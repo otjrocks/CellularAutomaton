@@ -5,8 +5,15 @@
 ### Simulations
 
 * Commonalities
+  * All three depend on the 8 adjacent neighbors.
+  * All of their behaviors are dependent on rules.
+  * All three can repopulate without the assistance of other nodes
+  * There 
 
 * Variations
+  * There are different states of the nodes - fire has 3 stages, game of life has 2, and the segregation model has 3+
+  * The forest has a separate probability to create and destroy nodes independent of neighbors
+  * 
 
 
 
