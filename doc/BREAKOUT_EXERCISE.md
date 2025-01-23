@@ -1,5 +1,5 @@
 # Breakout Abstractions Lab Discussion
-#### Owen Jennings, Justin Aronwald, Troy Ludwig
+#### Owen Jennings (otj4), Justin Aronwald (jga18), Troy Ludwig (tdl21)
 
 
 ### Block
