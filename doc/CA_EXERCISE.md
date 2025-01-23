@@ -1,5 +1,5 @@
 # Cell Society Design Lab Discussion
-#### Names and NetIDs
+#### Owen Jennings (otj4), Justin Aronwald (jga18), Troy Ludwig (tdl21)
 
 
 ### Simulations
@@ -70,26 +70,26 @@ This class's purpose or value is to represent a customer's order:
 This class's purpose or value is to represent a customer's order:
 ```java
 public class Order {
-     // returns whether or not the given items are available to order
-     public boolean isInStock (OrderLine items)
-     // sums the price of all the given items
-     public double getTotalPrice (OrderLine items)
-     // returns whether or not the customer's payment is valid
-     public boolean isValidPayment (Customer customer)
-     // dispatches the items to be ordered to the customer's selected address
-     public void deliverTo (OrderLine items, Customer customer)
- }
+  // returns whether or not the given items are available to order
+  public boolean isInStock (OrderLine items)
+  // sums the price of all the given items
+  public double getTotalPrice (OrderLine items)
+  // returns whether or not the customer's payment is valid
+  public boolean isValidPayment (Customer customer)
+  // dispatches the items to be ordered to the customer's selected address
+  public void deliverTo (OrderLine items, Customer customer)
+}
  ```
 
 
 This class's purpose or value is to manage something:
 ```java
 public class Something {
-     // sums the numbers in the given data
-     public int getTotal (Collection<Integer> data)
-	 // creates an order from the given data
-     public Order makeOrder (String structuredData)
- }
+  // sums the numbers in the given data
+  public int getTotal (Collection<Integer> data)
+  // creates an order from the given data
+  public Order makeOrder (String structuredData)
+}
 ```
 
 
@@ -98,34 +98,34 @@ public class Something {
 * Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
 ```java
  Something thing = new Something();
- Order o = thing.makeOrder("coffee,large,black");
+Order o = thing.makeOrder("coffee,large,black");
  o.update(13);
 ```
 
 * Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
 ```java
  Something thing = new Something();
- Order o = thing.makeOrder("coffee,large,black");
+Order o = thing.makeOrder("coffee,large,black");
  o.update(13);
 ```
 
 * Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
 ```java
  Something thing = new Something();
- Order o = thing.makeOrder("coffee,large,black");
+Order o = thing.makeOrder("coffee,large,black");
  o.update(13);
 ```
 
 * Set a simulation parameter: set the value of a parameter, probCatch, for a simulation, Fire, based on the value given in a data file
 ```java
  Something thing = new Something();
- Order o = thing.makeOrder("coffee,large,black");
+Order o = thing.makeOrder("coffee,large,black");
  o.update(13);
 ```
 
 * Switch simulations: load a new simulation from a data file, replacing the current running simulation with the newly loaded one
 ```java
  Something thing = new Something();
- Order o = thing.makeOrder("coffee,large,black");
+Order o = thing.makeOrder("coffee,large,black");
  o.update(13);
 ```
