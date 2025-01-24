@@ -77,6 +77,14 @@ The other classes include:
   * **Collaboration:** Takes and saves data from Simulation and Grid classes
 
 ## Design Details
+* Would be good to perform a CRC exercise for each class when completing this step
+* For each of the following abstractions, define the ruleset and how it collaborates with other classes in the program
+  * Potential Simulation Abstractions:
+    * Game of Life Sim
+    * Percolation Sim
+    * Fire Spreading Sim
+    * Schelling's Model of Segregation Sim
+    * Wa-Tor World Sim
 
 ## Use Cases
 
