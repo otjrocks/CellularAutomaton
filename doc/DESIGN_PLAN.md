@@ -27,8 +27,18 @@ Our main goals include a functional simulation created by proper encapsulated co
 At a high level, we know that we are going to include a hierarchy for the grid. The cell class will be abstracted to handle the various cell cases. We are going to ensure proper separation between the UI elements and the translation of files into the grid-like system. Broadly, each cell is going to have methods for updating its state and relations to its neighbors.
 
 In terms of high level flow, users are going to input an XML file with the grid coordination. Then, each cell's status will be determined by a set of rules predefined for that specific simulation. Then, each cell will be processed and the grid will be updated to accommodate each of the cell changes. Finally, the UI will be updated to display the changes to the user.
+
+
 ## User Interface
 
+We created a user interface design using Figma:
+
+![This is cool, too bad you can't see it](images/figmaDesign.png "An initial UI design")
+
+To view our Figma UI design online visit this link: [https://www.figma.com/design/fb8PYecEdF8yTVQFFQ9pHn/Untitled?node-id=0-1&t=o72ftO1mXizAi2pu-1](https://www.figma.com/design/fb8PYecEdF8yTVQFFQ9pHn/Untitled?node-id=0-1&t=o72ftO1mXizAi2pu-1)
+
+Our program will have an alert popup telling the user if there is any issues with the program.
+It will display a message like "File Not Found", "Incorrect XML File Format", "Invalid User Input", "Error ...", to alert the user whenever the program runs into an error.
 
 ## Configuration File Format
 For the XML file, we want tags that will specifically configuration a variety of simulation environments. These tags should include:
@@ -40,8 +50,9 @@ For the XML file, we want tags that will specifically configuration a variety of
 * Initial configuration states: what action is every cell taking at the beginning (ie. dead or alive, burning or empty, etc.)
 * Specific parameter values: any extra information required by the defined simulation type (ie. burning propability for Fire and nothing for Game of Life.)
 
-Link to example 1:
-Link to example 2:
+Link to example 1: [Example 1](../data/ExampleXMLs/Example1.xml)
+
+Link to example 2: [Example 2](../data/ExampleXMLs/Example2.xml)
 
 
 ## Design Overview
