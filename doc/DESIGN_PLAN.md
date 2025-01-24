@@ -31,6 +31,17 @@ In terms of high level flow, users are going to input an XML file with the grid 
 
 
 ## Configuration File Format
+For the XML file, we want tags that will specifically configuration a variety of simulation environments. These tags should include:
+* Simulation type: the name of the simulation that represents a set of rules
+* Simulation title: a name for the specific starting configuration
+* Simulation author: who wrote this starting configuration
+* Simulation description: what you expect to see or why you find this configuration interesting
+* Grid dimensions: height and width of the grid
+* Initial configuration states: what action is every cell taking at the beginning (ie. dead or alive, burning or empty, etc.)
+* Specific parameter values: any extra information required by the defined simulation type (ie. burning propability for Fire and nothing for Game of Life.)
+
+Link to example 1:
+Link to example 2:
 
 
 ## Design Overview
@@ -53,8 +64,6 @@ The other classes include:
 * **XMLHandler class** - handles the loading and saving of XML files
   * Parse the XML file to load the grid state and rules. Also handles the saving the current status back to an XML file
   * **Collaboration:** Takes and saves data from Simulation and Grid classes
-
-
 
 ## Design Details
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>SpreadingOfFire</Type>
+    <Title>Four Fires</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Four single unit fires that will spread to the surrounding forest</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,2,1,1,1,1,2,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,2,1,1,1,1,2,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <CatchProb> 0.5 </CatchProb>
+    </Parameters>
+</SimulationConfig>
