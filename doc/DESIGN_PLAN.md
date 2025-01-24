@@ -1,6 +1,6 @@
 # Cell Society Design Plan
-### Team Number
-### Names
+### Team Number: 4
+### By: Owen Jennings (otj4), Justin Aronwald (jga18), Troy Ludwig (tdl21)
 
 
 #### Examples
