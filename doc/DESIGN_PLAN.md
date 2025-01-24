@@ -33,8 +33,30 @@ In terms of high level flow, users are going to input an XML file with the grid 
 ## Configuration File Format
 
 
-## Design Details
+## Design Overview
+The abstractions we hope to create are the following:
+* **Simulation class** - holds the rules for each simulation
+  * This abstract class will be implemented by each type of simulation created (i.e Game of Life) containing the rules for that game
+  * **Collaboration:** the simulation class will interact with the Grid class to iterate through the Cell classes and update statuses. It will also likely interact with XML files to load the simulation paramters
 
+
+The other classes include:
+* **Grid class** - the 2D grid of cells
+  * Manages the data structure that we will use to hold the 2D grid as well as reference  
+  * **Collaboration:** the grid class will interact with the Cell class to update states
+* **Cell class** - each cell represented on the grid
+    * Each of the cells are going to maintain their current state
+    * **Collaboration:** the cell class will interact with its neighbors (other instances of the Cell class)
+* **View class** - represents the GUI for the user
+  * Displays the grid and handles the user input
+  * **Collaboration:** the view class will interact with the Simulation and Grid class to visualize the current state of the simulation
+* **XMLHandler class** - handles the loading and saving of XML files
+  * Parse the XML file to load the grid state and rules. Also handles the saving the current status back to an XML file
+  * **Collaboration:** Takes and saves data from Simulation and Grid classes
+
+
+
+## Design Details
 
 ## Use Cases
 
