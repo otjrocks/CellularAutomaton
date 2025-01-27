@@ -139,10 +139,99 @@ The other classes include:
 ## Use Cases
 
 * Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
+
+```java
+Simulation simulation = GameOfLifeSimulation();
+Cell middleCell = new DefaultCell(); // default cell is a cell with 2 states (0 or 1)
+List<Cell> neighbors = simulation.getNeighbors(middleCell);
+int numAliveNeighbors = 0;
+for (Cell neighbor: neighbors) {
+  if (neighbor.getState() == Cell.ALIVE) {
+    numAliveNeighbors++;
+  }
+  if (numAliveNeighbors < 2 || numAliveNeighbors > 3) {
+    middleCell.setState(Cell.DEAD)
+  } 
+}
+```
+
 * Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
+
+```java
+public class GameOfLifeSimulation {
+  public static List<Cell> getNeighbors(Cell cell) { // implementation of abstract class
+    List<Cell> neighbors = new ArrayList<Cell>();
+    if (cell.getX() > 0) {
+      neighbors.add(Grid.getCell(cell.getX() - 1, cell.getY()));
+    }
+    if (cell.getX() < Grid.getWidth() - 1) {
+      neighbors.add(Grid.getCell(cell.getX() + 1, cell.getY()));
+    }
+    if (cell.getY() > 0) {
+      neighbors.add(Grid.getCell(cell.getX(), cell.getY() - 1));
+    }
+    if (cell.getY() < Grid.getHeight() - 1) {
+      neighbors.add(Grid.getCell(cell.getX(), cell.getY() + 1));
+    }
+    if (cell.getX() > 0 && cell.getY() > 0) {
+      neighbors.add(Grid.getCell(cell.getX() - 1, cell.getY() - 1));
+    }
+    if (cell.getX() < Grid.getWidth() - 1 && cell.getY() > 0) {
+      neighbors.add(Grid.getCell(cell.getX() + 1, cell.getY() - 1));
+    }
+    if (cell.getX() > 0 && cell.getY() < Grid.getHeight() - 1) {
+      neighbors.add(Grid.getCell(cell.getX() - 1, cell.getY() + 1));
+    }
+    if (cell.getX() < Grid.getWidth() - 1 && cell.getY() < Grid.getHeight() - 1) {
+      neighbors.add(Grid.getCell(cell.getX() + 1, cell.getY() + 1));
+    }
+    return neighbors;
+  }
+}
+
+Simulation simulation = GameOfLifeSimulation();
+Cell middleCell = new DefaultCell(); // default cell is a cell with 2 states (0 or 1)
+List<Cell> neighbors = simulation.getNeighbors(middleCell);
+int numAliveNeighbors = 0;
+for (Cell neighbor: neighbors) {
+    if (neighbor.getState() == Cell.ALIVE) {
+numAliveNeighbors++;
+    }
+    if (numAliveNeighbors < 2 || numAliveNeighbors > 3) {
+    middleCell.setState(Cell.DEAD)
+  }
+}
+```
+
 * Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
+
+```java
+GameOfLifeSimulation simulation = new GameOfLifeSimulation();
+SimulationView mainView = new SimulationView();
+...
+simulation.getNextState();
+mainView.update();
+```
+
 * Switch simulations: load a new simulation from a data file, replacing the current running simulation with the newly loaded one
+
+```java
+currentSimulation = XMLFileHandler.parseXMLFile("simulation.xml");
+```
+
 * Set a simulation parameter: set the value of a parameter, probCatch, for a simulation, Fire, based on the value given in a data file
+
+```java
+public class SimulationRules {
+  private Map<String, Double> parameters;
+  public SimulationRules(..., Map<String, Double> parameters) {
+    this.parameters = parameters;
+  }
+  public getParameter(String para) {
+    return parameters.get(para);
+  }
+}
+```
 
 Additional Use Cases:
 
