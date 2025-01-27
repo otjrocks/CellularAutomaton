@@ -64,14 +64,14 @@ The other classes include:
   * Parse the XML file to load the grid state and rules. Also handles the saving the current status back to an XML file
   * **Collaboration:** Takes and saves data from Simulation and Grid classes
 
-![Diagram for Class Relation](images/design%20cell%20society.jpeg "Planned Mapping for Class Functionality and Relation")
+![Diagram for Class Relation](images/design%20cell%20society.png "Planned Mapping for Class Functionality and Relation")
 
 ## Design Details
 **Simulation and SimulationRules**
 * Must interact with XMLHandler to get the ruleset for this specific simulation and pass those rules to the Simulation to enact necessary changes
 * Will call getNeighbors() from SimulationRules to get relevant neighbors for the simulation and make next state changes based on the implementation of getNextState() from the Simulation class
 
-**Simulation getNextState and getNeighbor implementations:**
+**Simulation getNextState(Cell cell) and getNeighbors(Cell cell) implementations:**
   * Game of Life:
     1. Any cell with fewer than 2 neighbors dies due to underpopulation
     2. Any cell with 2 - 3 neighbors moves on to the next generation
