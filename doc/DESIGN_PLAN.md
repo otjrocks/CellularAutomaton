@@ -67,10 +67,11 @@ The other classes include:
 ![Diagram for Class Relation](images/design%20cell%20society.jpeg "Planned Mapping for Class Functionality and Relation")
 
 ## Design Details
-**SimulationRules**
+**Simulation and SimulationRules**
 * Must interact with XMLHandler to get the ruleset for this specific simulation and pass those rules to the Simulation to enact necessary changes
-* Will call getNeighbors() for given simulation and what changes should be made by the Simulation class
-**SimulationRules Subclasses**
+* Will call getNeighbors() from SimulationRules to get relevant neighbors for the simulation and make next state changes based on the implementation of getNextState() from the Simulation class
+
+**Simulation getNextState and getNeighbor implementations:**
   * Game of Life:
     1. Any cell with fewer than 2 neighbors dies due to underpopulation
     2. Any cell with 2 - 3 neighbors moves on to the next generation
@@ -107,8 +108,8 @@ The other classes include:
   * Spreading of Fire
     * 3 states (tree, burning, empty)
   * Schelling's Model of Segregation
-    * 2 states (satisfied or unsatidfied)
-    * requires some form of identifier to compare neighbors
+    * 2 states (for each racial/preference group)
+    * decides to move based on their neighbors race/state
   * Wa-Tor World
     * 3 states (shark, fish, or empty)
     * Need an identifier for when either are ready to reproduce or out of energy
@@ -120,16 +121,13 @@ The other classes include:
   * GridView
   * SimulationView
 
-## Use Cases
-
-
 ## Design Considerations
 * We considered keeping all simulation function within the Simulation class (data and rule storage, state updates, etc.) instead of splitting the duties between the SimulationRules, SimulationData and Simulation classes.
   * Pros:
     * Organizationally simple
   * Cons:
     * Would lead to a more difficult to read class
-    * Leaves to much implementation to a single class
+    * Leaves too much implementation to a single class
 * We considered passing all simulation rules in as arguments to the XML configuration file instead of utilizing abstraction to make specific case subclasses for each simulation type.
   * Pros:
     * Could provide more flexibility and scability to the code
@@ -137,8 +135,19 @@ The other classes include:
     * Unnecessary for the number of simulations we're planning to implement (5)
     * Would not show a great understanding of abstraction
 
+
+## Use Cases
+
+* Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
+* Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
+* Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
+* Switch simulations: load a new simulation from a data file, replacing the current running simulation with the newly loaded one
+* Set a simulation parameter: set the value of a parameter, probCatch, for a simulation, Fire, based on the value given in a data file
+
+Additional Use Cases:
+
 ## Team Responsibilities
- * Before Friday we hope to get all of the model finished and create necessary configuration files
+ * Before Friday, we hope to get all the model finished and create necessary configuration files
 
  * Troy Ludwig - XML Handling & Grid View
 
