@@ -234,6 +234,41 @@ public class SimulationRules {
 ```
 
 Additional Use Cases:
+1. Change how a simulation handles getting the next state for an individual cell
+```java
+public class CustomSimulationRules extends SimulationRules {
+  public List<Cell> getNeighbors(Map<Point, Cell> points, Cell cell) {
+    // find neighbors from a map of cells based on the current cell's location
+    // default implementation from SimulationRules class will be to return the list of 8 normal neighbors, so this does not need to override for all simulation types
+  }
+  public int getNextState(Cell cell) {
+    List<Cell> neighbors = getNeighbors(cell);
+    int nextState = 0;
+    int currentState = cell.getState();
+    for (Cell neighbor: neighbors) {
+      // do some logic to get next state based on custom simulation...
+    }
+    return nextState;
+  }
+}
+```
+
+2. Get the cell at the location (x,y) or return null if a cell does not exist at that location
+
+```java
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+
+public class Grid {
+
+  private Map<Point2D, Cell> myCells = new HashMap<>();
+  
+  private getCell(Point2D point) {
+    Cell cell = myCells.get(point);
+    return cell;
+  }
+}
+```
 
 ## Team Responsibilities
  * Before Friday, we hope to get all the model finished and create necessary configuration files
