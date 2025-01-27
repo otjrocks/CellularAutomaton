@@ -57,45 +57,109 @@ Link to example 2: [Example 2](../data/ExampleXMLs/Example2.xml)
 
 ## Design Overview
 The abstractions we hope to create are the following:
-* **Simulation class** - holds the rules for each simulation
-  * This abstract class will be implemented by each type of simulation created (i.e Game of Life) containing the rules for that game
+* **Simulation class** - performs actions associated with simulation progress
+  * This abstract class will be implemented by each type of simulation created (i.e Game of Life) based on how a simulation should be updated with respect to its given rules
   * **Collaboration:** the simulation class will interact with the Grid class to iterate through the Cell classes and update statuses. It will also likely interact with XML files to load the simulation paramters
-
-
-The other classes include:
-* **Grid class** - the 2D grid of cells
-  * Manages the data structure that we will use to hold the 2D grid as well as reference  
-  * **Collaboration:** the grid class will interact with the Cell class to update states
+* **SimulationRules class** - holds the rules for the current simulation based off simulation type in the XML
+  * This abstract class will be implemented by each type of simulation created (i.e Game of Life) containing the rules for that game
+  * **Collaboration:** the SimulationRules class will interact with the XMLHandler class to get the current ruleset based on simulation type and work with the Simulation and Grid classes to incorporate the necessary changes
 * **Cell class** - each cell represented on the grid
     * Each of the cells are going to maintain their current state
+    * This abstract class will be implemented by a cell for each type of simulation (i.e Game of Life) and each simulation has a different set of rules/properties by which the cell operates 
     * **Collaboration:** the cell class will interact with its neighbors (other instances of the Cell class)
 * **View class** - represents the GUI for the user
   * Displays the grid and handles the user input
+  * This abstract class will be implemented by subclass representing different aspects of the simulation UI (cells, grid, simulation components)
   * **Collaboration:** the view class will interact with the Simulation and Grid class to visualize the current state of the simulation
+
+The other classes include:
+* **SimulationData class** - holds data from XML file associated with current simulation
+  * **Collaboration:** will interact with the XMLHandler class to get the data it needs to store for the simulation. Will also give necessary information to Simulation class when requested.
+* **Grid class** - the 2D grid of cells
+  * Manages the data structure that we will use to hold the 2D grid as well as reference  
+  * **Collaboration:** the grid class will interact with the Cell class to update states
 * **XMLHandler class** - handles the loading and saving of XML files
   * Parse the XML file to load the grid state and rules. Also handles the saving the current status back to an XML file
   * **Collaboration:** Takes and saves data from Simulation and Grid classes
 
+![Diagram for Class Relation](images/design%20cell%20society.jpeg "Planned Mapping for Class Functionality and Relation")
+
 ## Design Details
-* Would be good to perform a CRC exercise for each class when completing this step
-* For each of the following abstractions, define the ruleset and how it collaborates with other classes in the program
-  * Potential Simulation Abstractions:
-    * Game of Life Sim
-    * Percolation Sim
-    * Fire Spreading Sim
-    * Schelling's Model of Segregation Sim
-    * Wa-Tor World Sim
+**SimulationRules**
+* Must interact with XMLHandler to get the ruleset for this specific simulation and pass those rules to the Simulation to enact necessary changes
+* Will call getNeighbors() for given simulation and what changes should be made by the Simulation class
+**SimulationRules Subclasses**
+  * Game of Life:
+    1. Any cell with fewer than 2 neighbors dies due to underpopulation
+    2. Any cell with 2 - 3 neighbors moves on to the next generation
+    3. Any cell with more than 3 neighbors dies due to overpopulation
+    4. Any inactive cell with exactly 3 neighbors becomes active
+  * Percolation:
+    * Any cell connected to the "top" (or any open water source) will also become full of water
+    * Blocked cells cannot be filled with water
+  * Spreading of Fire
+    * If a tree cell's neighbor is burning, that tree cell has a probability p of catching fire.
+    * If a cell is burning, the cell will become empty next turn
+    * An empty cell cannot catch fire
+  * Schelling's Model of Segregation
+    * Each cell has a "alike neighbor threshold"
+    * If a cell's percentage of alike neighbors falls below a certain threshold, it will move to another open cell in the grid in an attempt to move closer to people it is more similar to
+  * Wa-Tor World
+    * For fish:
+      1. Every time interval, the fish moves to an unoccupied adjacent space. If there are no unoccupied adjacent spaces, it does not move.
+      2. After a certain number of turns, the fish will reproduce by leaving a new fish on its previous space when moving
+    * For sharks:
+      1. Every time interval, the shark moves to a random adjacent space occupied by a fish. If there are no fish nearby, it simply moves to a random adjacent space. If there is no open adjacent space, it does not move.
+      2. Every time interval, the shark is deprived of one unit of energy
+      3. Upon reaching 0 energy, the shark dies
+      4. If the shark moves to a space occupied by a fish, it eats the fish and gains a certain amount of energy
+      5. After a certain number of turns, the shark reproduces the same way a fish does
+
+**Cell**
+* Must interact with Simulation and Grid for necessary updates and displaying these updates
+**Cell Subclasses**
+  * Game of Life:
+    * 2 states (dead or alive)
+  * Percolation
+    * 3 states (blocked, open (empty), open (water))
+  * Spreading of Fire
+    * 3 states (tree, burning, empty)
+  * Schelling's Model of Segregation
+    * 2 states (satisfied or unsatidfied)
+    * requires some form of identifier to compare neighbors
+  * Wa-Tor World
+    * 3 states (shark, fish, or empty)
+    * Need an identifier for when either are ready to reproduce or out of energy
+
+**View**
+* Must interact with each class represented by its subclasses (Cell, Grid and Simulation)
+**View Subclasses**
+  * CellView
+  * GridView
+  * SimulationView
 
 ## Use Cases
 
 
 ## Design Considerations
-
+* We considered keeping all simulation function within the Simulation class (data and rule storage, state updates, etc.) instead of splitting the duties between the SimulationRules, SimulationData and Simulation classes.
+  * Pros:
+    * Organizationally simple
+  * Cons:
+    * Would lead to a more difficult to read class
+    * Leaves to much implementation to a single class
+* We considered passing all simulation rules in as arguments to the XML configuration file instead of utilizing abstraction to make specific case subclasses for each simulation type.
+  * Pros:
+    * Could provide more flexibility and scability to the code
+  * Cons:
+    * Unnecessary for the number of simulations we're planning to implement (5)
+    * Would not show a great understanding of abstraction
 
 ## Team Responsibilities
+ * Before Friday we hope to get all of the model finished and create necessary configuration files
 
- * Team Member #1
+ * Troy Ludwig - XML Handling & Grid View
 
- * Team Member #2
+ * Owen Jennings - Cell and Grid Implementation and Simulation/Main View
 
- * Team Member #3
+ * Justin Aronwald - Simulation (Simulation Rules and Data) and Cell View
