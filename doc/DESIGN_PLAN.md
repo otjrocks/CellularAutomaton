@@ -270,6 +270,39 @@ public class Grid {
 }
 ```
 
+3. Resetting the simulation to the initial states
+```java
+simulation.reset();
+grid.reset();
+
+gridView.update(grid.getInitalCellStates());
+simulationVIew.displayInfo(simulation.getDescription());
+
+```
+
+4. Method to create a new Scene for displaying the simulation description
+
+```java
+import javafx.scene.Group;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+private Scene showAboutInfo(SimulationData simulationData) {
+  Group aboutGroup = new Group();
+  
+  //adjust sizing and positioning after
+  Text typeText = new Text("Type: " + simulationData.getType());
+  Text nameText = new Text("Name: " + simulationData.getName());
+  Text authorText = new Text("Author: " + simulationData.getAuthor());
+  Text descriptionText = new Text("Description: " + simulationData.getDescription());
+  
+  aboutGroup.getChildren().addAll(typeText, nameText, authorText, descriptionText);
+  //create an organized layout for the items
+  
+  return new Scene(aboutGroup, 400, 400); //adjust sizing as neede
+}
+```
+
 ## Team Responsibilities
  * Before Friday, we hope to get all the model finished and create necessary configuration files
 
