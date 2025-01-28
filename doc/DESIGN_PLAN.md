@@ -118,8 +118,11 @@ The other classes include:
 * Must interact with each class represented by its subclasses (Cell, Grid and Simulation)
 **View Subclasses**
   * CellView
+    * Responsibile for updating individual cell displays
   * GridView
+    * Interacts with cells to properlt update entire grid space
   * SimulationView
+    * Updates visual aspects of simulation variables
 
 ## Design Considerations
 * We considered keeping all simulation function within the Simulation class (data and rule storage, state updates, etc.) instead of splitting the duties between the SimulationRules, SimulationData and Simulation classes.
@@ -300,6 +303,41 @@ private Scene showAboutInfo(SimulationData simulationData) {
   //create an organized layout for the items
   
   return new Scene(aboutGroup, 400, 400); //adjust sizing as neede
+}
+```
+
+5. Method to generate catchProb for the spreading fire simulation (Could also be used for Schelling's Model of Segregation for whether or not a cell should move)
+```java
+import java.Math;
+
+private boolean shouldNeighborCatch(double probCatch){
+  double rand = Math.random();
+
+  // if the random number is less than or equal to probCatch, the neighbor should catch fire
+  if (rand =< probCatch){
+    return true;
+  }
+
+  // if the random number is greater than probCatch, the neighbor should not catch fire
+  else{
+    return false;
+  }
+}
+```
+
+6. Method for generating grid view based on cell position
+```java
+import javafx.scene.Group;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import java.util.Arraylist;
+
+public void generateGridView(Group gridGroup, ArrayList<Cell> cells){
+  for (Cell cell: cells){
+    Rectangle gridCell = new Rectangle(Cell.getX() - (CELL_LENGTH/2), Cell.getY() - (CELL_HEIGHT/2), Color.WHITE);
+    gridCell.setStroke(Color.BLACK);
+    gridGroup.getChildren().add(gridCell);
+  }
 }
 ```
 
