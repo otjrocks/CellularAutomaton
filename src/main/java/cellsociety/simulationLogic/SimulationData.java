@@ -1,4 +1,4 @@
-package cellsociety;
+package cellsociety.simulationLogic;
 
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
