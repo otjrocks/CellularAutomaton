@@ -48,7 +48,7 @@ public class Grid {
    * location
    */
   public boolean addCell(Cell cell) {
-    if (myCells.containsKey(
+    if (cellExists(
         cell.getLocation())) {  // cannot add a cell if the specified location already holds a seperate cell
       return false;
     }
@@ -64,11 +64,21 @@ public class Grid {
    */
   public boolean removeCell(int col, int row) {
     Point2D location = new Point2D.Double(col, row);
-    if (!myCells.containsKey(location)) {
+    if (!cellExists(location)) {
       return false;
     }
     myCells.remove(location);
     return true;
+  }
+
+  /**
+   * Check if a cell exists in the grid
+   *
+   * @param location: Location of cell
+   * @return true if the cell exists, false otherwise
+   */
+  public boolean cellExists(Point2D location) {
+    return myCells.containsKey(location);
   }
 
   /**
