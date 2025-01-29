@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 
 /**
  * An abstract Cell model that allows for a state stored in an integer value
+ *
+ * @author Owen Jennings
  */
 public abstract class Cell {
 
@@ -14,7 +16,7 @@ public abstract class Cell {
    * The default constructor for a Cell
    *
    * @param state:    The initial state of a cell, represented as an int
-   * @param location: The location in the simulation grid represented by a Point2D, where the (x,y)
+   * @param location: The location in the simulation grid represented by a Point2D, where the (x: row, y: col)
    *                  value is the relative location of the cell compared to other cells in the
    *                  grid.
    */
@@ -62,20 +64,20 @@ public abstract class Cell {
   }
 
   /**
-   * Get x coordinate of cell
+   * Get row coordinate of cell
    *
-   * @return int representing X location
+   * @return int representing row location
    */
-  public int getX() {
+  public int getRow() {
     return (int) myLocation.getX();
   }
 
   /**
-   * Get y coordinate of cell
+   * Get col coordinate of cell
    *
-   * @return int representing Y location
+   * @return int representing col location
    */
-  public int getY() {
+  public int getCol() {
     return (int) myLocation.getY();
   }
 

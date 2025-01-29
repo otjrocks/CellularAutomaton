@@ -9,6 +9,8 @@ import java.util.Map;
 
 /**
  * A class that handles working with cells within a simulation grid.
+ *
+ * @author Owen Jennings
  */
 public class Grid {
 
@@ -108,7 +110,7 @@ public class Grid {
 
   private boolean attemptAddCell(Cell cell) {
     // attempts to add cell to grid. Fails and returns false if cell provided does not have a properly formatted location or does not fit within the grid's width and height
-    if (cell.getX() < 0 || cell.getX() >= myWidth || cell.getY() < 0 || cell.getY() >= myHeight) {
+    if (cell.getRow() < 0 || cell.getRow() >= myWidth || cell.getCol() < 0 || cell.getCol() >= myHeight) {
       return false;
     }
     myCells.put(cell.getLocation(), cell);

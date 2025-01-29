@@ -8,7 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+/**
+ * Main file for application
+ */
 public class Main extends Application {
+
   public static final String TITLE = "Cell Society";
   public static final int WIDTH = 1200;
   public static final int HEIGHT = 800;

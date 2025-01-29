@@ -2,6 +2,11 @@ package cellsociety.model.cell;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A default implementation of a cell
+ *
+ * @author Owen Jennings
+ */
 public class DefaultCell extends Cell {
 
   /**

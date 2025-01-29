@@ -34,7 +34,7 @@ public class GameOfLifeRules extends SimulationRules {
     };
 
     for (int[] dir : directions) {
-      Point2D neighborLocation = new Point2D(cell.getX() + dir[0], cell.getY() + dir[1]);
+      Point2D neighborLocation = new Point2D(cell.getRow() + dir[0], cell.getCol() + dir[1]);
 
       if (cell.cellExists(neighborLocation)) {
         Cell neighborCell = cell.getCell(neighborLocation);

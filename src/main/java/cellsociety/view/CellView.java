@@ -7,6 +7,8 @@ import javafx.scene.shape.StrokeType;
 
 /**
  * A view used to create a cell
+ *
+ * @author Owen Jennings
  */
 public class CellView extends Rectangle {
 
