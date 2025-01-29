@@ -31,12 +31,12 @@ public class Grid {
   /**
    * Get a cell at the specified col and row, if it exists
    *
-   * @param col: Column of cell
    * @param row: Row of cell
+   * @param col: Column of cell
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
-  public Cell getCell(int col, int row) {
-    return myCells.get(new Point2D.Double(col, row));
+  public Cell getCell(int row, int col) {
+    return myCells.get(new Point2D.Double(row, col));
   }
 
   /**
@@ -58,12 +58,12 @@ public class Grid {
   /**
    * Remove the cell at a specified location
    *
-   * @param col: Column of cell
    * @param row: Row of cell
+   * @param col: Column of cell
    * @return true if the removal finished correct, false if the location specified cannot be found
    */
-  public boolean removeCell(int col, int row) {
-    Point2D location = new Point2D.Double(col, row);
+  public boolean removeCell(int row, int col) {
+    Point2D location = new Point2D.Double(row, col);
     if (!cellExists(location)) {
       return false;
     }
