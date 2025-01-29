@@ -1,4 +1,4 @@
-package cellsociety.simulationLogic;
+package cellsociety.model.simulation;
 
 import java.util.List;
 import java.util.Map;

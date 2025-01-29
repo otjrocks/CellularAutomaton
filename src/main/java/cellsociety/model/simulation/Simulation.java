@@ -1,4 +1,4 @@
-package cellsociety.simulationLogic;
+package cellsociety.model.simulation;
 
 public abstract class Simulation {
   private SimulationRules myRules;
