@@ -1,5 +1,6 @@
 package cellsociety.model.simulation;
 
+import cellsociety.model.cell.Cell;
 import java.util.List;
 import java.util.Map;
 
