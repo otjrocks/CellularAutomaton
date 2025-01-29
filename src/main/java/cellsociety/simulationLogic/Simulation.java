@@ -1,8 +1,8 @@
-package cellsociety;
+package cellsociety.simulationLogic;
 
 public abstract class Simulation {
   private SimulationRules myRules;
   private SimulationData myData;
 
-  abstract void getNextState();
+  abstract void getNextSimulationState();
 }
