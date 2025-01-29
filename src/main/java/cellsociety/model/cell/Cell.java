@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 public abstract class Cell {
 
   private int myState;
-  private final Point2D myLocation; // A cells location should be immutable
+  private final Point2D myLocation;
 
   /**
    * The default constructor for a Cell

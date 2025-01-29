@@ -17,6 +17,6 @@ public abstract class SimulationRules {
 
   //methods below depend on subclasses
   abstract List<Cell> getNeighbors(Cell cell);
-  abstract void getNextState(Cell cell);
+  public abstract int getNextState(Cell cell);
 
 }

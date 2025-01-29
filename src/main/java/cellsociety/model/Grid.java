@@ -1,6 +1,8 @@
 package cellsociety.model;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationRules;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,17 @@ public class Grid {
   }
 
   /**
+   * Get a cell at the specified col and row, if it exists
+   *
+   * @param col: Column of cell
+   * @param row: Row of cell
+   * @return The cell at the specified location if it exists, or null if it does not exist
+   */
+  public Cell getCell(int col, int row) {
+    return myCells.get(new Point2D.Double(col, row));
+  }
+
+  /**
    * Add a cell to the grid
    *
    * @param cell: The cell you which to add
@@ -45,15 +58,42 @@ public class Grid {
   /**
    * Remove the cell at a specified location
    *
-   * @param location: The Point2D location where you wish to remove a cell
+   * @param col: Column of cell
+   * @param row: Row of cell
    * @return true if the removal finished correct, false if the location specified cannot be found
    */
-  public boolean removeCell(Point2D location) {
+  public boolean removeCell(int col, int row) {
+    Point2D location = new Point2D.Double(col, row);
     if (!myCells.containsKey(location)) {
       return false;
     }
     myCells.remove(location);
     return true;
+  }
+
+  /**
+   * Update all cells in the grid based on the specified cell update rule determined by the
+   * simulation's rules class getNextState() Per project specifications: ""A simulation's rules
+   * (such as whether a cell changes state, is created, or moves to another position in the grid)
+   * are applied on each cell "simultaneously" (i.e., based on its current state and that of its
+   * neighbors) and then cell states are updated in a second pass.""
+   *
+   * @param simulation: The simulation you which to use to update the grid
+   */
+  public void updateGrid(Simulation simulation) {
+    SimulationRules rules = simulation.getRules();
+    Map<Cell, Integer> nextStates = getNextStatesForAllCells(rules);
+    for (Map.Entry<Cell, Integer> entry : nextStates.entrySet()) {
+      entry.getKey().setState(entry.getValue());
+    }
+  }
+
+  private Map<Cell, Integer> getNextStatesForAllCells(SimulationRules rules) {
+    Map<Cell, Integer> nextStates = new HashMap<>(); // calculate next states in first pass, then update all next states in second pass
+    for (Cell cell : myCells.values()) {
+      nextStates.put(cell, rules.getNextState(cell));
+    }
+    return nextStates;
   }
 
   private boolean attemptAddCell(Cell cell) {
