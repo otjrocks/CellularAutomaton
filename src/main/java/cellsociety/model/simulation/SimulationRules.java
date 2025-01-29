@@ -25,7 +25,7 @@ public abstract class SimulationRules {
   }
 
   //methods below depend on subclasses
-  abstract List<Cell> getNeighbors(Cell cell, Grid grid);
-  public abstract int getNextState(Cell cell);
+  public abstract List<Cell> getNeighbors(Cell cell, Grid grid);
+  public abstract int getNextState(Cell cell, Grid grid);
 
 }

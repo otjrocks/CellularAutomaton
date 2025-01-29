@@ -4,11 +4,16 @@ public abstract class Simulation {
   private SimulationRules myRules;
   private SimulationData myData;
 
+  public Simulation(SimulationRules rules, SimulationData data) {
+    myRules = rules;
+    myData = data;
+  }
+
   public SimulationRules getRules() {
     return myRules;
   }
   public SimulationData getData() {
     return myData;
   }
-  abstract void getNextSimulationState();
+  public abstract void getNextSimulationState();
 }

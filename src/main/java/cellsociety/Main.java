@@ -1,8 +1,14 @@
 package cellsociety;
 
 import cellsociety.model.Grid;
+import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.types.GameOfLife;
+import cellsociety.model.simulation.types.GameOfLifeRules;
 import cellsociety.view.MainView;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -31,6 +37,15 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) {
     Grid grid = new Grid(10, 10);
+    grid.addCell(new DefaultCell(1, new Point2D.Double(0,0)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(0, 1)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(1, 1)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(1, 0)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(2, 0)));
+    GameOfLife simulation = new GameOfLife(new GameOfLifeRules(), new SimulationData("GOL", "GOL", "Author", "description", new ArrayList<>()));
+    grid.printGrid();
+    grid.updateGrid(simulation);
+    System.out.println("\n\n");
     grid.printGrid();
 //    Scene scene = new Scene(root, WIDTH, HEIGHT, BACKGROUND_COLOR);
 //    stage.setScene(scene);

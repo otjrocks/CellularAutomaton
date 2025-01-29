@@ -132,7 +132,7 @@ public class Grid {
   private Map<Cell, Integer> getNextStatesForAllCells(SimulationRules rules) {
     Map<Cell, Integer> nextStates = new HashMap<>(); // calculate next states in first pass, then update all next states in second pass
     for (Cell cell : myCells.values()) {
-      nextStates.put(cell, rules.getNextState(cell));
+      nextStates.put(cell, rules.getNextState(cell, this));
     }
     return nextStates;
   }

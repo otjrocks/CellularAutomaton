@@ -25,9 +25,8 @@ public abstract class Cell {
       throw new IllegalArgumentException("Invalid state, state must be a positive integer");
     }
     myState = state;
+    // TODO: add error checking for whole integer values
     if (location == null ||
-        location.getX() % 1 == 0 ||
-        location.getY() % 1 == 0 ||
         location.getX() < 0 ||
         location.getY() < 0) { // Throw exception if
       throw new IllegalArgumentException(
