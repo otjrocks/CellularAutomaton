@@ -1,5 +1,7 @@
 package cellsociety;
 
+import cellsociety.model.Grid;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.view.MainView;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -28,15 +30,17 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    Scene scene = new Scene(root, WIDTH, HEIGHT, BACKGROUND_COLOR);
-    stage.setScene(scene);
-    stage.setTitle(TITLE);
-    stage.show();
-
-    MainView mainView = new MainView(GRID_WIDTH, GRID_HEIGHT);
-    mainView.setLayoutY((double) (HEIGHT - GRID_HEIGHT) / 2);
-    mainView.setLayoutX(MARGIN);
-    root.getChildren().add(mainView);
+    Grid grid = new Grid(10, 10);
+    grid.printGrid();
+//    Scene scene = new Scene(root, WIDTH, HEIGHT, BACKGROUND_COLOR);
+//    stage.setScene(scene);
+//    stage.setTitle(TITLE);
+//    stage.show();
+//
+//    MainView mainView = new MainView(GRID_WIDTH, GRID_HEIGHT);
+//    mainView.setLayoutY((double) (HEIGHT - GRID_HEIGHT) / 2);
+//    mainView.setLayoutX(MARGIN);
+//    root.getChildren().add(mainView);
   }
 
 }
