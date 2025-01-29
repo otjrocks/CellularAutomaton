@@ -42,6 +42,16 @@ public class Grid {
   }
 
   /**
+   * Get a cell at specified point if it exists
+   *
+   * @param point: point
+   * @return The cell at the specified location if it exists, or null if it does not exist
+   */
+  public Cell getCell(Point2D point) {
+    return myCells.get(point);
+  }
+
+  /**
    * Add a cell to the grid
    *
    * @param cell: The cell you which to add

@@ -1,5 +1,6 @@
 package cellsociety.model.simulation;
 
+import cellsociety.model.Grid;
 import java.util.HashMap;
 import cellsociety.model.cell.Cell;
 import java.util.List;
@@ -24,7 +25,7 @@ public abstract class SimulationRules {
   }
 
   //methods below depend on subclasses
-  abstract List<Cell> getNeighbors(Cell cell);
+  abstract List<Cell> getNeighbors(Cell cell, Grid grid);
   public abstract int getNextState(Cell cell);
 
 }
