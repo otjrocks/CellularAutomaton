@@ -6,7 +6,8 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.types.GameOfLife;
 import cellsociety.model.simulation.types.GameOfLifeRules;
-import cellsociety.view.MainView;
+import cellsociety.view.SidebarView;
+import cellsociety.view.SimulationView;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javafx.animation.KeyFrame;
@@ -28,16 +29,16 @@ import javafx.util.Duration;
 public class Main extends Application {
 
   public static final String TITLE = "Cell Society";
-  public static final int WIDTH = 1200;
+  public static final int WIDTH = 1400;
   public static final int HEIGHT = 800;
-  public static final int GRID_WIDTH = 400;
-  public static final int GRID_HEIGHT = 400;
   public static final Paint BACKGROUND_COLOR = Color.LIGHTGRAY;
-  public static final int MARGIN = 50;
+  public static final int MARGIN = 20;
+  public static final int GRID_WIDTH = (2 * WIDTH) / 3;
+  public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
   public static final double STEP_SPEED = 0.05;
 
   private final Group root = new Group();
-  private MainView myMainView;
+  private SimulationView myMainView;
   private Simulation mySimulation;
   private Grid myGrid;
 
@@ -48,6 +49,14 @@ public class Main extends Application {
   public void start(Stage stage) {
     initializeStage(stage);
     initializeStepAnimation();
+    initializeSidebar(mySimulation);
+  }
+
+  private void initializeSidebar(Simulation simulation) {
+    SidebarView sidebar = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN), GRID_HEIGHT - (2 * MARGIN), simulation);
+    sidebar.setLayoutX(GRID_WIDTH + 2 * MARGIN);
+    sidebar.setLayoutY(MARGIN);
+    root.getChildren().add(sidebar);
   }
 
   private void initializeStepAnimation() {
@@ -76,13 +85,13 @@ public class Main extends Application {
 
   private void createMainContainerAndView() {
     VBox mainContainer = new VBox();
-    mainContainer.setPrefWidth(GRID_WIDTH + MARGIN);
-    mainContainer.setPrefHeight(HEIGHT);
+    mainContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
+    mainContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
     mainContainer.setAlignment(Pos.CENTER);
 
     int numRows = 50, numCols = 50;
     createGOFModel(numRows, numCols); // sample game for now, not reading from file
-    myMainView = new MainView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols);
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols);
     mainContainer.getChildren().add(myMainView);
     root.getChildren().add(mainContainer);
   }

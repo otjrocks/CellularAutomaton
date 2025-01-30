@@ -14,7 +14,7 @@ import javafx.scene.paint.Paint;
  *
  * @author Owen Jennings
  */
-public class MainView extends Group {
+public class SimulationView extends Group {
   private final GridView myGridView;
 
   /**
@@ -23,7 +23,7 @@ public class MainView extends Group {
    * @param width:  width of main view
    * @param height: height of main view
    */
-  public MainView(int width, int height, int numRows, int numCols) {
+  public SimulationView(int width, int height, int numRows, int numCols) {
     myGridView = new GridView(width, height, numRows, numCols);
     getChildren().add(myGridView);
   }
