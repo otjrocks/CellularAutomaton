@@ -3,8 +3,11 @@ package cellsociety.model;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationRules;
+import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,9 +107,9 @@ public class Grid {
    */
   public void updateGrid(Simulation simulation) {
     SimulationRules rules = simulation.getRules();
-    Map<Cell, Integer> nextStates = getNextStatesForAllCells(rules);
-    for (Map.Entry<Cell, Integer> entry : nextStates.entrySet()) {
-      entry.getKey().setState(entry.getValue());
+    List<CellStateUpdate> nextStates = getNextStatesForAllCells(rules);
+    for (CellStateUpdate nextState: nextStates) {
+      getCell(nextState.getRow(), nextState.getCol()).setState(nextState.getState());
     }
   }
 
@@ -129,10 +132,10 @@ public class Grid {
     }
   }
 
-  public Map<Cell, Integer> getNextStatesForAllCells(SimulationRules rules) {
-    Map<Cell, Integer> nextStates = new HashMap<>(); // calculate next states in first pass, then update all next states in second pass
+  public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {
+    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
     for (Cell cell : myCells.values()) {
-      nextStates.put(cell, rules.getNextState(cell, this));
+      nextStates.add(new CellStateUpdate(cell.getLocation(), rules.getNextState(cell, this)));
     }
     return nextStates;
   }
