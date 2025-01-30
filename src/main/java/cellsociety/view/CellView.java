@@ -14,7 +14,7 @@ public class CellView extends Rectangle {
 
   public static final Paint DEFAULT_COLOR = Color.WHITE;
   public static final Paint BORDER_COLOR = Color.BLACK;
-  public static final int BORDER_WIDTH = 2;
+  public static final double BORDER_WIDTH = 0.6;
 
   /**
    * Create a cell with the default fill color

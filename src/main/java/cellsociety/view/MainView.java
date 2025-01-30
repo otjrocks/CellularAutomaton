@@ -1,7 +1,13 @@
 package cellsociety.view;
 
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Simulation;
+import java.util.Map;
+import java.util.Map.Entry;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * Main view for the visualizing the simulation
@@ -9,9 +15,6 @@ import javafx.scene.paint.Color;
  * @author Owen Jennings
  */
 public class MainView extends Group {
-
-  private static final int myGridWidth = 300;
-  private static final int myGridHeight = 300;
   private final GridView myGridView;
 
   /**
@@ -20,12 +23,17 @@ public class MainView extends Group {
    * @param width:  width of main view
    * @param height: height of main view
    */
-  public MainView(int width, int height) {
-    myGridView = new GridView(width, height, 20, 20);
+  public MainView(int width, int height, int numRows, int numCols) {
+    myGridView = new GridView(width, height, numRows, numCols);
     getChildren().add(myGridView);
-    myGridView.setColor(0, 0, Color.BLUE);
-    myGridView.setColor(1, 0, Color.RED);
-    myGridView.setColor(0, 1, Color.ORANGE);
+  }
+
+  public void step(Grid grid, Simulation simulation) {
+    Map<Cell, Integer> stateUpdates = grid.getNextStatesForAllCells(simulation.getRules());
+    for (Entry<Cell, Integer> entry : stateUpdates.entrySet()) {
+      Paint nextColor = entry.getValue() == 1 ? Color.GREEN : Color.LIGHTGRAY;  // TODO: hardcoded for now, will update after adding new simulation tyoes
+      myGridView.setColor(entry.getKey().getRow(), entry.getKey().getCol(), nextColor);
+    }
   }
 
 
