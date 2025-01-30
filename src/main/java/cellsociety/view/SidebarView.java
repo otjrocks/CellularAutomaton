@@ -18,7 +18,7 @@ public class SidebarView extends VBox {
 
   public static final double ELEMENT_SPACING = 5;
 
-  private int myWidth;
+  private final int myWidth;
   private Simulation mySimulation;
 
   /**
@@ -46,7 +46,7 @@ public class SidebarView extends VBox {
     addTextToSidebar("Name: " + simulationData.getName(), 14, TextAlignment.LEFT);
     addTextToSidebar("Type: " + simulationData.getType(), 14, TextAlignment.LEFT);
     addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Current Simulation Information: " + simulationData.getDescription(), 14,
+    addTextToSidebar("Description: " + simulationData.getDescription(), 14,
         TextAlignment.LEFT);
   }
 

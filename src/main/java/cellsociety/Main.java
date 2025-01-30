@@ -129,7 +129,7 @@ public class Main extends Application {
 
     mySimulation = new GameOfLife(
         new GameOfLifeRules(),
-        new SimulationData("GOL", "GOL", "Author", "description", new ArrayList<>())
+        new SimulationData("Game of Life", "Glider", "Richard K. Guy", "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.", new ArrayList<>())
     );
   }
 }
