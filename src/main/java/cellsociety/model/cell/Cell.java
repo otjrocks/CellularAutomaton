@@ -16,19 +16,20 @@ public abstract class Cell {
    * The default constructor for a Cell
    *
    * @param state:    The initial state of a cell, represented as an int
-   * @param location: The location in the simulation grid represented by a Point2D, where the (x: row, y: col)
-   *                  value is the relative location of the cell compared to other cells in the
-   *                  grid.
+   * @param location: The location in the simulation grid represented by a Point2D, where the (x:
+   *                  row, y: col) value is the relative location of the cell compared to other
+   *                  cells in the grid.
    */
   public Cell(int state, Point2D location) throws IllegalArgumentException {
     if (state < 0) {
       throw new IllegalArgumentException("Invalid state, state must be a positive integer");
     }
     myState = state;
-    // TODO: add error checking for whole integer values
     if (location == null ||
         location.getX() < 0 ||
-        location.getY() < 0) { // Throw exception if
+        location.getY() < 0 ||
+        location.getX() % 1 != 0 ||
+        location.getY() % 1 != 0) { // Throw exception if
       throw new IllegalArgumentException(
           "Invalid cell location, location must be represented as a positive integer");
     }

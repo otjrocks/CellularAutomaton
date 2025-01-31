@@ -17,19 +17,19 @@ import java.util.Map;
  */
 public class Grid {
 
-  private final int myWidth;
-  private final int myHeight;
+  private final int myNumRows;
+  private final int myNumCols;
   private final Map<Point2D, Cell> myCells;
 
   /**
    * Initialize a data structure to store a grid with the defined width and height
    *
-   * @param width:  Width of a grid represented as the number of cells spanning the width (int)
-   * @param height: Height of a grid represented as the number of cells spanning the height (int)
+   * @param numRows:  (int) number of rows
+   * @param numCols: (int) number of columns
    */
-  public Grid(int width, int height) {
-    myWidth = width;
-    myHeight = height;
+  public Grid(int numRows, int numCols) {
+    myNumRows = numRows;
+    myNumCols = numCols;
     myCells = new HashMap<>();
   }
 
@@ -71,22 +71,6 @@ public class Grid {
   }
 
   /**
-   * Remove the cell at a specified location
-   *
-   * @param row: Row of cell
-   * @param col: Column of cell
-   * @return true if the removal finished correct, false if the location specified cannot be found
-   */
-  public boolean removeCell(int row, int col) {
-    Point2D location = new Point2D.Double(row, col);
-    if (!cellExists(location)) {
-      return false;
-    }
-    myCells.remove(location);
-    return true;
-  }
-
-  /**
    * Check if a cell exists in the grid
    *
    * @param location: Location of cell
@@ -113,25 +97,6 @@ public class Grid {
     }
   }
 
-  /**
-   * For debugging, print current states of cells in grid.
-   * I asked ChatGPT for assistance in writing this method
-   */
-  public void printGrid() {
-    for (int row = 0; row < myWidth; row++) {
-      for (int col = 0; col < myHeight; col++) {
-        Cell cell = getCell(row, col);
-
-        if (cell != null) {
-          System.out.print(cell.getState() + " ");
-        } else {
-          System.out.print("0 ");
-        }
-      }
-      System.out.println();
-    }
-  }
-
   public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {
     List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
     for (Cell cell : myCells.values()) {
@@ -142,10 +107,17 @@ public class Grid {
 
   private boolean attemptAddCell(Cell cell) {
     // attempts to add cell to grid. Fails and returns false if cell provided does not have a properly formatted location or does not fit within the grid's width and height
-    if (cell.getRow() < 0 || cell.getRow() >= myWidth || cell.getCol() < 0 || cell.getCol() >= myHeight) {
+    if (!checkInBounds(cell)) {
       return false;
     }
     myCells.put(cell.getLocation(), cell);
     return true;
+  }
+
+  private boolean checkInBounds(Cell cell) {
+    return (cell.getLocation().getX() >= 0) &&
+        (cell.getLocation().getY() >= 0) &&
+        (cell.getLocation().getX() < myNumRows) &&
+        (cell.getLocation().getY() < myNumCols);
   }
 }

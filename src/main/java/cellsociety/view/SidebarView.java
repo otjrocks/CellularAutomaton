@@ -68,4 +68,5 @@ public class SidebarView extends VBox {
     text.setWrappingWidth(myWidth);
     return text;
   }
+
 }
