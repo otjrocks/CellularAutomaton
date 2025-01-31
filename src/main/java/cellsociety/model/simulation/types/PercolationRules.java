@@ -14,10 +14,8 @@ import java.util.Map;
 // A cell with state 2 indicates it's filled and water has passed through this cell
 
 public class PercolationRules extends SimulationRules {
-  private Map<String, Double> parameters;
-
-  public PercolationRules(Map<String, Double> parameters) {
-    super(parameters);
+  public PercolationRules() {
+    super();
   }
 
   /**
