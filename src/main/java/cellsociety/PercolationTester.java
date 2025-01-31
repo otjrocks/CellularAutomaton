@@ -4,10 +4,9 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.types.Percolation;
-import cellsociety.model.simulation.types.PercolationRules;
+import cellsociety.model.simulation.rules.PercolationRules;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class PercolationTester {
