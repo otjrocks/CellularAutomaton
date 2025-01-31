@@ -37,6 +37,7 @@ This project implements a cellular automata simulator.
 ### Notes/Assumptions
 
  * Assumptions or Simplifications:
+   * We assumed the typical usage of Percolation such that water flows from the top and only considers the adjacent neighbors (not the diagonals). 
 
  * Known Bugs:
 
