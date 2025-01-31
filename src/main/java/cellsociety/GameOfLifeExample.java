@@ -4,7 +4,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.types.GameOfLifeRules;
+import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 

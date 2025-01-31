@@ -1,4 +1,4 @@
-package cellsociety.model.simulation.types;
+package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -6,7 +6,6 @@ import cellsociety.model.simulation.SimulationRules;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 //For a Percolation cell, there can be 3 states
 // A cell with state 0 indicates it's blocked

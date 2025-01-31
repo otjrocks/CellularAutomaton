@@ -5,7 +5,7 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.types.GameOfLifeRules;
+import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.awt.geom.Point2D;
