@@ -26,6 +26,7 @@ public class SpreadingOfFireRules extends SimulationRules {
 
   /**
    * @param cell - individual cell from grid
+   * @param grid - the list of cell objects representing the grid
    * @return - a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
    *
    */
@@ -88,7 +89,7 @@ public class SpreadingOfFireRules extends SimulationRules {
     return currentState;
   }
 
-  private static Map<String, Double> setDefaultParameters() {
+  private Map<String, Double> setDefaultParameters() {
     Map<String, Double> parameters = new HashMap<>();
     parameters.put("ignitionWithoutNeighbors", 0.15);
     parameters.put("growInEmptyCell", 0.1);
