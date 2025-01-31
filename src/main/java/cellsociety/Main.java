@@ -1,5 +1,14 @@
 package cellsociety;
 
+import static cellsociety.config.MainConfig.BACKGROUND_COLOR;
+import static cellsociety.config.MainConfig.GRID_HEIGHT;
+import static cellsociety.config.MainConfig.GRID_WIDTH;
+import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.MARGIN;
+import static cellsociety.config.MainConfig.STEP_SPEED;
+import static cellsociety.config.MainConfig.TITLE;
+import static cellsociety.config.MainConfig.WIDTH;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
@@ -18,8 +27,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -27,16 +34,6 @@ import javafx.util.Duration;
  * Main file for application
  */
 public class Main extends Application {
-
-  public static final String TITLE = "Cell Society";
-  public static final int WIDTH = 1400;
-  public static final int HEIGHT = 800;
-  public static final Paint BACKGROUND_COLOR = Color.LIGHTGRAY;
-  public static final int MARGIN = 20;
-  public static final int GRID_WIDTH = (2 * WIDTH) / 3;
-  public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
-  public static final double STEP_SPEED = 0.05;
-
   private final Group root = new Group();
   private SimulationView myMainView;
   private Simulation mySimulation;
