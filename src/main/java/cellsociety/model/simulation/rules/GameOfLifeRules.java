@@ -1,4 +1,4 @@
-package cellsociety.model.simulation.types;
+package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;

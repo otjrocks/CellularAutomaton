@@ -4,26 +4,29 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.simulation.StateInfo;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.scene.paint.Color;
 
-public class GameOfLife extends Simulation {
+public class SegregationModel extends Simulation {
 
-  public GameOfLife(SimulationRules rules, SimulationData data) {
+  public SegregationModel(SimulationRules rules, SimulationData data) {
     super(rules, data);
   }
 
+  /**
+   *
+   */
   @Override
   public void getNextSimulationState() {
     return;
   }
 
+  /**
+   *
+   */
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo("Dead", Color.WHITE));
-    stateMap.put(1, new StateInfo("Alive", Color.BLACK));
+    stateMap.put(0, new StateInfo("Empty", Color.WHITE));
+    stateMap.put(1, new StateInfo("Group1", Color.RED));
+    stateMap.put(2, new StateInfo("Group2", Color.BLUE));
   }
-
 }
-
