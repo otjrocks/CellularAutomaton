@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PercolationTester {
+public class PercolationExample {
 
   public static void main(String[] args) throws InterruptedException {
     int width = 10, height = 10;
