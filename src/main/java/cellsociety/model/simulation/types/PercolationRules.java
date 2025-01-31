@@ -37,9 +37,7 @@ public class PercolationRules extends SimulationRules {
 
       if (grid.cellExists(neighborLocation)){
         Cell neighbor = grid.getCell(neighborLocation);
-        if (neighbor.getState() == 1){
-          neighbors.add(neighbor);
-        }
+        neighbors.add(neighbor);
       }
     }
     return neighbors;
@@ -59,13 +57,14 @@ public class PercolationRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
-    if (cell.getState() == 1) {
-      return 1;
+    int currentState = cell.getState();
+    if (currentState == 0) {
+      return 0;
     }
-    if (cell.getState() == 2) {
+    if (currentState == 2) {
       return 2;
     }
-    if (cell.getRow() == 0 && cell.getState() == 1) {
+    if (cell.getRow() == 0 && currentState == 1) {
       return 2;
     }
 
