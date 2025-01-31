@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 /**
- * Main view for the visualizing the simulation
+ * Simulation view for the visualizing the simulation
  *
  * @author Owen Jennings
  */
@@ -17,10 +17,10 @@ public class SimulationView extends Group {
   private final GridView myGridView;
 
   /**
-   * Create a main view
+   * Create a simulation view
    *
-   * @param width:  width of main view
-   * @param height: height of main view
+   * @param width:  width of simulation view
+   * @param height: height of simulation view
    */
   public SimulationView(int width, int height, int numRows, int numCols) {
     myGridView = new GridView(width, height, numRows, numCols);

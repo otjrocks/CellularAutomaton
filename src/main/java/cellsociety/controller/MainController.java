@@ -25,7 +25,7 @@ import javafx.util.Duration;
 
 /**
  * A class to handle the main interactions between the model and view classes
- * 
+ *
  * @author Owen Jennings
  */
 public class MainController {
@@ -34,22 +34,42 @@ public class MainController {
   private SimulationView myMainView;
   private Simulation mySimulation;
   private Grid myGrid;
+  Timeline mySimulationAnimation = new Timeline();
+  private boolean isPlaying = false;
 
   /**
    * Initialize the MainController
+   *
    * @param root: the main root group of the program
    */
   public MainController(Group root) {
     myRoot = root;
     createMainContainerAndView();
-    initializeSidebar(mySimulation);
-    initializeStepAnimation();
+    initializeSidebar(this);
+    initializeSimulationAnimation();
   }
 
-  private void initializeStepAnimation() {
-    Timeline animation = new Timeline();
-    animation.setCycleCount(Timeline.INDEFINITE);
-    animation.getKeyFrames()
+  /**
+   * Update the isPlaying parameter which determines whether simulation should be animated
+   *
+   * @param isPlaying: the new parameter for isPlaying
+   */
+  public void setIsPlaying(boolean isPlaying) {
+    this.isPlaying = isPlaying;
+  }
+
+  /**
+   * Returns the current simulation object
+   *
+   * @return The currently running simulation object
+   */
+  public Simulation getSimulation() {
+    return mySimulation;
+  }
+
+  private void initializeSimulationAnimation() {
+    mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
+    mySimulationAnimation.getKeyFrames()
         .add(new KeyFrame(Duration.seconds(STEP_SPEED), e -> {
           try {
             step();  // step function
@@ -57,12 +77,14 @@ public class MainController {
             throw new RuntimeException(ex);
           }
         }));
-    animation.play();
+    mySimulationAnimation.play();
   }
 
   public void step() {
-    myMainView.step(myGrid, mySimulation);
-    myGrid.updateGrid(mySimulation);
+    if (isPlaying) {
+      myMainView.step(myGrid, mySimulation);
+      myGrid.updateGrid(mySimulation);
+    }
   }
 
   private void createMainContainerAndView() {
@@ -77,10 +99,10 @@ public class MainController {
     mainContainer.getChildren().add(myMainView);
     myRoot.getChildren().add(mainContainer);
   }
-  
-  private void initializeSidebar(Simulation simulation) {
+
+  private void initializeSidebar(MainController controller) {
     SidebarView sidebar = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN),
-        GRID_HEIGHT - (2 * MARGIN), simulation);
+        GRID_HEIGHT - (2 * MARGIN), controller);
     sidebar.setLayoutX(GRID_WIDTH + 2 * MARGIN);
     sidebar.setLayoutY(MARGIN);
     myRoot.getChildren().add(sidebar);
@@ -105,7 +127,9 @@ public class MainController {
 
     mySimulation = new GameOfLife(
         new GameOfLifeRules(),
-        new SimulationData("Game of Life", "Glider", "Richard K. Guy", "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.", new ArrayList<>())
+        new SimulationData("Game of Life", "Glider", "Richard K. Guy",
+            "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.",
+            new ArrayList<>())
     );
   }
 }

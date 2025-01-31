@@ -1,8 +1,9 @@
 package cellsociety.view;
 
-import cellsociety.model.simulation.Simulation;
+import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationData;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,7 +20,8 @@ public class SidebarView extends VBox {
   public static final double ELEMENT_SPACING = 5;
 
   private final int myWidth;
-  private Simulation mySimulation;
+  private final MainController myMainController;
+  private boolean isPlaying = false;
 
   /**
    * Create a sidebar view with a preferred size of width x height
@@ -27,12 +29,12 @@ public class SidebarView extends VBox {
    * @param width:  preferred width of sidebar box
    * @param height: preferred height of sidebar box
    */
-  public SidebarView(int width, int height, Simulation simulation) {
+  public SidebarView(int width, int height, MainController controller) {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
     myWidth = width;
-    mySimulation = simulation;
+    myMainController = controller;
     initializeSidebar();
   }
 
@@ -42,12 +44,23 @@ public class SidebarView extends VBox {
   }
 
   private void initializeSimulationDataDisplay() {
-    SimulationData simulationData = mySimulation.getData();
+    SimulationData simulationData = myMainController.getSimulation().getData();
     addTextToSidebar("Name: " + simulationData.getName(), 14, TextAlignment.LEFT);
     addTextToSidebar("Type: " + simulationData.getType(), 14, TextAlignment.LEFT);
     addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
     addTextToSidebar("Description: " + simulationData.getDescription(), 14,
         TextAlignment.LEFT);
+    createPlayPauseButton();
+  }
+
+  private void createPlayPauseButton() {
+    Button playPauseButton = new Button("Play");
+    playPauseButton.setOnAction(event -> {
+      isPlaying = !isPlaying;
+      playPauseButton.setText(isPlaying ? "Pause" : "Play");
+      myMainController.setIsPlaying(isPlaying);
+    });
+    this.getChildren().addAll(playPauseButton);
   }
 
   private void initializeStaticContent() {
