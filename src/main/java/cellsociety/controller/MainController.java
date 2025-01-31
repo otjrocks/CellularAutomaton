@@ -34,6 +34,8 @@ public class MainController {
   private SimulationView myMainView;
   private Simulation mySimulation;
   private Grid myGrid;
+  private boolean isPlaying = false;
+  private double simulationSpeedMultiplier;
 
   /**
    * Initialize the MainController
@@ -41,9 +43,26 @@ public class MainController {
    */
   public MainController(Group root) {
     myRoot = root;
+    simulationSpeedMultiplier = 1;
     createMainContainerAndView();
-    initializeSidebar(mySimulation);
+    initializeSidebar(this);
     initializeStepAnimation();
+  }
+
+  /**
+   * Update the isPlaying parameter which determines whether simulation should be animated
+   * @param isPlaying: the new parameter for isPlaying
+   */
+  public void setIsPlaying(boolean isPlaying) {
+    this.isPlaying = isPlaying;
+  }
+
+  /**
+   * Returns the current simulation object
+   * @return The currently running simulation object
+   */
+  public Simulation getSimulation() {
+    return mySimulation;
   }
 
   private void initializeStepAnimation() {
@@ -61,8 +80,10 @@ public class MainController {
   }
 
   public void step() {
-    myMainView.step(myGrid, mySimulation);
-    myGrid.updateGrid(mySimulation);
+    if (isPlaying) {
+      myMainView.step(myGrid, mySimulation);
+      myGrid.updateGrid(mySimulation);
+    }
   }
 
   private void createMainContainerAndView() {
@@ -78,9 +99,9 @@ public class MainController {
     myRoot.getChildren().add(mainContainer);
   }
   
-  private void initializeSidebar(Simulation simulation) {
+  private void initializeSidebar(MainController controller) {
     SidebarView sidebar = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN),
-        GRID_HEIGHT - (2 * MARGIN), simulation);
+        GRID_HEIGHT - (2 * MARGIN), controller);
     sidebar.setLayoutX(GRID_WIDTH + 2 * MARGIN);
     sidebar.setLayoutY(MARGIN);
     myRoot.getChildren().add(sidebar);
