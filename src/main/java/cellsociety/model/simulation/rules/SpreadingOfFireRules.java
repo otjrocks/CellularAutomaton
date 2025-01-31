@@ -20,9 +20,8 @@ public class SpreadingOfFireRules extends SimulationRules {
   protected final Map<String, Double> parameters;
   private final Random random = new Random();
 
-  public SpreadingOfFireRules(Map<String, Double> parameters) {
-    this.parameters = setDefaultParameters();
-    this.parameters.putAll(parameters);
+  public SpreadingOfFireRules() {
+    this.parameters = new HashMap<>(setDefaultParameters());
   }
 
   /**
@@ -89,7 +88,7 @@ public class SpreadingOfFireRules extends SimulationRules {
     return currentState;
   }
 
-  private Map<String, Double> setDefaultParameters() {
+  private static Map<String, Double> setDefaultParameters() {
     Map<String, Double> parameters = new HashMap<>();
     parameters.put("ignitionWithoutNeighbors", 0.15);
     parameters.put("growInEmptyCell", 0.1);
