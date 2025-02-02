@@ -58,6 +58,12 @@ public class SidebarView extends VBox {
         TextAlignment.LEFT);
     Button playPauseButton = createPlayPauseButton();
     createStepButton(playPauseButton);
+    createFileChooserButton(playPauseButton);
+    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
+    this.getChildren().add(stateInfoView);
+  }
+
+  private void createFileChooserButton(Button playPauseButton) {
     Button chooseFile = new Button("Choose File");
     chooseFile.setOnAction(event -> {
       myMainController.handleNewSimulationFromFile();
