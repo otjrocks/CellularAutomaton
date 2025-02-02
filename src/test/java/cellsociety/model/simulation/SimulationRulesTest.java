@@ -19,33 +19,19 @@ class SimulationRulesTest {
   private Grid grid;
   private SimulationRules testSimulationRules;
 
-  /**
-   * Mock subclass of SimulationRules for testing.
-   */
-  private static class TestSimulationRules extends SimulationRules {
-    public TestSimulationRules() {
-      super();
-    }
-
-    @Override
-    public List<Cell> getNeighbors(Cell cell, Grid grid) {
-      return super.getNeighbors()
-
-    public TestSimulationRules(Map<String, Double> parameters) {
-      super(parameters);
-    }
-
-    @Override
-    public int getNextState(Cell cell, Grid grid) {
-      return cell.getState(); // Just return current state for mock testing
-    }
-  }
-
   @BeforeEach
   void setUp() {
     grid = new Grid(5, 5);
+
+    for (int row = 0; row < 5; row++) {
+      for (int col = 0; col < 5; col++) {
+        Cell newCell = new DefaultCell(0, new Double(row, col));
+        grid.addCell(newCell);
+      }
+    }
+
+
     testSimulationRules = new SimulationRules() {
-      @Override
       public List<Cell> getNeighbors(Cell cell, Grid grid) {
         return new ArrayList<>();
       }
@@ -96,15 +82,39 @@ class SimulationRulesTest {
 
   @Test
   void getNeighbors() {
-    Grid grid = new Grid(5, 5);
-    Cell cell = new Cell(1, new Double(1, 1)) {
-    };
+    Cell cell = grid.getCell(2, 2);
 
-    List<Cell> neighbors = testSimulationRules.getNeighbors(cell, grid);
-    assertTrue(neighbors.isEmpty(), "Neighbor list is empty.");
+    List<Cell> eightNeighbors = testSimulationRules.getNeighbors(cell, grid, true);
+    assertEquals(8, eightNeighbors.size(), "Moore's method should return 8 neighbors.");
+
+    List<Cell> fourNeighbors = testSimulationRules.getNeighbors(cell, grid, false);
+    assertEquals(4, fourNeighbors.size(), "Von neumann's method should return 4 neighbors.");
+  }
+
+  @Test
+  void getNeighborsBounds() {
+    Cell cell = grid.getCell(0, 0);
+
+    List<Cell> neighbors = testSimulationRules.getNeighbors(cell, grid, true);
+    assertEquals(3, neighbors.size());
+
+    cell = grid.getCell(0, 1);
+    neighbors = testSimulationRules.getNeighbors(cell, grid, false);
+    assertEquals(3, neighbors.size());
+
+    cell = grid.getCell(0, 2);
+    neighbors = testSimulationRules.getNeighbors(cell, grid, true);
+    assertEquals(5, neighbors.size());
+
+    cell = grid.getCell(4, 4);
+    neighbors = testSimulationRules.getNeighbors(cell, grid, false);
+    assertEquals(2, neighbors.size());
+
   }
 
   @Test
   void getNextState() {
+    Cell cell = new DefaultCell(2, new Double(2, 2));
+    assertEquals(2, testSimulationRules.getNextState(cell, grid));
   }
 }
