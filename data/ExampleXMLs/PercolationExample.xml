@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Percolation</Type>
+    <Title>Water Maze 1</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Block layout with path from start to finish to showcase how percolation sim operates</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>2,2,2,2,2,2,2,2,2,2</Row>
+        <Row>0,0,0,0,1,0,0,0,0,0</Row>
+        <Row>0,0,1,1,1,1,1,1,0,0</Row>
+        <Row>1,1,1,0,1,0,0,1,1,0</Row>
+        <Row>0,0,0,0,1,0,0,0,1,0</Row>
+        <Row>0,1,1,1,1,1,1,0,1,0</Row>
+        <Row>0,1,0,1,0,0,1,0,1,1</Row>
+        <Row>0,0,0,1,0,1,1,0,0,1</Row>
+        <Row>0,1,1,1,1,0,0,0,0,1</Row>
+        <Row>0,1,0,0,1,0,0,0,0,1</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <!-- No parameters are needed for Percolation -->
+    </Parameters>
+</SimulationConfig>

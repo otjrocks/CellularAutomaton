@@ -25,14 +25,12 @@ public class SegregationXMLHandler extends XMLHandler {
             if (param.getNodeType() == Node.ELEMENT_NODE) {
                 Element paramElement = (Element) param;
                 
-                if (paramElement.getElementsByTagName("toleranceThreshold").getLength() > 0) {
-                    try {
-                        double toleranceThreshold = Double.parseDouble(paramElement.getElementsByTagName("toleranceThreshold").item(0).getTextContent());
-                        myParameters.put("toleranceThreshold", toleranceThreshold);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Warning: Invalid parameter value. Defaulting to 0.3.");
-                        myParameters.put("toleranceThreshold", 0.3);
-                    }
+                try {
+                    double toleranceThreshold = Double.parseDouble(paramElement.getElementsByTagName("toleranceThreshold").item(0).getTextContent());
+                    myParameters.put("toleranceThreshold", toleranceThreshold);
+                } catch (NumberFormatException e) {
+                    System.err.println("Warning: Invalid parameter value. Defaulting to 0.3.");
+                    myParameters.put("toleranceThreshold", 0.3);
                 }
             }
         }
