@@ -31,7 +31,7 @@ public class Main extends Application {
     ScrollPane scrollPane = createMainScrollPane();
 
     Scene scene = new Scene(scrollPane, WIDTH, HEIGHT, BACKGROUND_COLOR);
-    new MainController(root); // create main controller and give access to main root
+    new MainController(stage, root); // create main controller and give access to main root
     stage.setScene(scene);
     stage.setTitle(TITLE);
     stage.show();

@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.config.FileChooserConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationData;
 import javafx.geometry.Pos;
@@ -52,18 +53,28 @@ public class SidebarView extends VBox {
         TextAlignment.LEFT);
     Button playPauseButton = createPlayPauseButton();
     createStepButton(playPauseButton);
+    Button chooseFile = new Button("Choose File");
+    chooseFile.setOnAction(event -> {
+      myMainController.getSimulationFromFile();
+      stopAnimationPlayIfRunning(playPauseButton);
+    });
+    this.getChildren().add(chooseFile);
   }
 
   private void createStepButton(Button playPauseButton) {
     Button stepButton = new Button("Single Step");
     stepButton.setOnAction(event -> {
       myMainController.handleSingleStep();
-      if (isPlaying) {
-        isPlaying = false;
-        playPauseButton.setText("Play");
-      }
+      stopAnimationPlayIfRunning(playPauseButton);
     });
     this.getChildren().add(stepButton);
+  }
+
+  private void stopAnimationPlayIfRunning(Button playPauseButton) {
+    if (isPlaying) {
+      playPauseButton.setText("Play");
+      isPlaying = false;
+    }
   }
 
   private Button createPlayPauseButton() {

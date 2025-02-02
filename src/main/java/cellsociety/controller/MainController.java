@@ -6,7 +6,9 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.WIDTH;
 
+import cellsociety.config.FileChooserConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.XMLHandler;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
@@ -22,6 +24,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -32,6 +35,7 @@ import javafx.util.Duration;
 public class MainController {
 
   private final Group myRoot;
+  private final Stage myStage;
   private SimulationView myMainView;
   private Simulation mySimulation;
   private Grid myGrid;
@@ -42,7 +46,8 @@ public class MainController {
    *
    * @param root: the main root group of the program
    */
-  public MainController(Group root) {
+  public MainController(Stage stage, Group root) {
+    myStage = stage;
     myRoot = root;
     createMainContainerAndView();
     initializeSidebar(this);
@@ -83,6 +88,12 @@ public class MainController {
   public void handleSingleStep() {
     stopAnimation();
     step();
+  }
+
+  public void getSimulationFromFile() {
+    stopAnimation();
+    String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
+    XMLHandler xmlHandler = new XMLHandler(filePath);
   }
 
   private void initializeSimulationAnimation() {
