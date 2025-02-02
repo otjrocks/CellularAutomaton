@@ -11,13 +11,7 @@ public class Percolation extends Simulation {
   public Percolation(SimulationRules rules, SimulationData data) {
     super(rules, data);
   }
-  /**
-   *
-   */
-  @Override
-  public void getNextSimulationState() {
-    return;
-  }
+
 
   @Override
   protected void initializeStateMap() {

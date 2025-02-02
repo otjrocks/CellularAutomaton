@@ -15,11 +15,6 @@ public class GameOfLife extends Simulation {
   }
 
   @Override
-  public void getNextSimulationState() {
-    return;
-  }
-
-  @Override
   protected void initializeStateMap() {
     stateMap.put(0, new StateInfo("Dead", Color.WHITE));
     stateMap.put(1, new StateInfo("Alive", Color.BLACK));

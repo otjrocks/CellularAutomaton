@@ -12,14 +12,6 @@ public class SpreadingOfFire extends Simulation {
     super(rules, data);
   }
 
-  /**
-   *
-   */
-  @Override
-  public void getNextSimulationState() {
-    return;
-  }
-
   @Override
   protected void initializeStateMap() {
     stateMap.put(0, new StateInfo("Empty", Color.BLACK));

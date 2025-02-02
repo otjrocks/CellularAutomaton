@@ -22,7 +22,6 @@ public abstract class Simulation {
   public SimulationData getData() {
     return myData;
   }
-  public abstract void getNextSimulationState();
 
   protected abstract void initializeStateMap();
   public StateInfo getStateInfo(int state) {
