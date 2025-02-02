@@ -34,6 +34,22 @@ public class Grid {
   }
 
   /**
+   * Get the number of rows in a grid
+   * @return (int) number of rows in a grid
+   */
+  public int getRows() {
+    return myNumRows;
+  }
+
+  /**
+   * Get number of columns in a grid
+   * @return (int) number of columns in a grid
+   */
+  public int getCols() {
+    return myNumCols;
+  }
+
+  /**
    * Get a cell at the specified col and row, if it exists
    *
    * @param row: Row of cell

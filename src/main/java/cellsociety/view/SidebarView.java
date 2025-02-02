@@ -38,6 +38,12 @@ public class SidebarView extends VBox {
     initializeSidebar();
   }
 
+  public void updateSidebar() {
+    this.getChildren().clear();
+    initializeStaticContent();
+    initializeSimulationDataDisplay();
+  }
+
   private void initializeSidebar() {
     initializeStaticContent();
     initializeSimulationDataDisplay();
@@ -50,17 +56,52 @@ public class SidebarView extends VBox {
     addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
     addTextToSidebar("Description: " + simulationData.getDescription(), 14,
         TextAlignment.LEFT);
-    createPlayPauseButton();
+    Button playPauseButton = createPlayPauseButton();
+    createStepButton(playPauseButton);
+    createFileChooserButton(playPauseButton);
+    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
+    this.getChildren().add(stateInfoView);
   }
 
-  private void createPlayPauseButton() {
+  private void createFileChooserButton(Button playPauseButton) {
+    Button chooseFile = new Button("Choose File");
+    chooseFile.setOnAction(event -> {
+      myMainController.handleNewSimulationFromFile();
+      stopAnimationPlayIfRunning(playPauseButton);
+    });
+    this.getChildren().add(chooseFile);
+  }
+
+  private void createStepButton(Button playPauseButton) {
+    Button stepButton = new Button("Single Step");
+    stepButton.setOnAction(event -> {
+      myMainController.handleSingleStep();
+      stopAnimationPlayIfRunning(playPauseButton);
+    });
+    this.getChildren().add(stepButton);
+  }
+
+  private void stopAnimationPlayIfRunning(Button playPauseButton) {
+    if (isPlaying) {
+      playPauseButton.setText("Play");
+      isPlaying = false;
+    }
+  }
+
+  private Button createPlayPauseButton() {
     Button playPauseButton = new Button("Play");
     playPauseButton.setOnAction(event -> {
       isPlaying = !isPlaying;
-      playPauseButton.setText(isPlaying ? "Pause" : "Play");
-      myMainController.setIsPlaying(isPlaying);
+      if (isPlaying) {
+        playPauseButton.setText("Pause");
+        myMainController.startAnimation();
+      } else {
+        playPauseButton.setText("Play");
+        myMainController.stopAnimation();
+      }
     });
     this.getChildren().addAll(playPauseButton);
+    return playPauseButton;
   }
 
   private void initializeStaticContent() {

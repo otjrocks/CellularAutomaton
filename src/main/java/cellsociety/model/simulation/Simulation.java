@@ -28,4 +28,7 @@ public abstract class Simulation {
   public StateInfo getStateInfo(int state) {
     return stateMap.getOrDefault(state, new StateInfo("Unknown", Color.GRAY));
   }
+  public Map<Integer, StateInfo> getStateMap() {
+    return Map.copyOf(stateMap);
+  }
 }
