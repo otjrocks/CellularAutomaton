@@ -1,9 +1,10 @@
-package cellsociety.model;
+package cellsociety.model.XMLHandlers;
 
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,18 +16,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.rules.GameOfLifeRules;
-import cellsociety.model.simulation.rules.PercolationRules;
-import cellsociety.model.simulation.rules.SegregationModelRules;
-import cellsociety.model.simulation.rules.SpreadingOfFireRules;
-import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.types.Percolation;
-import cellsociety.model.simulation.types.SegregationModel;
-import cellsociety.model.simulation.types.SpreadingOfFire;
 import javafx.scene.paint.Color;
 
 /**
@@ -34,7 +28,7 @@ import javafx.scene.paint.Color;
  *
  * @author Troy Ludwig
  */
-public class XMLHandler {
+public abstract class XMLHandler {
     private String myType;
     private String myTitle;
     private String myAuthor;
@@ -42,9 +36,11 @@ public class XMLHandler {
     private int myGridHeight;
     private int myGridWidth;
     private Grid myGrid;
-    private Simulation mySim;
-    private SimulationData mySimData;
-    private SimulationRules mySimRules;
+    
+    protected Simulation mySim;
+    protected SimulationData mySimData;
+    protected SimulationRules mySimRules;
+    protected Map<String, Double> myParameters;
 
     /**
     * XMLHandler constructor for referencing data
@@ -53,13 +49,8 @@ public class XMLHandler {
     *                     represented as a String
     */
     public XMLHandler(String xmlFilePath) {
-        ArrayList<Color> colors = new ArrayList(){{
-            add(Color.WHITE);
-            add(Color.RED);
-            add(Color.BLUE);
-        }};
+        ArrayList<Color> colors = new ArrayList();
         parseXMLFile(xmlFilePath, colors);
-        setSim(myType);
     }
 
     /**
@@ -100,28 +91,25 @@ public class XMLHandler {
                     myGrid.addCell(holdingCell);
                 }
             }
+
+            parseParameters(doc);
+            setSim();
+
         } catch (IOException | NumberFormatException | ParserConfigurationException | DOMException | SAXException e) {
         }
     }
 
-    private void setSim(String type){
-        if (type.equals("GameOfLife")){
-            mySimRules = new GameOfLifeRules();
-            mySim = new GameOfLife(mySimRules, mySimData);
-        }
-        if (type.equals("Percolation")){
-            mySimRules = new PercolationRules();
-            mySim = new Percolation(mySimRules, mySimData);
-        }
-        if (type.equals("SpreadingOfFire")){
-            mySimRules = new SpreadingOfFireRules();
-            mySim = new SpreadingOfFire(mySimRules, mySimData);
-        }
-        if (type.equals("Segregation")){
-            mySimRules = new SegregationModelRules();
-            mySim = new SegregationModel(mySimRules, mySimData);
-        }
-    }
+    /**
+    * Abstract method that assigns the parameters for the current simulation based on simulation type
+    * @param doc: parsed XML file containing the simulation data
+    *             most importantly for this function, the additional sim parameters
+    */
+    protected abstract void parseParameters(Document doc);
+
+    /**
+    * Abstract method that assigns SimRules and Sim based on simulation type
+    */
+    protected abstract void setSim();
 
     /**
     * Returns type associated with current simulation
@@ -193,21 +181,4 @@ public class XMLHandler {
         return mySim;
     }
 
-    /**
-    * Prints out all information associated with current XMLHandler
-    */
-    public void testXMLReading() {
-        System.out.println("Type: " + myType);
-        System.out.println("Title: " + myTitle);
-        System.out.println("Author: " + myAuthor);
-        System.out.println("Description: " + myDescription);
-        System.out.println("Grid Dimensions: " + myGridWidth + "x" + myGridHeight);
-        System.out.println("Initial Configuration:");
-        myGrid.printGrid();
-    }
-
-    public static void main(String[] args) {
-        XMLHandler handler = new XMLHandler("data/ExampleXMLs/Example1.xml");
-        handler.testXMLReading();
-    }
 }
