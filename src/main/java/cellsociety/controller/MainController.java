@@ -16,6 +16,7 @@ import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
@@ -35,7 +36,6 @@ public class MainController {
   private Simulation mySimulation;
   private Grid myGrid;
   Timeline mySimulationAnimation = new Timeline();
-  private boolean isPlaying = false;
 
   /**
    * Initialize the MainController
@@ -50,12 +50,21 @@ public class MainController {
   }
 
   /**
-   * Update the isPlaying parameter which determines whether simulation should be animated
-   *
-   * @param isPlaying: the new parameter for isPlaying
+   * Start the simulation animation if it is not already running
    */
-  public void setIsPlaying(boolean isPlaying) {
-    this.isPlaying = isPlaying;
+  public void startAnimation() {
+    if (mySimulationAnimation.getStatus() != Status.RUNNING) {
+      mySimulationAnimation.play();
+    }
+  }
+
+  /**
+   * Stop the simulation animation if it is currently running
+   */
+  public void stopAnimation() {
+    if (mySimulationAnimation.getStatus() == Status.RUNNING) {
+      mySimulationAnimation.stop();
+    }
   }
 
   /**
@@ -65,6 +74,15 @@ public class MainController {
    */
   public Simulation getSimulation() {
     return mySimulation;
+  }
+
+  /**
+   * Runs a single step animation on the simulation view. If the simulation animation is currently running,
+   * stop the animation and conduct a single step
+   */
+  public void handleSingleStep() {
+    stopAnimation();
+    step();
   }
 
   private void initializeSimulationAnimation() {
@@ -77,14 +95,11 @@ public class MainController {
             throw new RuntimeException(ex);
           }
         }));
-    mySimulationAnimation.play();
   }
 
-  public void step() {
-    if (isPlaying) {
-      myMainView.step(myGrid, mySimulation);
-      myGrid.updateGrid(mySimulation);
-    }
+  private void step() {
+    myMainView.step(myGrid, mySimulation);
+    myGrid.updateGrid(mySimulation);
   }
 
   private void createMainContainerAndView() {

@@ -50,17 +50,36 @@ public class SidebarView extends VBox {
     addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
     addTextToSidebar("Description: " + simulationData.getDescription(), 14,
         TextAlignment.LEFT);
-    createPlayPauseButton();
+    Button playPauseButton = createPlayPauseButton();
+    createStepButton(playPauseButton);
   }
 
-  private void createPlayPauseButton() {
+  private void createStepButton(Button playPauseButton) {
+    Button stepButton = new Button("Single Step");
+    stepButton.setOnAction(event -> {
+      myMainController.handleSingleStep();
+      if (isPlaying) {
+        isPlaying = false;
+        playPauseButton.setText("Play");
+      }
+    });
+    this.getChildren().add(stepButton);
+  }
+
+  private Button createPlayPauseButton() {
     Button playPauseButton = new Button("Play");
     playPauseButton.setOnAction(event -> {
       isPlaying = !isPlaying;
-      playPauseButton.setText(isPlaying ? "Pause" : "Play");
-      myMainController.setIsPlaying(isPlaying);
+      if (isPlaying) {
+        playPauseButton.setText("Pause");
+        myMainController.startAnimation();
+      } else {
+        playPauseButton.setText("Play");
+        myMainController.stopAnimation();
+      }
     });
     this.getChildren().addAll(playPauseButton);
+    return playPauseButton;
   }
 
   private void initializeStaticContent() {
