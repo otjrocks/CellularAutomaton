@@ -37,8 +37,10 @@ public class MainController {
   private final Group myRoot;
   private final Stage myStage;
   private SimulationView myMainView;
+  private SidebarView mySidebarView;
   private Simulation mySimulation;
   private Grid myGrid;
+  VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
 
   /**
@@ -90,10 +92,20 @@ public class MainController {
     step();
   }
 
-  public void getSimulationFromFile() {
-    stopAnimation();
+  public void handleNewSimulationFromFile() {
+    stopAnimation(); // stop animation if it is currently running
     String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
     XMLHandler xmlHandler = new XMLHandler(filePath);
+    mySimulation = xmlHandler.getSim();
+    myGrid = xmlHandler.getGrid();
+    createNewMainViewAndUpdateViewContainer();
+    mySidebarView.updateSidebar();
+  }
+
+  private void createNewMainViewAndUpdateViewContainer() {
+    myMainViewContainer.getChildren().remove(myMainView);
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols());
+    myMainViewContainer.getChildren().add(myMainView);
   }
 
   private void initializeSimulationAnimation() {
@@ -114,28 +126,27 @@ public class MainController {
   }
 
   private void createMainContainerAndView() {
-    VBox mainContainer = new VBox();
-    mainContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
-    mainContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
-    mainContainer.setAlignment(Pos.CENTER);
+    myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
+    myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
+    myMainViewContainer.setAlignment(Pos.CENTER);
 
     int numRows = 50, numCols = 50;
-    createGOFModel(numRows, numCols); // sample game for now, not reading from file
+    createInitialSimulation(numRows, numCols); // sample game for now, not reading from file
     myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols);
-    mainContainer.getChildren().add(myMainView);
-    myRoot.getChildren().add(mainContainer);
+    myMainViewContainer.getChildren().add(myMainView);
+    myRoot.getChildren().add(myMainViewContainer);
   }
 
   private void initializeSidebar(MainController controller) {
-    SidebarView sidebar = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN),
+    mySidebarView = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN),
         GRID_HEIGHT - (2 * MARGIN), controller);
-    sidebar.setLayoutX(GRID_WIDTH + 2 * MARGIN);
-    sidebar.setLayoutY(MARGIN);
-    myRoot.getChildren().add(sidebar);
+    mySidebarView.setLayoutX(GRID_WIDTH + 2 * MARGIN);
+    mySidebarView.setLayoutY(MARGIN);
+    myRoot.getChildren().add(mySidebarView);
   }
 
 
-  private void createGOFModel(int numRows, int numCols) {
+  private void createInitialSimulation(int numRows, int numCols) {
     myGrid = new Grid(numRows, numCols);
 
     // Add a glider pattern: Asked ChatGPT for helping make the glider for the simulation
