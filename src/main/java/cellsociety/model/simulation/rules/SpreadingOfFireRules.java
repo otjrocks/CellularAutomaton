@@ -41,7 +41,7 @@ public class SpreadingOfFireRules extends SimulationRules {
    *
    * @param cell - individual cell from grid
    * @param grid - the list of cell objects representing the grid
-   * @return -  the next state of a cell based on the rules of the forest fire model
+   * @return - the next state of a cell based on the rules of the forest fire model
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
