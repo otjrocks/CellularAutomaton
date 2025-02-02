@@ -24,6 +24,7 @@
     </InitialConfiguration>
 
     <Parameters>
-        <CatchProb> 0.5 </CatchProb>
+        <ignitionWithoutNeighbors> 0.1 </ignitionWithoutNeighbors>
+        <growInEmptyCell> 0.2 </growInEmptyCell>
     </Parameters>
 </SimulationConfig>
