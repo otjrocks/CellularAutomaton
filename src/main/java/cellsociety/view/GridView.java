@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.Grid;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 
@@ -36,8 +37,9 @@ public class GridView extends Group {
 
   /**
    * Set the color of a cell in the grid
-   * @param row: row of cell
-   * @param col: column of cell
+   *
+   * @param row:   row of cell
+   * @param col:   column of cell
    * @param color: color you want to set
    */
   public void setColor(int row, int col, Paint color) {

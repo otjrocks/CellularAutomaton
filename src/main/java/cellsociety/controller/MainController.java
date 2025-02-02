@@ -104,7 +104,7 @@ public class MainController {
 
   private void createNewMainViewAndUpdateViewContainer() {
     myMainViewContainer.getChildren().remove(myMainView);
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols());
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(), myGrid, mySimulation);
     myMainViewContainer.getChildren().add(myMainView);
   }
 
@@ -132,7 +132,7 @@ public class MainController {
 
     int numRows = 50, numCols = 50;
     createInitialSimulation(numRows, numCols); // sample game for now, not reading from file
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols);
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid, mySimulation);
     myMainViewContainer.getChildren().add(myMainView);
     myRoot.getChildren().add(myMainViewContainer);
   }
