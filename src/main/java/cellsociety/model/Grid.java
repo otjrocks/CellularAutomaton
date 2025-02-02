@@ -114,6 +114,18 @@ public class Grid {
   }
 
   /**
+   * Attempt to update a cell in the grid
+   * @param cell: the cell you which to update. This will update the grid with the cell provided
+   * @return true if update of cell succeeded, false otherwise
+   */
+  public boolean updateCell(Cell cell) {
+    if (!cellExists(cell.getLocation())) {
+      return false;
+    }
+    return attemptAddCell(cell);
+  }
+
+  /**
    * For debugging, print current states of cells in grid.
    * I asked ChatGPT for assistance in writing this method
    */
