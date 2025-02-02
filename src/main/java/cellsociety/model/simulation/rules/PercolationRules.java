@@ -22,7 +22,6 @@ public class PercolationRules extends SimulationRules {
    * @param grid - the list of cell objects representing the grid
    * @return -  a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
    */
-  @Override
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell ,grid, false);
   }

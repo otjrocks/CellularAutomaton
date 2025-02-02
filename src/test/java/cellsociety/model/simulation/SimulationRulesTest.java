@@ -19,6 +19,28 @@ class SimulationRulesTest {
   private Grid grid;
   private SimulationRules testSimulationRules;
 
+  /**
+   * Mock subclass of SimulationRules for testing.
+   */
+  private static class TestSimulationRules extends SimulationRules {
+    public TestSimulationRules() {
+      super();
+    }
+
+    @Override
+    public List<Cell> getNeighbors(Cell cell, Grid grid) {
+      return super.getNeighbors()
+
+    public TestSimulationRules(Map<String, Double> parameters) {
+      super(parameters);
+    }
+
+    @Override
+    public int getNextState(Cell cell, Grid grid) {
+      return cell.getState(); // Just return current state for mock testing
+    }
+  }
+
   @BeforeEach
   void setUp() {
     grid = new Grid(5, 5);

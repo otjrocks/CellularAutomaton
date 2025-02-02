@@ -28,7 +28,6 @@ public class SpreadingOfFireRules extends SimulationRules {
    * @return - a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
    *
    */
-  @Override
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, false);
   }
