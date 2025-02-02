@@ -97,6 +97,28 @@ public class Grid {
     }
   }
 
+
+  /**
+   * For debugging, print current states of cells in grid.
+   * I asked ChatGPT for assistance in writing this method
+   */
+  public void printGrid() {
+    for (int row = 0; row < myNumRows; row++) {
+      for (int col = 0; col < myNumCols; col++) {
+        Cell cell = getCell(row, col);
+
+        if (cell != null) {
+          System.out.print(cell.getState() + " ");
+        } else {
+          System.out.print("0 ");
+        }
+      }
+      System.out.println();
+    }
+  }
+
+
+
   public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {
     List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
     for (Cell cell : myCells.values()) {
