@@ -15,7 +15,17 @@ import cellsociety.model.XMLHandlers.types.PercolationXMLHandler;
 import cellsociety.model.XMLHandlers.types.SegregationXMLHandler;
 import cellsociety.model.XMLHandlers.types.SpreadingOfFireXMLHandler;
 
+/**
+* Separate class for differentiating between the different XMLHandler subclasses
+*
+*/
 public class XMLDefiner {
+    /**
+    * Method for referencing simulation type and returning the proper XMLHandler
+    *
+    * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
+    *                     represented as a String
+    */
     public static XMLHandler createHandler(String xmlFilePath) throws SAXException, ParserConfigurationException, IOException {
         File xmlFile = new File(xmlFilePath);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

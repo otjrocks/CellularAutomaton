@@ -11,11 +11,22 @@ import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.simulation.rules.SegregationModelRules;
 import cellsociety.model.simulation.types.SegregationModel;
 
+/**
+* Properly updates Segregation Simulations with the right Simulation and SimulationRules objects
+* after parsing the XML for universal Simulation data
+*/
 public class SegregationXMLHandler extends XMLHandler {
+
+    /**
+    * SegregationXMLHandler constructor that collects the universal sim data
+    */
     public SegregationXMLHandler(String xmlFilePath) {
         super(xmlFilePath);
     }
 
+    /**
+    * Collects the necessary parameters for Segregation Simulation (toleranceThreshold)
+    */
     @Override
     protected void parseParameters(Document doc) {
         myParameters = new HashMap<>();
@@ -36,9 +47,12 @@ public class SegregationXMLHandler extends XMLHandler {
         }
     }
     
+    /**
+    * Properly updates SimRules and Sim objects for Segregation Sim
+    */
     @Override
     protected void setSim(){
-        mySimRules = new SegregationModelRules();
+        mySimRules = new SegregationModelRules(myParameters);
         mySim = new SegregationModel(mySimRules, mySimData);
     }
 }

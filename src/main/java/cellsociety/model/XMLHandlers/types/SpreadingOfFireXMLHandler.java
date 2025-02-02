@@ -11,11 +11,22 @@ import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
 import cellsociety.model.simulation.types.SpreadingOfFire;
 
+/**
+* Properly updates Spreading of Fire Simulations with the right Simulation and SimulationRules objects
+* after parsing the XML for universal Simulation data
+*/
 public class SpreadingOfFireXMLHandler extends XMLHandler {
+
+    /**
+    * SpreadingOfFireXMLHandler constructor that collects the universal sim data
+    */
     public SpreadingOfFireXMLHandler(String xmlFilePath) {
         super(xmlFilePath);
     }
 
+    /**
+    * Collects the necessary parameters for Spreading of Fire Simulation (ignitionWithoutNeighbors and growInEmptyCell)
+    */
     @Override
     protected void parseParameters(Document doc) {
         myParameters = new HashMap<>();
@@ -48,9 +59,12 @@ public class SpreadingOfFireXMLHandler extends XMLHandler {
         }
     }
     
+    /**
+    * Properly updates SimRules and Sim objects for Spreading of Fire Sim
+    */
     @Override
     protected void setSim(){
-        mySimRules = new SpreadingOfFireRules();
+        mySimRules = new SpreadingOfFireRules(myParameters);
         mySim = new SpreadingOfFire(mySimRules, mySimData);
     }
 }

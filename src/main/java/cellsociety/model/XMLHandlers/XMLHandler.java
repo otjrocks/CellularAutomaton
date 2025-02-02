@@ -36,7 +36,7 @@ public abstract class XMLHandler {
     private int myGridHeight;
     private int myGridWidth;
     private Grid myGrid;
-    
+
     protected Simulation mySim;
     protected SimulationData mySimData;
     protected SimulationRules mySimRules;
@@ -181,4 +181,10 @@ public abstract class XMLHandler {
         return mySim;
     }
 
+    /**
+    * Returns the current additional simulation parameters
+    */
+    public Map<String, Double> getParams(){
+        return myParameters;
+    }
 }
