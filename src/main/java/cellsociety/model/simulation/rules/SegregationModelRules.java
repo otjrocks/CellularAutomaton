@@ -30,25 +30,7 @@ public class SegregationModelRules extends SimulationRules {
    */
   @Override
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    List<Cell> neighbors = new ArrayList<>();
-    Point2D curCellPosition = cell.getLocation();
-
-    int[][] directions = {
-        {0, -1}, {0, 1},   // left, right
-        {-1, 0}, {1, 0},   // up, down
-        {-1, -1}, {-1, 1}, // top diagonals (left, right)
-        {1, -1}, {1, 1}    // bottom diagonals (left, right)
-    };
-
-    for (int[] dir : directions) {
-      Point2D neighborLocation = new Point2D.Double(cell.getRow() + dir[0], cell.getCol() + dir[1]);
-
-      if (grid.cellExists(neighborLocation)) {
-        Cell neighborCell = grid.getCell(neighborLocation);
-        neighbors.add(neighborCell);
-      }
-    }
-    return neighbors;
+    return super.getNeighbors(cell, grid, true);
   }
 
 

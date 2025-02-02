@@ -24,21 +24,7 @@ public class PercolationRules extends SimulationRules {
    */
   @Override
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    List<Cell> neighbors = new ArrayList<>();
-
-    int [][] directions = {
-        {-1, 0}, {1, 0}, {0, -1}, {0, 1} // left, up, down, right
-    };
-
-    for (int[] direction : directions) {
-      Point2D neighborLocation = new Point2D.Double(cell.getRow() + direction[0], cell.getCol() + direction[1]);
-
-      if (grid.cellExists(neighborLocation)){
-        Cell neighbor = grid.getCell(neighborLocation);
-        neighbors.add(neighbor);
-      }
-    }
-    return neighbors;
+    return super.getNeighbors(cell ,grid, false);
   }
 
   /**
