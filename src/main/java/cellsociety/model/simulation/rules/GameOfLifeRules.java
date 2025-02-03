@@ -39,6 +39,11 @@ public class GameOfLifeRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+
+    if (cell.getRow() >= numOfGridRows || cell.getRow() < 0 || cell.getCol() >= numOfGridCols || cell.getCol() < 0) {
+      throw new IndexOutOfBoundsException("Cell position out of bounds");
+    }
+
     List<Cell> neighbors = getNeighbors(cell, grid);
     int aliveNeighbors = 0;
     for (Cell neighbor : neighbors) {
