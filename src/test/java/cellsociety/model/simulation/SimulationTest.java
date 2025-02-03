@@ -15,7 +15,7 @@ class SimulationTest {
   @BeforeEach
   void setUp() {
     testRules = new GameOfLifeRules(); // I chose an example rules class
-    testData = new SimulationMetaData("Game of Life", "Tester", "Justin", "Justin's GOL Test", null);
+    testData = new SimulationMetaData("Game of Life", "Tester", "Justin", "Justin's GOL Test");
     testSimulation = new Simulation(testRules, testData) {
       @Override
       protected void initializeStateMap() {
