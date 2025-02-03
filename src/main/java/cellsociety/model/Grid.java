@@ -34,6 +34,22 @@ public class Grid {
   }
 
   /**
+   * Get the number of rows in a grid
+   * @return (int) number of rows in a grid
+   */
+  public int getRows() {
+    return myNumRows;
+  }
+
+  /**
+   * Get number of columns in a grid
+   * @return (int) number of columns in a grid
+   */
+  public int getCols() {
+    return myNumCols;
+  }
+
+  /**
    * Get a cell at the specified col and row, if it exists
    *
    * @param row: Row of cell
@@ -97,6 +113,17 @@ public class Grid {
     }
   }
 
+  /**
+   * Attempt to update a cell in the grid
+   * @param cell: the cell you which to update. This will update the grid with the cell provided
+   * @return true if update of cell succeeded, false otherwise
+   */
+  public boolean updateCell(Cell cell) {
+    if (!cellExists(cell.getLocation())) {
+      return false;
+    }
+    return attemptAddCell(cell);
+  }
 
   /**
    * For debugging, print current states of cells in grid.
@@ -116,7 +143,6 @@ public class Grid {
       System.out.println();
     }
   }
-
 
 
   public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {

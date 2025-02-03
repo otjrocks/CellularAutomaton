@@ -18,10 +18,14 @@ import java.util.Random;
 public class SegregationModelRules extends SimulationRules {
   protected final Map<String, Double> parameters;
   private final Random random = new Random();
+  private boolean firstStateUpdate = true; // check to see if getNextState has been run before
+  private final List<Cell> emptyCells;
 
-  public SegregationModelRules() {
-    this.parameters = new HashMap<>(setDefaultParameters());
+  public SegregationModelRules(Map<String, Double> myParameters) {
+    this.parameters = new HashMap<>(myParameters);
+    emptyCells = new ArrayList<>();
   }
+
 
   /**
    * @param cell -  individual cell from grid
@@ -47,6 +51,10 @@ public class SegregationModelRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+    if (firstStateUpdate) {
+      getEmptyCells(grid);
+      firstStateUpdate = false;
+    }
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
 
@@ -66,17 +74,44 @@ public class SegregationModelRules extends SimulationRules {
     }
     double typePercentage = (double) sameType / totalNeighbors;
 
-    // unsatisfied -> mark as moved (HANDLE MOVEMENT IN GRID)
+    // unsatisfied
     if (typePercentage < parameters.get("toleranceThreshold")) {
+      moveCellToEmptyLocationIfAvailable(cell, grid, currentState);
       return 0;
     }
 
     return currentState;
   }
 
+  private void moveCellToEmptyLocationIfAvailable(Cell cell, Grid grid, int currentState) {
+    if (!emptyCells.isEmpty()) {
+      Cell newCell = getRandomEmptyCell();
+      newCell.setState(currentState);
+      grid.updateCell(newCell);
+      emptyCells.remove(newCell);
+      emptyCells.add(cell);
+    }
+  }
+
   private Map<String, Double> setDefaultParameters () {
     Map<String, Double> parameters = new HashMap<>();
     parameters.put("toleranceThreshold", 0.3);
     return parameters;
+  }
+
+  private void getEmptyCells(Grid grid) {
+    int rows = grid.getRows();
+    int cols = grid.getCols();
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        if (grid.getCell(row, col).getState() == 0) {
+          emptyCells.add(grid.getCell(row, col));
+        }
+      }
+    }
+  }
+
+  private Cell getRandomEmptyCell() {
+    return emptyCells.get(random.nextInt(emptyCells.size()));
   }
 }
