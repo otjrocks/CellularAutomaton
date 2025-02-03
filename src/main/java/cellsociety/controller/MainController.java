@@ -11,9 +11,13 @@ import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -101,6 +105,35 @@ public class MainController {
    */
   public void setEditing(boolean editing) {
     isEditing = editing;
+  }
+
+  /**
+   * Get rows in the grid
+   * @return int number of rows
+   */
+  public int getGridRows() {
+    return myGrid.getRows();
+  }
+
+  /**
+   * Get columns in the grid
+   * @return int number of columns
+   */
+  public int getGridCols() {
+    return myGrid.getCols();
+  }
+
+  public void updateGridCoordinates(int rows, int cols) {
+    myGrid = new Grid(rows, cols);
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getCols(); j++) {
+        List<Integer> states = mySimulation.getStates();
+        Collections.sort(states);
+        int initialState = states.getFirst();
+        myGrid.addCell(new DefaultCell(initialState, new Double(i,j)));
+      }
+    }
+    createNewMainViewAndUpdateViewContainer();
   }
 
   /**
