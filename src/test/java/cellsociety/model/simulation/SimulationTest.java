@@ -3,7 +3,6 @@ package cellsociety.model.simulation;
 import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.simulation.rules.GameOfLifeRules;
-import java.util.HashMap;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ class SimulationTest {
 
   @Test
   void getStateInfo() {
-    assertEquals(Color.WHITE, testSimulation.getStateInfo(0).getColor());
-    assertEquals(Color.BLACK, testSimulation.getStateInfo(1).getColor());
+    assertEquals(Color.WHITE, testSimulation.getStateInfo(0).color());
+    assertEquals(Color.BLACK, testSimulation.getStateInfo(1).color());
   }
 }
