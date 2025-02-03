@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
@@ -26,13 +27,16 @@ public class GridView extends Group {
    * @param numRows:    Number of rows in the grid
    * @param numColumns: Number of cells per row in the grid
    */
-  public GridView(int width, int height, int numRows, int numColumns) {
+  public GridView(int width, int height, int numRows, int numColumns, MainController mainController) {
     myNumRows = numRows;
     myNumColumns = numColumns;
     cellWidth = width / numColumns;
     cellHeight = height / numRows;
     myGrid = new CellView[myNumRows][myNumColumns];
     initializeGrid();
+    this.setOnMouseClicked(event -> {
+      mainController.changeCellState(this.getRow(event.getY()), this.getColumn(event.getX()));
+    });
   }
 
   /**
@@ -55,5 +59,13 @@ public class GridView extends Group {
         myGrid[row][column] = cellView;
       }
     }
+  }
+
+  private int getRow(double x) {
+    return (int) (x / cellHeight);
+  }
+
+  private int getColumn(double y) {
+    return (int) (y / cellWidth);
   }
 }

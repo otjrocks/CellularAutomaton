@@ -7,13 +7,23 @@ import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.config.FileChooserConfig;
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,6 +50,7 @@ public class MainController {
   private Grid myGrid;
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
+  private boolean isEditing = false;
 
   /**
    * Initialize the MainController
@@ -89,6 +100,84 @@ public class MainController {
     step();
   }
 
+  /**
+   * Set whether the user is editing the simulation
+   *
+   * @param editing: boolean indicating if user is editing the view
+   */
+  public void setEditing(boolean editing) {
+    isEditing = editing;
+  }
+
+  /**
+   * Get rows in the grid
+   * @return int number of rows
+   */
+  public int getGridRows() {
+    return myGrid.getRows();
+  }
+
+  /**
+   * Get columns in the grid
+   * @return int number of columns
+   */
+  public int getGridCols() {
+    return myGrid.getCols();
+  }
+
+  public void createNewSimulation(int rows, int cols, String type) {
+    myGrid = new Grid(rows, cols);
+    mySimulation = SimulationConfig.getNewSimulation(type, new SimulationMetaData(type, "", "", ""), null);
+    initializeGridWithCells();
+    createNewMainViewAndUpdateViewContainer();
+    createOrUpdateSidebar();
+  }
+
+  private void initializeGridWithCells() {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getCols(); j++) {
+        List<Integer> states = mySimulation.getStates();
+        Collections.sort(states);
+        int initialState = states.getFirst();
+        String simulationType = mySimulation.getData().type();
+        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
+      }
+    }
+  }
+
+  /**
+   * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
+   * from user input. The cell state will only be changed if the user is currently in editing mode
+   *
+   * @param row:    row of cell you which to change state of
+   * @param column: column of cell you which to change state of
+   */
+  public void changeCellState(int row, int column) {
+    if (isEditing) {
+      Cell cell = myGrid.getCell(row, column);
+      int nextState = getNextAvailableState(cell);
+      cell.setState(nextState);
+      myGrid.updateCell(cell);
+      mySimulationView.setColor(row, column, mySimulation.getStateInfo(nextState).color());
+    }
+  }
+
+  // From the states list from the simulation get the next available state from a sorted order
+  private int getNextAvailableState(Cell cell) {
+    List<Integer> states = mySimulation.getStates();
+    Collections.sort(states);
+    int nextStateIndex = states.indexOf(cell.getState());
+    if (nextStateIndex == -1 || nextStateIndex == states.size() - 1) {
+      nextStateIndex = 0;
+    } else {
+      nextStateIndex++;
+    }
+    return states.get(nextStateIndex);
+  }
+
+  /**
+   * Handle the loading and creation of a new simulation from a file chooser
+   */
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
@@ -110,6 +199,7 @@ public class MainController {
   }
 
   private void createOrUpdateSidebar() {
+    isEditing = false;
     if (mySidebarView == null) {
       initializeSidebar(this);
     } else {
@@ -121,7 +211,7 @@ public class MainController {
     myMainViewContainer.getChildren().clear();
     mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
         myGrid.getCols(),
-        myGrid, mySimulation);
+        myGrid, mySimulation, this);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
 

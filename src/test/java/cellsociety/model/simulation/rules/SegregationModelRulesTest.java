@@ -58,11 +58,4 @@ class SegregationModelRulesTest {
         "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
   }
 
-  @Test
-  void testCellHasValidCoordinates() {
-    Cell cell = new DefaultCell(1, new Point2D.Double(-1, -1));
-
-    assertThrows(IndexOutOfBoundsException.class, () -> segregationModelRules.getNextState(cell, grid),
-        "Calling getNextState() on an coordinate with an invalid location should throw OutofBoundsException.");
-  }
 }

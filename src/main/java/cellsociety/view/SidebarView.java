@@ -4,7 +4,6 @@ import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -23,6 +22,11 @@ public class SidebarView extends VBox {
   private final int myWidth;
   private final MainController myMainController;
   private boolean isPlaying = false;
+  private boolean isEditing = false;
+  private Button playPauseButton;
+  private Button stepButton;
+  private Button chooseFileButton;
+  private CreateNewSimulationView myCreateNewSimulationView;
 
   /**
    * Create a sidebar view with a preferred size of width x height
@@ -40,10 +44,16 @@ public class SidebarView extends VBox {
   }
 
   public void updateSidebar() {
+    isEditing = false;
     this.getChildren().clear();
     initializeStaticContent();
     initializeSimulationDataDisplay();
   }
+
+  public void setEditing(boolean isEditing) {
+    this.isEditing = isEditing;
+  }
+
 
   private void initializeSidebar() {
     initializeStaticContent();
@@ -52,12 +62,54 @@ public class SidebarView extends VBox {
 
   private void initializeSimulationDataDisplay() {
     createSimulationMetaDataDisplay();
-    Button playPauseButton = createPlayPauseButton();
-    createStepButton(playPauseButton);
-    createFileChooserButton(playPauseButton);
+    createPlayPauseButton();
+    createStepButton();
+    createFileChooserButton();
     StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView parameterView = new ParameterView(myMainController.getSimulation());
     this.getChildren().addAll(stateInfoView, parameterView);
+    createChangeModeButton();
+    myCreateNewSimulationView = new CreateNewSimulationView(
+        myMainController.getGridRows(), myMainController.getGridCols(), myMainController);
+  }
+
+  private void disableSetCoordinates() {
+    this.getChildren().remove(myCreateNewSimulationView);
+  }
+  private void enableSetCoordinates() {
+    this.getChildren().add(myCreateNewSimulationView);
+  }
+
+  private void createChangeModeButton() {
+    Button modeButton = new Button("Edit Mode");
+    modeButton.setOnMouseClicked(event -> {
+      isEditing = !isEditing;
+      if (isEditing) {
+        enableSetCoordinates();
+        stopAnimation();
+        setDisableAllButtonsExceptModeButton(true);
+        modeButton.setText("View Mode");
+        myMainController.setEditing(true);
+      } else {
+        disableSetCoordinates();
+        setDisableAllButtonsExceptModeButton(false);
+        modeButton.setText("Edit Mode");
+        myMainController.setEditing(false);
+      }
+    });
+    this.getChildren().add(modeButton);
+  }
+
+  private void stopAnimation() {
+    myMainController.stopAnimation();
+    playPauseButton.setText("Play");
+    isPlaying = false;
+  }
+
+  private void setDisableAllButtonsExceptModeButton(boolean disable) {
+    playPauseButton.setDisable(disable);
+    stepButton.setDisable(disable);
+    chooseFileButton.setDisable(disable);
   }
 
   private void createSimulationMetaDataDisplay() {
@@ -69,17 +121,17 @@ public class SidebarView extends VBox {
         TextAlignment.LEFT);
   }
 
-  private void createFileChooserButton(Button playPauseButton) {
-    Button chooseFile = new Button("Choose File");
-    chooseFile.setOnAction(event -> {
+  private void createFileChooserButton() {
+    chooseFileButton = new Button("Choose File");
+    chooseFileButton.setOnAction(event -> {
       myMainController.handleNewSimulationFromFile();
       stopAnimationPlayIfRunning(playPauseButton);
     });
-    this.getChildren().add(chooseFile);
+    this.getChildren().add(chooseFileButton);
   }
 
-  private void createStepButton(Button playPauseButton) {
-    Button stepButton = new Button("Single Step");
+  private void createStepButton() {
+    stepButton = new Button("Single Step");
     stepButton.setOnAction(event -> {
       myMainController.handleSingleStep();
       stopAnimationPlayIfRunning(playPauseButton);
@@ -94,8 +146,8 @@ public class SidebarView extends VBox {
     }
   }
 
-  private Button createPlayPauseButton() {
-    Button playPauseButton = new Button("Play");
+  private void createPlayPauseButton() {
+    playPauseButton = new Button("Play");
     playPauseButton.setOnAction(event -> {
       isPlaying = !isPlaying;
       if (isPlaying) {
@@ -107,7 +159,6 @@ public class SidebarView extends VBox {
       }
     });
     this.getChildren().addAll(playPauseButton);
-    return playPauseButton;
   }
 
   private void initializeStaticContent() {

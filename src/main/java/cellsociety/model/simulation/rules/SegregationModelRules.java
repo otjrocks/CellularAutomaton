@@ -21,7 +21,11 @@ public class SegregationModelRules extends SimulationRules {
   private boolean firstStateUpdate = true; // check to see if getNextState has been run before
 
   public SegregationModelRules(Map<String, Double> myParameters) {
-    this.parameters = new HashMap<>(myParameters);
+    if (myParameters == null || myParameters.isEmpty()) {
+      this.parameters = setDefaultParameters();
+    } else {
+      this.parameters = new HashMap<>(myParameters);
+    }
   }
 
 
@@ -48,14 +52,6 @@ public class SegregationModelRules extends SimulationRules {
    * @return - the next state of a cell based on the rules of Schelling's segregation model
    */
 
-
-
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    throw new UnsupportedOperationException("Segregation model updates all cells at once!");
-  }
-
-  /*
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
@@ -66,8 +62,11 @@ public class SegregationModelRules extends SimulationRules {
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
 
+    if (currentState == 0) return 0;
+
     int sameType = 0;
     int totalNeighbors = 0;
+
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() != 0) {
         totalNeighbors++;
@@ -76,25 +75,20 @@ public class SegregationModelRules extends SimulationRules {
         }
       }
     }
-    // No occupied neighbors -> stay
-    if (totalNeighbors == 0) {
-      return currentState;
-    }
     double typePercentage = (double) sameType / totalNeighbors;
 
-    // unsatisfied
-    if (typePercentage < parameters.get("toleranceThreshold")) {
-      moveCellToEmptyLocationIfAvailable(cell, emptyCells, grid, currentState);
-      return 0;
+    // No occupied neighbors or satisfied-> stay
+    if (totalNeighbors == 0 || typePercentage >= parameters.get("toleranceThreshold")) {
+      return currentState;
     }
 
-    return currentState;
+    //mark as -1 to be moved
+    return -1;
   }
-*/
 
   @Override
   public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
-    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
+    List<CellStateUpdate> nextStates = new ArrayList<>();
     List<Cell> emptyCells = new ArrayList<>();
     getEmptyCells(grid, emptyCells);
 
@@ -103,47 +97,30 @@ public class SegregationModelRules extends SimulationRules {
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
-      int currentState = cell.getState();
+      int nextState = getNextState(cell, grid);
 
-      if (currentState == 0) {
-        nextStates.add(new CellStateUpdate(cell.getLocation(), 0));
-        continue;
-      }
-
-      int sameType = 0;
-      int totalNeighbors = 0;
-
-      List<Cell> neighbors = getNeighbors(cell, grid);
-      for (Cell neighbor : neighbors) {
-        if (neighbor.getState() != 0) {
-          totalNeighbors++;
-          if (neighbor.getState() == currentState) {
-            sameType++;
-          }
-        }
-      }
-
-      if (totalNeighbors == 0 || ((double) sameType / totalNeighbors) >= parameters.get("toleranceThreshold")) {
-        nextStates.add(new CellStateUpdate(cell.getLocation(), currentState));
-      } else {
+      if (nextState == -1) {
         unsatisfiedCells.add(cell);
+      } else {
+        nextStates.add(new CellStateUpdate(cell.getLocation(), nextState));
       }
+    }
 
-      for (Cell unsatisfiedCell : unsatisfiedCells) {
-        moveCellToEmptyLocationIfAvailable(unsatisfiedCell, emptyCells, unsatisfiedCell.getState(), nextStates);
-      }
+    for (Cell unsatisfiedCell : unsatisfiedCells) {
+       moveCellToEmptyLocationIfAvailable(unsatisfiedCell, emptyCells, nextStates);
     }
     return nextStates;
   }
 
 
-  private void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells, int currentState, List<CellStateUpdate> nextStates) {
+  private void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells, List<CellStateUpdate> nextStates) {
     if (!emptyCells.isEmpty()) {
       Cell newCell = getAndRemoveRandomEmptyCell(emptyCells);
-      nextStates.add(new CellStateUpdate(newCell.getLocation(), currentState));
+      nextStates.add(new CellStateUpdate(newCell.getLocation(), unsatisfiedCell.getState()));
       nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), 0));
+      emptyCells.add(unsatisfiedCell);
     } else {
-      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), currentState));
+      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), unsatisfiedCell.getState()));
     }
   }
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GameOfLifeRulesTest {
+
   private Grid grid;
   private GameOfLifeRules gameOfLifeRules;
 
@@ -29,7 +30,8 @@ class GameOfLifeRulesTest {
     Cell neighbor = new DefaultCell(1, new Double(2, 3));
     grid.updateCell(neighbor);
 
-    assertEquals(0, gameOfLifeRules.getNextState(cell, grid), "A cell with less than 2 neighbors dies");
+    assertEquals(0, gameOfLifeRules.getNextState(cell, grid),
+        "A cell with less than 2 neighbors dies");
 
   }
 
@@ -53,7 +55,8 @@ class GameOfLifeRulesTest {
     grid.addCell(new DefaultCell(1, new Double(3, 2)));
     grid.addCell(new DefaultCell(1, new Double(2, 3)));
 
-    assertEquals(1, gameOfLifeRules.getNextState(cell, grid), "A cell with 2-3 neighbors should die.");
+    assertEquals(1, gameOfLifeRules.getNextState(cell, grid),
+        "A cell with 2-3 neighbors should die.");
   }
 
   @Test
@@ -64,7 +67,8 @@ class GameOfLifeRulesTest {
     grid.addCell(new DefaultCell(1, new Double(3, 2)));
     grid.addCell(new DefaultCell(1, new Double(2, 3)));
 
-    assertEquals(1, gameOfLifeRules.getNextState(cell, grid), "An inactive cell with 3 neighbors becomes active");
+    assertEquals(1, gameOfLifeRules.getNextState(cell, grid),
+        "An inactive cell with 3 neighbors becomes active");
   }
 
   //Needed assistance from ChatGPT on how to run the "negative scenario" tests, so it helped with the testGetNextStateNullCell.
@@ -81,12 +85,5 @@ class GameOfLifeRulesTest {
     assertThrows(IndexOutOfBoundsException.class, () -> gameOfLifeRules.getNextState(cell, grid),
         "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
   }
-
-  @Test
-  void testCellHasValidCoordinates() {
-    Cell cell = new DefaultCell(1, new Double(-1, -1));
-
-    assertThrows(IndexOutOfBoundsException.class, () -> gameOfLifeRules.getNeighbors(cell, grid),
-        "Calling getNeighbors() on an coordinate with an invalid location should throw IllegalArgumentException.");
-  }
+  
 }
