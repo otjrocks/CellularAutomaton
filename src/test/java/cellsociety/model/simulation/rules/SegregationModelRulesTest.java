@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
-import java.awt.geom.Point2D.Double;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ class SegregationModelRulesTest {
 
   @Test
   void testCellInBounds() {
-    Cell cell = new DefaultCell(1, new Double(50, 50));
+    Cell cell = new DefaultCell(1, new Point2D.Double(50, 50));
 
     assertThrows(IndexOutOfBoundsException.class, () -> segregationModelRules.getNextState(cell, grid),
         "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
@@ -60,7 +60,7 @@ class SegregationModelRulesTest {
 
   @Test
   void testCellHasValidCoordinates() {
-    Cell cell = new DefaultCell(1, new Double(-1, -1));
+    Cell cell = new DefaultCell(1, new Point2D.Double(-1, -1));
 
     assertThrows(IndexOutOfBoundsException.class, () -> segregationModelRules.getNextState(cell, grid),
         "Calling getNextState() on an coordinate with an invalid location should throw OutofBoundsException.");
