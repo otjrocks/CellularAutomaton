@@ -1,10 +1,12 @@
 package cellsociety.model.simulation;
 
 import cellsociety.model.Grid;
+import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cellsociety.model.cell.Cell;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +54,16 @@ public abstract class SimulationRules {
     }
     return neighbors;
 
+  }
+
+  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
+    Iterator<Cell> cellIterator = grid.getCellIterator();
+    while (cellIterator.hasNext()) {
+      Cell cell = cellIterator.next();
+      nextStates.add(new CellStateUpdate(cell.getLocation(), getNextState(cell, grid)));
+    }
+    return nextStates;
   }
 
   //methods below depend on subclasses

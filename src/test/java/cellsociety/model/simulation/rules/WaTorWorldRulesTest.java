@@ -13,7 +13,7 @@ class WaTorWorldRulesTest {
 
   @BeforeEach
   void setUp() {
-    grid = new Grid();
+    grid = new Grid(5, 5);
     waTorWorldRules = new WaTorWorldRules();
   }
 

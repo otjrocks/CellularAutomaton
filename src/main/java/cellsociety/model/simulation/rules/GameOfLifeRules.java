@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,15 @@ public class GameOfLifeRules extends SimulationRules {
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, true);
+  }
+
+  /**
+   *
+   * @param grid - the class containing the cell objects
+   * @return - A list of cell state/information updates from one class to another
+   */
+  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
+    return super.getNextStatesForAllCells(grid);
   }
 
   /**
