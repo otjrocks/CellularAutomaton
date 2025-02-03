@@ -2,10 +2,11 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -19,11 +20,9 @@ public class SegregationModelRules extends SimulationRules {
   protected final Map<String, Double> parameters;
   private final Random random = new Random();
   private boolean firstStateUpdate = true; // check to see if getNextState has been run before
-  private final List<Cell> emptyCells;
 
   public SegregationModelRules(Map<String, Double> myParameters) {
     this.parameters = new HashMap<>(myParameters);
-    emptyCells = new ArrayList<>();
   }
 
 
@@ -49,6 +48,15 @@ public class SegregationModelRules extends SimulationRules {
    * @param grid - the list of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Schelling's segregation model
    */
+
+
+
+  @Override
+  public int getNextState(Cell cell, Grid grid) {
+    throw new UnsupportedOperationException("Segregation model updates all cells at once!");
+  }
+
+  /*
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
@@ -56,10 +64,6 @@ public class SegregationModelRules extends SimulationRules {
       throw new IndexOutOfBoundsException("Cell position out of bounds");
     }
 
-    if (firstStateUpdate) {
-      getEmptyCells(grid);
-      firstStateUpdate = false;
-    }
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
 
@@ -81,20 +85,66 @@ public class SegregationModelRules extends SimulationRules {
 
     // unsatisfied
     if (typePercentage < parameters.get("toleranceThreshold")) {
-      moveCellToEmptyLocationIfAvailable(cell, grid, currentState);
+      moveCellToEmptyLocationIfAvailable(cell, emptyCells, grid, currentState);
       return 0;
     }
 
     return currentState;
   }
+*/
 
-  private void moveCellToEmptyLocationIfAvailable(Cell cell, Grid grid, int currentState) {
+  @Override
+  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
+    List<Cell> emptyCells = new ArrayList<>();
+    getEmptyCells(grid, emptyCells);
+
+    List<Cell> unsatisfiedCells = new ArrayList<>();
+
+    Iterator<Cell> cellIterator = grid.getCellIterator();
+    while (cellIterator.hasNext()) {
+      Cell cell = cellIterator.next();
+      int currentState = cell.getState();
+
+      if (currentState == 0) {
+        nextStates.add(new CellStateUpdate(cell.getLocation(), 0));
+        continue;
+      }
+
+      int sameType = 0;
+      int totalNeighbors = 0;
+
+      List<Cell> neighbors = getNeighbors(cell, grid);
+      for (Cell neighbor : neighbors) {
+        if (neighbor.getState() != 0) {
+          totalNeighbors++;
+          if (neighbor.getState() == currentState) {
+            sameType++;
+          }
+        }
+      }
+
+      if (totalNeighbors == 0 || ((double) sameType / totalNeighbors) >= parameters.get("toleranceThreshold")) {
+        nextStates.add(new CellStateUpdate(cell.getLocation(), currentState));
+      } else {
+        unsatisfiedCells.add(cell);
+      }
+
+      for (Cell unsatisfiedCell : unsatisfiedCells) {
+        moveCellToEmptyLocationIfAvailable(unsatisfiedCell, emptyCells, unsatisfiedCell.getState(), nextStates);
+      }
+    }
+    return nextStates;
+  }
+
+
+  private void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells, int currentState, List<CellStateUpdate> nextStates) {
     if (!emptyCells.isEmpty()) {
-      Cell newCell = getRandomEmptyCell();
-      newCell.setState(currentState);
-      grid.updateCell(newCell);
-      emptyCells.remove(newCell);
-      emptyCells.add(cell);
+      Cell newCell = getAndRemoveRandomEmptyCell(emptyCells);
+      nextStates.add(new CellStateUpdate(newCell.getLocation(), currentState));
+      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), 0));
+    } else {
+      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), currentState));
     }
   }
 
@@ -104,7 +154,7 @@ public class SegregationModelRules extends SimulationRules {
     return parameters;
   }
 
-  private void getEmptyCells(Grid grid) {
+  private void getEmptyCells(Grid grid, List<Cell> emptyCells) {
     int rows = grid.getRows();
     int cols = grid.getCols();
     for (int row = 0; row < rows; row++) {
@@ -116,7 +166,7 @@ public class SegregationModelRules extends SimulationRules {
     }
   }
 
-  private Cell getRandomEmptyCell() {
-    return emptyCells.get(random.nextInt(emptyCells.size()));
+  private Cell getAndRemoveRandomEmptyCell(List<Cell> emptyCells) {
+    return emptyCells.remove(random.nextInt(emptyCells.size()));
   }
 }
