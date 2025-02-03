@@ -27,6 +27,7 @@ public abstract class SimulationRules {
   }
   //only two options, so moved the getNeighbors here and actually defined it.
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
+
     List<Cell> neighbors = new ArrayList<>();
     Point2D curCellPosition = cell.getLocation();
 

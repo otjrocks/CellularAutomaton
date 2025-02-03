@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class GameOfLifeRules extends SimulationRules {
-
-  private final int numOfGridRows = 8;
-  private final int numOfGridCols = 8;
   private Map<String, Double> parameters;
 
 
@@ -40,7 +37,7 @@ public class GameOfLifeRules extends SimulationRules {
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
-    if (cell.getRow() >= numOfGridRows || cell.getRow() < 0 || cell.getCol() >= numOfGridCols || cell.getCol() < 0) {
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
       throw new IndexOutOfBoundsException("Cell position out of bounds");
     }
 
