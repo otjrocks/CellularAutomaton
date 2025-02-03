@@ -10,11 +10,11 @@ import javafx.stage.FileChooser;
  * @author Owen Jennings
  */
 public class FileChooserConfig {
-
   // kind of data files to look for
   public static final String DATA_FILE_EXTENSION = "*.xml";
   // default to start in the data folder to make it easy on the user to find
   public static final String DATA_FILE_FOLDER = System.getProperty("user.dir") + "/data";
+  public static final String DEFAULT_SIMULATION_PATH = DATA_FILE_FOLDER + "/simulations/default.xml"; // default simulation
   // NOTE: make ONE chooser since generally accepted behavior is that it remembers where user left it last
   public static final FileChooser FILE_CHOOSER = makeChooser();
 

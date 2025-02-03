@@ -10,14 +10,9 @@ import cellsociety.config.FileChooserConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
-import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -55,7 +50,6 @@ public class MainController {
     myStage = stage;
     myRoot = root;
     createMainContainerAndView();
-    initializeSidebar(this);
     initializeSimulationAnimation();
   }
 
@@ -98,22 +92,35 @@ public class MainController {
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
+    updateSimulationFromFile(filePath);
+  }
+
+  private void updateSimulationFromFile(String filePath) {
     XMLHandler xmlHandler = null;
     try {
       xmlHandler = XMLDefiner.createHandler(filePath);
     } catch (SAXException | ParserConfigurationException | IOException e) {
       throw new RuntimeException(e);
     }
-    
+
     mySimulation = xmlHandler.getSim();
     myGrid = xmlHandler.getGrid();
     createNewMainViewAndUpdateViewContainer();
-    mySidebarView.updateSidebar();
+    createOrUpdateSidebar();
+  }
+
+  private void createOrUpdateSidebar() {
+    if (mySidebarView == null) {
+      initializeSidebar(this);
+    } else {
+      mySidebarView.updateSidebar();
+    }
   }
 
   private void createNewMainViewAndUpdateViewContainer() {
-    myMainViewContainer.getChildren().remove(mySimulationView);
-    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(),
+    myMainViewContainer.getChildren().clear();
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
+        myGrid.getCols(),
         myGrid, mySimulation);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
@@ -139,12 +146,7 @@ public class MainController {
     myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
     myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
     myMainViewContainer.setAlignment(Pos.CENTER);
-
-    int numRows = 50, numCols = 50;
-    createInitialSimulation(numRows, numCols); // sample game for now, not reading from file
-    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid,
-        mySimulation);
-    myMainViewContainer.getChildren().add(mySimulationView);
+    updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
     myRoot.getChildren().add(myMainViewContainer);
   }
 
@@ -156,27 +158,4 @@ public class MainController {
     myRoot.getChildren().add(mySidebarView);
   }
 
-
-  private void createInitialSimulation(int numRows, int numCols) {
-    myGrid = new Grid(numRows, numCols);
-
-    // Add a glider pattern: Asked ChatGPT for helping make the glider for the simulation
-    myGrid.addCell(new DefaultCell(1, new Point2D.Double(1, 0)));
-    myGrid.addCell(new DefaultCell(1, new Point2D.Double(2, 1)));
-    myGrid.addCell(new DefaultCell(1, new Point2D.Double(0, 2)));
-    myGrid.addCell(new DefaultCell(1, new Point2D.Double(1, 2)));
-    myGrid.addCell(new DefaultCell(1, new Point2D.Double(2, 2)));
-    // Initialize every point in the grid to a DefaultCell with state 0
-    for (int x = 0; x < numRows; x++) {
-      for (int y = 0; y < numCols; y++) {
-        myGrid.addCell(new DefaultCell(0, new Point2D.Double(x, y)));
-      }
-    }
-
-    mySimulation = new GameOfLife(
-        new GameOfLifeRules(),
-        new SimulationMetaData("Game of Life", "Glider", "Richard K. Guy",
-            "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.")
-    );
-  }
 }
