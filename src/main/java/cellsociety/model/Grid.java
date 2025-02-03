@@ -23,7 +23,7 @@ public class Grid {
   /**
    * Initialize a data structure to store a grid with the defined width and height
    *
-   * @param numRows:  (int) number of rows
+   * @param numRows: (int) number of rows
    * @param numCols: (int) number of columns
    */
   public Grid(int numRows, int numCols) {
@@ -34,6 +34,7 @@ public class Grid {
 
   /**
    * Get the number of rows in a grid
+   *
    * @return (int) number of rows in a grid
    */
   public int getRows() {
@@ -42,6 +43,7 @@ public class Grid {
 
   /**
    * Get number of columns in a grid
+   *
    * @return (int) number of columns in a grid
    */
   public int getCols() {
@@ -106,13 +108,14 @@ public class Grid {
    */
   public void updateGrid(Simulation simulation) {
     List<CellStateUpdate> nextStates = simulation.getRules().getNextStatesForAllCells(this);
-    for (CellStateUpdate nextState: nextStates) {
+    for (CellStateUpdate nextState : nextStates) {
       getCell(nextState.getRow(), nextState.getCol()).setState(nextState.getState());
     }
   }
 
   /**
    * Attempt to update a cell in the grid
+   *
    * @param cell: the cell you which to update. This will update the grid with the cell provided
    * @return true if update of cell succeeded, false otherwise
    */
@@ -124,8 +127,18 @@ public class Grid {
   }
 
   /**
-   * For debugging, print current states of cells in grid.
-   * I asked ChatGPT for assistance in writing this method
+   * Get an iterator of all the cells that are in the Grid
+   *
+   * @return - an iterator of all the cells in a grid
+   */
+  public Iterator<Cell> getCellIterator() {
+    return myCells.values().iterator();
+
+  }
+
+  /**
+   * For debugging, print current states of cells in grid. I asked ChatGPT for assistance in writing
+   * this method
    */
   public void printGrid() {
     for (int row = 0; row < myNumRows; row++) {
@@ -141,7 +154,6 @@ public class Grid {
       System.out.println();
     }
   }
-
 
 
   private boolean attemptAddCell(Cell cell) {
@@ -160,21 +172,5 @@ public class Grid {
         (cell.getLocation().getY() < myNumCols);
   }
 
-  /**
-   *
-   * @return - a iterator of all the cells in a grid
-   */
-  public Iterator<Cell> getCellIterator() {
-    return myCells.values().iterator();
 
-  }
-  /*
-  public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {
-    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
-    for (Cell cell : myCells.values()) {
-      nextStates.add(new CellStateUpdate(cell.getLocation(), rules.getNextState(cell, this)));
-    }
-    return nextStates;
-  }
-   */
 }
