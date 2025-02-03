@@ -12,14 +12,13 @@ import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.types.GameOfLife;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.ArrayList;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -176,9 +175,8 @@ public class MainController {
 
     mySimulation = new GameOfLife(
         new GameOfLifeRules(),
-        new SimulationData("Game of Life", "Glider", "Richard K. Guy",
-            "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.",
-            new ArrayList<>())
+        new SimulationMetaData("Game of Life", "Glider", "Richard K. Guy",
+            "A basic configuration that produces a \"glider\" that moves diagonally across the grid using the Game of Life simulation conditions.")
     );
   }
 }

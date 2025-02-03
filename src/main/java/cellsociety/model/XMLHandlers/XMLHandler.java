@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
 import javafx.scene.paint.Color;
 
@@ -38,7 +38,7 @@ public abstract class XMLHandler {
     private Grid myGrid;
 
     protected Simulation mySim;
-    protected SimulationData mySimData;
+    protected SimulationMetaData mySimData;
     protected SimulationRules mySimRules;
     protected Map<String, Double> myParameters;
 
@@ -75,7 +75,7 @@ public abstract class XMLHandler {
             myAuthor = doc.getElementsByTagName("Author").item(0).getTextContent();
             myDescription = doc.getElementsByTagName("Description").item(0).getTextContent();
 
-            mySimData = new SimulationData(myType, myTitle, myAuthor, myDescription, colors);
+            mySimData = new SimulationMetaData(myType, myTitle, myAuthor, myDescription);
 
             Element gridDimensions = (Element) doc.getElementsByTagName("GridDimensions").item(0);
             myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
@@ -163,7 +163,7 @@ public abstract class XMLHandler {
     /**
     * Returns the simulation data associated with current simulation
     */
-    public SimulationData getSimData() {
+    public SimulationMetaData getSimData() {
         return mySimData;
     }
 

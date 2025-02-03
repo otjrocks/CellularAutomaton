@@ -5,11 +5,11 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 
 public abstract class Simulation {
-  private SimulationRules myRules;
-  private SimulationData myData;
+  private final SimulationRules myRules;
+  private final SimulationMetaData myData;
   protected final Map<Integer, StateInfo> stateMap;
 
-  public Simulation(SimulationRules rules, SimulationData data) {
+  public Simulation(SimulationRules rules, SimulationMetaData data) {
     myRules = rules;
     myData = data;
     this.stateMap = new HashMap<>();
@@ -19,7 +19,7 @@ public abstract class Simulation {
   public SimulationRules getRules() {
     return myRules;
   }
-  public SimulationData getData() {
+  public SimulationMetaData getData() {
     return myData;
   }
 

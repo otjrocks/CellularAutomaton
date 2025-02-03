@@ -2,11 +2,10 @@ package cellsociety;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.types.Percolation;
 import cellsociety.model.simulation.rules.PercolationRules;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class PercolationExample {
@@ -33,7 +32,7 @@ public class PercolationExample {
 
     Percolation percolation = new Percolation(
         new PercolationRules(),
-        new SimulationData("Percolation", "Percolation", "Author", "Percolation Simulation", new ArrayList<>())
+        new SimulationMetaData("Percolation", "Percolation", "Author", "Percolation Simulation")
     );
 
     for (int i = 0; i < 40; i++) {

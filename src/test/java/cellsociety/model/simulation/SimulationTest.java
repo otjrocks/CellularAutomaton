@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 class SimulationTest {
   private Simulation testSimulation;
   private SimulationRules testRules;
-  private SimulationData testData;
+  private SimulationMetaData testData;
 
   @BeforeEach
   void setUp() {
     testRules = new GameOfLifeRules(); // I chose an example rules class
-    testData = new SimulationData("Game of Life", "Tester", "Justin", "Justin's GOL Test", null);
+    testData = new SimulationMetaData("Game of Life", "Tester", "Justin", "Justin's GOL Test", null);
     testSimulation = new Simulation(testRules, testData) {
       @Override
       protected void initializeStateMap() {

@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 public abstract class SimulationRules {
-  private Map<String, Double> parameters;
+  private final Map<String, Double> parameters;
 
   public SimulationRules() {
     this.parameters = new HashMap<>();
@@ -31,7 +31,6 @@ public abstract class SimulationRules {
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
 
     List<Cell> neighbors = new ArrayList<>();
-    Point2D curCellPosition = cell.getLocation();
 
     int[][] directions = {
         {0, -1}, {0, 1},   // left, right

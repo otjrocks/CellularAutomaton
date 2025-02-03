@@ -1,7 +1,5 @@
 package cellsociety.model.simulation;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
@@ -9,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SimulationDataTest {
-  private SimulationData simulationData;
+  private SimulationMetaData simulationData;
   private ArrayList<Color> colors;
 
   @BeforeEach
@@ -19,7 +17,7 @@ class SimulationDataTest {
     colors.add(Color.BLUE);
     colors.add(Color.GREEN);
 
-    simulationData = new SimulationData("GameOfLife", "GOL Test", "Justin", "Justin's version", colors);
+    simulationData = new SimulationMetaData("GameOfLife", "GOL Test", "Justin", "Justin's version", colors);
   }
   @Test
   void testGetters() {

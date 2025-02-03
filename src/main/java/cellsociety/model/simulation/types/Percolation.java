@@ -1,14 +1,14 @@
 package cellsociety.model.simulation.types;
 
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.simulation.StateInfo;
 import javafx.scene.paint.Color;
 
 public class Percolation extends Simulation {
 
-  public Percolation(SimulationRules rules, SimulationData data) {
+  public Percolation(SimulationRules rules, SimulationMetaData data) {
     super(rules, data);
   }
 

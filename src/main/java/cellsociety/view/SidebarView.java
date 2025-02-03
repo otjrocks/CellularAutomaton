@@ -1,7 +1,7 @@
 package cellsociety.view;
 
 import cellsociety.controller.MainController;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -50,11 +50,11 @@ public class SidebarView extends VBox {
   }
 
   private void initializeSimulationDataDisplay() {
-    SimulationData simulationData = myMainController.getSimulation().getData();
-    addTextToSidebar("Name: " + simulationData.getName(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Type: " + simulationData.getType(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Description: " + simulationData.getDescription(), 14,
+    SimulationMetaData simulationData = myMainController.getSimulation().getData();
+    addTextToSidebar("Name: " + simulationData.name(), 14, TextAlignment.LEFT);
+    addTextToSidebar("Type: " + simulationData.type(), 14, TextAlignment.LEFT);
+    addTextToSidebar("Author: " + simulationData.author(), 14, TextAlignment.LEFT);
+    addTextToSidebar("Description: " + simulationData.description(), 14,
         TextAlignment.LEFT);
     Button playPauseButton = createPlayPauseButton();
     createStepButton(playPauseButton);
