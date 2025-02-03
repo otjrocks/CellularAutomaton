@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SimulationConfig>
     <Type>GameOfLife</Type>
-    <Title>Glider</Title>
-    <Author>Richard K. Guy</Author>
-    <Description>A basic configuration that produces a "glider" that moves diagonally across the grid</Description>
+    <Title>CornerCross</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
 
     <GridDimensions>
         <Height>10</Height>
@@ -11,20 +11,19 @@
     </GridDimensions>
 
     <InitialConfiguration>
-        <Row>0,0,0,0,0,0,0,0,0,0</Row>
-        <Row>0,0,0,0,0,0,0,0,0,0</Row>
-        <Row>0,0,0,0,0,0,0,0,0,0</Row>
-        <Row>0,0,0,0,0,1,0,0,0,0</Row>
-        <Row>0,0,0,0,0,0,1,0,0,0</Row>
-        <Row>0,0,0,0,1,1,1,0,0,0</Row>
+        <Row>1,0,1,0,0,0,0,1,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,0</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,0</Row>
+        <Row>1,0,1,0,0,0,0,1,0,1</Row>
     </InitialConfiguration>
 
     <Parameters>
         <!-- No parameters are needed for Game of Life -->
     </Parameters>
 </SimulationConfig>
-

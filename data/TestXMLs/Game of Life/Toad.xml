@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SimulationConfig>
     <Type>GameOfLife</Type>
-    <Title>Glider</Title>
-    <Author>Richard K. Guy</Author>
-    <Description>A basic configuration that produces a "glider" that moves diagonally across the grid</Description>
+    <Title>Toad</Title>
+    <Author>Simon Norton</Author>
+    <Description>2-period oscillator that connect and separate with each period</Description>
 
     <GridDimensions>
         <Height>10</Height>
@@ -15,9 +15,9 @@
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,1,0,0,0,0</Row>
-        <Row>0,0,0,0,0,0,1,0,0,0</Row>
-        <Row>0,0,0,0,1,1,1,0,0,0</Row>
-        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,1,0,0,1,0,0,0</Row>
+        <Row>0,0,0,1,0,0,1,0,0,0</Row>
+        <Row>0,0,0,0,1,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0</Row>
@@ -27,4 +27,3 @@
         <!-- No parameters are needed for Game of Life -->
     </Parameters>
 </SimulationConfig>
-
