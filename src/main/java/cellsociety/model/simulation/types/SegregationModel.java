@@ -16,14 +16,6 @@ public class SegregationModel extends Simulation {
    *
    */
   @Override
-  public void getNextSimulationState() {
-    return;
-  }
-
-  /**
-   *
-   */
-  @Override
   protected void initializeStateMap() {
     stateMap.put(0, new StateInfo("Empty", Color.WHITE));
     stateMap.put(1, new StateInfo("Group1", Color.RED));

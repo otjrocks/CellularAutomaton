@@ -3,8 +3,6 @@ package cellsociety.model.simulation.rules;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.SimulationRules;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,23 +32,8 @@ public class SpreadingOfFireRules extends SimulationRules {
    * @return - a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
    *
    */
-  @Override
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    List<Cell> neighbors = new ArrayList<>();
-
-    int [][] directions = {
-        {-1, 0}, {1, 0}, {0, -1}, {0, 1} // left, up, down, right
-    };
-
-    for (int[] direction : directions) {
-      Point2D neighborLocation = new Point2D.Double(cell.getRow() + direction[0], cell.getCol() + direction[1]);
-
-      if (grid.cellExists(neighborLocation)){
-        Cell neighbor = grid.getCell(neighborLocation);
-        neighbors.add(neighbor);
-      }
-    }
-    return neighbors;
+    return super.getNeighbors(cell, grid, false);
   }
 
 
@@ -62,7 +45,7 @@ public class SpreadingOfFireRules extends SimulationRules {
    *
    * @param cell - individual cell from grid
    * @param grid - the list of cell objects representing the grid
-   * @return -  the next state of a cell based on the rules of the forest fire model
+   * @return - the next state of a cell based on the rules of the forest fire model
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
