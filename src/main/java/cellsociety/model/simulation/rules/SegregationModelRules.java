@@ -17,7 +17,6 @@ import java.util.Random;
 // A cell with state 2 indicates it's a part of Group 2
 
 public class SegregationModelRules extends SimulationRules {
-  protected final Map<String, Double> parameters;
   private final Random random = new Random();
   private boolean firstStateUpdate = true; // check to see if getNextState has been run before
 

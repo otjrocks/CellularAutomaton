@@ -15,11 +15,10 @@ import java.util.*;
  */
 public class WaTorWorldRules extends SimulationRules {
 
-  private final Map<String, Double> parameters;
   private final Random random = new Random();
 
   public WaTorWorldRules(Map<String, Double> parameters) {
-    this.parameters = parameters;
+    super.parameters = parameters;
   }
 
   // I asked ChatGPT for help with implementing this enum

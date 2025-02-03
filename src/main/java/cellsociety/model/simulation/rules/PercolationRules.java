@@ -2,7 +2,6 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 

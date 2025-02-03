@@ -4,6 +4,7 @@ import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -50,17 +51,22 @@ public class SidebarView extends VBox {
   }
 
   private void initializeSimulationDataDisplay() {
+    createSimulationMetaDataDisplay();
+    Button playPauseButton = createPlayPauseButton();
+    createStepButton(playPauseButton);
+    createFileChooserButton(playPauseButton);
+    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
+    ParameterView parameterView = new ParameterView(myMainController.getSimulation());
+    this.getChildren().addAll(stateInfoView, parameterView);
+  }
+
+  private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().getData();
     addTextToSidebar("Name: " + simulationData.name(), 14, TextAlignment.LEFT);
     addTextToSidebar("Type: " + simulationData.type(), 14, TextAlignment.LEFT);
     addTextToSidebar("Author: " + simulationData.author(), 14, TextAlignment.LEFT);
     addTextToSidebar("Description: " + simulationData.description(), 14,
         TextAlignment.LEFT);
-    Button playPauseButton = createPlayPauseButton();
-    createStepButton(playPauseButton);
-    createFileChooserButton(playPauseButton);
-    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
-    this.getChildren().add(stateInfoView);
   }
 
   private void createFileChooserButton(Button playPauseButton) {

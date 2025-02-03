@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class GameOfLifeRules extends SimulationRules {
-  private Map<String, Double> parameters;
 
 
   public GameOfLifeRules() {
@@ -27,11 +26,9 @@ public class GameOfLifeRules extends SimulationRules {
 
 
   /**
-   * Game of Life:
-   * Any cell with fewer than 2 neighbors dies due to underpopulation
-   * Any cell with 2 - 3 neighbors moves on to the next generation
-   * Any cell with more than 3 neighbors dies due to overpopulation
-   * Any inactive cell with exactly 3 neighbors becomes active
+   * Game of Life: Any cell with fewer than 2 neighbors dies due to underpopulation Any cell with 2
+   * - 3 neighbors moves on to the next generation Any cell with more than 3 neighbors dies due to
+   * overpopulation Any inactive cell with exactly 3 neighbors becomes active
    *
    * @param cell - individual cell from grid
    * @return the next state of a cell based on the rules of game of life
@@ -39,7 +36,8 @@ public class GameOfLifeRules extends SimulationRules {
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
+        || cell.getCol() < 0) {
       throw new IndexOutOfBoundsException("Cell position out of bounds");
     }
 

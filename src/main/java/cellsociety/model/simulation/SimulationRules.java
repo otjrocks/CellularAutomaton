@@ -13,7 +13,7 @@ import java.util.Map;
 
 public abstract class SimulationRules {
 
-  private final Map<String, Double> parameters;
+  protected Map<String, Double> parameters;
 
   public SimulationRules() {
     this.parameters = new HashMap<>();
@@ -21,6 +21,10 @@ public abstract class SimulationRules {
 
   public SimulationRules(Map<String, Double> parameters) {
     this.parameters = parameters;
+  }
+
+  public Map<String, Double> getParameters() {
+    return Map.copyOf(parameters);
   }
 
   public Double getParameter(String curParameter) {

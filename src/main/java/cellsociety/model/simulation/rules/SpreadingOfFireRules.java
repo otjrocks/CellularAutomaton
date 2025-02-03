@@ -15,7 +15,6 @@ import java.util.Random;
 // A cell with state 2 indicates it's burning
 
 public class SpreadingOfFireRules extends SimulationRules {
-  protected final Map<String, Double> parameters;
   private final Random random = new Random();
 
   public SpreadingOfFireRules() {
