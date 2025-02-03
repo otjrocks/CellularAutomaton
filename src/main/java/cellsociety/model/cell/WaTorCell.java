@@ -9,8 +9,17 @@ import java.awt.geom.Point2D;
  */
 public class WaTorCell extends Cell {
 
+  public static final int DEFAULT_HEALTH = 5;
   private int health;
   private int reproductionEnergy;
+
+  /**
+   * Create a WaTor cell with the default health amount
+   */
+  public WaTorCell(int state, Point2D location) {
+    super(state, location);
+    this.health = DEFAULT_HEALTH;
+  }
 
   /**
    * Create a WaTor cell
@@ -38,6 +47,7 @@ public class WaTorCell extends Cell {
 
   /**
    * Add to a cells health
+   *
    * @param amount: the amount you wish to add
    */
   public void addHealth(int amount) {

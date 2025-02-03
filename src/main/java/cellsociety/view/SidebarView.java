@@ -26,6 +26,7 @@ public class SidebarView extends VBox {
   private Button playPauseButton;
   private Button stepButton;
   private Button chooseFileButton;
+  private CreateNewSimulationView myCreateNewSimulationView;
 
   /**
    * Create a sidebar view with a preferred size of width x height
@@ -43,10 +44,16 @@ public class SidebarView extends VBox {
   }
 
   public void updateSidebar() {
+    isEditing = false;
     this.getChildren().clear();
     initializeStaticContent();
     initializeSimulationDataDisplay();
   }
+
+  public void setEditing(boolean isEditing) {
+    this.isEditing = isEditing;
+  }
+
 
   private void initializeSidebar() {
     initializeStaticContent();
@@ -61,15 +68,30 @@ public class SidebarView extends VBox {
     StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView parameterView = new ParameterView(myMainController.getSimulation());
     this.getChildren().addAll(stateInfoView, parameterView);
+    createChangeModeButton();
+    myCreateNewSimulationView = new CreateNewSimulationView(
+        myMainController.getGridRows(), myMainController.getGridCols(), myMainController);
+  }
+
+  private void disableSetCoordinates() {
+    this.getChildren().remove(myCreateNewSimulationView);
+  }
+  private void enableSetCoordinates() {
+    this.getChildren().add(myCreateNewSimulationView);
+  }
+
+  private void createChangeModeButton() {
     Button modeButton = new Button("Edit Mode");
     modeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
+        enableSetCoordinates();
         stopAnimation();
         setDisableAllButtonsExceptModeButton(true);
         modeButton.setText("View Mode");
         myMainController.setEditing(true);
       } else {
+        disableSetCoordinates();
         setDisableAllButtonsExceptModeButton(false);
         modeButton.setText("Edit Mode");
         myMainController.setEditing(false);
