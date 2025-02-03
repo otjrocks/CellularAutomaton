@@ -12,21 +12,25 @@ import java.util.Map;
 
 
 public abstract class SimulationRules {
+
   private final Map<String, Double> parameters;
 
   public SimulationRules() {
     this.parameters = new HashMap<>();
   }
+
   public SimulationRules(Map<String, Double> parameters) {
     this.parameters = parameters;
   }
-  public Double getParameter(String curParameter){
+
+  public Double getParameter(String curParameter) {
     return parameters.get(curParameter);
   }
 
-  public void setParameter(String key, Double value){
+  public void setParameter(String key, Double value) {
     parameters.put(key, value);
   }
+
   //only two options, so moved the getNeighbors here and actually defined it.
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
 

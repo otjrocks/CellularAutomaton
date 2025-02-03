@@ -4,8 +4,6 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 
 //For a Percolation cell, there can be 3 states
