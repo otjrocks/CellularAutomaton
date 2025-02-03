@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Percolation</Type>
+    <Title>SmallMaze</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A small maze to demonstrate the percolation simulation's ability to find a way out</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>0,0,1,0,0,0,0,0,0,0</Row>
+        <Row>0,1,1,1,1,0,1,1,1,1</Row>
+        <Row>0,1,0,0,1,0,0,0,0,1</Row>
+        <Row>1,1,1,0,1,1,1,1,1,1</Row>
+        <Row>1,0,1,0,0,0,0,0,0,0</Row>
+        <Row>1,0,1,1,1,1,1,1,1,1</Row>
+        <Row>0,0,0,1,0,1,0,0,0,1</Row>
+        <Row>1,1,1,1,0,1,1,1,0,1</Row>
+        <Row>0,1,0,0,1,1,0,1,0,1</Row>
+        <Row>0,0,0,0,1,0,0,0,0,0</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <!-- No parameters are needed for Percolation -->
+    </Parameters>
+</SimulationConfig>
