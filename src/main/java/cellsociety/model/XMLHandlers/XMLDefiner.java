@@ -14,6 +14,7 @@ import cellsociety.model.XMLHandlers.types.GameOfLifeXMLHandler;
 import cellsociety.model.XMLHandlers.types.PercolationXMLHandler;
 import cellsociety.model.XMLHandlers.types.SegregationXMLHandler;
 import cellsociety.model.XMLHandlers.types.SpreadingOfFireXMLHandler;
+import cellsociety.model.XMLHandlers.types.WWXMLHandler;
 
 /**
 * Separate class for differentiating between the different XMLHandler subclasses
@@ -47,6 +48,9 @@ public class XMLDefiner {
             }
             case "Segregation" -> {
                 return new SegregationXMLHandler(xmlFilePath);
+            }
+            case "WaTorWorld" -> {
+                return new WWXMLHandler(xmlFilePath);
             }
             default -> throw new IllegalArgumentException("Unsupported simulation type: " + type);
         }
