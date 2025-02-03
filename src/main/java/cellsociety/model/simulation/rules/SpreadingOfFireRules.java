@@ -60,17 +60,7 @@ public class SpreadingOfFireRules extends SimulationRules {
     if (currentState == 2){
       return 0;
     }
-    // neighbor burning -> you burn
-    List<Cell> neighbors = getNeighbors(cell, grid);
-    for (Cell neighbor : neighbors){
-      if (neighbor.getState() == 2){
-        return 2;
-      }
-    }
-    //random ignition of a tree cell
-    if (currentState == 1 && (random.nextDouble() < parameters.get("ignitionWithoutNeighbors"))){
-      return 2;
-    }
+
     //empty to tree
     if (currentState == 0) {
       if (random.nextDouble() < parameters.get("growInEmptyCell")){
@@ -78,6 +68,20 @@ public class SpreadingOfFireRules extends SimulationRules {
       }
       return 0;
     }
+
+    // neighbor burning -> you burn
+    List<Cell> neighbors = getNeighbors(cell, grid);
+    for (Cell neighbor : neighbors){
+      if (neighbor.getState() == 2 && cell.getState() == 1) { // you must be a tree to burn
+        return 2;
+      }
+    }
+
+    //random ignition of a tree cell
+    if (currentState == 1 && (random.nextDouble() < parameters.get("ignitionWithoutNeighbors"))){
+      return 2;
+    }
+
     return currentState;
   }
 
