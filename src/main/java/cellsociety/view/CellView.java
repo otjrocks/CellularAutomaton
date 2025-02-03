@@ -30,7 +30,6 @@ public class CellView extends Rectangle {
     this.setStroke(BORDER_COLOR);
     this.setStrokeType(StrokeType.INSIDE);
     this.setStrokeWidth(BORDER_WIDTH);
-
   }
 
   /**

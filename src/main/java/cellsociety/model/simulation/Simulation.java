@@ -1,7 +1,10 @@
 package cellsociety.model.simulation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.scene.paint.Color;
 
 public abstract class Simulation {
@@ -33,5 +36,9 @@ public abstract class Simulation {
 
   public Map<Integer, StateInfo> getStateMap() {
     return Map.copyOf(stateMap);
+  }
+
+  public List<Integer> getStates() {
+    return new ArrayList<>(stateMap.keySet());
   }
 }
