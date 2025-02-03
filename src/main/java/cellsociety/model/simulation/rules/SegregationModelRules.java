@@ -19,12 +19,13 @@ public class SegregationModelRules extends SimulationRules {
   protected final Map<String, Double> parameters;
   private final Random random = new Random();
   private boolean firstStateUpdate = true; // check to see if getNextState has been run before
-  private List<Cell> emptyCells;
+  private final List<Cell> emptyCells;
 
-  public SegregationModelRules() {
-    this.parameters = new HashMap<>(setDefaultParameters());
+  public SegregationModelRules(Map<String, Double> myParameters) {
+    this.parameters = new HashMap<>(myParameters);
     emptyCells = new ArrayList<>();
   }
+
 
   /**
    * @param cell -  individual cell from grid

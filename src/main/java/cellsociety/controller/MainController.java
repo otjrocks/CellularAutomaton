@@ -8,7 +8,8 @@ import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.config.FileChooserConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.XMLHandler;
+import cellsociety.model.XMLHandlers.XMLDefiner;
+import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationData;
@@ -17,6 +18,7 @@ import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -26,6 +28,8 @@ import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * A class to handle the main interactions between the model and view classes
@@ -84,8 +88,8 @@ public class MainController {
   }
 
   /**
-   * Runs a single step animation on the simulation view. If the simulation animation is currently running,
-   * stop the animation and conduct a single step
+   * Runs a single step animation on the simulation view. If the simulation animation is currently
+   * running, stop the animation and conduct a single step
    */
   public void handleSingleStep() {
     stopAnimation();
@@ -95,7 +99,13 @@ public class MainController {
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
-    XMLHandler xmlHandler = new XMLHandler(filePath);
+    XMLHandler xmlHandler = null;
+    try {
+      xmlHandler = XMLDefiner.createHandler(filePath);
+    } catch (SAXException | ParserConfigurationException | IOException e) {
+      throw new RuntimeException(e);
+    }
+    
     mySimulation = xmlHandler.getSim();
     myGrid = xmlHandler.getGrid();
     createNewMainViewAndUpdateViewContainer();
@@ -104,7 +114,8 @@ public class MainController {
 
   private void createNewMainViewAndUpdateViewContainer() {
     myMainViewContainer.getChildren().remove(myMainView);
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(), myGrid, mySimulation);
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(),
+        myGrid, mySimulation);
     myMainViewContainer.getChildren().add(myMainView);
   }
 
@@ -132,7 +143,8 @@ public class MainController {
 
     int numRows = 50, numCols = 50;
     createInitialSimulation(numRows, numCols); // sample game for now, not reading from file
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid, mySimulation);
+    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid,
+        mySimulation);
     myMainViewContainer.getChildren().add(myMainView);
     myRoot.getChildren().add(myMainViewContainer);
   }

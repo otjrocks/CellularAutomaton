@@ -24,6 +24,10 @@ public class SpreadingOfFireRules extends SimulationRules {
     this.parameters = new HashMap<>(setDefaultParameters());
   }
 
+  public SpreadingOfFireRules(Map<String, Double> myParameters) {
+    this.parameters = myParameters;
+  }
+
   /**
    * @param cell - individual cell from grid
    * @param grid - the list of cell objects representing the grid
