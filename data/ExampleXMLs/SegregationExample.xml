@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Segregation</Type>
+    <Title>Checkerboard</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Alternating pattern of unalike residents with a 4x4 square of movement space</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>1,2,1,2,1,2,1,2,1,2</Row>
+        <Row>2,1,2,1,2,1,2,1,2,1</Row>
+        <Row>1,2,1,2,1,2,1,2,1,2</Row>
+        <Row>2,1,2,0,0,0,0,1,2,1</Row>
+        <Row>1,2,1,0,0,0,0,2,1,2</Row>
+        <Row>2,1,2,0,0,0,0,1,2,1</Row>
+        <Row>1,2,1,0,0,0,0,2,1,2</Row>
+        <Row>2,1,2,1,2,1,2,1,2,1</Row>
+        <Row>1,2,1,2,1,2,1,2,1,2</Row>
+        <Row>2,1,2,1,2,1,2,1,2,1</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <toleranceThreshold> 0.5 </toleranceThreshold>
+    </Parameters>
+</SimulationConfig>
