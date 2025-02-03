@@ -51,6 +51,11 @@ public class SegregationModelRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
+      throw new IndexOutOfBoundsException("Cell position out of bounds");
+    }
+
     if (firstStateUpdate) {
       getEmptyCells(grid);
       firstStateUpdate = false;
