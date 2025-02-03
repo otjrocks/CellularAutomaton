@@ -2,75 +2,177 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-// For a WaTorWOrld cell, there can be 3 states
-// A cell with state -1 indicates that it needs to be moved
-// A cell with state 0 indicates it's empty
-// A cell with state 1 indicates it's a fish
-// A cell with state 2 indicates it's a shark
+/**
+ * The rules implementation for simulation WaTor World. Handles fish movement, shark movement,
+ * reproduction, and energy loss.
+ *
+ * @author Owen Jennings
+ */
 public class WaTorWorldRules extends SimulationRules {
+
+  private final Map<String, Double> parameters;
   private final Random random = new Random();
 
+  public WaTorWorldRules(Map<String, Double> parameters) {
+    this.parameters = parameters;
+  }
+
+  // I asked ChatGPT for help with implementing this enum
+  public enum State {
+    MOVE_PENDING(-1),
+    EMPTY(0),
+    FISH(1),
+    SHARK(2);
+
+    private final int value;
+
+    State(int value) {
+      this.value = value;
+    }
+
+    public int getValue() {
+      return value;
+    }
+
+    public static State fromValue(int value) {
+      for (State state : values()) {
+        if (state.value == value) {
+          return state;
+        }
+      }
+      throw new IllegalArgumentException("Invalid WaTorState value: " + value);
+    }
+  }
+
   /**
-   * @param cell - individual cell from grid
-   * @param grid - the list of cell objects representing the grid
-   * @return - a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
-   *
+   * Retrieves the adjacent non-diagonal neighbors.
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, false);
   }
 
-  /**
-   * Wa-Tor World
-   * A fish cell (1) will randomly move to an empty adjacent squares if some exist, otherwise it will stay in place.
-   * After a certain number of rounds, a fish may reproduce. This occurs when a fish moves to a neighboring square, it leaves a new fish in the old time and the reproduction time is set to 0.
-   * A shark cell (2) will randomly move to an adjacent square occupied by a fish. If none, it will move to a random empty space. If none, it won't move
-   * After each step, a shark is deprived of 1 energy
-   * if a shark moves to a square occupied by a fish, it eats the fish and earns a certain amount of energy
-   * After a certain number of rounds, a shark may reproduce in the same way as a fish
-   *
-   * @param cell - individual cell from grid
-   * @param grid - the list of cell objects representing the grid
-   * @return - the next state of a cell based on the rules of the forest fire model
-   */
-
   @Override
   public int getNextState(Cell cell, Grid grid) {
-    int currentState = cell.getState();
+    State currentState = State.fromValue(cell.getState());
 
-    if (currentState == 1) {
-      return handleFishCell(cell, grid);
-    } else if (currentState == 2) {
-      return handleSharkCell(cell, grid);
+    switch (currentState) {
+      case FISH -> {
+        return shouldFishMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.FISH.getValue();
+      }
+      case SHARK -> {
+        return getSharkNextState(cell, grid);
+      }
+      case EMPTY -> {
+        return State.EMPTY.getValue();
+      }
+      default -> {
+        return cell.getState();
+      }
     }
-
-    return currentState;
   }
 
-  //returning a negative 1 will be handled by the grid class
-  private int handleFishCell(Cell cell, Grid grid) {
-    List<Cell> emptyNeighbors = getNeighborsByState(cell, grid, 0);
-    if (!emptyNeighbors.isEmpty()) {
-      return -1;
+  private int getSharkNextState(Cell cell, Grid grid) {
+    if (isSharkDead(cell)) {
+      return State.EMPTY.getValue();
     }
-    return 1;
+    return shouldSharkMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.SHARK.getValue();
   }
 
-  private int handleSharkCell(Cell cell, Grid grid) {
-    List<Cell> fishNeighbors = getNeighborsByState(cell, grid, 1);
-    if (!fishNeighbors.isEmpty()) {
-      return -1;
+  private boolean shouldFishMove(Cell cell, Grid grid) {
+    return !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
+  }
+
+  private boolean isSharkDead(Cell cell) {
+    return ((WaTorCell) cell).getHealth() <= 0;
+  }
+
+  private boolean shouldSharkMove(Cell cell, Grid grid) {
+    WaTorCell sharkCell = (WaTorCell) cell;
+    if (sharkCell.getHealth() <= 0) {
+      return false; // Shark is dead
     }
-    List<Cell> emptyNeighbors = getNeighborsByState(cell, grid, 0);
-    if (!emptyNeighbors.isEmpty()) {
-      return -1;
+    return !getNeighborsByState(cell, grid, State.FISH.getValue()).isEmpty() ||
+        !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
+  }
+
+  // I asked ChatGPT for assistance with implementing the state transitions in this method
+  @Override
+  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellStateUpdate> nextStates = new ArrayList<>();
+    List<Cell> movingCells = new ArrayList<>();
+
+    // First pass: Determine next state or mark cells as MOVE_PENDING
+    Iterator<Cell> cellIterator = grid.getCellIterator();
+    while (cellIterator.hasNext()) {
+      Cell cell = cellIterator.next();
+      int nextState = getNextState(cell, grid);
+
+      if (nextState == State.MOVE_PENDING.getValue()) {
+        movingCells.add(cell);
+      } else {
+        if (nextState != State.EMPTY.getValue() || cell.getState() != State.EMPTY.getValue()) {
+          // do not add cell update if cell was empty before and is still empty, in case someone wants to move there
+          nextStates.add(new CellStateUpdate(cell.getLocation(), nextState));
+        }
+      }
     }
-    return 2;
+
+    // Second pass: Process movements
+    for (Cell cell : movingCells) {
+      processMovement(cell, grid, nextStates);
+    }
+
+    return nextStates;
+  }
+
+  private void processMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates) {
+    State currentState = State.fromValue(cell.getState());
+
+    List<Cell> targetCells;
+    if (currentState == State.SHARK) {
+      targetCells = getNeighborsByState(cell, grid, State.FISH.getValue());
+      if (targetCells.isEmpty()) {
+        targetCells = getNeighborsByState(cell, grid, State.EMPTY.getValue());
+      }
+    } else {
+      targetCells = getNeighborsByState(cell, grid, State.EMPTY.getValue());
+    }
+
+    if (!targetCells.isEmpty()) {
+      Cell target = targetCells.get(random.nextInt(targetCells.size()));
+      moveEntity(cell, target, nextStates);
+    }
+  }
+
+  private void moveEntity(Cell fromCell, Cell toCell, List<CellStateUpdate> nextStates) {
+    State entityState = State.fromValue(fromCell.getState());
+    WaTorCell movingCell = (WaTorCell) fromCell;
+
+    if (entityState == State.SHARK) {
+      if (toCell.getState() == State.FISH.getValue()) {
+        movingCell.addHealth(parameters.get("sharkEnergyGain").intValue());
+      }
+    }
+
+    if (movingCell.getReproductionEnergy() >= parameters.get(getReproductionParam(entityState))) {
+      movingCell.resetReproductionEnergy();
+      nextStates.add(
+          new CellStateUpdate(fromCell.getLocation(), entityState.getValue())); // Reproduce
+    } else {
+      nextStates.add(
+          new CellStateUpdate(fromCell.getLocation(), State.EMPTY.getValue())); // Move out
+    }
+
+    nextStates.add(new CellStateUpdate(toCell.getLocation(), entityState.getValue())); // Move in
+  }
+
+  private String getReproductionParam(State state) {
+    return (state == State.FISH) ? "fishReproductionTime" : "sharkReproductionTime";
   }
 
   private List<Cell> getNeighborsByState(Cell cell, Grid grid, int state) {
@@ -84,5 +186,4 @@ public class WaTorWorldRules extends SimulationRules {
     }
     return neighborsByState;
   }
-
 }

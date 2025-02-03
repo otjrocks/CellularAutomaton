@@ -25,14 +25,6 @@ public class GameOfLifeRules extends SimulationRules {
     return super.getNeighbors(cell, grid, true);
   }
 
-  /**
-   *
-   * @param grid - the class containing the cell objects
-   * @return - A list of cell state/information updates from one class to another
-   */
-  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
-    return super.getNextStatesForAllCells(grid);
-  }
 
   /**
    * Game of Life:
