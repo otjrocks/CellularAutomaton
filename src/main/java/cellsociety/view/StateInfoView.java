@@ -39,8 +39,8 @@ public class StateInfoView extends VBox {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(10);
-    CellView dummyCell = new CellView(0, 0, 20, 20, stateInfo.getColor());
-    Text stateInfoText = new Text(stateInfo.getDisplayName());
+    CellView dummyCell = new CellView(0, 0, 20, 20, stateInfo.color());
+    Text stateInfoText = new Text(stateInfo.displayName());
     stateInfoText.setFont(new Font("Arial", 18));
     box.getChildren().add(dummyCell);
     box.getChildren().add(stateInfoText);
