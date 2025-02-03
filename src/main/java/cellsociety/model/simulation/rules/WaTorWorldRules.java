@@ -18,7 +18,18 @@ public class WaTorWorldRules extends SimulationRules {
   private final Random random = new Random();
 
   public WaTorWorldRules(Map<String, Double> parameters) {
-    super.parameters = parameters;
+    if (parameters == null || parameters.isEmpty()) {
+      setDefaultParameters();
+    } else {
+      super.parameters = parameters;
+    }
+  }
+
+  private void setDefaultParameters () {
+    super.parameters = new HashMap<>();
+    parameters.put("fishReproductionTime", 0.3);
+    parameters.put("sharkReproductionTime", 0.3);
+    parameters.put("sharkEnergyGain", 0.3);
   }
 
   // I asked ChatGPT for help with implementing this enum

@@ -7,12 +7,14 @@ import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.config.FileChooserConfig;
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.awt.Color;
@@ -123,17 +125,24 @@ public class MainController {
     return myGrid.getCols();
   }
 
-  public void updateGridCoordinates(int rows, int cols) {
+  public void createNewSimulation(int rows, int cols, String type) {
     myGrid = new Grid(rows, cols);
+    mySimulation = SimulationConfig.getNewSimulation(type, new SimulationMetaData(type, "", "", ""), null);
+    initializeGridWithCells();
+    createNewMainViewAndUpdateViewContainer();
+    createOrUpdateSidebar();
+  }
+
+  private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
         List<Integer> states = mySimulation.getStates();
         Collections.sort(states);
         int initialState = states.getFirst();
-        myGrid.addCell(new DefaultCell(initialState, new Double(i,j)));
+        String simulationType = mySimulation.getData().type();
+        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
       }
     }
-    createNewMainViewAndUpdateViewContainer();
   }
 
   /**
@@ -190,6 +199,7 @@ public class MainController {
   }
 
   private void createOrUpdateSidebar() {
+    isEditing = false;
     if (mySidebarView == null) {
       initializeSidebar(this);
     } else {

@@ -1,8 +1,12 @@
 package cellsociety.view;
 
+import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -13,15 +17,16 @@ import javafx.scene.text.Text;
  *
  * @author Owen Jennings
  */
-public class SetCoordinatesView extends VBox {
+public class CreateNewSimulationView extends VBox {
 
   private int myNumRows;
   private int myNumCols;
   private Text rowText;
   private Text colText;
   private final MainController myMainController;
+  private ComboBox<String> simulationSelector;
 
-  public SetCoordinatesView(int rows, int cols, MainController mainController) {
+  public CreateNewSimulationView(int rows, int cols, MainController mainController) {
     this.setSpacing(5);
     this.setAlignment(Pos.CENTER_LEFT);
     myNumRows = rows;
@@ -32,9 +37,20 @@ public class SetCoordinatesView extends VBox {
 
   private void initialize() {
     createTitle();
+    createSimulationTypeControl();
     createRowControl();
     createColControl();
-    createCreateButton();
+    createUpdateButton();
+  }
+
+  private void createSimulationTypeControl() {
+    ObservableList<String> options =
+        FXCollections.observableArrayList(
+            SimulationConfig.simulations
+        );
+    simulationSelector = new ComboBox<>(options);
+    simulationSelector.setValue(options.getFirst()); // set default value
+    this.getChildren().add(simulationSelector);
   }
 
   private void createTitle() {
@@ -44,12 +60,12 @@ public class SetCoordinatesView extends VBox {
 
   }
 
-  private void createCreateButton() {
-    Button createButton = new Button("Create");
-    createButton.setOnMouseClicked(event -> {
-      myMainController.updateGridCoordinates(myNumRows, myNumCols);
+  private void createUpdateButton() {
+    Button updateButton = new Button("Update");
+    updateButton.setOnMouseClicked(event -> {
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue());
     });
-    this.getChildren().add(createButton);
+    this.getChildren().add(updateButton);
   }
 
   private void createColControl() {
@@ -81,12 +97,12 @@ public class SetCoordinatesView extends VBox {
   }
 
   private void setRows(int amount) {
-    myNumRows = Math.max(amount, 0);
+    myNumRows = Math.max(amount, 1);
     rowText.setText(Integer.toString(myNumRows));
   }
 
   private void setCols(int amount) {
-    myNumCols = Math.max(amount, 0);
+    myNumCols = Math.max(amount, 1);
     colText.setText(Integer.toString(myNumCols));
   }
 

@@ -21,7 +21,11 @@ public class SegregationModelRules extends SimulationRules {
   private boolean firstStateUpdate = true; // check to see if getNextState has been run before
 
   public SegregationModelRules(Map<String, Double> myParameters) {
-    this.parameters = new HashMap<>(myParameters);
+    if (myParameters == null || myParameters.isEmpty()) {
+      setDefaultParameters();
+    } else {
+      this.parameters = new HashMap<>(myParameters);
+    }
   }
 
 
