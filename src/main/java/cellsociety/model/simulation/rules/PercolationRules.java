@@ -28,15 +28,6 @@ public class PercolationRules extends SimulationRules {
   }
 
   /**
-   *
-   * @param grid - the class containing the cell objects
-   * @return - A list of cell state/information updates from one class to another
-   */
-  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
-    return super.getNextStatesForAllCells(grid);
-  }
-
-  /**
    * Percolation:
    * Water starts form the top row of the grid.
    * Any open cell (1) in the first row becomes filled
