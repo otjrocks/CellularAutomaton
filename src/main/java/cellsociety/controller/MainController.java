@@ -40,7 +40,7 @@ public class MainController {
 
   private final Group myRoot;
   private final Stage myStage;
-  private SimulationView myMainView;
+  private SimulationView mySimulationView;
   private SidebarView mySidebarView;
   private Simulation mySimulation;
   private Grid myGrid;
@@ -113,10 +113,10 @@ public class MainController {
   }
 
   private void createNewMainViewAndUpdateViewContainer() {
-    myMainViewContainer.getChildren().remove(myMainView);
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(),
+    myMainViewContainer.getChildren().remove(mySimulationView);
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(), myGrid.getCols(),
         myGrid, mySimulation);
-    myMainViewContainer.getChildren().add(myMainView);
+    myMainViewContainer.getChildren().add(mySimulationView);
   }
 
   private void initializeSimulationAnimation() {
@@ -132,7 +132,7 @@ public class MainController {
   }
 
   private void step() {
-    myMainView.step(myGrid, mySimulation);
+    mySimulationView.step(myGrid, mySimulation);
     myGrid.updateGrid(mySimulation);
   }
 
@@ -143,9 +143,9 @@ public class MainController {
 
     int numRows = 50, numCols = 50;
     createInitialSimulation(numRows, numCols); // sample game for now, not reading from file
-    myMainView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid,
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, numRows, numCols, myGrid,
         mySimulation);
-    myMainViewContainer.getChildren().add(myMainView);
+    myMainViewContainer.getChildren().add(mySimulationView);
     myRoot.getChildren().add(myMainViewContainer);
   }
 

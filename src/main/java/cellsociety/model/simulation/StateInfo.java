@@ -2,20 +2,11 @@ package cellsociety.model.simulation;
 
 import javafx.scene.paint.Color;
 
-public class StateInfo {
-  private final String displayName;
-  private final Color color;
+/**
+ * A record to hold information about a state
+ * @param displayName: The display name of a state
+ * @param color: the color of a state
+ */
+public record StateInfo(String displayName, Color color) {
 
-  public StateInfo(String displayName, Color color) {
-    this.displayName = displayName;
-    this.color = color;
-  }
-
-  public String getDisplayName() {
-    return displayName;
-  }
-
-  public Color getColor() {
-    return color;
-  }
 }
