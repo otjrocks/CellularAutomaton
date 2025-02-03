@@ -10,10 +10,14 @@ import cellsociety.config.FileChooserConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,6 +44,7 @@ public class MainController {
   private Grid myGrid;
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
+  private boolean isEditing = false;
 
   /**
    * Initialize the MainController
@@ -89,6 +94,48 @@ public class MainController {
     step();
   }
 
+  /**
+   * Set whether the user is editing the simulation
+   *
+   * @param editing: boolean indicating if user is editing the view
+   */
+  public void setEditing(boolean editing) {
+    isEditing = editing;
+  }
+
+  /**
+   * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
+   * from user input. The cell state will only be changed if the user is currently in editing mode
+   *
+   * @param row:    row of cell you which to change state of
+   * @param column: column of cell you which to change state of
+   */
+  public void changeCellState(int row, int column) {
+    if (isEditing) {
+      Cell cell = myGrid.getCell(row, column);
+      int nextState = getNextAvailableState(cell);
+      cell.setState(nextState);
+      myGrid.updateCell(cell);
+      mySimulationView.setColor(row, column, mySimulation.getStateInfo(nextState).color());
+    }
+  }
+
+  // From the states list from the simulation get the next available state from a sorted order
+  private int getNextAvailableState(Cell cell) {
+    List<Integer> states = mySimulation.getStates();
+    Collections.sort(states);
+    int nextStateIndex = states.indexOf(cell.getState());
+    if (nextStateIndex == -1 || nextStateIndex == states.size() - 1) {
+      nextStateIndex = 0;
+    } else {
+      nextStateIndex++;
+    }
+    return states.get(nextStateIndex);
+  }
+
+  /**
+   * Handle the loading and creation of a new simulation from a file chooser
+   */
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
@@ -121,7 +168,7 @@ public class MainController {
     myMainViewContainer.getChildren().clear();
     mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
         myGrid.getCols(),
-        myGrid, mySimulation);
+        myGrid, mySimulation, this);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
 
