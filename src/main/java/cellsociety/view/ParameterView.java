@@ -3,7 +3,6 @@ package cellsociety.view;
 import cellsociety.model.simulation.Simulation;
 import java.util.Map;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -27,19 +26,18 @@ public class ParameterView extends VBox {
   }
 
   private void createTitle() {
-    createText("Parameters:", 20);
+    createText("Parameters:");
   }
 
   private void createParameters(Simulation simulation) {
     Map<String, Double> parameters = simulation.getRules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
-      createText("- " + entry.getKey() + ": " + entry.getValue(), 14);
+      createText("- " + entry.getKey() + ": " + entry.getValue());
     }
   }
 
-  private void createText(String entry, int size) {
+  private void createText(String entry) {
     Text parameter = new Text(entry);
-    parameter.setFont(new Font("Arial", size));
     this.getChildren().add(parameter);
   }
 }

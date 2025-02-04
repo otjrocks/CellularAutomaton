@@ -5,7 +5,6 @@ import cellsociety.model.simulation.StateInfo;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -31,7 +30,6 @@ public class StateInfoView extends VBox {
 
   private void createTitle() {
     Text title = new Text("State Info:");
-    title.setFont(new Font("Arial", 20));
     this.getChildren().add(title);
   }
 
@@ -41,7 +39,6 @@ public class StateInfoView extends VBox {
     box.setSpacing(10);
     CellView dummyCell = new CellView(0, 0, 20, 20, stateInfo.color());
     Text stateInfoText = new Text(stateInfo.displayName());
-    stateInfoText.setFont(new Font("Arial", 18));
     box.getChildren().add(dummyCell);
     box.getChildren().add(stateInfoText);
     this.getChildren().add(box);

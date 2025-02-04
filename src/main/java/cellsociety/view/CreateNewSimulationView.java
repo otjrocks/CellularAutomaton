@@ -22,7 +22,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -82,7 +81,6 @@ public class CreateNewSimulationView extends VBox {
     SimulationConfig.getParameters(simulationName);
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
       Text parametersTitle = new Text("Customize Parameters: ");
-      parametersTitle.setFont(new Font(20));
       parametersControlBox.getChildren().add(parametersTitle);
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
@@ -138,7 +136,6 @@ public class CreateNewSimulationView extends VBox {
 
   private void createTitle() {
     Text title = new Text("Create New Grid:");
-    title.setFont(new Font("Arial", 20));
     this.getChildren().add(title);
   }
 

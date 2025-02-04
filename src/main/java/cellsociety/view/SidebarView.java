@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -157,11 +156,11 @@ public class SidebarView extends VBox {
 
   private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().getData();
-    Text name = createText("Name: " + simulationData.name(), 14, TextAlignment.LEFT);
-    Text type = createText("Type: " + simulationData.type(), 14, TextAlignment.LEFT);
-    Text author = createText("Author: " + simulationData.author(), 14, TextAlignment.LEFT);
-    Text description = createText("Description: " + simulationData.description(), 14,
-        TextAlignment.LEFT);
+    Text name = createText("Name: " + simulationData.name());
+    Text type = createText("Type: " + simulationData.type());
+    Text author = createText("Author: " + simulationData.author());
+    Text description = createText("Description: " + simulationData.description()
+    );
     myMetaData.getChildren().addAll(name, type, author, description);
   }
 
@@ -187,6 +186,7 @@ public class SidebarView extends VBox {
       stopAnimationPlayIfRunning();
       try {
         myMainController.handleSavingToFile();
+        myAlertField.flash("File successfully saved!", false);
       } catch (Exception e) {
         myAlertField.flash("Could not save to file!", true);
         if (VERBOSE_ERROR_MESSAGES) {
@@ -234,16 +234,15 @@ public class SidebarView extends VBox {
   }
 
   private void initializeStaticContent() {
-    Text title = createText("Cellular Automaton", 20, TextAlignment.CENTER);
-    Text infoTitle = createText("Current Simulation Information: ", 18, TextAlignment.LEFT);
+    Text title = createText("Cellular Automaton");
+    Text infoTitle = createText("Current Simulation Information: ");
     myMetaData.getChildren().addAll(title, infoTitle);
   }
 
-  private Text createText(String message, double size, TextAlignment align) {
+  private Text createText(String message) {
     Text text = new Text(message);
-    text.setFont(new Font("Arial", size));
     text.setFill(Color.BLACK);
-    text.setTextAlignment(align);
+    text.setTextAlignment(TextAlignment.LEFT);
     text.setWrappingWidth(myWidth);
     return text;
   }
