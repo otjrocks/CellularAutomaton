@@ -2,11 +2,13 @@ package cellsociety.view;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import cellsociety.model.simulation.SimulationMetaData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -25,6 +27,9 @@ public class CreateNewSimulationView extends VBox {
   private Text colText;
   private final MainController myMainController;
   private ComboBox<String> simulationSelector;
+  private TextField myNameField;
+  private TextField myAuthorField;
+  private TextField myDescriptionField;
 
   public CreateNewSimulationView(int rows, int cols, MainController mainController) {
     this.setSpacing(5);
@@ -40,7 +45,26 @@ public class CreateNewSimulationView extends VBox {
     createSimulationTypeControl();
     createRowControl();
     createColControl();
+    createSimulationMetaDataTextFields();
     createUpdateButton();
+  }
+
+  private void createSimulationMetaDataTextFields() {
+    myNameField = createTextField("Name: ", "A Glider");
+    myAuthorField = createTextField("Author: ", "John Doe");
+    myDescriptionField = createTextField("Description: ", "A simple glider");
+  }
+
+  private TextField createTextField(String label, String prompt) {
+    HBox box = new HBox();
+    box.setAlignment(Pos.CENTER_LEFT);
+    box.setSpacing(5);
+    TextField textField = new TextField();
+    textField.setPromptText(prompt);
+    Text textFieldLabel = new Text(label);
+    box.getChildren().addAll(textFieldLabel, textField);
+    this.getChildren().add(box);
+    return textField;
   }
 
   private void createSimulationTypeControl() {
@@ -53,6 +77,7 @@ public class CreateNewSimulationView extends VBox {
     this.getChildren().add(simulationSelector);
   }
 
+
   private void createTitle() {
     Text title = new Text("Create New Grid:");
     title.setFont(new Font("Arial", 20));
@@ -63,7 +88,12 @@ public class CreateNewSimulationView extends VBox {
   private void createUpdateButton() {
     Button updateButton = new Button("Update");
     updateButton.setOnMouseClicked(event -> {
-      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue());
+      SimulationMetaData metaData = new SimulationMetaData(
+          simulationSelector.getValue(),
+          myNameField.getText(),
+          myAuthorField.getText(),
+          myDescriptionField.getText());
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(), metaData);
     });
     this.getChildren().add(updateButton);
   }

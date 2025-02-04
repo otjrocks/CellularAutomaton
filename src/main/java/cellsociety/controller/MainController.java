@@ -12,16 +12,12 @@ import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
-import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
+import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javafx.animation.Animation.Status;
@@ -111,6 +107,7 @@ public class MainController {
 
   /**
    * Get rows in the grid
+   *
    * @return int number of rows
    */
   public int getGridRows() {
@@ -119,15 +116,16 @@ public class MainController {
 
   /**
    * Get columns in the grid
+   *
    * @return int number of columns
    */
   public int getGridCols() {
     return myGrid.getCols();
   }
 
-  public void createNewSimulation(int rows, int cols, String type) {
+  public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData) {
     myGrid = new Grid(rows, cols);
-    mySimulation = SimulationConfig.getNewSimulation(type, new SimulationMetaData(type, "", "", ""), null);
+    mySimulation = SimulationConfig.getNewSimulation(type, metaData, null);
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
@@ -180,8 +178,11 @@ public class MainController {
    */
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
-    String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
-    updateSimulationFromFile(filePath);
+    File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
+    if (file != null) { // only update simulation if a file was selected
+      String filePath = file.getAbsolutePath();
+      updateSimulationFromFile(filePath);
+    }
   }
 
   private void updateSimulationFromFile(String filePath) {
