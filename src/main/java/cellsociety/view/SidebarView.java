@@ -153,6 +153,15 @@ public class SidebarView extends VBox {
     this.getChildren().add(myChooseFileButton);
   }
 
+  private void createSaveFileButton() {
+    saveFileButton = new Button("Save to XML");
+    saveFileButton.setOnAction(event -> {
+      myMainController.handleSavingToFile();
+      stopAnimationPlayIfRunning(playPauseButton);
+    });
+    this.getChildren().add(saveFileButton);
+  }
+
   private void createStepButton() {
     myStepButton = new Button("Single Step");
     myStepButton.setOnAction(event -> {

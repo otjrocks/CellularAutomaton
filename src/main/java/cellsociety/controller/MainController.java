@@ -1,16 +1,24 @@
 package cellsociety.controller;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import cellsociety.config.FileChooserConfig;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.WIDTH;
-
-import cellsociety.config.FileChooserConfig;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
+import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
@@ -29,8 +37,6 @@ import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  * A class to handle the main interactions between the model and view classes
@@ -207,6 +213,10 @@ public class MainController {
       String filePath = file.getAbsolutePath();
       updateSimulationFromFile(filePath);
     }
+  }
+
+  public void handleSavingToFile() {
+    XMLWriter.saveSimulationToXML(mySimulation, myGrid);
   }
 
   private void updateSimulationFromFile(String filePath) {

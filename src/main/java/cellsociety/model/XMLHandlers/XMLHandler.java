@@ -3,7 +3,6 @@ package cellsociety.model.XMLHandlers;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,7 +20,6 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import javafx.scene.paint.Color;
 
 /**
  * Allows the program to collect data from an XML configuration file and store the associated date
@@ -49,8 +47,7 @@ public abstract class XMLHandler {
     *                     represented as a String
     */
     public XMLHandler(String xmlFilePath) {
-        ArrayList<Color> colors = new ArrayList();
-        parseXMLFile(xmlFilePath, colors);
+        parseXMLFile(xmlFilePath);
     }
 
     /**
@@ -62,7 +59,7 @@ public abstract class XMLHandler {
     * @param colors: An arraylist of colors to pass as options for SimulationData
     *                Just a temporary variable until I can update the XML file tags
     */
-    private void parseXMLFile(String xmlFilePath, ArrayList<Color> colors) {
+    private void parseXMLFile(String xmlFilePath) {
         try {
             File xmlFile = new File(xmlFilePath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -87,7 +84,7 @@ public abstract class XMLHandler {
                 String[] rowValues = rows.item(i).getTextContent().split(",");
                 for (int j = 0; j < rowValues.length; j++) {
                     int state = Integer.parseInt(rowValues[j]);
-                    DefaultCell holdingCell = new DefaultCell(state, new Point2D.Double(j, i));
+                    DefaultCell holdingCell = new DefaultCell(state, new Point2D.Double(i, j));
                     myGrid.addCell(holdingCell);
                 }
             }

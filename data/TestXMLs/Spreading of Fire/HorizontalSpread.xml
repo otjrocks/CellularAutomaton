@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>SpreadingOfFire</Type>
+    <Title>HorizontalSpread</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Horizontal line of trees that will catch fire from right to left. Both parameters set to zero to demonstrate basic spreading</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,2</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <ignitionWithoutNeighbors> 0.0 </ignitionWithoutNeighbors>
+        <growInEmptyCell> 0.0 </growInEmptyCell>
+    </Parameters>
+</SimulationConfig>

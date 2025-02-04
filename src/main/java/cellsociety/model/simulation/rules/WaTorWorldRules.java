@@ -1,11 +1,17 @@
 package cellsociety.model.simulation.rules;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.*;
 
 /**
  * The rules implementation for simulation WaTor World. Handles fish movement, shark movement,
