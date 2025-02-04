@@ -112,7 +112,8 @@ public class CreateNewSimulationView extends VBox {
         FXCollections.observableArrayList(SimulationConfig.simulations);
     simulationSelector = new ComboBox<>(options);
     simulationSelector.setValue(options.getFirst());
-    simulationSelector.valueProperty().addListener((ov, t, t1) -> addAllParameters(simulationSelector.getValue()));
+    simulationSelector.valueProperty()
+        .addListener((ov, t, t1) -> addAllParameters(simulationSelector.getValue()));
     this.getChildren().add(simulationSelector);
   }
 
@@ -123,7 +124,7 @@ public class CreateNewSimulationView extends VBox {
   }
 
   private void createUpdateButton() {
-    javafx.scene.control.Button updateButton = new javafx.scene.control.Button("Update");
+    javafx.scene.control.Button updateButton = new javafx.scene.control.Button("Create New Grid");
     updateButton.setOnMouseClicked(event -> {
       myNumRows = parseIntegerField(rowField, myNumRows);
       myNumCols = parseIntegerField(colField, myNumCols);
@@ -136,10 +137,12 @@ public class CreateNewSimulationView extends VBox {
 
       Map<String, Double> parameters = new HashMap<>();
       for (String parameter : myParameterTextFields.keySet()) {
-        parameters.put(parameter, Double.parseDouble(myParameterTextFields.get(parameter).getText()));
+        parameters.put(parameter,
+            Double.parseDouble(myParameterTextFields.get(parameter).getText()));
       }
 
-      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(), metaData, parameters);
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
+          metaData, parameters);
     });
     this.getChildren().add(updateButton);
   }
@@ -147,7 +150,8 @@ public class CreateNewSimulationView extends VBox {
   private void createRowControl() {
     rowField = new IntegerField();
     rowField.setText(Integer.toString(myNumRows));
-    rowField.textProperty().addListener((obs, oldVal, newVal) -> myNumRows = parseIntegerField(rowField, myNumRows));
+    rowField.textProperty()
+        .addListener((obs, oldVal, newVal) -> myNumRows = parseIntegerField(rowField, myNumRows));
 
     HBox rowBox = new HBox(new Text("Number of Rows:"), rowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
@@ -158,7 +162,8 @@ public class CreateNewSimulationView extends VBox {
   private void createColControl() {
     colField = new IntegerField();
     colField.setText(Integer.toString(myNumCols));
-    colField.textProperty().addListener((obs, oldVal, newVal) -> myNumCols = parseIntegerField(colField, myNumCols));
+    colField.textProperty()
+        .addListener((obs, oldVal, newVal) -> myNumCols = parseIntegerField(colField, myNumCols));
 
     HBox colBox = new HBox(new Text("Number of Columns:"), colField);
     colBox.setAlignment(Pos.CENTER_LEFT);

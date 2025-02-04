@@ -202,7 +202,6 @@ public class MainController {
   }
 
   private void createOrUpdateSidebar() {
-    isEditing = false;
     if (mySidebarView == null) {
       initializeSidebar(this);
     } else {
