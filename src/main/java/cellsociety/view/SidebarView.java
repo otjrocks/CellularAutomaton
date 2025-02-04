@@ -33,6 +33,7 @@ public class SidebarView extends VBox {
   private Button myStepButton;
   private Button myChooseFileButton;
   private Button myModeButton;
+  private Button mySaveButton;
   private final VBox myMetaData = new VBox();
   private CreateNewSimulationView myCreateNewSimulationView;
 
@@ -87,10 +88,11 @@ public class SidebarView extends VBox {
     createStepButton();
     createFileChooserButton();
     createChangeModeButton();
+    createSaveFileButton();
     HBox buttons = new HBox();
     buttons.setAlignment(Pos.CENTER_LEFT);
     buttons.setSpacing(ELEMENT_SPACING);
-    buttons.getChildren().addAll(myPlayPauseButton, myStepButton, myChooseFileButton, myModeButton);
+    buttons.getChildren().addAll(myPlayPauseButton, myStepButton, myChooseFileButton, myModeButton, mySaveButton);
     return buttons;
   }
 
@@ -154,12 +156,11 @@ public class SidebarView extends VBox {
   }
 
   private void createSaveFileButton() {
-    saveFileButton = new Button("Save to XML");
-    saveFileButton.setOnAction(event -> {
+    mySaveButton = new Button("Save to XML");
+    mySaveButton.setOnMouseClicked(event -> {
       myMainController.handleSavingToFile();
-      stopAnimationPlayIfRunning(playPauseButton);
+      stopAnimationPlayIfRunning(myPlayPauseButton);
     });
-    this.getChildren().add(saveFileButton);
   }
 
   private void createStepButton() {

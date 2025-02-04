@@ -3,6 +3,7 @@ package cellsociety.model.XMLHandlers;
 import java.io.File;
 import java.util.Map;
 
+import javafx.stage.FileChooser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,6 +85,7 @@ public class XMLWriter {
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
+            e.printStackTrace();
         }
     }
 
