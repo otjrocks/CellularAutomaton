@@ -49,6 +49,12 @@ public class EditModeView extends VBox {
   private StateInfoView myStateInfoView;
   private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
 
+  /**
+   * Create a edit mode view
+   *
+   * @param mainController: the main controller of this view
+   * @param alertField:     the alert field to display messages
+   */
   public EditModeView(MainController mainController,
       AlertField alertField) {
     this.setSpacing(5);
@@ -179,7 +185,8 @@ public class EditModeView extends VBox {
     attemptCreatingNewSimulation(metaData, parameters);
   }
 
-  private void attemptCreatingNewSimulation(SimulationMetaData metaData, Map<String, Double> parameters) {
+  private void attemptCreatingNewSimulation(SimulationMetaData metaData,
+      Map<String, Double> parameters) {
     try {
       myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
           metaData, parameters);
