@@ -1,9 +1,14 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.STEP_SPEED;
+
+import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,15 +23,17 @@ import javafx.scene.text.TextAlignment;
 public class SidebarView extends VBox {
 
   public static final double ELEMENT_SPACING = 5;
+  public static final double SPEED_SLIDER_DELTA = 10; // how drastic changes from speed slider should be
 
   private final int myWidth;
   private final MainController myMainController;
   private boolean isPlaying = false;
   private boolean isEditing = false;
-  private Button playPauseButton;
-  private Button stepButton;
-  private Button chooseFileButton;
-  private Button saveFileButton;
+  private Button myPlayPauseButton;
+  private Button myStepButton;
+  private Button myChooseFileButton;
+  private Button myModeButton;
+  private final VBox myMetaData = new VBox();
   private CreateNewSimulationView myCreateNewSimulationView;
 
   /**
@@ -39,97 +46,111 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    this.getChildren().add(myMetaData);
+    myMetaData.setSpacing(ELEMENT_SPACING);
     myWidth = width;
     myMainController = controller;
     initializeSidebar();
   }
 
   public void updateSidebar() {
-    isEditing = false;
-    this.getChildren().clear();
-    initializeStaticContent();
-    initializeSimulationDataDisplay();
+    updateSidebarContent();
   }
-
-  public void setEditing(boolean isEditing) {
-    this.isEditing = isEditing;
-  }
-
 
   private void initializeSidebar() {
-    initializeStaticContent();
-    initializeSimulationDataDisplay();
-  }
-
-  private void initializeSimulationDataDisplay() {
-    createSimulationMetaDataDisplay();
-    createPlayPauseButton();
-    createStepButton();
-    createSaveFileButton();
-    createFileChooserButton();
-    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
-    ParameterView parameterView = new ParameterView(myMainController.getSimulation());
-    this.getChildren().addAll(stateInfoView, parameterView);
-    createChangeModeButton();
+    updateSidebar();
+    double initialSliderValue = (1 / STEP_SPEED);
+    initializeSpeedSlider(initialSliderValue);
+    this.getChildren().add(createAllButtons());
     myCreateNewSimulationView = new CreateNewSimulationView(
         myMainController.getGridRows(), myMainController.getGridCols(), myMainController);
   }
 
-  private void disableSetCoordinates() {
+  private void initializeSpeedSlider(double initialSliderValue) {
+    Slider slider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
+        initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
+    slider.valueProperty().addListener((observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(1 / (Double) newValue, isPlaying));
+    this.getChildren().add(slider);
+  }
+
+  private void updateSidebarContent() {
+    myMetaData.getChildren().clear();
+    initializeStaticContent();
+    createSimulationMetaDataDisplay();
+    StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
+    myMetaData.getChildren().addAll(myStateInfoView, myParameterView);
+  }
+
+  private HBox createAllButtons() {
+    createPlayPauseButton();
+    createStepButton();
+    createFileChooserButton();
+    createChangeModeButton();
+    HBox buttons = new HBox();
+    buttons.setAlignment(Pos.CENTER_LEFT);
+    buttons.setSpacing(ELEMENT_SPACING);
+    buttons.getChildren().addAll(myPlayPauseButton, myStepButton, myChooseFileButton, myModeButton);
+    return buttons;
+  }
+
+  private void disableEditView() {
     this.getChildren().remove(myCreateNewSimulationView);
   }
-  private void enableSetCoordinates() {
+
+  private void enableEditView() {
     this.getChildren().add(myCreateNewSimulationView);
   }
 
   private void createChangeModeButton() {
-    Button modeButton = new Button("Edit Mode");
-    modeButton.setOnMouseClicked(event -> {
+    myModeButton = new Button("Edit Mode");
+    myModeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
-        enableSetCoordinates();
+        enableEditView();
         stopAnimation();
         setDisableAllButtonsExceptModeButton(true);
-        modeButton.setText("View Mode");
+        myModeButton.setText("View Mode");
         myMainController.setEditing(true);
       } else {
-        disableSetCoordinates();
+        disableEditView();
         setDisableAllButtonsExceptModeButton(false);
-        modeButton.setText("Edit Mode");
+        myModeButton.setText("Edit Mode");
         myMainController.setEditing(false);
       }
     });
-    this.getChildren().add(modeButton);
+    this.getChildren().add(myModeButton);
   }
 
   private void stopAnimation() {
     myMainController.stopAnimation();
-    playPauseButton.setText("Play");
+    myPlayPauseButton.setText("Play");
     isPlaying = false;
   }
 
   private void setDisableAllButtonsExceptModeButton(boolean disable) {
-    playPauseButton.setDisable(disable);
-    stepButton.setDisable(disable);
-    chooseFileButton.setDisable(disable);
+    myPlayPauseButton.setDisable(disable);
+    myStepButton.setDisable(disable);
+    myChooseFileButton.setDisable(disable);
   }
 
   private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().getData();
-    addTextToSidebar("Name: " + simulationData.name(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Type: " + simulationData.type(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Author: " + simulationData.author(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Description: " + simulationData.description(), 14,
+    Text name = createText("Name: " + simulationData.name(), 14, TextAlignment.LEFT);
+    Text type = createText("Type: " + simulationData.type(), 14, TextAlignment.LEFT);
+    Text author = createText("Author: " + simulationData.author(), 14, TextAlignment.LEFT);
+    Text description = createText("Description: " + simulationData.description(), 14,
         TextAlignment.LEFT);
+    myMetaData.getChildren().addAll(name, type, author, description);
   }
 
   private void createFileChooserButton() {
-    chooseFileButton = new Button("Choose File");
-    chooseFileButton.setOnAction(event -> {
+    myChooseFileButton = new Button("Choose File");
+    myChooseFileButton.setOnAction(event -> {
       myMainController.handleNewSimulationFromFile();
-      stopAnimationPlayIfRunning(playPauseButton);
+      stopAnimationPlayIfRunning(myPlayPauseButton);
     });
-    this.getChildren().add(chooseFileButton);
+    this.getChildren().add(myChooseFileButton);
   }
 
   private void createSaveFileButton() {
@@ -142,12 +163,12 @@ public class SidebarView extends VBox {
   }
 
   private void createStepButton() {
-    stepButton = new Button("Single Step");
-    stepButton.setOnAction(event -> {
+    myStepButton = new Button("Single Step");
+    myStepButton.setOnAction(event -> {
       myMainController.handleSingleStep();
-      stopAnimationPlayIfRunning(playPauseButton);
+      stopAnimationPlayIfRunning(myPlayPauseButton);
     });
-    this.getChildren().add(stepButton);
+    this.getChildren().add(myStepButton);
   }
 
   private void stopAnimationPlayIfRunning(Button playPauseButton) {
@@ -158,28 +179,24 @@ public class SidebarView extends VBox {
   }
 
   private void createPlayPauseButton() {
-    playPauseButton = new Button("Play");
-    playPauseButton.setOnAction(event -> {
+    myPlayPauseButton = new Button("Play");
+    myPlayPauseButton.setOnAction(event -> {
       isPlaying = !isPlaying;
       if (isPlaying) {
-        playPauseButton.setText("Pause");
+        myPlayPauseButton.setText("Pause");
         myMainController.startAnimation();
       } else {
-        playPauseButton.setText("Play");
+        myPlayPauseButton.setText("Play");
         myMainController.stopAnimation();
       }
     });
-    this.getChildren().addAll(playPauseButton);
+    this.getChildren().addAll(myPlayPauseButton);
   }
 
   private void initializeStaticContent() {
-    addTextToSidebar("Cellular Automaton", 20, TextAlignment.CENTER);
-    addTextToSidebar("Current Simulation Information: ", 18, TextAlignment.LEFT);
-  }
-
-  private void addTextToSidebar(String message, double size, TextAlignment align) {
-    Text title = createText(message, size, align);
-    this.getChildren().add(title);
+    Text title = createText("Cellular Automaton", 20, TextAlignment.CENTER);
+    Text infoTitle = createText("Current Simulation Information: ", 18, TextAlignment.LEFT);
+    myMetaData.getChildren().addAll(title, infoTitle);
   }
 
   private Text createText(String message, double size, TextAlignment align) {
