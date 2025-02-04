@@ -216,7 +216,7 @@ public class MainController {
   }
 
   public void handleSavingToFile() {
-    XMLWriter.saveSimulationToXML(mySimulation, myGrid);
+    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
 
   private void updateSimulationFromFile(String filePath) {

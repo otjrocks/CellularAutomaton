@@ -174,6 +174,7 @@ public class SidebarView extends VBox {
 
   private void stopAnimationPlayIfRunning(Button playPauseButton) {
     if (isPlaying) {
+      myMainController.stopAnimation();
       playPauseButton.setText("Play");
       isPlaying = false;
     }
