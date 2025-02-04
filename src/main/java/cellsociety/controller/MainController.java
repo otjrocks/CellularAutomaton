@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -123,9 +124,10 @@ public class MainController {
     return myGrid.getCols();
   }
 
-  public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData) {
+  public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
+      Map<String, Double> parameters) {
     myGrid = new Grid(rows, cols);
-    mySimulation = SimulationConfig.getNewSimulation(type, metaData, null);
+    mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
