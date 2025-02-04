@@ -9,11 +9,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import cellsociety.config.FileChooserConfig;
+
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
+import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
-import static cellsociety.config.MainConfig.WIDTH;
+
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
@@ -25,9 +27,6 @@ import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -107,7 +106,8 @@ public class MainController {
    * Update the animation to have a new speed
    *
    * @param speed: the new speed of the animation
-   * @param start: a boolean to determine if the animation should start with the new speed or remain stopped
+   * @param start: a boolean to determine if the animation should start with the new speed or remain
+   *               stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
     mySimulationAnimation.stop();
@@ -275,7 +275,7 @@ public class MainController {
   }
 
   private void initializeSidebar(MainController controller) {
-    mySidebarView = new SidebarView(WIDTH - GRID_WIDTH - (3 * MARGIN),
+    mySidebarView = new SidebarView(SIDEBAR_WIDTH,
         GRID_HEIGHT - (2 * MARGIN), controller);
     mySidebarView.setLayoutX(GRID_WIDTH + 2 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);

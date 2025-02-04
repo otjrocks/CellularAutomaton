@@ -1,14 +1,16 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.STEP_SPEED;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
-import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,8 +36,11 @@ public class SidebarView extends VBox {
   private Button myChooseFileButton;
   private Button myModeButton;
   private Button mySaveButton;
+  private Slider mySpeedSlider;
   private final VBox myMetaData = new VBox();
+  private final HBox myButtons = new HBox();
   private CreateNewSimulationView myCreateNewSimulationView;
+  private AlertField myAlertField;
 
   /**
    * Create a sidebar view with a preferred size of width x height
@@ -47,6 +52,8 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    createChangeModeButton();
+    this.getChildren().add(myModeButton);
     this.getChildren().add(myMetaData);
     myMetaData.setSpacing(ELEMENT_SPACING);
     myWidth = width;
@@ -54,28 +61,45 @@ public class SidebarView extends VBox {
     initializeSidebar();
   }
 
+  /**
+   * Update the non-static content of the sidebar
+   */
   public void updateSidebar() {
     updateSidebarContent();
   }
 
-  private void initializeSidebar() {
-    updateSidebar();
-    double initialSliderValue = (1 / STEP_SPEED);
-    initializeSpeedSlider(initialSliderValue);
-    this.getChildren().add(createAllButtons());
-    myCreateNewSimulationView = new CreateNewSimulationView(
-        myMainController.getGridRows(), myMainController.getGridCols(), myMainController);
+  private AlertField initializeAlertField() {
+    final AlertField myAlertField;
+    myAlertField = new AlertField();
+    this.getChildren().add(myAlertField);
+    VBox.setVgrow(myAlertField, Priority.ALWAYS);
+    myAlertField.setAlignment(Pos.BOTTOM_LEFT);
+    return myAlertField;
   }
 
-  private void initializeSpeedSlider(double initialSliderValue) {
-    Slider slider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
+  private void initializeSidebar() {
+    updateSidebar();
+    initializeSpeedSlider();
+    this.getChildren().add(createAllButtons());
+    myAlertField = initializeAlertField();
+    myCreateNewSimulationView = new CreateNewSimulationView(
+        myMainController.getGridRows(), myMainController.getGridCols(), myMainController,
+        myAlertField);
+  }
+
+  private void initializeSpeedSlider() {
+    double initialSliderValue = (1 / STEP_SPEED);
+    mySpeedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
         initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
-    slider.valueProperty().addListener((observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(1 / (Double) newValue, isPlaying));
-    this.getChildren().add(slider);
+    mySpeedSlider.valueProperty().addListener(
+        (observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(
+            1 / (Double) newValue, isPlaying));
+    this.getChildren().add(mySpeedSlider);
   }
 
   private void updateSidebarContent() {
     myMetaData.getChildren().clear();
+    createChangeModeButton();
     initializeStaticContent();
     createSimulationMetaDataDisplay();
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
@@ -87,21 +111,29 @@ public class SidebarView extends VBox {
     createPlayPauseButton();
     createStepButton();
     createFileChooserButton();
-    createChangeModeButton();
     createSaveFileButton();
-    HBox buttons = new HBox();
-    buttons.setAlignment(Pos.CENTER_LEFT);
-    buttons.setSpacing(ELEMENT_SPACING);
-    buttons.getChildren().addAll(myPlayPauseButton, myStepButton, myChooseFileButton, myModeButton, mySaveButton);
-    return buttons;
+    myButtons.setAlignment(Pos.CENTER_LEFT);
+    myButtons.setSpacing(ELEMENT_SPACING);
+    myButtons.getChildren()
+        .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton);
+    return myButtons;
   }
 
   private void disableEditView() {
-    this.getChildren().remove(myCreateNewSimulationView);
+    this.getChildren().clear();
+    this.getChildren().addAll(myModeButton, myMetaData, mySpeedSlider, myButtons, myAlertField);
   }
 
+
   private void enableEditView() {
-    this.getChildren().add(myCreateNewSimulationView);
+    this.getChildren().clear();
+    this.getChildren().addAll(myModeButton, myCreateNewSimulationView, myAlertField);
+    moveAlertFieldToBottom();
+  }
+
+  private void moveAlertFieldToBottom() {
+    this.getChildren().remove(myAlertField);
+    this.getChildren().add(myAlertField);
   }
 
   private void createChangeModeButton() {
@@ -110,30 +142,17 @@ public class SidebarView extends VBox {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
-        stopAnimation();
-        setDisableAllButtonsExceptModeButton(true);
+        stopAnimationPlayIfRunning();
         myModeButton.setText("View Mode");
         myMainController.setEditing(true);
+        myAlertField.flash("Editing mode enabled!", false);
       } else {
         disableEditView();
-        setDisableAllButtonsExceptModeButton(false);
         myModeButton.setText("Edit Mode");
         myMainController.setEditing(false);
+        myAlertField.flash("Editing mode disabled!", false);
       }
     });
-    this.getChildren().add(myModeButton);
-  }
-
-  private void stopAnimation() {
-    myMainController.stopAnimation();
-    myPlayPauseButton.setText("Play");
-    isPlaying = false;
-  }
-
-  private void setDisableAllButtonsExceptModeButton(boolean disable) {
-    myPlayPauseButton.setDisable(disable);
-    myStepButton.setDisable(disable);
-    myChooseFileButton.setDisable(disable);
   }
 
   private void createSimulationMetaDataDisplay() {
@@ -149,8 +168,15 @@ public class SidebarView extends VBox {
   private void createFileChooserButton() {
     myChooseFileButton = new Button("Choose File");
     myChooseFileButton.setOnAction(event -> {
-      myMainController.handleNewSimulationFromFile();
-      stopAnimationPlayIfRunning(myPlayPauseButton);
+      try {
+        myMainController.handleNewSimulationFromFile();
+      } catch (Exception e) {
+        myAlertField.flash("Could not load simulation from file!", true);
+        if (VERBOSE_ERROR_MESSAGES) {
+          myAlertField.flash(e.getMessage(), true);
+        }
+      }
+      stopAnimationPlayIfRunning();
     });
     this.getChildren().add(myChooseFileButton);
   }
@@ -158,8 +184,15 @@ public class SidebarView extends VBox {
   private void createSaveFileButton() {
     mySaveButton = new Button("Save to XML");
     mySaveButton.setOnMouseClicked(event -> {
-      myMainController.handleSavingToFile();
-      stopAnimationPlayIfRunning(myPlayPauseButton);
+      stopAnimationPlayIfRunning();
+      try {
+        myMainController.handleSavingToFile();
+      } catch (Exception e) {
+        myAlertField.flash("Could not save to file!", true);
+        if (VERBOSE_ERROR_MESSAGES) {
+          myAlertField.flash(e.getMessage(), true);
+        }
+      }
     });
   }
 
@@ -167,17 +200,22 @@ public class SidebarView extends VBox {
     myStepButton = new Button("Single Step");
     myStepButton.setOnAction(event -> {
       myMainController.handleSingleStep();
-      stopAnimationPlayIfRunning(myPlayPauseButton);
+      stopAnimationPlayIfRunning();
     });
     this.getChildren().add(myStepButton);
   }
 
-  private void stopAnimationPlayIfRunning(Button playPauseButton) {
+  private void stopAnimationPlayIfRunning() {
     if (isPlaying) {
-      myMainController.stopAnimation();
-      playPauseButton.setText("Play");
-      isPlaying = false;
+      stopAnimation();
     }
+  }
+
+  private void stopAnimation() {
+    myMainController.stopAnimation();
+    myPlayPauseButton.setText("Play");
+    isPlaying = false;
+    myAlertField.flash("Animation successfully paused!", false);
   }
 
   private void createPlayPauseButton() {
@@ -187,9 +225,9 @@ public class SidebarView extends VBox {
       if (isPlaying) {
         myPlayPauseButton.setText("Pause");
         myMainController.startAnimation();
+        myAlertField.flash("Animation successfully started!", false);
       } else {
-        myPlayPauseButton.setText("Play");
-        myMainController.stopAnimation();
+        stopAnimation();
       }
     });
     this.getChildren().addAll(myPlayPauseButton);
