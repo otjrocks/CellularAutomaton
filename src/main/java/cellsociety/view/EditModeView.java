@@ -8,6 +8,7 @@ import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
@@ -29,7 +30,7 @@ import javafx.scene.text.Text;
  *
  * @author Owen Jennings
  */
-public class CreateNewSimulationView extends VBox {
+public class EditModeView extends VBox {
 
   public static final int DEFAULT_NUM_CELLS = 25;
 
@@ -44,27 +45,43 @@ public class CreateNewSimulationView extends VBox {
   private TextField myDescriptionField;
   private VBox parametersControlBox;
   private final AlertField myAlertField;
+  private final VBox myHeaderBox = new VBox();
+  private StateInfoView myStateInfoView;
   private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
 
-  public CreateNewSimulationView(int rows, int cols, MainController mainController,
+  public EditModeView(MainController mainController,
       AlertField alertField) {
     this.setSpacing(5);
     this.setAlignment(Pos.CENTER_LEFT);
-    myNumRows = rows;
-    myNumCols = cols;
+    myNumRows = mainController.getGridRows();
+    myNumCols = mainController.getGridCols();
     myMainController = mainController;
     myAlertField = alertField;
     initialize();
   }
 
   private void initialize() {
-    createTitle();
+    createHeader();
     createSimulationTypeControl();
     createRowControl();
     createColControl();
     createSimulationMetaDataTextFields();
     initializeParametersControl();
     createUpdateButton();
+  }
+
+  private void createHeader() {
+    Text title = new Text("Create New Grid:");
+    myHeaderBox.getChildren().add(title);
+    this.getChildren().add(myHeaderBox);
+    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myHeaderBox.getChildren().add(myStateInfoView);
+  }
+
+  private void updateStateInfo(Simulation newSimulation) {
+    myHeaderBox.getChildren().removeLast();
+    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myHeaderBox.getChildren().add(myStateInfoView);
   }
 
   private void initializeParametersControl() {
@@ -125,18 +142,15 @@ public class CreateNewSimulationView extends VBox {
     simulationSelector = new ComboBox<>(options);
     simulationSelector.setValue(options.getFirst());
     simulationSelector.valueProperty()
-        .addListener((ov, t, t1) -> addAllParameters(simulationSelector.getValue()));
+        .addListener((ov, t, t1) -> {
+          addAllParameters(simulationSelector.getValue());
+        });
     HBox container = new HBox();
     container.setAlignment(Pos.CENTER_LEFT);
     container.setSpacing(5);
     Text simulationTypeLabel = new Text("Simulation Type: ");
     container.getChildren().addAll(simulationTypeLabel, simulationSelector);
     this.getChildren().add(container);
-  }
-
-  private void createTitle() {
-    Text title = new Text("Create New Grid:");
-    this.getChildren().add(title);
   }
 
   private void createUpdateButton() {
@@ -159,12 +173,28 @@ public class CreateNewSimulationView extends VBox {
   }
 
   private void createNewSimulation() {
-    SimulationMetaData metaData = new SimulationMetaData(
-        simulationSelector.getValue(),
-        myNameField.getText(),
-        myAuthorField.getText(),
-        myDescriptionField.getText());
+    SimulationMetaData metaData = createMetaData();
 
+    Map<String, Double> parameters = createAndValidateParameters();
+    attemptCreatingNewSimulation(metaData, parameters);
+  }
+
+  private void attemptCreatingNewSimulation(SimulationMetaData metaData, Map<String, Double> parameters) {
+    try {
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
+          metaData, parameters);
+      myAlertField.flash("New Simulation Created!", false);
+      resetFields();
+      updateStateInfo(myMainController.getSimulation());
+    } catch (Exception e) {
+      myAlertField.flash("Error creating new simulation!", true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+    }
+  }
+
+  private Map<String, Double> createAndValidateParameters() {
     Map<String, Double> parameters = new HashMap<>();
     boolean validParameters = true;
     for (String parameter : myParameterTextFields.keySet()) {
@@ -182,19 +212,18 @@ public class CreateNewSimulationView extends VBox {
       parameters.put(parameter, value);
     }
     if (!validParameters) {
-      return;
+      return null;
     }
-    try {
-      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
-          metaData, parameters);
-    } catch (Exception e) {
-      myAlertField.flash("Error creating new simulation!", true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
-    }
-    myAlertField.flash("New Simulation Created!", false);
-    resetFields();
+    return parameters;
+  }
+
+  private SimulationMetaData createMetaData() {
+    SimulationMetaData metaData = new SimulationMetaData(
+        simulationSelector.getValue(),
+        myNameField.getText(),
+        myAuthorField.getText(),
+        myDescriptionField.getText());
+    return metaData;
   }
 
   private void resetFields() {
