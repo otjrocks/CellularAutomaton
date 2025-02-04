@@ -12,18 +12,15 @@ import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
-import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
+import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -101,6 +98,28 @@ public class MainController {
   }
 
   /**
+   * Update the animation to have a new speed
+   *
+   * @param speed: the new speed of the animation
+   * @param start: a boolean to determine if the animation should start with the new speed or remain stopped
+   */
+  public void updateAnimationSpeed(double speed, boolean start) {
+    mySimulationAnimation.stop();
+    mySimulationAnimation.getKeyFrames().clear();
+    mySimulationAnimation.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(speed), e -> {
+          try {
+            step();
+          } catch (Exception ex) {
+            throw new RuntimeException(ex);
+          }
+        }));
+    if (!isEditing && start) {
+      mySimulationAnimation.play();
+    }
+  }
+
+  /**
    * Set whether the user is editing the simulation
    *
    * @param editing: boolean indicating if user is editing the view
@@ -111,6 +130,7 @@ public class MainController {
 
   /**
    * Get rows in the grid
+   *
    * @return int number of rows
    */
   public int getGridRows() {
@@ -119,15 +139,17 @@ public class MainController {
 
   /**
    * Get columns in the grid
+   *
    * @return int number of columns
    */
   public int getGridCols() {
     return myGrid.getCols();
   }
 
-  public void createNewSimulation(int rows, int cols, String type) {
+  public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
+      Map<String, Double> parameters) {
     myGrid = new Grid(rows, cols);
-    mySimulation = SimulationConfig.getNewSimulation(type, new SimulationMetaData(type, "", "", ""), null);
+    mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
@@ -180,8 +202,11 @@ public class MainController {
    */
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
-    String filePath = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage).getAbsolutePath();
-    updateSimulationFromFile(filePath);
+    File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
+    if (file != null) { // only update simulation if a file was selected
+      String filePath = file.getAbsolutePath();
+      updateSimulationFromFile(filePath);
+    }
   }
 
   private void updateSimulationFromFile(String filePath) {
@@ -199,7 +224,6 @@ public class MainController {
   }
 
   private void createOrUpdateSidebar() {
-    isEditing = false;
     if (mySidebarView == null) {
       initializeSidebar(this);
     } else {
