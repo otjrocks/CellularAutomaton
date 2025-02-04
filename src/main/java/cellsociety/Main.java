@@ -4,7 +4,6 @@ import static cellsociety.config.MainConfig.BACKGROUND_COLOR;
 import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
-
 import cellsociety.controller.MainController;
 import javafx.application.Application;
 import javafx.scene.Group;

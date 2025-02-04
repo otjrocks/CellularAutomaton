@@ -26,6 +26,7 @@ public class SidebarView extends VBox {
   private Button playPauseButton;
   private Button stepButton;
   private Button chooseFileButton;
+  private Button saveFileButton;
   private CreateNewSimulationView myCreateNewSimulationView;
 
   /**
@@ -64,6 +65,7 @@ public class SidebarView extends VBox {
     createSimulationMetaDataDisplay();
     createPlayPauseButton();
     createStepButton();
+    createSaveFileButton();
     createFileChooserButton();
     StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView parameterView = new ParameterView(myMainController.getSimulation());
@@ -128,6 +130,15 @@ public class SidebarView extends VBox {
       stopAnimationPlayIfRunning(playPauseButton);
     });
     this.getChildren().add(chooseFileButton);
+  }
+
+  private void createSaveFileButton() {
+    saveFileButton = new Button("Save to XML");
+    saveFileButton.setOnAction(event -> {
+      myMainController.handleSavingToFile();
+      stopAnimationPlayIfRunning(playPauseButton);
+    });
+    this.getChildren().add(saveFileButton);
   }
 
   private void createStepButton() {
