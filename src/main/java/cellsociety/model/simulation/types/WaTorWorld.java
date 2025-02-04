@@ -16,8 +16,8 @@ public class WaTorWorld extends Simulation {
 
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo("Empty", Color.BLACK));
+    stateMap.put(0, new StateInfo("Empty", Color.BLUE));
     stateMap.put(1, new StateInfo("Fish", Color.GREEN));
-    stateMap.put(2, new StateInfo("Sharks", Color.BLUE));
+    stateMap.put(2, new StateInfo("Sharks", Color.GREY));
   }
 }
