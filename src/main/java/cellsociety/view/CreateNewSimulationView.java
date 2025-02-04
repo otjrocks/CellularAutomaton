@@ -4,6 +4,7 @@ import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
@@ -16,6 +17,7 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -141,7 +143,7 @@ public class CreateNewSimulationView extends VBox {
   }
 
   private void createUpdateButton() {
-    javafx.scene.control.Button updateButton = new javafx.scene.control.Button("Create New Grid");
+    Button updateButton = new Button("Create New Grid");
     updateButton.setOnMouseClicked(event -> {
       handleUpdateButton();
     });
@@ -157,8 +159,6 @@ public class CreateNewSimulationView extends VBox {
     }
 
     createNewSimulation();
-    resetFields();
-    myAlertField.flash("New Simulation Created!", false);
   }
 
   private void createNewSimulation() {
@@ -169,13 +169,35 @@ public class CreateNewSimulationView extends VBox {
         myDescriptionField.getText());
 
     Map<String, Double> parameters = new HashMap<>();
+    boolean validParameters = true;
     for (String parameter : myParameterTextFields.keySet()) {
-      parameters.put(parameter,
-          Double.parseDouble(myParameterTextFields.get(parameter).getText()));
+      double value;
+      try {
+        value = Double.parseDouble(myParameterTextFields.get(parameter).getText());
+      } catch (Exception e) {
+        myAlertField.flash("Invalid parameter value(s)!", true);
+        if (VERBOSE_ERROR_MESSAGES) {
+          myAlertField.flash(e.getMessage(), true);
+        }
+        validParameters = false;
+        break;
+      }
+      parameters.put(parameter, value);
     }
-
-    myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
-        metaData, parameters);
+    if (!validParameters) {
+      return;
+    }
+    try {
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
+          metaData, parameters);
+    } catch (Exception e) {
+      myAlertField.flash("Error creating new simulation!", true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+    }
+    myAlertField.flash("New Simulation Created!", false);
+    resetFields();
   }
 
   private void resetFields() {
