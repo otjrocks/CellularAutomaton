@@ -2,7 +2,6 @@ package cellsociety.model.simulation.rules;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -81,11 +80,11 @@ public class WaTorWorldRules extends SimulationRules {
     State currentState = State.fromValue(cell.getState());
 
     switch (currentState) {
+      case FISH -> {
+        return shouldFishMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.FISH.getValue();
+      }
       case SHARK -> {
         return getSharkNextState(cell, grid);
-      }
-      case FISH -> {
-        return State.FISH.getValue();
       }
       case EMPTY -> {
         return State.EMPTY.getValue();
@@ -96,7 +95,6 @@ public class WaTorWorldRules extends SimulationRules {
     }
   }
 
-  // Checks if there are valid moves for shark and it's alive
   private int getSharkNextState(Cell cell, Grid grid) {
     if (isSharkDead(cell)) {
       return State.EMPTY.getValue();
@@ -104,13 +102,19 @@ public class WaTorWorldRules extends SimulationRules {
     return shouldSharkMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.SHARK.getValue();
   }
 
-  // Checks if shark is out of health
+  private boolean shouldFishMove(Cell cell, Grid grid) {
+    return !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
+  }
+
   private boolean isSharkDead(Cell cell) {
     return ((WaTorCell) cell).getHealth() <= 0;
   }
 
-  // Checks if shark has any valid moves
   private boolean shouldSharkMove(Cell cell, Grid grid) {
+    WaTorCell sharkCell = (WaTorCell) cell;
+    if (sharkCell.getHealth() <= 0) {
+      return false; // Shark is dead
+    }
     return !getNeighborsByState(cell, grid, State.FISH.getValue()).isEmpty() ||
         !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
   }
@@ -119,105 +123,75 @@ public class WaTorWorldRules extends SimulationRules {
   @Override
   public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellStateUpdate> nextStates = new ArrayList<>();
-    List<Cell> fishCells = new ArrayList<>();
     List<Cell> movingCells = new ArrayList<>();
-    HashSet<String> occupiedCells = new HashSet<>();
 
     // First pass: Determine next state or mark cells as MOVE_PENDING
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
-      State currentState = State.fromValue(cell.getState());
+      int nextState = getNextState(cell, grid);
 
-      if(currentState == State.SHARK){
-        int nextState = getNextState(cell, grid);
-        if (nextState == State.MOVE_PENDING.getValue()) {
-          movingCells.add(cell);
-        } else {
+      if (nextState == State.MOVE_PENDING.getValue()) {
+        movingCells.add(cell);
+      } else {
+        if (nextState != State.EMPTY.getValue() || cell.getState() != State.EMPTY.getValue()) {
+          // do not add cell update if cell was empty before and is still empty, in case someone wants to move there
           nextStates.add(new CellStateUpdate(cell.getLocation(), nextState));
-          if (nextState == State.SHARK.getValue()) {
-                    occupiedCells.add(cell.getLocation().toString());
-                }
         }
-      }
-      else if(currentState == State.FISH){
-        fishCells.add(cell);
-      }
-      else if(currentState != State.EMPTY || cell.getState() != State.EMPTY.getValue()) {
-        nextStates.add(new CellStateUpdate(cell.getLocation(), currentState.getValue()));
       }
     }
 
     // Second pass: Process movements
     for (Cell cell : movingCells) {
-      processMovement(cell, grid, nextStates, occupiedCells);
-    }
-
-    for (Cell cell : fishCells) {
-      processMovement(cell, grid, nextStates, occupiedCells);
+      processMovement(cell, grid, nextStates);
     }
 
     return nextStates;
   }
 
-  private void processMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates, HashSet<String> occupiedCells) {
+  private void processMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates) {
     State currentState = State.fromValue(cell.getState());
-    WaTorCell movingCell = (WaTorCell) cell;
 
     List<Cell> targetCells;
     if (currentState == State.SHARK) {
       targetCells = getNeighborsByState(cell, grid, State.FISH.getValue());
-      if (!targetCells.isEmpty()) {
-        Cell target = targetCells.get(random.nextInt(targetCells.size()));
-
-
-        movingCell.addHealth(parameters.get("sharkEnergyGain").intValue());
-
-        nextStates.add(new CellStateUpdate(target.getLocation(), State.SHARK.getValue()));
-        nextStates.add(new CellStateUpdate(cell.getLocation(), determineReproductionOrEmpty(movingCell, State.SHARK)));
-
-        occupiedCells.add(target.getLocation().toString());
-        return;
+      if (targetCells.isEmpty()) {
+        targetCells = getNeighborsByState(cell, grid, State.EMPTY.getValue());
       }
-      targetCells = getValidEmptyNeighbors(cell, grid, occupiedCells);
-
     } else {
-      targetCells = getValidEmptyNeighbors(cell, grid, occupiedCells);
+      targetCells = getNeighborsByState(cell, grid, State.EMPTY.getValue());
     }
 
     if (!targetCells.isEmpty()) {
       Cell target = targetCells.get(random.nextInt(targetCells.size()));
-
-      nextStates.add(new CellStateUpdate(target.getLocation(), currentState.getValue()));
-      nextStates.add(new CellStateUpdate(cell.getLocation(), determineReproductionOrEmpty(movingCell, currentState)));
-
-      occupiedCells.add(target.getLocation().toString());
-    }
-
-    if (currentState == State.SHARK) {
-        movingCell.addHealth(-1);
-        if (movingCell.getHealth() <= 0) {
-            nextStates.add(new CellStateUpdate(cell.getLocation(), State.EMPTY.getValue())); // Shark dies
-        }
+      moveEntity(cell, target, nextStates);
     }
   }
 
-  private int determineReproductionOrEmpty(WaTorCell cell, State state) {
-    if (cell.getReproductionEnergy() >= parameters.get(getReproductionParam(state)).intValue()) {
-        cell.resetReproductionEnergy();
-        return state.getValue();
+  private void moveEntity(Cell fromCell, Cell toCell, List<CellStateUpdate> nextStates) {
+    State entityState = State.fromValue(fromCell.getState());
+    WaTorCell movingCell = (WaTorCell) fromCell;
+
+    if (entityState == State.SHARK) {
+      if (toCell.getState() == State.FISH.getValue()) {
+        movingCell.addHealth(parameters.get("sharkEnergyGain").intValue());
+      }
     }
-    return State.EMPTY.getValue();
+
+    if (movingCell.getReproductionEnergy() >= parameters.get(getReproductionParam(entityState))) {
+      movingCell.resetReproductionEnergy();
+      nextStates.add(
+          new CellStateUpdate(fromCell.getLocation(), entityState.getValue())); // Reproduce
+    } else {
+      nextStates.add(
+          new CellStateUpdate(fromCell.getLocation(), State.EMPTY.getValue())); // Move out
+    }
+
+    nextStates.add(new CellStateUpdate(toCell.getLocation(), entityState.getValue())); // Move in
   }
 
   private String getReproductionParam(State state) {
     return (state == State.FISH) ? "fishReproductionTime" : "sharkReproductionTime";
-  }
-
-  private List<Cell> getValidEmptyNeighbors(Cell cell, Grid grid, HashSet<String> occupiedCells) {
-    List<Cell> emptyNeighbors = getNeighborsByState(cell, grid, State.EMPTY.getValue());
-    emptyNeighbors.removeIf(neighbor -> occupiedCells.contains(neighbor.getLocation().toString()));
-    return emptyNeighbors;
   }
 
   private List<Cell> getNeighborsByState(Cell cell, Grid grid, int state) {
