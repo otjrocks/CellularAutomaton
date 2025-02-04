@@ -98,6 +98,28 @@ public class MainController {
   }
 
   /**
+   * Update the animation to have a new speed
+   *
+   * @param speed: the new speed of the animation
+   * @param start: a boolean to determine if the animation should start with the new speed or remain stopped
+   */
+  public void updateAnimationSpeed(double speed, boolean start) {
+    mySimulationAnimation.stop();
+    mySimulationAnimation.getKeyFrames().clear();
+    mySimulationAnimation.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(speed), e -> {
+          try {
+            step();
+          } catch (Exception ex) {
+            throw new RuntimeException(ex);
+          }
+        }));
+    if (!isEditing && start) {
+      mySimulationAnimation.play();
+    }
+  }
+
+  /**
    * Set whether the user is editing the simulation
    *
    * @param editing: boolean indicating if user is editing the view

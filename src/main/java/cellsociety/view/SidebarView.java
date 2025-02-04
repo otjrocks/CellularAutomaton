@@ -1,9 +1,13 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.STEP_SPEED;
+
+import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,6 +23,7 @@ import javafx.scene.text.TextAlignment;
 public class SidebarView extends VBox {
 
   public static final double ELEMENT_SPACING = 5;
+  public static final double SPEED_SLIDER_DELTA = 10; // how drastic changes from speed slider should be
 
   private final int myWidth;
   private final MainController myMainController;
@@ -28,8 +33,6 @@ public class SidebarView extends VBox {
   private Button myStepButton;
   private Button myChooseFileButton;
   private Button myModeButton;
-  private StateInfoView myStateInfoView;
-  private ParameterView myParameterView;
   private final VBox myMetaData = new VBox();
   private CreateNewSimulationView myCreateNewSimulationView;
 
@@ -56,17 +59,26 @@ public class SidebarView extends VBox {
 
   private void initializeSidebar() {
     updateSidebar();
+    double initialSliderValue = (1 / STEP_SPEED);
+    initializeSpeedSlider(initialSliderValue);
     this.getChildren().add(createAllButtons());
     myCreateNewSimulationView = new CreateNewSimulationView(
         myMainController.getGridRows(), myMainController.getGridCols(), myMainController);
+  }
+
+  private void initializeSpeedSlider(double initialSliderValue) {
+    Slider slider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
+        initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
+    slider.valueProperty().addListener((observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(1 / (Double) newValue, isPlaying));
+    this.getChildren().add(slider);
   }
 
   private void updateSidebarContent() {
     myMetaData.getChildren().clear();
     initializeStaticContent();
     createSimulationMetaDataDisplay();
-    myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myParameterView = new ParameterView(myMainController.getSimulation());
+    StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
     myMetaData.getChildren().addAll(myStateInfoView, myParameterView);
   }
 
