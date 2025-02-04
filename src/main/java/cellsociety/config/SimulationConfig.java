@@ -50,6 +50,7 @@ public class SimulationConfig {
    * exist
    */
   public static Cell getNewCell(int row, int col, int state, String simulationName) {
+    validateSimulation(simulationName);
     if (simulationName.equals("WaTorWorld")) {
       return new WaTorCell(state, new Double(row, col));
     }
@@ -70,6 +71,8 @@ public class SimulationConfig {
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
       Map<String, java.lang.Double> parameters) {
+    validateSimulation(simulationName);
+    validateParameters(simulationName, parameters);
     return switch (simulationName) {
       case "Percolation" -> new Percolation(new PercolationRules(), simulationMetaData);
       case "Segregation" ->
@@ -89,6 +92,7 @@ public class SimulationConfig {
    * @return A list of strings representing the parameter names
    */
   public static List<String> getParameters(String simulationName) {
+    validateSimulation(simulationName);
     switch (simulationName) {
       case "Segregation" -> {
         return List.of("toleranceThreshold");
@@ -104,4 +108,27 @@ public class SimulationConfig {
       }
     }
   }
+
+  private static void validateSimulation(String simulationName) {
+    if (!List.of(simulations).contains(simulationName)) {
+      throw new IllegalArgumentException(
+          "The simulation type " + simulationName + " is not a valid simulation");
+    }
+  }
+
+  private static void validateParameters(String simulationName,
+      Map<String, java.lang.Double> parameters) {
+    List<String> requiredParameters = getParameters(simulationName);
+    for (String parameter : requiredParameters) {
+      if (parameters == null) {
+        throw new NullPointerException(
+            "This simulation requires parameters, and your parameters are null");
+      }
+      if (!parameters.containsKey(parameter)) {
+        throw new IllegalArgumentException(
+            "The required parameter " + parameter + " is missing from your parameters map.");
+      }
+    }
+  }
+
 }
