@@ -28,18 +28,21 @@ public class ParameterView extends VBox {
   }
 
   private void createTitle() {
-    createText(MESSAGES.getString("PARAMETER_TITLE"));
+    createText(MESSAGES.getString("PARAMETER_TITLE"), true);
   }
 
   private void createParameters(Simulation simulation) {
     Map<String, Double> parameters = simulation.getRules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
-      createText(String.format("- %s%s %s", entry.getKey(), ": ", entry.getValue()));
+      createText(String.format("- %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
     }
   }
 
-  private void createText(String entry) {
+  private void createText(String entry, boolean title) {
     Text parameter = new Text(entry);
+    if (title) {
+      parameter.getStyleClass().add("secondary-title");
+    }
     this.getChildren().add(parameter);
   }
 }

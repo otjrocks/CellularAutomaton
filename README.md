@@ -20,7 +20,7 @@ This project implements a cellular automata simulator.
  * Resources used for learning (including AI assistance)
  
  * Resources used directly (including AI assistance)
-
+- https://github.com/antoniopelusi/JavaFX-Dark-Theme
 
 ### Running the Program
 

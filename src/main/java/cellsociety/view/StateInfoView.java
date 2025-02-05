@@ -32,6 +32,7 @@ public class StateInfoView extends VBox {
 
   private void createTitle() {
     Text title = new Text(MESSAGES.getString("STATE_INFO_TITLE"));
+    title.getStyleClass().add("secondary-title");
     this.getChildren().add(title);
   }
 
