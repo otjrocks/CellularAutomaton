@@ -69,6 +69,17 @@ public class EditModeView extends VBox {
     initialize();
   }
 
+  /**
+   * Update the state info display for the edit more view
+   */
+  public void updateStateInfo() {
+    myHeaderBox.getChildren()
+        .removeFirst(); // remove the current state info box before creating a new one
+    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myHeaderBox.getChildren()
+        .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
+  }
+
   private void initialize() {
     createHeader();
     createSimulationTypeControl();
@@ -88,14 +99,6 @@ public class EditModeView extends VBox {
     this.getChildren().add(myHeaderBox);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
     myHeaderBox.getChildren().addAll(myStateInfoView, instructions, title);
-  }
-
-  private void updateStateInfo() {
-    myHeaderBox.getChildren()
-        .removeFirst(); // remove the current state info box before creating a new one
-    myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myHeaderBox.getChildren()
-        .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
   }
 
   private void initializeParametersControl() {
