@@ -48,6 +48,20 @@ public class WaTorCell extends Cell {
   }
 
   /**
+   * Resets the health of the cell to the default health
+   */
+  public void resetHealth() {
+    this.health = DEFAULT_HEALTH;
+  }
+
+  /**
+   * Set health of a cell
+   */
+  public void setHealth(int health) {
+    this.health = health;
+  }
+
+  /**
    * Add to a cells health
    *
    * @param amount: the amount you wish to add
