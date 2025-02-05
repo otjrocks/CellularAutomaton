@@ -105,12 +105,14 @@ public class Grid {
    * neighbors) and then cell states are updated in a second pass.""
    *
    * @param simulation: The simulation you which to use to update the grid
+   * @return The cell state updates that have occurred when the grid was updated
    */
-  public void updateGrid(Simulation simulation) {
+  public List<CellStateUpdate> updateGrid(Simulation simulation) {
     List<CellStateUpdate> nextStates = simulation.getRules().getNextStatesForAllCells(this);
     for (CellStateUpdate nextState : nextStates) {
       getCell(nextState.getRow(), nextState.getCol()).setState(nextState.getState());
     }
+    return nextStates;
   }
 
   /**

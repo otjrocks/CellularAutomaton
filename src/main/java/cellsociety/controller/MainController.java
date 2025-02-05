@@ -258,7 +258,6 @@ public class MainController {
 
   private void step() {
     mySimulationView.step(myGrid, mySimulation);
-    myGrid.updateGrid(mySimulation);
   }
 
   private void createMainContainerAndView() {
