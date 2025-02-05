@@ -62,6 +62,7 @@ public class SidebarView extends VBox {
 
 
   private void enableEditView() {
+    myEditModeView.updateStateInfo();
     this.getChildren().clear();
     this.getChildren().addAll(myModeButton, myEditModeView, myAlertField);
   }
