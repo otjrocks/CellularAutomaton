@@ -1,6 +1,5 @@
 package cellsociety.model.XMLHandlers;
 
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -15,8 +14,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
@@ -84,7 +84,7 @@ public abstract class XMLHandler {
                 String[] rowValues = rows.item(i).getTextContent().split(",");
                 for (int j = 0; j < rowValues.length; j++) {
                     int state = Integer.parseInt(rowValues[j]);
-                    DefaultCell holdingCell = new DefaultCell(state, new Point2D.Double(i, j));
+                    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, myType);
                     myGrid.addCell(holdingCell);
                 }
             }

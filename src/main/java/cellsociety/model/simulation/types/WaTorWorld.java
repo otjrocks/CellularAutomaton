@@ -1,7 +1,6 @@
 package cellsociety.model.simulation.types;
 
 import static cellsociety.config.MainConfig.MESSAGES;
-
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;

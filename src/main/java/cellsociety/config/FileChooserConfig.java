@@ -3,6 +3,7 @@ package cellsociety.config;
 import static cellsociety.config.MainConfig.MESSAGES;
 
 import java.io.File;
+
 import javafx.stage.FileChooser;
 
 /**
@@ -16,7 +17,7 @@ public class FileChooserConfig {
   // kind of data files to look for
   public static final String DATA_FILE_EXTENSION = "*.xml";
   // default to start in the data folder to make it easy on the user to find
-  public static final String DATA_FILE_FOLDER = System.getProperty("user.dir") + "/data";
+  public static final String DATA_FILE_FOLDER = System.getProperty("user.dir") + "/src/main/resources";
   public static final String DATA_SAVE_FOLDER = DATA_FILE_FOLDER + "/simulations/custom";
   public static final String DEFAULT_SIMULATION_PATH =
       DATA_FILE_FOLDER + "/simulations/default.xml"; // default simulation

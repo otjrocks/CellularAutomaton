@@ -24,9 +24,9 @@
     </InitialConfiguration>
 
     <Parameters>
-        <fishReproductionTime>0.3</fishReproductionTime>
-        <sharkReproductionTime>0.3</sharkReproductionTime>
-        <sharkEnergyGain>0.3</sharkEnergyGain>
+        <fishReproductionTime>2</fishReproductionTime>
+        <sharkReproductionTime>3</sharkReproductionTime>
+        <sharkEnergyGain>1</sharkEnergyGain>
     </Parameters>
 </SimulationConfig>
 

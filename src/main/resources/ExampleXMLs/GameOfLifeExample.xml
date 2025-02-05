@@ -3,7 +3,7 @@
     <Type>GameOfLife</Type>
     <Title>Glider</Title>
     <Author>Richard K. Guy</Author>
-    <Description>A basic configuration that produces a "glider" that moves diagonally across the grid</Description>
+    <Description>A basic configuration that produces a glider that moves diagonally across the grid</Description>
 
     <GridDimensions>
         <Height>10</Height>

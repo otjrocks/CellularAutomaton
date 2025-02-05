@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Simulation>
+    <Type>WaTorWorld</Type>
+    <Title>SurroundTheShark</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Many fish surrounding a single shark with gaps to allow for movement</Description>
+    <GridDimensions>
+        <Height>11</Height>
+        <Width>11</Width>
+    </GridDimensions>
+    <GridData>
+        <Row>1,1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,0,1,0,1,0,1,0,1,0,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,0,1,0,0,0,0,0,1,0,1</Row>
+        <Row>1,1,1,0,0,0,0,0,1,1,1</Row>
+        <Row>1,0,1,0,0,2,0,0,1,0,1</Row>
+        <Row>1,1,1,0,0,0,0,0,1,1,1</Row>
+        <Row>1,0,1,0,0,0,0,0,1,0,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1,1</Row>
+        <Row>1,0,1,0,1,0,1,0,1,0,1</Row>
+        <Row>1,1,1,1,1,1,1,1,1,1,1</Row>
+    </GridData>
+    <Parameters>
+        <fishReproductionTime>2.0</fishReproductionTime>
+        <sharkEnergyGain>1.0</sharkEnergyGain>
+        <sharkReproductionTime>3.0</sharkReproductionTime>
+    </Parameters>
+</Simulation>

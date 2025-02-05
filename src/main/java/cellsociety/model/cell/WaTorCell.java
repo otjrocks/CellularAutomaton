@@ -11,7 +11,7 @@ public class WaTorCell extends Cell {
 
   public static final int DEFAULT_HEALTH = 5;
   private int health;
-  private int reproductionEnergy;
+  private double reproductionEnergy;
 
   /**
    * Create a WaTor cell with the default health amount
@@ -51,7 +51,7 @@ public class WaTorCell extends Cell {
    * @param amount: the amount you wish to add
    */
   public void addHealth(int amount) {
-    reproductionEnergy += amount;
+    health += amount;
   }
 
   /**
@@ -59,7 +59,7 @@ public class WaTorCell extends Cell {
    *
    * @return the reproductive energy of the cell
    */
-  public int getReproductionEnergy() {
+  public double getReproductionEnergy() {
     return reproductionEnergy;
   }
 
@@ -73,7 +73,6 @@ public class WaTorCell extends Cell {
   @Override
   public void setState(int newState) {
     super.setState(newState);
-    health--;
     reproductionEnergy++;
   }
 }
