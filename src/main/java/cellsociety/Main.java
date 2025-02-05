@@ -36,7 +36,7 @@ public class Main extends Application {
 
     Scene scene = new Scene(scrollPane, WIDTH, HEIGHT);
     Font.loadFont(getClass().getResourceAsStream(DEFAULT_FONT_PATH), 14);
-    Font.loadFont(getClass().getResourceAsStream(BOLD_FONT_PATH), 14);
+    Font.loadFont(getClass().getResourceAsStream(BOLD_FONT_PATH), 24);
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
     new MainController(stage, root); // create main controller and give access to main root
