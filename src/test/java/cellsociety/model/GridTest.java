@@ -1,14 +1,17 @@
 package cellsociety.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.Simulation;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class GridTest {
 

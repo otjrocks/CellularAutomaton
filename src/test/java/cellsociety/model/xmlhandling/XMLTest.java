@@ -8,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cellsociety.model.XMLHandlers.types.GameOfLifeXMLHandler;
+import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 
 class XMLTest {
 
-  private GameOfLifeXMLHandler myXMLHandler;
+  private XMLHandler myXMLHandler;
 
   @BeforeEach
   void setUp() {
-    myXMLHandler = new GameOfLifeXMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
+    myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
   }
 
   @Test
@@ -56,11 +56,6 @@ class XMLTest {
     assertEquals(myXMLHandler.getSimData().name(), "Glider");
     assertEquals(myXMLHandler.getSimData().author(), "Richard K. Guy");
     assertEquals(myXMLHandler.getSimData().description(), "A basic configuration that produces a glider that moves diagonally across the grid");
-  }
-
-  @Test
-  void getSimRules() {
-    assertThat(myXMLHandler.getSimRules(), instanceOf(GameOfLifeRules.class));
   }
 
   @Test
