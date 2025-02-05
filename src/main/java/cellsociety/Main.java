@@ -1,14 +1,19 @@
 package cellsociety;
 
-import static cellsociety.config.MainConfig.BACKGROUND_COLOR;
+import static cellsociety.config.MainConfig.BOLD_FONT_PATH;
+import static cellsociety.config.MainConfig.DEFAULT_FONT_PATH;
 import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.STYLESHEET_PATH;
 import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
+
 import cellsociety.controller.MainController;
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -29,7 +34,11 @@ public class Main extends Application {
   private void initializeStage(Stage stage) {
     ScrollPane scrollPane = createMainScrollPane();
 
-    Scene scene = new Scene(scrollPane, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    Scene scene = new Scene(scrollPane, WIDTH, HEIGHT);
+    Font.loadFont(getClass().getResourceAsStream(DEFAULT_FONT_PATH), 14);
+    Font.loadFont(getClass().getResourceAsStream(BOLD_FONT_PATH), 14);
+    scene.getStylesheets()
+        .add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
     new MainController(stage, root); // create main controller and give access to main root
     stage.setScene(scene);
     stage.setTitle(TITLE);

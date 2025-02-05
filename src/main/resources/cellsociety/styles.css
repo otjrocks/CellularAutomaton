@@ -1,0 +1,105 @@
+/*
+The main stylesheet of the application
+ */
+@font-face {
+  font-family: Lato;
+  src: url('./fonts/regular.ttf');
+}
+
+@font-face {
+  font-family: 'Lato Bold';
+  src: url('./fonts/bold.ttf');
+}
+
+* {
+  -fx-light: rgb(232, 232, 232);
+  -fx-dark: rgb(46, 46, 46);
+  -fx-gray: rgb(214, 214, 214);
+  -fx-accent: rgb(61, 15, 255);
+  -fx-warning: rgb(239, 34, 34);
+}
+
+.root {
+  -fx-font-family: Lato;
+  -fx-background: -fx-light;
+  -fx-font-size: 14px;
+}
+
+.main-title {
+  -fx-font-size: 26px;
+  -fx-font-family: 'Lato Bold';
+  -fx-font-weight: bold;
+}
+
+.secondary-title {
+  -fx-font-size: 20px;
+  -fx-font-family: Lato;
+  -fx-fill: -fx-dark;
+}
+
+.button {
+  -fx-background-color: -fx-accent;
+  -fx-text-fill: -fx-light;
+  -fx-font-size: 16px;
+}
+
+.button:hover {
+  -fx-opacity: 0.9;
+}
+
+.alert-warning {
+  -fx-fill: -fx-warning;
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+}
+
+.alert-info {
+  -fx-fill: -fx-accent;
+  -fx-font-size: 16px;
+}
+
+.metadata-container {
+  -fx-font-size: 15px;
+  -fx-background-color: -fx-gray;
+  -fx-padding: 15 10 15 10;
+}
+
+/* Slider */
+.slider .track {
+  -fx-background-color: -fx-gray;
+  background-color: -fx-gray;
+  -fx-background-radius: 0;
+  -fx-background-insets: 2 -2 1 0;
+}
+
+.slider .thumb {
+  -fx-background-color: -fx-accent;
+  background-color: -fx-accent;
+  -fx-background-radius: 15;
+  -fx-background-insets: 1 0 1 2;
+  -fx-border-radius: 15;
+  border-radius: 15;
+  -fx-border-insets: 1 0 1 2;
+  -fx-pref-width: 15;
+  -fx-pref-height: 15;
+  -fx-cursor: HAND;
+  cursor: HAND;
+}
+
+.slider:focused .thumb {
+  -fx-border-color: -fx-accent;
+  border-color: -fx-accent;
+  -fx-opacity: 0.8;
+}
+
+.slider .thumb:hover {
+  -fx-border-color: -fx-accent;
+  border-color: -fx-accent;
+  -fx-opacity: 0.8;
+}
+
+.slider .thumb:pressed {
+  -fx-border-color: -fx-accent;
+  border-color: -fx-accent;
+  -fx-opacity: 0.8;
+}

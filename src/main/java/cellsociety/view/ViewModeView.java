@@ -33,7 +33,7 @@ public class ViewModeView extends VBox {
   private Button myChooseFileButton;
   private Button mySaveButton;
   private Button myStepButton;
-  private Slider mySpeedSlider;
+  private final VBox mySpeedSliderBox = new VBox();
   private HBox myControlButtons = new HBox();
 
   /**
@@ -61,17 +61,19 @@ public class ViewModeView extends VBox {
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
     setPlayPauseButtonText();
-    this.getChildren().addAll(myStateInfoView, myParameterView, mySpeedSlider, myControlButtons);
+    this.getChildren().addAll(myStateInfoView, myParameterView, mySpeedSliderBox, myControlButtons);
   }
 
 
   private void initializeSpeedSlider() {
     double initialSliderValue = (1 / STEP_SPEED);
-    mySpeedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
+    Text sliderLabel = new Text(MESSAGES.getString("SLIDER_LABEL"));
+    Slider speedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
         initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
-    mySpeedSlider.valueProperty().addListener(
+    speedSlider.valueProperty().addListener(
         (observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(
             1 / (Double) newValue, myMainController.isPlaying()));
+    mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
   }
 
   private HBox createAllButtons() {
@@ -88,6 +90,8 @@ public class ViewModeView extends VBox {
 
   private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().getData();
+    Text infoText = new Text(MESSAGES.getString("INFO_DISPLAY_TITLE"));
+    infoText.getStyleClass().add("secondary-title");
     Text name = createText(
         String.format("%s %s", MESSAGES.getString("NAME_LABEL"), simulationData.name()));
     Text type = createText(
@@ -98,7 +102,11 @@ public class ViewModeView extends VBox {
         String.format("%s %s", MESSAGES.getString("DESCRIPTION_LABEL"),
             simulationData.description())
     );
-    this.getChildren().addAll(name, type, author, description);
+    VBox metaDataBox = new VBox();
+    metaDataBox.setSpacing(ELEMENT_SPACING);
+    metaDataBox.getChildren().addAll(infoText, name, type, author, description);
+    metaDataBox.getStyleClass().add("metadata-container");
+    this.getChildren().add(metaDataBox);
   }
 
   private void createFileChooserButton() {
@@ -182,15 +190,15 @@ public class ViewModeView extends VBox {
 
   private void initializeStaticContent() {
     Text title = createText(MESSAGES.getString("TITLE"));
-    Text infoTitle = createText(MESSAGES.getString("INFO_DISPLAY_TITLE"));
-    this.getChildren().addAll(title, infoTitle);
+    title.getStyleClass().add("main-title");
+    this.getChildren().addAll(title);
   }
 
   private Text createText(String message) {
     Text text = new Text(message);
     text.setFill(Color.BLACK);
     text.setTextAlignment(TextAlignment.LEFT);
-    text.setWrappingWidth(SIDEBAR_WIDTH);
+    text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
 }
