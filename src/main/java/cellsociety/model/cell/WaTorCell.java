@@ -70,6 +70,13 @@ public class WaTorCell extends Cell {
     reproductionEnergy = 0;
   }
 
+  /**
+   * decrease the health of cell
+   */
+  public void decreaseHealth() {
+    health -= 1;
+  }
+
   @Override
   public void setState(int newState) {
     super.setState(newState);
