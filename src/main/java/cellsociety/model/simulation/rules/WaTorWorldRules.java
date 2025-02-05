@@ -22,7 +22,6 @@ import java.util.Set;
  *
  * @author Owen Jennings
  * @author Justin Aronwald
- *
  */
 public class WaTorWorldRules extends SimulationRules {
 
@@ -36,12 +35,12 @@ public class WaTorWorldRules extends SimulationRules {
     }
   }
 
-  private Map<String, Double> setDefaultParameters () {
+  private Map<String, Double> setDefaultParameters() {
     Map<String, Double> parameters = new HashMap<>();
 
-    parameters.put("fishReproductionTime", 0.3);
-    parameters.put("sharkReproductionTime", 0.3);
-    parameters.put("sharkEnergyGain", 0.3);
+    parameters.put("fishReproductionTime", 3.0);
+    parameters.put("sharkReproductionTime", 4.0);
+    parameters.put("sharkEnergyGain", 2.0);
 
     return parameters;
   }
@@ -60,7 +59,6 @@ public class WaTorWorldRules extends SimulationRules {
     }
 
     /**
-     *
      * @return the value of a state
      */
     public int getValue() {
@@ -68,14 +66,12 @@ public class WaTorWorldRules extends SimulationRules {
     }
 
     /**
-     *
      * @param value - the value of a state
-     * @return - the actual State
      */
-    public static State fromValue(int value) {
+    public static void fromValue(int value) {
       for (State state : values()) {
         if (state.value == value) {
-          return state;
+          return;
         }
       }
       throw new IllegalArgumentException("Invalid WaTorState value: " + value);
@@ -91,50 +87,11 @@ public class WaTorWorldRules extends SimulationRules {
 
   @Override
   public int getNextState(Cell cell, Grid grid) {
-    State currentState = State.fromValue(cell.getState());
-
-    switch (currentState) {
-      case FISH -> {
-        return shouldFishMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.FISH.getValue();
-      }
-      case SHARK -> {
-        return getSharkNextState(cell, grid);
-      }
-      case EMPTY -> {
-        return State.EMPTY.getValue();
-      }
-      default -> {
-        return cell.getState();
-      }
-    }
+    return -1; // Not used
   }
 
-  private int getSharkNextState(Cell cell, Grid grid) {
-    if (isSharkDead(cell)) {
-      return State.EMPTY.getValue();
-    }
-    return shouldSharkMove(cell, grid) ? State.MOVE_PENDING.getValue() : State.SHARK.getValue();
-  }
-
-  private boolean shouldFishMove(Cell cell, Grid grid) {
-    return !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
-  }
-
-  private boolean isSharkDead(Cell cell) {
-    return ((WaTorCell) cell).getHealth() <= 0;
-  }
-
-  private boolean shouldSharkMove(Cell cell, Grid grid) {
-    WaTorCell sharkCell = (WaTorCell) cell;
-    if (sharkCell.getHealth() <= 0) {
-      return false; // Shark is dead
-    }
-    return !getNeighborsByState(cell, grid, State.FISH.getValue()).isEmpty() ||
-        !getNeighborsByState(cell, grid, State.EMPTY.getValue()).isEmpty();
-  }
 
   /**
-   *
    * @param grid - the grid object containing the cell objects
    * @return - A list containing the updates that will happen to cells
    */
@@ -159,19 +116,20 @@ public class WaTorWorldRules extends SimulationRules {
         nextStates.add(new CellStateUpdate(cell.getLocation(), cell.getState()));
       }
     }
-      //process sharks first
-      for (Cell shark : sharkCells) {
-        processSharkMovement(shark, grid, nextStates, updatedCells, fishCells);
-      }
+    //process sharks first
+    for (Cell shark : sharkCells) {
+      processSharkMovement(shark, grid, nextStates, updatedCells, fishCells);
+    }
 
-      for (Cell fish : fishCells) {
-        processFishMovement(fish, grid, nextStates, updatedCells);
-      }
+    for (Cell fish : fishCells) {
+      processFishMovement(fish, grid, nextStates, updatedCells);
+    }
 
-      return nextStates;
+    return nextStates;
   }
 
-  private void processSharkMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates, Set<Point2D> updatedCells, List<Cell> fishCells) {
+  private void processSharkMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates,
+      Set<Point2D> updatedCells, List<Cell> fishCells) {
     WaTorCell shark = (WaTorCell) cell;
 
     shark.decreaseHealth();
@@ -182,14 +140,16 @@ public class WaTorWorldRules extends SimulationRules {
       return;
     }
 
-    boolean shouldReproduce = shark.getReproductionEnergy() >= parameters.get("sharkReproductionTime");
+    boolean shouldReproduce =
+        shark.getReproductionEnergy() >= parameters.get("sharkReproductionTime");
     List<Cell> fishNeighbors = getNeighborsByState(shark, grid, State.FISH.getValue());
 
     if (!fishNeighbors.isEmpty()) {
       Cell fishCell = fishNeighbors.get(random.nextInt(fishNeighbors.size()));
       if (!updatedCells.contains(fishCell.getLocation())) {
         fishCells.remove(fishCell);
-        checkReproductionAndMoveOutSharkCell(nextStates, shark, shouldReproduce, fishCell, updatedCells, grid);
+        checkReproductionAndMoveOutSharkCell(nextStates, shark, shouldReproduce, fishCell,
+            updatedCells, grid);
         shark.addHealth(parameters.get("sharkEnergyGain").intValue());
         return;
       }
@@ -199,16 +159,19 @@ public class WaTorWorldRules extends SimulationRules {
     if (!emptyNeighbors.isEmpty()) {
       Cell newLocation = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
       if (!updatedCells.contains(newLocation.getLocation())) {
-        checkReproductionAndMoveOutSharkCell(nextStates, shark, shouldReproduce, newLocation, updatedCells, grid);
+        checkReproductionAndMoveOutSharkCell(nextStates, shark, shouldReproduce, newLocation,
+            updatedCells, grid);
       }
     }
   }
 
-  private void checkReproductionAndMoveOutSharkCell(List<CellStateUpdate> nextStates, WaTorCell shark,
+  private void checkReproductionAndMoveOutSharkCell(List<CellStateUpdate> nextStates,
+      WaTorCell shark,
       boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells, Grid grid) {
 
     if (!updatedCells.contains(newLocation.getLocation())) {
-      nextStates.add(new CellStateUpdate(newLocation.getLocation(), State.SHARK.getValue())); //moves in
+      nextStates.add(
+          new CellStateUpdate(newLocation.getLocation(), State.SHARK.getValue())); //moves in
       grid.updateCell(shark);
       updatedCells.add(newLocation.getLocation());
     }
@@ -224,7 +187,8 @@ public class WaTorWorldRules extends SimulationRules {
     }
   }
 
-  private void processFishMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates, Set<Point2D> updatedCells) {
+  private void processFishMovement(Cell cell, Grid grid, List<CellStateUpdate> nextStates,
+      Set<Point2D> updatedCells) {
     WaTorCell fish = (WaTorCell) cell;
 
     List<Cell> emptyNeighbors = getNeighborsByState(fish, grid, State.EMPTY.getValue());
@@ -232,7 +196,8 @@ public class WaTorWorldRules extends SimulationRules {
     if (!emptyNeighbors.isEmpty()) {
       Cell newLocation = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
 
-      boolean shouldReproduce = fish.getReproductionEnergy() >= parameters.get("fishReproductionTime");
+      boolean shouldReproduce =
+          fish.getReproductionEnergy() >= parameters.get("fishReproductionTime");
 
       if (shouldReproduce) {
         fish.resetReproductionEnergy();
@@ -244,7 +209,8 @@ public class WaTorWorldRules extends SimulationRules {
       }
 
       if (!updatedCells.contains(newLocation.getLocation())) {
-        nextStates.add(new CellStateUpdate(newLocation.getLocation(), State.FISH.getValue())); // Move in
+        nextStates.add(
+            new CellStateUpdate(newLocation.getLocation(), State.FISH.getValue())); // Move in
         updatedCells.add(newLocation.getLocation());
       }
     }
