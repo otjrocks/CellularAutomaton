@@ -1,12 +1,12 @@
 package cellsociety.view.components;
 
+import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -26,6 +26,7 @@ public class AlertField extends VBox {
 
   /**
    * Flash a message in the alert area
+   *
    * @param message: The message you wish to alert the user with
    * @param warning: denotes if the alert is a warning or just an informational alert
    */
@@ -37,14 +38,14 @@ public class AlertField extends VBox {
   }
 
   private void createNewAlertMessage(String message, boolean isWarning) {
-    String alertPrefix = isWarning ? "Warning: " : "Info: ";
-    Text newMessage = new Text(alertPrefix + message);
+    String alertPrefix =
+        isWarning ? MESSAGES.getString("WARNING_PREFIX") : MESSAGES.getString("INFO_PREFIX");
+    Text newMessage = new Text(String.format(alertPrefix, message));
     if (isWarning) {
       newMessage.setFill(ALERT_COLOR);
     } else {
       newMessage.setFill(INFO_COLOR);
     }
-    newMessage.setFont(new Font("Arial", 14));
     newMessage.setWrappingWidth(SIDEBAR_WIDTH);
     this.getChildren().add(newMessage);
 

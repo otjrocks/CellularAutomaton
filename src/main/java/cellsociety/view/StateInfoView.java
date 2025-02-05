@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.StateInfo;
 import javafx.geometry.Pos;
@@ -29,7 +31,7 @@ public class StateInfoView extends VBox {
   }
 
   private void createTitle() {
-    Text title = new Text("State Info:");
+    Text title = new Text(MESSAGES.getString("STATE_INFO_TITLE"));
     this.getChildren().add(title);
   }
 

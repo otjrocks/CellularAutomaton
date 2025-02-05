@@ -1,5 +1,7 @@
 package cellsociety.config;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
@@ -112,7 +114,7 @@ public class SimulationConfig {
   private static void validateSimulation(String simulationName) {
     if (!List.of(simulations).contains(simulationName)) {
       throw new IllegalArgumentException(
-          "The simulation type " + simulationName + " is not a valid simulation");
+          String.format(MESSAGES.getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
     }
   }
 
@@ -122,11 +124,11 @@ public class SimulationConfig {
     for (String parameter : requiredParameters) {
       if (parameters == null) {
         throw new NullPointerException(
-            "This simulation requires parameters, and your parameters are null");
+            MESSAGES.getString("NULL_SIMULATION_PARAMETERS_ERROR"));
       }
       if (!parameters.containsKey(parameter)) {
         throw new IllegalArgumentException(
-            "The required parameter " + parameter + " is missing from your parameters map.");
+            String.format(MESSAGES.getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
       }
     }
   }

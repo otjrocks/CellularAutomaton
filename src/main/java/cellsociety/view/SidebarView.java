@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
@@ -65,20 +67,20 @@ public class SidebarView extends VBox {
   }
 
   private void createChangeModeButton() {
-    myModeButton = new Button("Edit Mode");
+    myModeButton = new Button(MESSAGES.getString("EDIT_MODE"));
     myModeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
         myMainController.stopAnimation();
-        myModeButton.setText("View Mode");
+        myModeButton.setText(MESSAGES.getString("VIEW_MODE"));
         myMainController.setEditing(true);
-        myAlertField.flash("Editing mode enabled!", false);
+        myAlertField.flash(MESSAGES.getString("EDIT_MODE_ENABLED"), false);
       } else {
         disableEditView();
-        myModeButton.setText("Edit Mode");
+        myModeButton.setText(MESSAGES.getString("EDIT_MODE"));
         myMainController.setEditing(false);
-        myAlertField.flash("Editing mode disabled!", false);
+        myAlertField.flash(MESSAGES.getString("EDIT_MODE_DISABLED"), false);
       }
     });
   }

@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
@@ -87,22 +88,27 @@ public class ViewModeView extends VBox {
 
   private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().getData();
-    Text name = createText("Name: " + simulationData.name());
-    Text type = createText("Type: " + simulationData.type());
-    Text author = createText("Author: " + simulationData.author());
-    Text description = createText("Description: " + simulationData.description()
+    Text name = createText(
+        String.format("%s %s", MESSAGES.getString("NAME_LABEL"), simulationData.name()));
+    Text type = createText(
+        String.format("%s %s", MESSAGES.getString("TYPE_LABEL"), simulationData.type()));
+    Text author = createText(
+        String.format("%s %s", MESSAGES.getString("AUTHOR_LABEL"), simulationData.author()));
+    Text description = createText(
+        String.format("%s %s", MESSAGES.getString("DESCRIPTION_LABEL"),
+            simulationData.description())
     );
     this.getChildren().addAll(name, type, author, description);
   }
 
   private void createFileChooserButton() {
-    myChooseFileButton = new Button("Choose File");
+    myChooseFileButton = new Button(MESSAGES.getString("CHOOSE_FILE_BUTTON"));
     myChooseFileButton.setOnAction(event -> {
       try {
         stopAnimationPlayIfRunning();
         myMainController.handleNewSimulationFromFile();
       } catch (Exception e) {
-        myAlertField.flash("Could not load simulation from file!", true);
+        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
@@ -113,14 +119,14 @@ public class ViewModeView extends VBox {
   }
 
   private void createSaveFileButton() {
-    mySaveButton = new Button("Save to XML");
+    mySaveButton = new Button(MESSAGES.getString("SAVE_TO_XML"));
     mySaveButton.setOnMouseClicked(event -> {
       stopAnimationPlayIfRunning();
       try {
         myMainController.handleSavingToFile();
-        myAlertField.flash("File successfully saved!", false);
+        myAlertField.flash(MESSAGES.getString("FILE_SAVE_SUCCESS"), false);
       } catch (Exception e) {
-        myAlertField.flash("Could not save to file!", true);
+        myAlertField.flash(MESSAGES.getString("FILE_SAVE_FAIL"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
@@ -129,7 +135,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createStepButton() {
-    myStepButton = new Button("Single Step");
+    myStepButton = new Button(MESSAGES.getString("STEP_LABEL"));
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
       myMainController.handleSingleStep();
@@ -137,7 +143,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createPlayPauseButton() {
-    myPlayPauseButton = new Button("Play");
+    myPlayPauseButton = new Button(MESSAGES.getString("PLAY_LABEL"));
     myPlayPauseButton.setOnAction(event -> {
       if (myMainController.isPlaying()) {
         stopAnimation();
@@ -151,13 +157,13 @@ public class ViewModeView extends VBox {
   private void startAnimation() {
     myMainController.startAnimation();
     setPlayPauseButtonText();
-    myAlertField.flash("Animation successfully started!", false);
+    myAlertField.flash(MESSAGES.getString("ANIMATION_START"), false);
   }
 
   private void stopAnimation() {
     myMainController.stopAnimation();
     setPlayPauseButtonText();
-    myAlertField.flash("Animation successfully paused!", false);
+    myAlertField.flash(MESSAGES.getString("ANIMATION_PAUSE"), false);
   }
 
   private void stopAnimationPlayIfRunning() {
@@ -168,15 +174,15 @@ public class ViewModeView extends VBox {
 
   private void setPlayPauseButtonText() {
     if (myMainController.isPlaying()) {
-      myPlayPauseButton.setText("Pause");
+      myPlayPauseButton.setText(MESSAGES.getString("PAUSE_LABEL"));
     } else {
-      myPlayPauseButton.setText("Play");
+      myPlayPauseButton.setText(MESSAGES.getString("PLAY_LABEL"));
     }
   }
 
   private void initializeStaticContent() {
-    Text title = createText("Cellular Automaton");
-    Text infoTitle = createText("Current Simulation Information: ");
+    Text title = createText(MESSAGES.getString("TITLE"));
+    Text infoTitle = createText(MESSAGES.getString("INFO_DISPLAY_TITLE"));
     this.getChildren().addAll(title, infoTitle);
   }
 

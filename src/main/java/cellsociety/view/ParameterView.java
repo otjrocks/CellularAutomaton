@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.simulation.Simulation;
 import java.util.Map;
 import javafx.scene.layout.VBox;
@@ -26,13 +28,13 @@ public class ParameterView extends VBox {
   }
 
   private void createTitle() {
-    createText("Parameters:");
+    createText(MESSAGES.getString("PARAMETER_TITLE"));
   }
 
   private void createParameters(Simulation simulation) {
     Map<String, Double> parameters = simulation.getRules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
-      createText("- " + entry.getKey() + ": " + entry.getValue());
+      createText(String.format("- %s%s %s", entry.getKey(), ": ", entry.getValue()));
     }
   }
 
