@@ -195,13 +195,14 @@ public class WaTorWorldRules extends SimulationRules {
 
     if (!updatedCells.contains(newLocation.getLocation())) {
       nextStates.add(new CellStateUpdate(newLocation.getLocation(), State.SHARK.getValue())); //moves in
-      grid.updateCell(new WaTorCell(State.SHARK.getValue(), newLocation.getLocation()));
+      grid.updateCell(shark);
       updatedCells.add(newLocation.getLocation());
     }
 
     if (shouldReproduce) {
       System.out.println("Shark at " + shark.getLocation() + " has reproduced: ");
       nextStates.add(new CellStateUpdate(shark.getLocation(), State.SHARK.getValue())); // moves out
+      grid.updateCell(new WaTorCell(State.SHARK.getValue(), newLocation.getLocation()));
       shark.resetReproductionEnergy();
       updatedCells.add(shark.getLocation());
     } else if (!newLocation.getLocation().equals(shark.getLocation())) {
