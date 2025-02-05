@@ -35,7 +35,7 @@ public class SimulationView extends Group {
   }
 
   public void step(Grid grid, Simulation simulation) {
-    List<CellStateUpdate> stateUpdates = simulation.getRules().getNextStatesForAllCells(grid);
+    List<CellStateUpdate> stateUpdates = grid.updateGrid(simulation);
     for (CellStateUpdate stateUpdate : stateUpdates) {
       int nextState = stateUpdate.getState();
       StateInfo nextStateInfo = simulation.getStateInfo(nextState);
