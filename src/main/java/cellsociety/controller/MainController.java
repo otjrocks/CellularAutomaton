@@ -272,7 +272,7 @@ public class MainController {
   private void initializeSidebar(MainController controller) {
     mySidebarView = new SidebarView(SIDEBAR_WIDTH,
         GRID_HEIGHT - (2 * MARGIN), controller);
-    mySidebarView.setLayoutX(GRID_WIDTH + 2 * MARGIN);
+    mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);
   }

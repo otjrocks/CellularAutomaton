@@ -61,7 +61,7 @@ public class ViewModeView extends VBox {
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
     setPlayPauseButtonText();
-    this.getChildren().addAll(myStateInfoView, myParameterView, mySpeedSliderBox, myControlButtons);
+    this.getChildren().addAll(myStateInfoView, myParameterView, myControlButtons, mySpeedSliderBox);
   }
 
 
@@ -83,6 +83,7 @@ public class ViewModeView extends VBox {
     createSaveFileButton();
     myControlButtons.setAlignment(Pos.CENTER_LEFT);
     myControlButtons.setSpacing(ELEMENT_SPACING);
+    myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
         .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton);
     return myControlButtons;

@@ -5,7 +5,9 @@ import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
+import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
@@ -58,7 +60,7 @@ public class EditModeView extends VBox {
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {
-    this.setSpacing(5);
+    this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
     myNumRows = mainController.getGridRows();
     myNumCols = mainController.getGridCols();
@@ -79,16 +81,21 @@ public class EditModeView extends VBox {
 
   private void createHeader() {
     Text title = new Text(MESSAGES.getString("CREATE_NEW_GRID_HEADER"));
-    myHeaderBox.getChildren().add(title);
+    title.getStyleClass().add("secondary-title");
+    Text instructions = new Text(MESSAGES.getString("EDIT_VIEW_INSTRUCTIONS"));
+    instructions.setWrappingWidth(SIDEBAR_WIDTH);
+    myHeaderBox.setSpacing(ELEMENT_SPACING * 3);
     this.getChildren().add(myHeaderBox);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myHeaderBox.getChildren().add(myStateInfoView);
+    myHeaderBox.getChildren().addAll(myStateInfoView, instructions, title);
   }
 
-  private void updateStateInfo(Simulation newSimulation) {
-    myHeaderBox.getChildren().removeLast();
+  private void updateStateInfo() {
+    myHeaderBox.getChildren()
+        .removeFirst(); // remove the current state info box before creating a new one
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myHeaderBox.getChildren().add(myStateInfoView);
+    myHeaderBox.getChildren()
+        .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
   }
 
   private void initializeParametersControl() {
@@ -105,6 +112,7 @@ public class EditModeView extends VBox {
     SimulationConfig.getParameters(simulationName);
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
       Text parametersTitle = new Text(MESSAGES.getString("CUSTOMIZE_PARAMETERS_TITLE"));
+      parametersTitle.getStyleClass().add("secondary-title");
       parametersControlBox.getChildren().add(parametersTitle);
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
@@ -196,7 +204,7 @@ public class EditModeView extends VBox {
           metaData, parameters);
       myAlertField.flash(MESSAGES.getString("NEW_SIMULATION_CREATED"), false);
       resetFields();
-      updateStateInfo(myMainController.getSimulation());
+      updateStateInfo();
     } catch (Exception e) {
       myAlertField.flash(MESSAGES.getString("ERROR_CREATING_SIMULATION"), true);
       if (VERBOSE_ERROR_MESSAGES) {
