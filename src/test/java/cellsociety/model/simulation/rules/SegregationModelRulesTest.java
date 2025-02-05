@@ -58,4 +58,24 @@ class SegregationModelRulesTest {
         "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
   }
 
+  @Test
+  void testEmptyCell() {
+    Cell cell = new DefaultCell(0, new Point2D.Double(2, 2));
+
+    assertEquals(0, segregationModelRules.getNextState(cell, grid));
+  }
+
+  @Test
+  void testCellMarkedToBeMoved() {
+    Cell cell = new DefaultCell(1, new Point2D.Double(1, 1));
+
+    grid.addCell(cell);
+    grid.addCell(new DefaultCell(2, new Point2D.Double(0, 1)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(1, 0)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(2, 1)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(1, 2)));
+
+    assertEquals(-1, segregationModelRules.getNextState(cell, grid));
+  }
+
 }
