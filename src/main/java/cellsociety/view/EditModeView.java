@@ -2,11 +2,14 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
+import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
@@ -16,11 +19,11 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -28,7 +31,7 @@ import javafx.scene.text.Text;
  *
  * @author Owen Jennings
  */
-public class CreateNewSimulationView extends VBox {
+public class EditModeView extends VBox {
 
   public static final int DEFAULT_NUM_CELLS = 25;
 
@@ -43,27 +46,49 @@ public class CreateNewSimulationView extends VBox {
   private TextField myDescriptionField;
   private VBox parametersControlBox;
   private final AlertField myAlertField;
+  private final VBox myHeaderBox = new VBox();
+  private StateInfoView myStateInfoView;
   private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
 
-  public CreateNewSimulationView(int rows, int cols, MainController mainController,
+  /**
+   * Create a edit mode view
+   *
+   * @param mainController: the main controller of this view
+   * @param alertField:     the alert field to display messages
+   */
+  public EditModeView(MainController mainController,
       AlertField alertField) {
     this.setSpacing(5);
     this.setAlignment(Pos.CENTER_LEFT);
-    myNumRows = rows;
-    myNumCols = cols;
+    myNumRows = mainController.getGridRows();
+    myNumCols = mainController.getGridCols();
     myMainController = mainController;
     myAlertField = alertField;
     initialize();
   }
 
   private void initialize() {
-    createTitle();
+    createHeader();
     createSimulationTypeControl();
     createRowControl();
     createColControl();
     createSimulationMetaDataTextFields();
     initializeParametersControl();
     createUpdateButton();
+  }
+
+  private void createHeader() {
+    Text title = new Text(MESSAGES.getString("CREATE_NEW_GRID_HEADER"));
+    myHeaderBox.getChildren().add(title);
+    this.getChildren().add(myHeaderBox);
+    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myHeaderBox.getChildren().add(myStateInfoView);
+  }
+
+  private void updateStateInfo(Simulation newSimulation) {
+    myHeaderBox.getChildren().removeLast();
+    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myHeaderBox.getChildren().add(myStateInfoView);
   }
 
   private void initializeParametersControl() {
@@ -79,28 +104,30 @@ public class CreateNewSimulationView extends VBox {
     myParameterTextFields.clear();
     SimulationConfig.getParameters(simulationName);
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
-      Text parametersTitle = new Text("Customize Parameters: ");
-      parametersTitle.setFont(new Font(20));
+      Text parametersTitle = new Text(MESSAGES.getString("CUSTOMIZE_PARAMETERS_TITLE"));
       parametersControlBox.getChildren().add(parametersTitle);
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
-      DoubleField newParameterField = createDoubleField(parameter, "0", parametersControlBox);
+      DoubleField newParameterField = createDoubleField(parameter, parametersControlBox);
       myParameterTextFields.put(parameter, newParameterField);
     }
   }
 
   private void createSimulationMetaDataTextFields() {
-    myNameField = createTextField("Name: ", "A Glider", this);
-    myAuthorField = createTextField("Author: ", "John Doe", this);
-    myDescriptionField = createTextField("Description: ", "A simple glider", this);
+    myNameField = createTextField(MESSAGES.getString("NAME_LABEL"),
+        MESSAGES.getString("DEFAULT_NAME"), this);
+    myAuthorField = createTextField(MESSAGES.getString("AUTHOR_LABEL"),
+        MESSAGES.getString("DEFAULT_AUTHOR"), this);
+    myDescriptionField = createTextField(MESSAGES.getString("DESCRIPTION_LABEL"),
+        MESSAGES.getString("DEFAULT_DESCRIPTION"), this);
   }
 
-  private DoubleField createDoubleField(String label, String defaultValue, VBox target) {
+  private DoubleField createDoubleField(String label, VBox target) {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
     DoubleField doubleTextField = new DoubleField();
-    doubleTextField.setText(defaultValue);
+    doubleTextField.setText("0");
     Text textFieldLabel = new Text(label);
     box.getChildren().addAll(textFieldLabel, doubleTextField);
     target.getChildren().add(box);
@@ -125,23 +152,19 @@ public class CreateNewSimulationView extends VBox {
     simulationSelector = new ComboBox<>(options);
     simulationSelector.setValue(options.getFirst());
     simulationSelector.valueProperty()
-        .addListener((ov, t, t1) -> addAllParameters(simulationSelector.getValue()));
+        .addListener((ov, t, t1) -> {
+          addAllParameters(simulationSelector.getValue());
+        });
     HBox container = new HBox();
     container.setAlignment(Pos.CENTER_LEFT);
     container.setSpacing(5);
-    Text simulationTypeLabel = new Text("Simulation Type: ");
+    Text simulationTypeLabel = new Text(MESSAGES.getString("SIMULATION_TYPE_LABEL"));
     container.getChildren().addAll(simulationTypeLabel, simulationSelector);
     this.getChildren().add(container);
   }
 
-  private void createTitle() {
-    Text title = new Text("Create New Grid:");
-    title.setFont(new Font("Arial", 20));
-    this.getChildren().add(title);
-  }
-
   private void createUpdateButton() {
-    javafx.scene.control.Button updateButton = new javafx.scene.control.Button("Create New Grid");
+    Button updateButton = new Button(MESSAGES.getString("CREATE_NEW_GRID_HEADER"));
     updateButton.setOnMouseClicked(event -> {
       handleUpdateButton();
     });
@@ -157,25 +180,61 @@ public class CreateNewSimulationView extends VBox {
     }
 
     createNewSimulation();
-    resetFields();
-    myAlertField.flash("New Simulation Created!", false);
   }
 
   private void createNewSimulation() {
+    SimulationMetaData metaData = createMetaData();
+
+    Map<String, Double> parameters = createAndValidateParameters();
+    attemptCreatingNewSimulation(metaData, parameters);
+  }
+
+  private void attemptCreatingNewSimulation(SimulationMetaData metaData,
+      Map<String, Double> parameters) {
+    try {
+      myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
+          metaData, parameters);
+      myAlertField.flash(MESSAGES.getString("NEW_SIMULATION_CREATED"), false);
+      resetFields();
+      updateStateInfo(myMainController.getSimulation());
+    } catch (Exception e) {
+      myAlertField.flash(MESSAGES.getString("ERROR_CREATING_SIMULATION"), true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+    }
+  }
+
+  private Map<String, Double> createAndValidateParameters() {
+    Map<String, Double> parameters = new HashMap<>();
+    boolean validParameters = true;
+    for (String parameter : myParameterTextFields.keySet()) {
+      double value;
+      try {
+        value = Double.parseDouble(myParameterTextFields.get(parameter).getText());
+      } catch (Exception e) {
+        myAlertField.flash(MESSAGES.getString("INVALID_PARAMETERS"), true);
+        if (VERBOSE_ERROR_MESSAGES) {
+          myAlertField.flash(e.getMessage(), true);
+        }
+        validParameters = false;
+        break;
+      }
+      parameters.put(parameter, value);
+    }
+    if (!validParameters) {
+      return null;
+    }
+    return parameters;
+  }
+
+  private SimulationMetaData createMetaData() {
     SimulationMetaData metaData = new SimulationMetaData(
         simulationSelector.getValue(),
         myNameField.getText(),
         myAuthorField.getText(),
         myDescriptionField.getText());
-
-    Map<String, Double> parameters = new HashMap<>();
-    for (String parameter : myParameterTextFields.keySet()) {
-      parameters.put(parameter,
-          Double.parseDouble(myParameterTextFields.get(parameter).getText()));
-    }
-
-    myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
-        metaData, parameters);
+    return metaData;
   }
 
   private void resetFields() {
@@ -198,7 +257,7 @@ public class CreateNewSimulationView extends VBox {
 
   private boolean checkInvalidText(String text) {
     if (text.isEmpty()) {
-      myAlertField.flash("You have one or more empty fields", true);
+      myAlertField.flash(MESSAGES.getString("EMPTY_FIELD"), true);
       return true;
     }
     return false;
@@ -208,10 +267,8 @@ public class CreateNewSimulationView extends VBox {
     boolean valid = numRows >= MIN_GRID_NUM_ROWS && numRows <= MAX_GRID_NUM_ROWS;
     if (!valid) {
       myAlertField.flash(
-          "Invalid number of rows. You must have at least " +
-              MIN_GRID_NUM_ROWS +
-              " and less than " +
-              MAX_GRID_NUM_ROWS + " rows!", true);
+          String.format(MESSAGES.getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS),
+          true);
     }
     return valid;
   }
@@ -220,10 +277,8 @@ public class CreateNewSimulationView extends VBox {
     boolean valid = numCols >= MIN_GRID_NUM_COLS && numCols <= MAX_GRID_NUM_COLS;
     if (!valid) {
       myAlertField.flash(
-          "Invalid number of columns. You must have at least " +
-              MIN_GRID_NUM_COLS +
-              " and less than " +
-              MAX_GRID_NUM_COLS + " columns!", true);
+          String.format(MESSAGES.getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS),
+          true);
     }
     return valid;
   }
@@ -234,7 +289,7 @@ public class CreateNewSimulationView extends VBox {
     rowField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumRows = parseIntegerField(rowField, 0));
 
-    HBox rowBox = new HBox(new Text("Number of Rows:"), rowField);
+    HBox rowBox = new HBox(new Text(MESSAGES.getString("NUMBER_ROWS")), rowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
     rowBox.setSpacing(5);
     this.getChildren().add(rowBox);
@@ -246,7 +301,7 @@ public class CreateNewSimulationView extends VBox {
     colField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumCols = parseIntegerField(colField, 0));
 
-    HBox colBox = new HBox(new Text("Number of Columns:"), colField);
+    HBox colBox = new HBox(new Text(MESSAGES.getString("NUMBER_COLUMNS")), colField);
     colBox.setAlignment(Pos.CENTER_LEFT);
     colBox.setSpacing(5);
     this.getChildren().add(colBox);

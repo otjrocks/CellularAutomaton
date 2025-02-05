@@ -1,11 +1,17 @@
 package cellsociety.config;
 
+import java.util.ResourceBundle;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class MainConfig {
+  // Language configuration
+  public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
+  public static final String CURRENT_LANGUAGE = "English";
+  public static final String LANGUAGE_PATH = LANGUAGE_FILE_PATH + CURRENT_LANGUAGE;
+  public static final ResourceBundle MESSAGES = ResourceBundle.getBundle(LANGUAGE_PATH);
 
-  public static final String TITLE = "Cell Society";
+  public static final String TITLE = MESSAGES.getString("TITLE");
   public static final int WIDTH = 1400;
   public static final int HEIGHT = 800;
   public static final Paint BACKGROUND_COLOR = Color.LIGHTGRAY;

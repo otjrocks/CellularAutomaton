@@ -152,6 +152,14 @@ public class MainController {
     return myGrid.getCols();
   }
 
+  /**
+   * Get whether the grid animation is currently playing
+   * @return true if the animation is playing, false otherwise
+   */
+  public boolean isPlaying() {
+    return mySimulationAnimation.getStatus() == Status.RUNNING;
+  }
+
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Double> parameters) {
     myGrid = new Grid(rows, cols);
@@ -237,7 +245,7 @@ public class MainController {
     if (mySidebarView == null) {
       initializeSidebar(this);
     } else {
-      mySidebarView.updateSidebar();
+      mySidebarView.update();
     }
   }
 

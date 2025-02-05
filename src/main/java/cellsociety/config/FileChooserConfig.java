@@ -1,5 +1,7 @@
 package cellsociety.config;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import java.io.File;
 import javafx.stage.FileChooser;
 
@@ -29,8 +31,10 @@ public class FileChooserConfig {
    */
   public static FileChooser makeSaveChooser(String name) {
     FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Save Your Simulation");
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML File", "*.xml"));
+    fileChooser.setTitle(MESSAGES.getString("SAVE_FILE_TITLE"));
+    fileChooser.getExtensionFilters().add(
+        new FileChooser.ExtensionFilter(MESSAGES.getString("XML_FILE_EXTENSION_NAME"),
+            FileChooserConfig.DATA_FILE_EXTENSION));
     fileChooser.setInitialDirectory(new File(DATA_SAVE_FOLDER));
     fileChooser.setInitialFileName(name + ".xml");
     return fileChooser;
@@ -40,11 +44,12 @@ public class FileChooserConfig {
   // set some sensible defaults when the FileChooser is created
   private static FileChooser makeChooser() {
     FileChooser result = new FileChooser();
-    result.setTitle("Open Data File");
+    result.setTitle(MESSAGES.getString("OPEN_FILE_TITLE"));
     // pick a reasonable place to start searching for files
     result.setInitialDirectory(new File(DATA_FILE_FOLDER));
-    result.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("Data Files",
-        FileChooserConfig.DATA_FILE_EXTENSION));
+    result.getExtensionFilters()
+        .setAll(new FileChooser.ExtensionFilter(MESSAGES.getString("XML_FILE_EXTENSION_NAME"),
+            FileChooserConfig.DATA_FILE_EXTENSION));
     return result;
   }
 
