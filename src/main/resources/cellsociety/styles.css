@@ -26,7 +26,7 @@ The main stylesheet of the application
 }
 
 .main-title {
-  -fx-font-size: 26px;
+  -fx-font-size: 24px;
   -fx-font-family: 'Lato Bold';
   -fx-font-weight: bold;
 }
@@ -40,7 +40,7 @@ The main stylesheet of the application
 .button {
   -fx-background-color: -fx-accent;
   -fx-text-fill: -fx-light;
-  -fx-font-size: 16px;
+  -fx-font-size: 15px;
 }
 
 .button:hover {
@@ -64,7 +64,21 @@ The main stylesheet of the application
   -fx-padding: 15 10 15 10;
 }
 
+.control-buttons {
+  -fx-padding: 50 0 10 0;
+}
+
+.info-box {
+  -fx-padding: 15 10 15 10;
+  -fx-border-width: 2px;
+  -fx-border-color: -fx-dark;
+  -fx-border-style: solid;
+}
+
 /* Slider */
+.slider {
+  -fx-padding: 15 0 0 0;
+}
 .slider .track {
   -fx-background-color: -fx-gray;
   background-color: -fx-gray;

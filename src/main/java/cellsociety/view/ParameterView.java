@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
 import java.util.Map;
@@ -20,8 +21,9 @@ public class ParameterView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public ParameterView(Simulation simulation) {
-    this.setSpacing(10);
+    this.setSpacing(ELEMENT_SPACING);
     if (!simulation.getRules().getParameters().isEmpty()) {
+      this.getStyleClass().add("info-box");
       createTitle();
       createParameters(simulation);
     }
@@ -34,7 +36,7 @@ public class ParameterView extends VBox {
   private void createParameters(Simulation simulation) {
     Map<String, Double> parameters = simulation.getRules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
-      createText(String.format("- %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
+      createText(String.format("• %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
     }
   }
 

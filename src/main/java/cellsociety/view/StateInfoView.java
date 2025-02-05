@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.StateInfo;
@@ -23,7 +24,8 @@ public class StateInfoView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
-    this.setSpacing(10);
+    this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("info-box");
     createTitle();
     simulation.getStateMap().forEach((key, value) -> {
       createListItemFromStateInfo(value);
