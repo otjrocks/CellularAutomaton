@@ -17,7 +17,7 @@ class XMLTest {
 
   @BeforeEach
   void setUp() {
-    myXMLHandler = new GameOfLifeXMLHandler("data/ExampleXMLs/GameOfLifeExample.xml");
+    myXMLHandler = new GameOfLifeXMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
   }
 
   @Test
