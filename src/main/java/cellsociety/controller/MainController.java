@@ -1,24 +1,18 @@
 package cellsociety.controller;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
+import java.util.Map;
 
 import cellsociety.config.FileChooserConfig;
-
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.XMLHandlers.XMLDefiner;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
@@ -26,8 +20,6 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
-import java.io.File;
-import java.util.Map;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -228,12 +220,7 @@ public class MainController {
   }
 
   private void updateSimulationFromFile(String filePath) {
-    XMLHandler xmlHandler = null;
-    try {
-      xmlHandler = XMLDefiner.createHandler(filePath);
-    } catch (SAXException | ParserConfigurationException | IOException e) {
-      throw new RuntimeException(e);
-    }
+    XMLHandler xmlHandler = new XMLHandler(filePath);
 
     mySimulation = xmlHandler.getSim();
     myGrid = xmlHandler.getGrid();

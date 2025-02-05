@@ -1,11 +1,8 @@
 package cellsociety.model.XMLHandlers;
 
-import cellsociety.config.FileChooserConfig;
 import java.io.File;
 import java.util.Map;
 
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,11 +14,13 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import cellsociety.config.FileChooserConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
+import javafx.stage.Stage;
 
 /**
  * Class for saving simulation data into an XML file.
@@ -91,7 +90,6 @@ public class XMLWriter {
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
-            e.printStackTrace();
         }
     }
 
