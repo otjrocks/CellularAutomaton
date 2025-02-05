@@ -10,21 +10,24 @@ import java.awt.geom.Point2D;
 public class CellStateUpdate {
 
   private final Point2D myLocation;
-  private final int myState;
+  private final int myNextState;
+
 
   /**
    * Initialize a Cell State Update Object
    *
-   * @param location location you which to update
-   * @param myState  new state to update to
+   * @param location    location you which to update
+   * @param myNextState new state to update to
    */
-  public CellStateUpdate(Point2D location, int myState) {
+  public CellStateUpdate(Point2D location, int myNextState) {
     this.myLocation = location;
-    this.myState = myState;
+    this.myNextState = myNextState;
   }
+
 
   /**
    * Get row of cell to update
+   *
    * @return row of cell to update
    */
   public int getRow() {
@@ -33,6 +36,7 @@ public class CellStateUpdate {
 
   /**
    * Get column of cell to update
+   *
    * @return column of cell to update
    */
   public int getCol() {
@@ -45,6 +49,6 @@ public class CellStateUpdate {
    * @return integer for state to update
    */
   public int getState() {
-    return myState;
+    return myNextState;
   }
 }

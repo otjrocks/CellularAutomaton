@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -172,15 +173,19 @@ public class WaTorWorldRules extends SimulationRules {
     if (!updatedCells.contains(newLocation.getLocation())) {
       nextStates.add(
           new CellStateUpdate(newLocation.getLocation(), State.SHARK.getValue())); //moves in
-      grid.updateCell(shark);
+      setCellHealth(grid, newLocation.getLocation(),
+          shark.getHealth());  // ensure shark retains its health when it moves
       updatedCells.add(newLocation.getLocation());
     }
 
     if (shouldReproduce) {
-      nextStates.add(new CellStateUpdate(shark.getLocation(), State.SHARK.getValue())); // moves out
-      grid.updateCell(new WaTorCell(State.SHARK.getValue(), newLocation.getLocation()));
-      shark.resetReproductionEnergy();
+      resetReproductionEnergy(grid,
+          newLocation.getLocation()); // ensure old shark that has moved has reproduction energy reset
+      nextStates.add(new CellStateUpdate(shark.getLocation(),
+          State.SHARK.getValue())); // create new shark at original location
+      resetCellHealth(grid, shark.getLocation()); // ensure new shark has correct initial health
       updatedCells.add(shark.getLocation());
+
     } else if (!newLocation.getLocation().equals(shark.getLocation())) {
       nextStates.add(new CellStateUpdate(shark.getLocation(), State.EMPTY.getValue())); // moves out
       updatedCells.add(shark.getLocation());
@@ -199,8 +204,15 @@ public class WaTorWorldRules extends SimulationRules {
       boolean shouldReproduce =
           fish.getReproductionEnergy() >= parameters.get("fishReproductionTime");
 
+      if (!updatedCells.contains(newLocation.getLocation())) {
+        nextStates.add(
+            new CellStateUpdate(newLocation.getLocation(), State.FISH.getValue())); // Move in
+        updatedCells.add(newLocation.getLocation());
+      }
+
       if (shouldReproduce) {
-        fish.resetReproductionEnergy();
+        resetReproductionEnergy(grid,
+            newLocation.getLocation()); // update reproduction energy of old fish, which is in a new location
         nextStates.add(new CellStateUpdate(fish.getLocation(), State.FISH.getValue())); // Offspring
         updatedCells.add(fish.getLocation());
       } else if (!updatedCells.contains(fish.getLocation())) {
@@ -208,11 +220,6 @@ public class WaTorWorldRules extends SimulationRules {
         updatedCells.add(fish.getLocation());
       }
 
-      if (!updatedCells.contains(newLocation.getLocation())) {
-        nextStates.add(
-            new CellStateUpdate(newLocation.getLocation(), State.FISH.getValue())); // Move in
-        updatedCells.add(newLocation.getLocation());
-      }
     }
   }
 
@@ -226,5 +233,23 @@ public class WaTorWorldRules extends SimulationRules {
       }
     }
     return neighborsByState;
+  }
+
+  // reset reproduction energy at location
+  private void resetReproductionEnergy(Grid grid, Point2D location) {
+    WaTorCell cell = (WaTorCell) grid.getCell(location);
+    cell.resetReproductionEnergy();
+  }
+
+  // set health of cell at location
+  private void setCellHealth(Grid grid, Point2D location, int health) {
+    WaTorCell cell = (WaTorCell) grid.getCell(location);
+    cell.setHealth(health);
+  }
+
+  // reset health of cell at location
+  private void resetCellHealth(Grid grid, Point2D location) {
+    WaTorCell cell = (WaTorCell) grid.getCell(location);
+    cell.resetHealth();
   }
 }
