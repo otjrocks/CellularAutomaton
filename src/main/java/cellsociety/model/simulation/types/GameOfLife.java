@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.types;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
@@ -14,8 +16,8 @@ public class GameOfLife extends Simulation {
 
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo("Dead", Color.WHITE));
-    stateMap.put(1, new StateInfo("Alive", Color.BLACK));
+    stateMap.put(0, new StateInfo(MESSAGES.getString("DEAD"), Color.WHITE));
+    stateMap.put(1, new StateInfo(MESSAGES.getString("ALIVE"), Color.BLACK));
   }
 
 }

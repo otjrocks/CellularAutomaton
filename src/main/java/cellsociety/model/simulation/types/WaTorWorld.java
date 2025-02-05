@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.types;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
@@ -16,8 +18,8 @@ public class WaTorWorld extends Simulation {
 
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo("Empty", Color.BLACK));
-    stateMap.put(1, new StateInfo("Fish", Color.GREEN));
-    stateMap.put(2, new StateInfo("Sharks", Color.BLUE));
+    stateMap.put(0, new StateInfo(MESSAGES.getString("EMPTY"), Color.BLACK));
+    stateMap.put(1, new StateInfo(MESSAGES.getString("FISH"), Color.GREEN));
+    stateMap.put(2, new StateInfo(MESSAGES.getString("SHARK"), Color.BLUE));
   }
 }

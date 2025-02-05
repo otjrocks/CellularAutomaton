@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.types;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
@@ -17,8 +19,8 @@ public class SegregationModel extends Simulation {
    */
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo("Empty", Color.WHITE));
-    stateMap.put(1, new StateInfo("Group1", Color.RED));
-    stateMap.put(2, new StateInfo("Group2", Color.BLUE));
+    stateMap.put(0, new StateInfo(MESSAGES.getString("EMPTY"), Color.WHITE));
+    stateMap.put(1, new StateInfo(MESSAGES.getString("GROUP_ONE"), Color.RED));
+    stateMap.put(2, new StateInfo(MESSAGES.getString("GROUP_TWO"), Color.BLUE));
   }
 }
