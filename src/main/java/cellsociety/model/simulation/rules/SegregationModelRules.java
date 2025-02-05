@@ -113,7 +113,8 @@ public class SegregationModelRules extends SimulationRules {
   }
 
 
-  private void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells, List<CellStateUpdate> nextStates) {
+  void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells,
+      List<CellStateUpdate> nextStates) {
     if (!emptyCells.isEmpty()) {
       Cell newCell = getAndRemoveRandomEmptyCell(emptyCells);
       nextStates.add(new CellStateUpdate(newCell.getLocation(), unsatisfiedCell.getState()));
@@ -130,7 +131,7 @@ public class SegregationModelRules extends SimulationRules {
     return parameters;
   }
 
-  private void getEmptyCells(Grid grid, List<Cell> emptyCells) {
+  void getEmptyCells(Grid grid, List<Cell> emptyCells) {
     int rows = grid.getRows();
     int cols = grid.getCols();
     for (int row = 0; row < rows; row++) {
@@ -142,7 +143,7 @@ public class SegregationModelRules extends SimulationRules {
     }
   }
 
-  private Cell getAndRemoveRandomEmptyCell(List<Cell> emptyCells) {
+  Cell getAndRemoveRandomEmptyCell(List<Cell> emptyCells) {
     return emptyCells.remove(random.nextInt(emptyCells.size()));
   }
 }
