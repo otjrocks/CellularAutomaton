@@ -24,16 +24,18 @@ public class WaTorCell extends Cell {
   /**
    * Create a WaTor cell
    *
-   * @param state    :    The initial state of a cell, represented as an int
-   * @param location : The location in the simulation grid represented by a Point2D, where the (x:
-   *                 row, y: col) value is the relative location of the cell compared to other cells
-   *                 in the grid.
-   * @param health:  initial health of the cell
+   * @param state               :    The initial state of a cell, represented as an int
+   * @param location            : The location in the simulation grid represented by a Point2D,
+   *                            where the (x: row, y: col) value is the relative location of the
+   *                            cell compared to other cells in the grid.
+   * @param health:             initial health of the cell
+   * @param reproductionEnergy: initial reproduction energy of cell
    */
-  public WaTorCell(int state, Point2D location, int health) throws IllegalArgumentException {
+  public WaTorCell(int state, Point2D location, int health, double reproductionEnergy)
+      throws IllegalArgumentException {
     super(state, location);
     this.health = health;
-    reproductionEnergy = 0;
+    this.reproductionEnergy = reproductionEnergy;
   }
 
   /**

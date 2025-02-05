@@ -17,8 +17,8 @@ import java.util.Random;
 // A cell with state 2 indicates it's a part of Group 2
 
 public class SegregationModelRules extends SimulationRules {
+
   private final Random random = new Random();
-  private boolean firstStateUpdate = true; // check to see if getNextState has been run before
 
   public SegregationModelRules(Map<String, Double> myParameters) {
     if (myParameters == null || myParameters.isEmpty()) {
@@ -32,20 +32,22 @@ public class SegregationModelRules extends SimulationRules {
   /**
    * @param cell -  individual cell from grid
    * @param grid - the list of cell objects representing the grid
-   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and diagonals)
+   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and
+   * diagonals)
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, true);
   }
 
 
-  /** Schelling's Model of Segregation:
-   * There exists a probability tolerance threshold T (0.3) representing the minimum number
-   * of neighbors that must be the same state for the cell to be satisfied
-
-   *  If a cell has less than T of similar neighbors, they move to a random empty space
-   *  If a cell >= T of similar neighbors, they stay
-   *  Cells move until all cells are satisfied or no empty spaces remain
+  /**
+   * Schelling's Model of Segregation: There exists a probability tolerance threshold T (0.3)
+   * representing the minimum number of neighbors that must be the same state for the cell to be
+   * satisfied
+   * <p>
+   * If a cell has less than T of similar neighbors, they move to a random empty space If a cell >=
+   * T of similar neighbors, they stay Cells move until all cells are satisfied or no empty spaces
+   * remain
    *
    * @param cell -  individual cell from grid
    * @param grid - the list of cell objects representing the grid
@@ -55,14 +57,17 @@ public class SegregationModelRules extends SimulationRules {
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
+        || cell.getCol() < 0) {
       throw new IndexOutOfBoundsException("Cell position out of bounds");
     }
 
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
 
-    if (currentState == 0) return 0;
+    if (currentState == 0) {
+      return 0;
+    }
 
     int sameType = 0;
     int totalNeighbors = 0;
@@ -107,7 +112,7 @@ public class SegregationModelRules extends SimulationRules {
     }
 
     for (Cell unsatisfiedCell : unsatisfiedCells) {
-       moveCellToEmptyLocationIfAvailable(unsatisfiedCell, emptyCells, nextStates);
+      moveCellToEmptyLocationIfAvailable(unsatisfiedCell, emptyCells, nextStates);
     }
     return nextStates;
   }
@@ -121,11 +126,12 @@ public class SegregationModelRules extends SimulationRules {
       nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), 0));
       emptyCells.add(unsatisfiedCell);
     } else {
-      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), unsatisfiedCell.getState()));
+      nextStates.add(
+          new CellStateUpdate(unsatisfiedCell.getLocation(), unsatisfiedCell.getState()));
     }
   }
 
-  private Map<String, Double> setDefaultParameters () {
+  private Map<String, Double> setDefaultParameters() {
     Map<String, Double> parameters = new HashMap<>();
     parameters.put("toleranceThreshold", 0.3);
     return parameters;

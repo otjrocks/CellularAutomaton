@@ -75,7 +75,7 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkDies() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1);
+    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
     grid.addCell(shark);
 
     List<CellStateUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
