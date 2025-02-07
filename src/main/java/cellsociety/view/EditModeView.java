@@ -208,6 +208,9 @@ public class EditModeView extends VBox {
       myAlertField.flash(MESSAGES.getString("NEW_SIMULATION_CREATED"), false);
       resetFields();
       updateStateInfo();
+    } catch (IllegalArgumentException e) {
+      myAlertField.flash(MESSAGES.getString("ERROR_CREATING_SIMULATION"), true);
+      myAlertField.flash(e.getMessage(), true);
     } catch (Exception e) {
       myAlertField.flash(MESSAGES.getString("ERROR_CREATING_SIMULATION"), true);
       if (VERBOSE_ERROR_MESSAGES) {
