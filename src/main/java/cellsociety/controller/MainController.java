@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import cellsociety.config.FileChooserConfig;
+
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
+
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.XMLHandler;
@@ -146,6 +148,7 @@ public class MainController {
 
   /**
    * Get whether the grid animation is currently playing
+   *
    * @return true if the animation is playing, false otherwise
    */
   public boolean isPlaying() {
@@ -184,8 +187,9 @@ public class MainController {
     if (isEditing) {
       Cell cell = myGrid.getCell(row, column);
       int nextState = getNextAvailableState(cell);
-      cell.setState(nextState);
-      myGrid.updateCell(cell);
+      // create new cell instead of just updating cell status, to ensure that new cell has all other information reset for custom cell types
+      myGrid.updateCell(
+          SimulationConfig.getNewCell(row, column, nextState, mySimulation.getData().type()));
       mySimulationView.setColor(row, column, mySimulation.getStateInfo(nextState).color());
     }
   }
