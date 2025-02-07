@@ -1,6 +1,5 @@
 package cellsociety.model.simulation.rules;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +47,6 @@ public class WaTorWorldRules extends SimulationRules {
 
   // I asked ChatGPT for help with implementing this enum
   public enum State {
-    MOVE_PENDING(-1),
     EMPTY(0),
     FISH(1),
     SHARK(2);
@@ -149,9 +147,9 @@ public class WaTorWorldRules extends SimulationRules {
       Cell fishCell = fishNeighbors.get(random.nextInt(fishNeighbors.size()));
       if (!updatedCells.contains(fishCell.getLocation())) {
         fishCells.remove(fishCell);
+        shark.addHealth(parameters.get("sharkEnergyGain").intValue());
         checkReproductionAndMoveOutSharkCell(nextStates, shark, shouldReproduce, fishCell,
             updatedCells, grid);
-        shark.addHealth(parameters.get("sharkEnergyGain").intValue());
         return;
       }
     }
@@ -169,21 +167,22 @@ public class WaTorWorldRules extends SimulationRules {
   private void checkReproductionAndMoveOutSharkCell(List<CellStateUpdate> nextStates,
       WaTorCell shark,
       boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells, Grid grid) {
-
     if (!updatedCells.contains(newLocation.getLocation())) {
       nextStates.add(
           new CellStateUpdate(newLocation.getLocation(), State.SHARK.getValue())); //moves in
       setCellHealth(grid, newLocation.getLocation(),
-          shark.getHealth());  // ensure shark retains its health when it moves
+          shark.getHealth());
+      setReproductionEnergy(grid, newLocation.getLocation(), shark.getReproductionEnergy() + 1);
+      // ensure shark retains its health and reproductive energy + 1 when it moves
       updatedCells.add(newLocation.getLocation());
     }
 
     if (shouldReproduce) {
-      resetReproductionEnergy(grid,
-          newLocation.getLocation()); // ensure old shark that has moved has reproduction energy reset
-      nextStates.add(new CellStateUpdate(shark.getLocation(),
-          State.SHARK.getValue())); // create new shark at original location
-      resetCellHealth(grid, shark.getLocation()); // ensure new shark has correct initial health
+      // create new shark/offspring at original location of shark
+      nextStates.add(new CellStateUpdate(shark.getLocation(), State.SHARK.getValue()));
+      resetCellHealth(grid, shark.getLocation());
+      resetReproductionEnergy(grid, newLocation.getLocation()); // reset parent sharks reproductive
+      resetReproductionEnergy(grid, shark.getLocation()); // ensure initial reproductive for child
       updatedCells.add(shark.getLocation());
 
     } else if (!newLocation.getLocation().equals(shark.getLocation())) {
@@ -207,6 +206,8 @@ public class WaTorWorldRules extends SimulationRules {
       if (!updatedCells.contains(newLocation.getLocation())) {
         nextStates.add(
             new CellStateUpdate(newLocation.getLocation(), State.FISH.getValue())); // Move in
+        setReproductionEnergy(grid, newLocation.getLocation(),
+            fish.getReproductionEnergy() + 1); // set new cell to have original cells reproductive energy + 1
         updatedCells.add(newLocation.getLocation());
       }
 
@@ -214,6 +215,8 @@ public class WaTorWorldRules extends SimulationRules {
         resetReproductionEnergy(grid,
             newLocation.getLocation()); // update reproduction energy of old fish, which is in a new location
         nextStates.add(new CellStateUpdate(fish.getLocation(), State.FISH.getValue())); // Offspring
+        resetReproductionEnergy(grid,
+            fish.getLocation()); // reset reproductive energy of new fish offspring
         updatedCells.add(fish.getLocation());
       } else if (!updatedCells.contains(fish.getLocation())) {
         nextStates.add(new CellStateUpdate(fish.getLocation(), State.EMPTY.getValue())); // Move out
@@ -245,6 +248,12 @@ public class WaTorWorldRules extends SimulationRules {
   private void setCellHealth(Grid grid, Point2D location, int health) {
     WaTorCell cell = (WaTorCell) grid.getCell(location);
     cell.setHealth(health);
+  }
+
+  // set reproductive health of cell
+  private void setReproductionEnergy(Grid grid, Point2D location, double energy) {
+    WaTorCell cell = (WaTorCell) grid.getCell(location);
+    cell.setReproductionEnergy(energy);
   }
 
   // reset health of cell at location

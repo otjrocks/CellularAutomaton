@@ -87,6 +87,14 @@ public class WaTorCell extends Cell {
   }
 
   /**
+   * Set reproductive energy
+   * @param reproductionEnergy: new value for energy
+   */
+  public void setReproductionEnergy(double reproductionEnergy) {
+    this.reproductionEnergy = reproductionEnergy;
+  }
+
+  /**
    * decrease the health of cell
    */
   public void decreaseHealth() {
@@ -96,6 +104,5 @@ public class WaTorCell extends Cell {
   @Override
   public void setState(int newState) {
     super.setState(newState);
-    reproductionEnergy++;
   }
 }
