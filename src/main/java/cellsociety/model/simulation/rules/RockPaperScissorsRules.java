@@ -90,7 +90,7 @@ public class RockPaperScissorsRules extends SimulationRules {
     for (Cell neighbor : neighbors) {
       int neighborState = neighbor.getState();
       if (neighborState != 0) {
-        neighborCount.put(neighborState, neighborCount.get(neighborState) + 1);
+        neighborCount.put(neighborState, neighborCount.getOrDefault(neighborState, 0) + 1);
       }
     }
   }
