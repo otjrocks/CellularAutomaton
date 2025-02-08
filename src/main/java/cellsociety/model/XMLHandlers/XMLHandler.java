@@ -1,9 +1,8 @@
 package cellsociety.model.XMLHandlers;
 
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,22 +12,22 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationData;
-import cellsociety.model.simulation.SimulationRules;
-import javafx.scene.paint.Color;
+import cellsociety.model.simulation.SimulationMetaData;
 
 /**
  * Allows the program to collect data from an XML configuration file and store the associated date
  *
  * @author Troy Ludwig
  */
-public abstract class XMLHandler {
+public class XMLHandler {
     private String myType;
     private String myTitle;
     private String myAuthor;
@@ -36,11 +35,9 @@ public abstract class XMLHandler {
     private int myGridHeight;
     private int myGridWidth;
     private Grid myGrid;
-
-    protected Simulation mySim;
-    protected SimulationData mySimData;
-    protected SimulationRules mySimRules;
-    protected Map<String, Double> myParameters;
+    private Simulation mySim;
+    private SimulationMetaData mySimData;
+    private Map<String, Double> myParameters;
 
     /**
     * XMLHandler constructor for referencing data
@@ -49,8 +46,7 @@ public abstract class XMLHandler {
     *                     represented as a String
     */
     public XMLHandler(String xmlFilePath) {
-        ArrayList<Color> colors = new ArrayList();
-        parseXMLFile(xmlFilePath, colors);
+        parseXMLFile(xmlFilePath);
     }
 
     /**
@@ -62,7 +58,7 @@ public abstract class XMLHandler {
     * @param colors: An arraylist of colors to pass as options for SimulationData
     *                Just a temporary variable until I can update the XML file tags
     */
-    private void parseXMLFile(String xmlFilePath, ArrayList<Color> colors) {
+    private void parseXMLFile(String xmlFilePath) {
         try {
             File xmlFile = new File(xmlFilePath);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -75,7 +71,7 @@ public abstract class XMLHandler {
             myAuthor = doc.getElementsByTagName("Author").item(0).getTextContent();
             myDescription = doc.getElementsByTagName("Description").item(0).getTextContent();
 
-            mySimData = new SimulationData(myType, myTitle, myAuthor, myDescription, colors);
+            mySimData = new SimulationMetaData(myType, myTitle, myAuthor, myDescription);
 
             Element gridDimensions = (Element) doc.getElementsByTagName("GridDimensions").item(0);
             myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
@@ -87,7 +83,7 @@ public abstract class XMLHandler {
                 String[] rowValues = rows.item(i).getTextContent().split(",");
                 for (int j = 0; j < rowValues.length; j++) {
                     int state = Integer.parseInt(rowValues[j]);
-                    DefaultCell holdingCell = new DefaultCell(state, new Point2D.Double(j, i));
+                    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, myType);
                     myGrid.addCell(holdingCell);
                 }
             }
@@ -100,16 +96,46 @@ public abstract class XMLHandler {
     }
 
     /**
-    * Abstract method that assigns the parameters for the current simulation based on simulation type
+    * Method that assigns the parameters for the current simulation based on simulation type
     * @param doc: parsed XML file containing the simulation data
     *             most importantly for this function, the additional sim parameters
     */
-    protected abstract void parseParameters(Document doc);
+    private void parseParameters(Document doc){
+        myParameters = new HashMap<>();
+        NodeList params = doc.getElementsByTagName("Parameters");
+        if (params.getLength() > 0) {
+            Node param = params.item(0);
+            if (param.getNodeType() == Node.ELEMENT_NODE) {
+                Element paramElement = (Element) param;
+
+                checkAndLoadParameter(paramElement, "ignitionWithoutNeighbors");
+                checkAndLoadParameter(paramElement, "growInEmptyCell");
+                checkAndLoadParameter(paramElement, "toleranceThreshold");
+                checkAndLoadParameter(paramElement, "fishReproductionTime");
+                checkAndLoadParameter(paramElement, "sharkReproductionTime");
+                checkAndLoadParameter(paramElement, "sharkEnergyGain");
+            }
+        }
+    }
+
+    private void checkAndLoadParameter(Element paramElement, String paramName){
+        if (paramElement.getElementsByTagName(paramName).getLength() > 0) {
+            try {
+                double paramValue = Double.parseDouble(paramElement.getElementsByTagName(paramName).item(0).getTextContent());
+                myParameters.put(paramName, paramValue);
+            } catch (NumberFormatException e) {
+                System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
+                myParameters.put(paramName, 1.0);
+            }
+        }
+    }
 
     /**
-    * Abstract method that assigns SimRules and Sim based on simulation type
+    * Method that assigns SimRules and Sim based on simulation type
     */
-    protected abstract void setSim();
+    private void setSim(){
+        mySim = SimulationConfig.getNewSimulation(myType, mySimData, myParameters);
+    }
 
     /**
     * Returns type associated with current simulation
@@ -163,15 +189,8 @@ public abstract class XMLHandler {
     /**
     * Returns the simulation data associated with current simulation
     */
-    public SimulationData getSimData() {
+    public SimulationMetaData getSimData() {
         return mySimData;
-    }
-
-    /**
-    * Returns the simulation rules associated with current simulation
-    */
-    public SimulationRules getSimRules(){
-        return mySimRules;
     }
 
     /**

@@ -1,7 +1,7 @@
 package cellsociety.model.simulation;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SimulationDataTest {
-  private SimulationData simulationData;
+  private SimulationMetaData simulationData;
   private ArrayList<Color> colors;
 
   @BeforeEach
@@ -19,33 +19,14 @@ class SimulationDataTest {
     colors.add(Color.BLUE);
     colors.add(Color.GREEN);
 
-    simulationData = new SimulationData("GameOfLife", "GOL Test", "Justin", "Justin's version", colors);
+    simulationData = new SimulationMetaData("GameOfLife", "GOL Test", "Justin", "Justin's version");
   }
   @Test
   void testGetters() {
-    assertEquals("GameOfLife", simulationData.getType());
-    assertEquals("GOL Test", simulationData.getName());
-    assertEquals("Justin", simulationData.getAuthor());
-    assertEquals("Justin's version", simulationData.getDescription());
-    assertEquals(colors, simulationData.getColors());
+    assertEquals("GameOfLife", simulationData.type());
+    assertEquals("GOL Test", simulationData.name());
+    assertEquals("Justin", simulationData.author());
+    assertEquals("Justin's version", simulationData.description());
   }
 
-  @Test
-  void testSetters() {
-    simulationData.setType("NewGameOfLife");
-    assertEquals("NewGameOfLife", simulationData.getType());
-
-    simulationData.setName("GOLN Test");
-    assertEquals("GOLN Test", simulationData.getName());
-
-    simulationData.setAuthor("Justin2");
-    assertEquals("Justin2", simulationData.getAuthor());
-
-    simulationData.setDescription("Justin's second version");
-    assertEquals("Justin's second version", simulationData.getDescription());
-
-    colors.add(Color.YELLOW);
-    simulationData.setColors(colors);
-    assertEquals(colors, simulationData.getColors());
-  }
 }

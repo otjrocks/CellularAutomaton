@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>WaTorWorld</Type>
+    <Title>WaTorWorldExample</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Basic Wa-Tor World set up with a school of fish and two sharks</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+        <Row>0,0,1,1,1,1,1,1,0,0</Row>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,2,2,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <fishReproductionTime>2</fishReproductionTime>
+        <sharkReproductionTime>3</sharkReproductionTime>
+        <sharkEnergyGain>1</sharkEnergyGain>
+    </Parameters>
+</SimulationConfig>
+

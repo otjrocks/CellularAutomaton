@@ -2,11 +2,10 @@ package cellsociety.model;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class Grid {
   /**
    * Initialize a data structure to store a grid with the defined width and height
    *
-   * @param numRows:  (int) number of rows
+   * @param numRows: (int) number of rows
    * @param numCols: (int) number of columns
    */
   public Grid(int numRows, int numCols) {
@@ -35,6 +34,7 @@ public class Grid {
 
   /**
    * Get the number of rows in a grid
+   *
    * @return (int) number of rows in a grid
    */
   public int getRows() {
@@ -43,6 +43,7 @@ public class Grid {
 
   /**
    * Get number of columns in a grid
+   *
    * @return (int) number of columns in a grid
    */
   public int getCols() {
@@ -104,17 +105,19 @@ public class Grid {
    * neighbors) and then cell states are updated in a second pass.""
    *
    * @param simulation: The simulation you which to use to update the grid
+   * @return The cell state updates that have occurred when the grid was updated
    */
-  public void updateGrid(Simulation simulation) {
-    SimulationRules rules = simulation.getRules();
-    List<CellStateUpdate> nextStates = getNextStatesForAllCells(rules);
-    for (CellStateUpdate nextState: nextStates) {
+  public List<CellStateUpdate> updateGrid(Simulation simulation) {
+    List<CellStateUpdate> nextStates = simulation.getRules().getNextStatesForAllCells(this);
+    for (CellStateUpdate nextState : nextStates) {
       getCell(nextState.getRow(), nextState.getCol()).setState(nextState.getState());
     }
+    return nextStates;
   }
 
   /**
    * Attempt to update a cell in the grid
+   *
    * @param cell: the cell you which to update. This will update the grid with the cell provided
    * @return true if update of cell succeeded, false otherwise
    */
@@ -126,8 +129,18 @@ public class Grid {
   }
 
   /**
-   * For debugging, print current states of cells in grid.
-   * I asked ChatGPT for assistance in writing this method
+   * Get an iterator of all the cells that are in the Grid
+   *
+   * @return - an iterator of all the cells in a grid
+   */
+  public Iterator<Cell> getCellIterator() {
+    return myCells.values().iterator();
+
+  }
+
+  /**
+   * For debugging, print current states of cells in grid. I asked ChatGPT for assistance in writing
+   * this method
    */
   public void printGrid() {
     for (int row = 0; row < myNumRows; row++) {
@@ -145,14 +158,6 @@ public class Grid {
   }
 
 
-  public List<CellStateUpdate> getNextStatesForAllCells(SimulationRules rules) {
-    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
-    for (Cell cell : myCells.values()) {
-      nextStates.add(new CellStateUpdate(cell.getLocation(), rules.getNextState(cell, this)));
-    }
-    return nextStates;
-  }
-
   private boolean attemptAddCell(Cell cell) {
     // attempts to add cell to grid. Fails and returns false if cell provided does not have a properly formatted location or does not fit within the grid's width and height
     if (!checkInBounds(cell)) {
@@ -168,4 +173,6 @@ public class Grid {
         (cell.getLocation().getX() < myNumRows) &&
         (cell.getLocation().getY() < myNumCols);
   }
+
+
 }

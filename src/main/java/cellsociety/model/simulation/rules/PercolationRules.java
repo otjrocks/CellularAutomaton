@@ -3,8 +3,6 @@ package cellsociety.model.simulation.rules;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.SimulationRules;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 
 //For a Percolation cell, there can be 3 states
@@ -29,8 +27,8 @@ public class PercolationRules extends SimulationRules {
   /**
    * Percolation:
    * Water starts form the top row of the grid.
-   * Any open cell in the first row becomes filled
-   * If a cell below a filled cell is open, it becomes filled
+   * Any open cell (1) in the first row becomes filled
+   * If a cell below a filled cell (2) is open, it becomes filled
    * If a neighboring cell (not including diagonals) is open and is connected to another filled cell, it becomes filled
    * If a bottom row cell becomes filled, percolation is successful
    *
@@ -40,6 +38,11 @@ public class PercolationRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
+      throw new IndexOutOfBoundsException("Cell position out of bounds");
+    }
+
     int currentState = cell.getState();
     if (currentState == 0) {
       return 0;

@@ -1,15 +1,19 @@
 package cellsociety.model.simulation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import javafx.scene.paint.Color;
 
 public abstract class Simulation {
-  private SimulationRules myRules;
-  private SimulationData myData;
+
+  private final SimulationRules myRules;
+  private final SimulationMetaData myData;
   protected final Map<Integer, StateInfo> stateMap;
 
-  public Simulation(SimulationRules rules, SimulationData data) {
+  public Simulation(SimulationRules rules, SimulationMetaData data) {
     myRules = rules;
     myData = data;
     this.stateMap = new HashMap<>();
@@ -19,15 +23,22 @@ public abstract class Simulation {
   public SimulationRules getRules() {
     return myRules;
   }
-  public SimulationData getData() {
+
+  public SimulationMetaData getData() {
     return myData;
   }
 
   protected abstract void initializeStateMap();
+
   public StateInfo getStateInfo(int state) {
     return stateMap.getOrDefault(state, new StateInfo("Unknown", Color.GRAY));
   }
+
   public Map<Integer, StateInfo> getStateMap() {
     return Map.copyOf(stateMap);
+  }
+
+  public List<Integer> getStates() {
+    return new ArrayList<>(stateMap.keySet());
   }
 }

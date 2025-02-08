@@ -2,11 +2,10 @@ package cellsociety;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.types.GameOfLife;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 public class GameOfLifeExample {
 
@@ -29,7 +28,7 @@ public class GameOfLifeExample {
 
     GameOfLife simulation = new GameOfLife(
         new GameOfLifeRules(),
-        new SimulationData("GOL", "GOL", "Author", "description", new ArrayList<>())
+        new SimulationMetaData("GOL", "GOL", "Author", "description")
     );
 
     // Run multiple frames of the simulation

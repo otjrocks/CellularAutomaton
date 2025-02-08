@@ -1,34 +1,44 @@
 package cellsociety.model.simulation;
 
 import cellsociety.model.Grid;
+import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cellsociety.model.cell.Cell;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 
 public abstract class SimulationRules {
-  private Map<String, Double> parameters;
+
+  protected Map<String, Double> parameters;
 
   public SimulationRules() {
     this.parameters = new HashMap<>();
   }
+
   public SimulationRules(Map<String, Double> parameters) {
     this.parameters = parameters;
   }
-  public Double getParameter(String curParameter){
+
+  public Map<String, Double> getParameters() {
+    return Map.copyOf(parameters);
+  }
+
+  public Double getParameter(String curParameter) {
     return parameters.get(curParameter);
   }
 
-  public void setParameter(String key, Double value){
+  public void setParameter(String key, Double value) {
     parameters.put(key, value);
   }
+
   //only two options, so moved the getNeighbors here and actually defined it.
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
+
     List<Cell> neighbors = new ArrayList<>();
-    Point2D curCellPosition = cell.getLocation();
 
     int[][] directions = {
         {0, -1}, {0, 1},   // left, right
@@ -51,6 +61,16 @@ public abstract class SimulationRules {
     }
     return neighbors;
 
+  }
+
+  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
+    Iterator<Cell> cellIterator = grid.getCellIterator();
+    while (cellIterator.hasNext()) {
+      Cell cell = cellIterator.next();
+      nextStates.add(new CellStateUpdate(cell.getLocation(), getNextState(cell, grid)));
+    }
+    return nextStates;
   }
 
   //methods below depend on subclasses

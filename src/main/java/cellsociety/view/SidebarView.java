@@ -1,14 +1,13 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.controller.MainController;
-import cellsociety.model.simulation.SimulationData;
+import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 /**
  * A class to handle all the sidebar view elements of the app
@@ -19,9 +18,12 @@ public class SidebarView extends VBox {
 
   public static final double ELEMENT_SPACING = 5;
 
-  private final int myWidth;
   private final MainController myMainController;
-  private boolean isPlaying = false;
+  private boolean isEditing = false;
+  private Button myModeButton;
+  private AlertField myAlertField;
+  private final EditModeView myEditModeView;
+  private final ViewModeView myViewModeView;
 
   /**
    * Create a sidebar view with a preferred size of width x height
@@ -33,94 +35,54 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
-    myWidth = width;
     myMainController = controller;
-    initializeSidebar();
+    initializeAlertField();
+    createChangeModeButton();
+    myViewModeView = new ViewModeView(myMainController, myAlertField);
+    myEditModeView = new EditModeView(myMainController, myAlertField);
+    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
   }
 
-  public void updateSidebar() {
+  public void update() {
+    myViewModeView.update();
+  }
+
+  private void initializeAlertField() {
+    myAlertField = new AlertField();
+    VBox.setVgrow(myAlertField, Priority.ALWAYS);
+    myAlertField.setAlignment(Pos.BOTTOM_LEFT);
+  }
+
+
+  private void disableEditView() {
     this.getChildren().clear();
-    initializeStaticContent();
-    initializeSimulationDataDisplay();
+    myViewModeView.update();
+    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
   }
 
-  private void initializeSidebar() {
-    initializeStaticContent();
-    initializeSimulationDataDisplay();
+
+  private void enableEditView() {
+    myEditModeView.updateStateInfo();
+    this.getChildren().clear();
+    this.getChildren().addAll(myModeButton, myEditModeView, myAlertField);
   }
 
-  private void initializeSimulationDataDisplay() {
-    SimulationData simulationData = myMainController.getSimulation().getData();
-    addTextToSidebar("Name: " + simulationData.getName(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Type: " + simulationData.getType(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Author: " + simulationData.getAuthor(), 14, TextAlignment.LEFT);
-    addTextToSidebar("Description: " + simulationData.getDescription(), 14,
-        TextAlignment.LEFT);
-    Button playPauseButton = createPlayPauseButton();
-    createStepButton(playPauseButton);
-    createFileChooserButton(playPauseButton);
-    StateInfoView stateInfoView = new StateInfoView(myMainController.getSimulation());
-    this.getChildren().add(stateInfoView);
-  }
-
-  private void createFileChooserButton(Button playPauseButton) {
-    Button chooseFile = new Button("Choose File");
-    chooseFile.setOnAction(event -> {
-      myMainController.handleNewSimulationFromFile();
-      stopAnimationPlayIfRunning(playPauseButton);
-    });
-    this.getChildren().add(chooseFile);
-  }
-
-  private void createStepButton(Button playPauseButton) {
-    Button stepButton = new Button("Single Step");
-    stepButton.setOnAction(event -> {
-      myMainController.handleSingleStep();
-      stopAnimationPlayIfRunning(playPauseButton);
-    });
-    this.getChildren().add(stepButton);
-  }
-
-  private void stopAnimationPlayIfRunning(Button playPauseButton) {
-    if (isPlaying) {
-      playPauseButton.setText("Play");
-      isPlaying = false;
-    }
-  }
-
-  private Button createPlayPauseButton() {
-    Button playPauseButton = new Button("Play");
-    playPauseButton.setOnAction(event -> {
-      isPlaying = !isPlaying;
-      if (isPlaying) {
-        playPauseButton.setText("Pause");
-        myMainController.startAnimation();
-      } else {
-        playPauseButton.setText("Play");
+  private void createChangeModeButton() {
+    myModeButton = new Button(MESSAGES.getString("EDIT_MODE"));
+    myModeButton.setOnMouseClicked(event -> {
+      isEditing = !isEditing;
+      if (isEditing) {
+        enableEditView();
         myMainController.stopAnimation();
+        myModeButton.setText(MESSAGES.getString("VIEW_MODE"));
+        myMainController.setEditing(true);
+        myAlertField.flash(MESSAGES.getString("EDIT_MODE_ENABLED"), false);
+      } else {
+        disableEditView();
+        myModeButton.setText(MESSAGES.getString("EDIT_MODE"));
+        myMainController.setEditing(false);
+        myAlertField.flash(MESSAGES.getString("EDIT_MODE_DISABLED"), false);
       }
     });
-    this.getChildren().addAll(playPauseButton);
-    return playPauseButton;
   }
-
-  private void initializeStaticContent() {
-    addTextToSidebar("Cellular Automaton", 20, TextAlignment.CENTER);
-    addTextToSidebar("Current Simulation Information: ", 18, TextAlignment.LEFT);
-  }
-
-  private void addTextToSidebar(String message, double size, TextAlignment align) {
-    Text title = createText(message, size, align);
-    this.getChildren().add(title);
-  }
-
-  private Text createText(String message, double size, TextAlignment align) {
-    Text text = new Text(message);
-    text.setFont(new Font("Arial", size));
-    text.setFill(Color.BLACK);
-    text.setTextAlignment(align);
-    text.setWrappingWidth(myWidth);
-    return text;
-  }
-
 }

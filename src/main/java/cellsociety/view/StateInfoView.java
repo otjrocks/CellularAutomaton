@@ -1,11 +1,13 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
+
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.StateInfo;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -22,7 +24,8 @@ public class StateInfoView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
-    this.setSpacing(10);
+    this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("info-box");
     createTitle();
     simulation.getStateMap().forEach((key, value) -> {
       createListItemFromStateInfo(value);
@@ -30,8 +33,8 @@ public class StateInfoView extends VBox {
   }
 
   private void createTitle() {
-    Text title = new Text("State Info:");
-    title.setFont(new Font("Arial", 20));
+    Text title = new Text(MESSAGES.getString("STATE_INFO_TITLE"));
+    title.getStyleClass().add("secondary-title");
     this.getChildren().add(title);
   }
 
@@ -39,9 +42,8 @@ public class StateInfoView extends VBox {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(10);
-    CellView dummyCell = new CellView(0, 0, 20, 20, stateInfo.getColor());
-    Text stateInfoText = new Text(stateInfo.getDisplayName());
-    stateInfoText.setFont(new Font("Arial", 18));
+    CellView dummyCell = new CellView(0, 0, 20, 20, stateInfo.color());
+    Text stateInfoText = new Text(stateInfo.displayName());
     box.getChildren().add(dummyCell);
     box.getChildren().add(stateInfoText);
     this.getChildren().add(box);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>GameOfLife</Type>
+    <Title>Explosion</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Initial symmetrical configuration that expands outwards before all becoming inactive</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,1,0,0,0,0,1,0,0</Row>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+        <Row>0,0,0,1,0,0,1,0,0,0</Row>
+        <Row>0,0,0,1,0,0,1,0,0,0</Row>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+        <Row>0,0,1,0,0,0,0,1,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <!-- No parameters are needed for Game of Life -->
+    </Parameters>
+</SimulationConfig>

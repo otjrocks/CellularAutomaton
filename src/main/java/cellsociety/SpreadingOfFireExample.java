@@ -2,13 +2,10 @@ package cellsociety;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.SimulationData;
-import cellsociety.model.simulation.rules.PercolationRules;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
-import cellsociety.model.simulation.types.Percolation;
 import cellsociety.model.simulation.types.SpreadingOfFire;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SpreadingOfFireExample {
@@ -35,7 +32,7 @@ public class SpreadingOfFireExample {
 
     SpreadingOfFire sof = new SpreadingOfFire(
         new SpreadingOfFireRules(),
-        new SimulationData("SOF", "SOF", "Author", "SOF Simulation", new ArrayList<>())
+        new SimulationMetaData("SOF", "SOF", "Author", "SOF Simulation")
     );
 
     for (int i = 0; i < 40; i++) {
