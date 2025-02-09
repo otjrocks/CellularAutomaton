@@ -77,7 +77,7 @@ public class RockPaperScissorsRules extends SimulationRules {
 
     for (int i = 1; i < numStates; i++) {
       int winningState = (currentState + i) % numStates;
-      if (winningState == 0) {
+      if (winningState == 0 || isInLosingRange(numStates, currentState, winningState)) {
         continue;
       }
 
@@ -86,6 +86,23 @@ public class RockPaperScissorsRules extends SimulationRules {
       }
     }
     return lastWinnningState;
+  }
+
+  //Needed help from ChatGPT to help refine my logic here.
+  private static boolean isInLosingRange(int numStates, int currentState, int winningState) {
+    if (currentState == 0 || winningState == 0) {
+      return false;
+    }
+
+    int losingStart = (currentState - numStates / 2 + numStates) % numStates;
+    int losingEnd = (currentState - 1 + numStates) % numStates;
+
+    // Adjust for circular modular range
+    if (losingStart <= losingEnd) {
+      return winningState >= losingStart && winningState <= losingEnd;
+    } else {
+      return winningState >= losingStart || winningState <= losingEnd;
+    }
   }
 
   private static void countNeighbors(List<Cell> neighbors, Map<Integer, Integer> neighborCount) {

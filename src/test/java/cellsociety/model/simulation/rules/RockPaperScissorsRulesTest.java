@@ -16,6 +16,7 @@ public class RockPaperScissorsRulesTest {
 
   private RockPaperScissorsRules rockPaperScissorsRules;
   private Grid grid;
+  private Grid fullGrid;
   private Map<String, Double> parameters = new HashMap<>();
 
   @BeforeEach
@@ -25,6 +26,29 @@ public class RockPaperScissorsRulesTest {
     parameters.put("numStates", 3.0);
 
     rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+
+    int[][] gridPattern = {
+        {1, 2, 3, 4, 5},
+        {2, 3, 4, 5, 1},
+        {3, 4, 5, 1, 2},
+        {4, 5, 1, 2, 3},
+        {5, 1, 2, 3, 4}
+    };
+
+    fullGrid = initializeGrid(gridPattern);
+  }
+
+  private Grid initializeGrid(int[][] states) {
+    int rows = states.length;
+    int cols = states[0].length;
+    Grid grid = new Grid(rows, cols);
+
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        grid.addCell(new DefaultCell(states[row][col], new Point2D.Double(row, col)));
+      }
+    }
+    return grid;
   }
 
   @Test
@@ -94,10 +118,18 @@ public class RockPaperScissorsRulesTest {
     grid.addCell(new DefaultCell(0, new Point2D.Double(3, 3)));
 
     assertEquals(1, rockPaperScissorsRules.getNextState(cell, grid));
-
   }
 
+  @Test
+  void getNextState_CornerCell_ReturnWinnerState() {
+    Cell cell = new DefaultCell(1, new Point2D.Double(0, 0));
+    grid.addCell(cell);
 
+    grid.addCell(new DefaultCell(2, new Point2D.Double(0, 1)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(1, 0)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(1, 1)));
 
+    assertEquals(2, rockPaperScissorsRules.getNextState(cell, grid));
+  }
 
 }
