@@ -73,6 +73,8 @@ public class RockPaperScissorsRules extends SimulationRules {
 
   private static int checkForWinner(int numStates, int currentState, Map<Integer, Integer> neighborCount,
       double threshold) {
+    int lastWinnningState = currentState;
+
     for (int i = 1; i < numStates; i++) {
       int winningState = (currentState + i) % numStates;
       if (winningState == 0) {
@@ -80,10 +82,10 @@ public class RockPaperScissorsRules extends SimulationRules {
       }
 
       if (neighborCount.getOrDefault(winningState, 0) > threshold) {
-        return winningState;
+        lastWinnningState = winningState;
       }
     }
-    return currentState;
+    return lastWinnningState;
   }
 
   private static void countNeighbors(List<Cell> neighbors, Map<Integer, Integer> neighborCount) {
