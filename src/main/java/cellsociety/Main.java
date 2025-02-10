@@ -8,6 +8,9 @@ import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.controller.MainController;
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
+import java.awt.SplashScreen;
 import java.util.Objects;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -28,7 +31,10 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    initializeStage(stage);
+    SplashScreenView splashScreen = new SplashScreenView(new AlertField(), stage);
+    splashScreen.show();
+
+    //initializeStage(stage);
   }
 
   private void initializeStage(Stage stage) {
