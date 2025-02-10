@@ -6,11 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cellsociety.config.SimulationConfig;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationMetaData;
 
 /**
  * A class that handles working with cells within a simulation grid.
@@ -175,15 +173,4 @@ public class Grid {
         (cell.getLocation().getY() < myNumCols);
   }
 
-  public Grid buildGridFromArray(String[][] gridData, SimulationMetaData simData){
-    Grid arrayGrid = new Grid(gridData.length, gridData[0].length);
-    for (int i = 0; i < gridData.length; i++) {
-      for (int j = 0; j < gridData[i].length; j++) {
-        int state = Integer.parseInt(gridData[i][j]);
-        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, simData.type());
-        arrayGrid.addCell(holdingCell);
-      }
-    }
-    return arrayGrid;
-  }
 }

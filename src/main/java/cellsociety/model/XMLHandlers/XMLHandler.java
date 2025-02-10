@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 
@@ -84,11 +85,15 @@ public class XMLHandler {
     }
 
     private void parseGrid(Document gridDoc){
-        String[][] gridData = new String[myGridHeight][myGridWidth];
+        myGrid = new Grid(myGridHeight, myGridWidth);
         NodeList rows = gridDoc.getElementsByTagName("Row");
         for (int i = 0; i < rows.getLength(); i++) {
             String[] rowValues = rows.item(i).getTextContent().split(",");
-            System.arraycopy(rowValues, 0, gridData[i], 0, rowValues.length);
+            for (int j = 0; j < rowValues.length; j++) {
+                int state = Integer.parseInt(rowValues[j]);
+                Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
+                myGrid.addCell(holdingCell);
+            }
         }
     }
 
