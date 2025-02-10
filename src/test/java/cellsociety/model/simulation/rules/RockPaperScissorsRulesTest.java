@@ -61,25 +61,18 @@ public class RockPaperScissorsRulesTest {
   }
 
   @Test
-  void getNextState_EmptyCell_ReturnsEmptyState() {
-    Cell cell = new DefaultCell(0, new Point2D.Double(2, 2));
-
-    assertEquals(0, rockPaperScissorsRules.getNextState(cell, grid));
-  }
-
-  @Test
   void constructor_DefaultParameters_InitializesWithDefaultThreshold() {
     assertEquals(0.5, rockPaperScissorsRules.getParameters().get("minThreshold"));
   }
 
   @Test
-  void getNextState_NeighborsExceedThreshold_ReturnWinnersState() {
+  void getNextState_NeighborsExceedThresholdAndWin_ReturnWinnersState() {
     Cell cell = new DefaultCell(1, new Point2D.Double(2, 2));
     grid.addCell(cell);
 
     grid.addCell(new DefaultCell(2, new Point2D.Double(2, 3)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 2)));
-    grid.addCell(new DefaultCell(0, new Point2D.Double(2, 1)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(2, 1)));
     grid.addCell(new DefaultCell(3, new Point2D.Double(3, 2)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(3, 3)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 1)));
@@ -89,7 +82,7 @@ public class RockPaperScissorsRulesTest {
 
 
   @Test
-  void getNextState_NeighborsBelowThreshold_ReturnCurrentState() {
+  void getNextState_NeighborsBelowThresholdAndLose_ReturnCurrentState() {
     Cell cell = new DefaultCell(1, new Point2D.Double(2, 2));
     grid.addCell(cell);
 
@@ -104,7 +97,7 @@ public class RockPaperScissorsRulesTest {
   }
 
   @Test
-  void getNextState_NeighborsAreEmpty_ReturnCurrentState() {
+  void getNextState_NeighborsExceedThresholdButLose_ReturnCurrentState() {
     Cell cell = new DefaultCell(1, new Point2D.Double(2, 2));
     grid.addCell(cell);
 

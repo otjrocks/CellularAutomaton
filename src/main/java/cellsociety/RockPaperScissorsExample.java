@@ -15,16 +15,17 @@ import java.util.Random;
 public class RockPaperScissorsExample {
 
   public static void main(String[] args) throws InterruptedException {
-    int width = 5, height = 5;
+    int width = 3, height = 3;
     Grid grid = new Grid(width, height);
 
     // Parameters for the simulation
     Map<String, Double> parameters = new HashMap<>();
-    parameters.put("numStates", 5.0); // 5 possible states (1, 2, 3, 4, 5)
-    parameters.put("minThreshold", 0.25); // At least 50% of neighbors to win
+    parameters.put("numStates", 5.0);
+    parameters.put("minThreshold", 0.49); // At least 50% of neighbors to win
 
     Random random = new Random();
 
+    /*
     // Populate the grid with random states (excluding 0, which means empty)
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
@@ -32,11 +33,22 @@ public class RockPaperScissorsExample {
         grid.addCell(new DefaultCell(state, new Point2D.Double(x, y)));
       }
     }
-
+    */
     // Add some specific patterns for testing
-    grid.addCell(new DefaultCell(1, new Point2D.Double(4, 3)));
-    grid.addCell(new DefaultCell(2, new Point2D.Double(4, 4)));
-    grid.addCell(new DefaultCell(3, new Point2D.Double(4, 5)));
+    grid.addCell(new DefaultCell(3, new Point2D.Double(0, 0)));
+    grid.addCell(new DefaultCell(4, new Point2D.Double(0, 1)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(0, 2)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(1, 0)));
+    grid.addCell(new DefaultCell(3, new Point2D.Double(1, 1)));
+    grid.addCell(new DefaultCell(4, new Point2D.Double(1, 2)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(2, 0)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(2, 1)));
+    grid.addCell(new DefaultCell(3, new Point2D.Double(2, 2)));
+
+
+
+
+
 
     RockPaperScissorsRules rules = new RockPaperScissorsRules(parameters);
     Simulation simulation = new RockPaperScissors(

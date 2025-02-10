@@ -11,7 +11,6 @@ import java.util.Map;
 // Winning depends on the next one in the circle (i.e with 3 states: 1 beats 2, 2 beats 3, 3 beats 1)
 //The number of states the current state beats as well as loses to is N/2 (rounded down)
   // This is determined by (current state - opponent state + numStates) % numStates
-// A cell with state 0 means it's empty.
 
 
 public class RockPaperScissorsRules extends SimulationRules {
@@ -54,12 +53,8 @@ public class RockPaperScissorsRules extends SimulationRules {
     int numStates = parameters.get("numStates").intValue();
     double threshold = parameters.get("minThreshold");
 
-    if (currentState == 0) {
-      return 0;
-    }
-
     Map<Integer, Integer> neighborCount = new HashMap<>();
-    for (int i = 1; i < numStates; i++) {
+    for (int i = 0; i < numStates; i++) {
       neighborCount.put(i, 0);
     }
 
@@ -75,13 +70,13 @@ public class RockPaperScissorsRules extends SimulationRules {
       double threshold) {
     int lastWinnningState = currentState;
 
-    for (int i = 1; i < numStates; i++) {
+    for (int i = 0; i < numStates; i++) {
       int winningState = (currentState + i) % numStates;
-      if (winningState == 0 || isInLosingRange(numStates, currentState, winningState)) {
+      if (isInLosingRange(numStates, currentState, winningState)) {
         continue;
       }
 
-      if (neighborCount.getOrDefault(winningState, 0) > threshold) {
+      if (neighborCount.getOrDefault(winningState, 0) >= threshold) {
         lastWinnningState = winningState;
       }
     }
@@ -90,10 +85,6 @@ public class RockPaperScissorsRules extends SimulationRules {
 
   //Needed help from ChatGPT to help refine my logic here.
   private static boolean isInLosingRange(int numStates, int currentState, int winningState) {
-    if (currentState == 0 || winningState == 0) {
-      return false;
-    }
-
     int losingStart = (currentState - numStates / 2 + numStates) % numStates;
     int losingEnd = (currentState - 1 + numStates) % numStates;
 
@@ -108,9 +99,7 @@ public class RockPaperScissorsRules extends SimulationRules {
   private static void countNeighbors(List<Cell> neighbors, Map<Integer, Integer> neighborCount) {
     for (Cell neighbor : neighbors) {
       int neighborState = neighbor.getState();
-      if (neighborState != 0) {
         neighborCount.put(neighborState, neighborCount.getOrDefault(neighborState, 0) + 1);
-      }
     }
   }
 

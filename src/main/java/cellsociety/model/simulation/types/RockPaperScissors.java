@@ -15,7 +15,7 @@ public class RockPaperScissors extends Simulation {
 
   @Override
   protected void initializeStateMap() {
-    stateMap.put(0, new StateInfo(MESSAGES.getString("EMPTY"), Color.WHITE));
+    stateMap.put(0, new StateInfo(MESSAGES.getString("ZERO"), Color.GRAY));
     stateMap.put(1, new StateInfo(MESSAGES.getString("ONE"), Color.RED));
     stateMap.put(2, new StateInfo(MESSAGES.getString("TWO"), Color.ORANGE));
     stateMap.put(3, new StateInfo(MESSAGES.getString("THREE"), Color.YELLOW));
