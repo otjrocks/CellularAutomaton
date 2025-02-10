@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -66,7 +65,18 @@ public class XMLHandler {
             parseParameters(doc);
             setSim();
 
-        } catch (IOException | NumberFormatException | ParserConfigurationException | DOMException | SAXException e) {
+        } catch (SAXException e) {
+            System.err.println("Warning: Malformed XML file. Please check the formatting.");
+        } catch (ParserConfigurationException e) {
+            System.err.println("Warning: XML parser configuration issue.");
+        } catch (IOException e) {
+            System.err.println("Warning: Unable to read the file. Check permissions and file path.");
+        } catch (NumberFormatException e) {
+            System.err.println("Warning: Incorrect data format found in XML. Expected numerical values.");
+        } catch (NullPointerException e) {
+            System.err.println("Warning: Missing required data field. Please add required fields to XML.");
+        } catch (Exception e) {
+            System.err.println("Warning: Unexpected issue while parsing the XML file.");
         }
     }
 
