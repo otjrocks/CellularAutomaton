@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 
@@ -28,10 +27,6 @@ import cellsociety.model.simulation.SimulationMetaData;
  * @author Troy Ludwig
  */
 public class XMLHandler {
-    private String myType;
-    private String myTitle;
-    private String myAuthor;
-    private String myDescription;
     private int myGridHeight;
     private int myGridWidth;
     private Grid myGrid;
@@ -55,8 +50,6 @@ public class XMLHandler {
     *
     * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
     *                     represented as a String
-    * @param colors: An arraylist of colors to pass as options for SimulationData
-    *                Just a temporary variable until I can update the XML file tags
     */
     private void parseXMLFile(String xmlFilePath) {
         try {
@@ -66,32 +59,36 @@ public class XMLHandler {
             Document doc = builder.parse(xmlFile);
             doc.getDocumentElement().normalize();
 
-            myType = doc.getElementsByTagName("Type").item(0).getTextContent();
-            myTitle = doc.getElementsByTagName("Title").item(0).getTextContent();
-            myAuthor = doc.getElementsByTagName("Author").item(0).getTextContent();
-            myDescription = doc.getElementsByTagName("Description").item(0).getTextContent();
-
-            mySimData = new SimulationMetaData(myType, myTitle, myAuthor, myDescription);
-
-            Element gridDimensions = (Element) doc.getElementsByTagName("GridDimensions").item(0);
-            myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
-            myGridWidth = Integer.parseInt(gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
-
-            myGrid = new Grid(myGridHeight, myGridWidth);
-            NodeList rows = doc.getElementsByTagName("Row");
-            for (int i = 0; i < rows.getLength(); i++) {
-                String[] rowValues = rows.item(i).getTextContent().split(",");
-                for (int j = 0; j < rowValues.length; j++) {
-                    int state = Integer.parseInt(rowValues[j]);
-                    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, myType);
-                    myGrid.addCell(holdingCell);
-                }
-            }
-
+            parseSimData(doc);
+            parseDimensions(doc);
+            parseGrid(doc);
             parseParameters(doc);
             setSim();
 
         } catch (IOException | NumberFormatException | ParserConfigurationException | DOMException | SAXException e) {
+        }
+    }
+
+    private void parseSimData(Document data){
+        String type = data.getElementsByTagName("Type").item(0).getTextContent();
+        String title = data.getElementsByTagName("Title").item(0).getTextContent();
+        String author = data.getElementsByTagName("Author").item(0).getTextContent();
+        String description = data.getElementsByTagName("Description").item(0).getTextContent();
+        mySimData = new SimulationMetaData(type, title, author, description);
+    }
+
+    private void parseDimensions(Document dimDoc){
+        Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
+        myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
+        myGridWidth = Integer.parseInt(gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
+    }
+
+    private void parseGrid(Document gridDoc){
+        String[][] gridData = new String[myGridHeight][myGridWidth];
+        NodeList rows = gridDoc.getElementsByTagName("Row");
+        for (int i = 0; i < rows.getLength(); i++) {
+            String[] rowValues = rows.item(i).getTextContent().split(",");
+            System.arraycopy(rowValues, 0, gridData[i], 0, rowValues.length);
         }
     }
 
@@ -118,6 +115,11 @@ public class XMLHandler {
         }
     }
 
+    /**
+    * Method that checks an XML file for a parameter with a given name
+    * @param paramElement: element containing all parameters for a given simulation
+    * @param paramName: name of the parameter being checked
+    */
     private void checkAndLoadParameter(Element paramElement, String paramName){
         if (paramElement.getElementsByTagName(paramName).getLength() > 0) {
             try {
@@ -134,35 +136,7 @@ public class XMLHandler {
     * Method that assigns SimRules and Sim based on simulation type
     */
     private void setSim(){
-        mySim = SimulationConfig.getNewSimulation(myType, mySimData, myParameters);
-    }
-
-    /**
-    * Returns type associated with current simulation
-    */
-    public String getType() {
-        return myType;
-    }
-
-    /**
-    * Returns title of current simulation
-    */
-    public String getTitle() {
-        return myTitle;
-    }
-
-    /**
-    * Returns author of current simulation
-    */
-    public String getAuthor() {
-        return myAuthor;
-    }
-
-    /**
-    * Returns description of current simulation
-    */
-    public String getDescription() {
-        return myDescription;
+        mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
     }
 
     /**
