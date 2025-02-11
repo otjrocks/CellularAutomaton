@@ -1,12 +1,14 @@
 package cellsociety.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.Simulation;
@@ -14,8 +16,6 @@ import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -185,12 +185,12 @@ public class EditModeView extends VBox {
   private void createNewSimulation() {
     SimulationMetaData metaData = createMetaData();
 
-    Map<String, Double> parameters = createAndValidateParameters();
+    Map<String, String> parameters = createAndValidateParameters();
     attemptCreatingNewSimulation(metaData, parameters);
   }
 
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, Double> parameters) {
+      Map<String, String> parameters) {
     try {
       myMainController.createNewSimulation(myNumRows, myNumCols, simulationSelector.getValue(),
           metaData, parameters);
@@ -205,13 +205,13 @@ public class EditModeView extends VBox {
     }
   }
 
-  private Map<String, Double> createAndValidateParameters() {
-    Map<String, Double> parameters = new HashMap<>();
+  private Map<String, String> createAndValidateParameters() {
+    Map<String, String> parameters = new HashMap<>();
     boolean validParameters = true;
     for (String parameter : myParameterTextFields.keySet()) {
-      double value;
+      String str;
       try {
-        value = Double.parseDouble(myParameterTextFields.get(parameter).getText());
+        str = myParameterTextFields.get(parameter).getText();
       } catch (Exception e) {
         myAlertField.flash(MESSAGES.getString("INVALID_PARAMETERS"), true);
         if (VERBOSE_ERROR_MESSAGES) {
@@ -220,7 +220,7 @@ public class EditModeView extends VBox {
         validParameters = false;
         break;
       }
-      parameters.put(parameter, value);
+      parameters.put(parameter, str);
     }
     if (!validParameters) {
       return null;

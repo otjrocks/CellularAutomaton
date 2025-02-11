@@ -1,15 +1,15 @@
 package cellsociety.model.simulation;
 
-import cellsociety.model.Grid;
-import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import cellsociety.model.cell.Cell;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellStateUpdate;
 
 public abstract class SimulationRules {
 

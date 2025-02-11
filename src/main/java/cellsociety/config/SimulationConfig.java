@@ -1,7 +1,13 @@
 package cellsociety.config;
 
-import static cellsociety.config.MainConfig.MESSAGES;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static cellsociety.config.MainConfig.MESSAGES;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
@@ -17,11 +23,6 @@ import cellsociety.model.simulation.types.Percolation;
 import cellsociety.model.simulation.types.SegregationModel;
 import cellsociety.model.simulation.types.SpreadingOfFire;
 import cellsociety.model.simulation.types.WaTorWorld;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Store all information pertaining to simulations
@@ -72,18 +73,18 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, String> parameters) {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
     return switch (simulationName) {
       case "Percolation" -> new Percolation(new PercolationRules(), simulationMetaData);
       case "Segregation" ->
-          new SegregationModel(new SegregationModelRules(parameters), simulationMetaData);
+          new SegregationModel(new SegregationModelRules(convertMap(parameters)), simulationMetaData);
       case "SpreadingOfFire" ->
-          new SpreadingOfFire(new SpreadingOfFireRules(parameters), simulationMetaData);
-      case "WaTorWorld" -> new WaTorWorld(new WaTorWorldRules(parameters), simulationMetaData);
+          new SpreadingOfFire(new SpreadingOfFireRules(convertMap(parameters)), simulationMetaData);
+      case "WaTorWorld" -> new WaTorWorld(new WaTorWorldRules(convertMap(parameters)), simulationMetaData);
       default ->
-          new GameOfLife(new GameOfLifeRules(), simulationMetaData); // default game is GameOfLife
+          new GameOfLife(new GameOfLifeRules(parameters), simulationMetaData); // default game is GameOfLife
     };
   }
 
@@ -119,7 +120,7 @@ public class SimulationConfig {
   }
 
   private static void validateParameters(String simulationName,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, String> parameters) {
     List<String> requiredParameters = getParameters(simulationName);
     for (String parameter : requiredParameters) {
       if (parameters == null) {
@@ -133,4 +134,18 @@ public class SimulationConfig {
     }
   }
 
+  private static Map<String, java.lang.Double> convertMap(Map<String, String> stringMap) {
+    Map<String, java.lang.Double> paramMap = new HashMap<>();
+    for (String key : stringMap.keySet()) {
+        String value = stringMap.get(key);
+        if (value != null) {
+            try {
+                paramMap.put(key, java.lang.Double.valueOf(value));
+            } catch (NumberFormatException e) {
+                System.err.println("Warning: Invalid number format for key: " + key);
+            }
+        }
+    }
+    return paramMap;
+  }
 }

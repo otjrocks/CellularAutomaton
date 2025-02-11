@@ -34,7 +34,7 @@ public class XMLHandler {
     private Grid myGrid;
     private Simulation mySim;
     private SimulationMetaData mySimData;
-    private Map<String, Double> myParameters;
+    private Map<String, String> myParameters;
 
     /**
     * XMLHandler constructor for referencing data
@@ -137,13 +137,14 @@ public class XMLHandler {
             Node param = params.item(0);
             if (param.getNodeType() == Node.ELEMENT_NODE) {
                 Element paramElement = (Element) param;
-
-                checkAndLoadParameter(paramElement, "ignitionWithoutNeighbors");
-                checkAndLoadParameter(paramElement, "growInEmptyCell");
-                checkAndLoadParameter(paramElement, "toleranceThreshold");
-                checkAndLoadParameter(paramElement, "fishReproductionTime");
-                checkAndLoadParameter(paramElement, "sharkReproductionTime");
-                checkAndLoadParameter(paramElement, "sharkEnergyGain");
+                
+                checkAndLoadRulestringParameter(paramElement);
+                checkAndLoadNumericParameter(paramElement, "ignitionWithoutNeighbors");
+                checkAndLoadNumericParameter(paramElement, "growInEmptyCell");
+                checkAndLoadNumericParameter(paramElement, "toleranceThreshold");
+                checkAndLoadNumericParameter(paramElement, "fishReproductionTime");
+                checkAndLoadNumericParameter(paramElement, "sharkReproductionTime");
+                checkAndLoadNumericParameter(paramElement, "sharkEnergyGain");
             }
         }
     }
@@ -153,15 +154,22 @@ public class XMLHandler {
     * @param paramElement: element containing all parameters for a given simulation
     * @param paramName: name of the parameter being checked
     */
-    private void checkAndLoadParameter(Element paramElement, String paramName){
+    private void checkAndLoadNumericParameter(Element paramElement, String paramName){
         if (paramElement.getElementsByTagName(paramName).getLength() > 0) {
             try {
-                double paramValue = Double.parseDouble(paramElement.getElementsByTagName(paramName).item(0).getTextContent());
+                String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
                 myParameters.put(paramName, paramValue);
             } catch (NumberFormatException e) {
                 System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
-                myParameters.put(paramName, 1.0);
+                myParameters.put(paramName, "1.0");
             }
+        }
+    }
+
+    private void checkAndLoadRulestringParameter(Element paramElement){
+        if (paramElement.getElementsByTagName("ruleString").getLength() > 0) {
+            String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+            myParameters.put("ruleString", paramString);
         }
     }
 
@@ -210,7 +218,7 @@ public class XMLHandler {
     /**
     * Returns the current additional simulation parameters
     */
-    public Map<String, Double> getParams(){
+    public Map<String, String> getParams(){
         return myParameters;
     }
 
