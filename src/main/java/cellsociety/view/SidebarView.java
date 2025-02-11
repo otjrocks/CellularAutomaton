@@ -26,8 +26,6 @@ public class SidebarView extends VBox {
   private final MainController myMainController;
   private boolean isEditing = false;
   private Button myModeButton;
-  private ComboBox<String> languageDropdown;
-  private Text changeLanguageText;
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
   private final ViewModeView myViewModeView;
@@ -46,10 +44,9 @@ public class SidebarView extends VBox {
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
-    createLanguageDropdown();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
-    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField, changeLanguageText, languageDropdown);
+    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
   }
 
   public void update() {
@@ -66,14 +63,14 @@ public class SidebarView extends VBox {
   private void disableEditView() {
     this.getChildren().clear();
     myViewModeView.update();
-    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField, changeLanguageText, languageDropdown);
+    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
   }
 
 
   private void enableEditView() {
     myEditModeView.updateStateInfo();
     this.getChildren().clear();
-    this.getChildren().addAll(myModeButton, myEditModeView, myAlertField, changeLanguageText, languageDropdown);
+    this.getChildren().addAll(myModeButton, myEditModeView, myAlertField);
   }
 
   private void createChangeModeButton() {
@@ -95,46 +92,5 @@ public class SidebarView extends VBox {
     });
   }
 
-  private void createLanguageDropdown() {
-    languageDropdown = new ComboBox<>();
-    changeLanguageText = new Text(MESSAGES.getString("CHANGE_LANGUAGE"));
-
-    String propertiesFolderPath = "src/main/resources/cellsociety/languages/";
-    List<String> languages = fetchLanguages(propertiesFolderPath);
-
-    if (languages.isEmpty()) {
-      myAlertField.flash(MESSAGES.getString("NO_LANGUAGES_FOUND"), false);
-    }
-
-    for (String language : languages) {
-      languageDropdown.getItems().add(language);
-    }
-    if (languages.contains("English")) {
-      languageDropdown.setValue("English");
-    } else {
-      languageDropdown.setValue(languages.getFirst());
-    }
-
-    languageDropdown.setOnAction(event -> {
-      String language = languageDropdown.getValue();
-      System.out.println("Selected language: " + language);
-    });
-  }
-
-  private List<String> fetchLanguages(String propertiesFolderPath) {
-    List<String> languages = new ArrayList<>();
-    File directory = new File(propertiesFolderPath);
-    // this next line was from an LLM
-    File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
-
-    if (files != null) {
-      for (File file : files) {
-        String fileNameWithoutExtension = file.getName().replace(".properties", "");
-        languages.add(fileNameWithoutExtension);
-      }
-    }
-
-    return languages;
-  }
 
 }
