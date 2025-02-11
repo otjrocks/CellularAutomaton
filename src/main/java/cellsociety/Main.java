@@ -31,7 +31,8 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    SplashScreenView splashScreen = new SplashScreenView(new AlertField(), stage);
+    MainController mainController = new MainController(stage, root);
+    SplashScreenView splashScreen = new SplashScreenView(new AlertField(), stage, mainController, () -> initializeStage(stage));
     splashScreen.show();
 
     //initializeStage(stage);
@@ -45,7 +46,6 @@ public class Main extends Application {
     Font.loadFont(getClass().getResourceAsStream(BOLD_FONT_PATH), 24);
     scene.getStylesheets()
         .add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-    new MainController(stage, root); // create main controller and give access to main root
     stage.setScene(scene);
     stage.setTitle(TITLE);
     stage.show();

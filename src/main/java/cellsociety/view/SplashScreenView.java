@@ -1,12 +1,15 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
+import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -22,16 +25,23 @@ public class SplashScreenView extends VBox {
 
   private ComboBox<String> languageDropdown;
   private Text changeLanguageText;
+  private Button myChooseFileButton;
+  private Runnable onStart;
+  private MainController mainController;
 
 
-  public SplashScreenView(AlertField myAlertField, Stage stage) {
+  public SplashScreenView(AlertField myAlertField, Stage stage, MainController mainController,
+      Runnable onStart) {
     this.myAlertField = myAlertField;
     this.setSpacing(ELEMENT_SPACING * 2);
     this.splashScreenStage = stage;
-    initializeSplashScreen(stage);
+    this.onStart = onStart;
+    this.mainController = mainController;
+
+    initializeSplashScreen(onStart);
   }
 
-  private void initializeSplashScreen(Stage stage) {
+  private void initializeSplashScreen(Runnable onStart) {
 
     Text title = new Text(MESSAGES.getString("SPLASH_HEADER"));
     Text description = new Text(MESSAGES.getString("SPLASH_DESCRIPTION"));
@@ -43,10 +53,8 @@ public class SplashScreenView extends VBox {
     Text changeThemeButton = new Text(MESSAGES.getString("CHANGE_THEME"));
 
     createLanguageDropdown();
-
-
-
-    this.getChildren().addAll(title, description, changeLanguageText, languageDropdown);
+    this.getChildren().addAll(title, description, instructions, changeLanguageText, languageDropdown);
+    createFileChooserButton();
 
 
 
@@ -96,6 +104,26 @@ public class SplashScreenView extends VBox {
     return languages;
   }
 
+
+  private void createFileChooserButton() {
+    myChooseFileButton = new Button(MESSAGES.getString("CHOOSE_FILE_BUTTON"));
+    myChooseFileButton.setOnAction(event -> {
+      try {
+        mainController.handleNewSimulationFromFile();
+        splashScreenStage.close();
+        onStart.run();
+      } catch (IllegalArgumentException e) {
+        myAlertField.flash(e.getMessage(), true);
+        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+      } catch (Exception e) {
+        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+        if (VERBOSE_ERROR_MESSAGES) {
+          myAlertField.flash(e.getMessage(), true);
+        }
+      }
+    });
+    this.getChildren().add(myChooseFileButton);
+  }
 
   public void show() {
     splashScreenStage.show();
