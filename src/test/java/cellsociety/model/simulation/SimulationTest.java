@@ -2,7 +2,10 @@ package cellsociety.model.simulation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +40,7 @@ class SimulationTest {
 
   @Test
   void getStateInfo() {
-    assertEquals(Color.WHITE, testSimulation.getStateInfo(0).color());
-    assertEquals(Color.BLACK, testSimulation.getStateInfo(1).color());
+    assertEquals(Color.WHITE, StateDisplayConfig.getStateInfo(testSimulation, 0).color());
+    assertEquals(Color.BLACK, StateDisplayConfig.getStateInfo(testSimulation, 1).color());
   }
 }

@@ -90,7 +90,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createSimulationMetaDataDisplay() {
-    SimulationMetaData simulationData = myMainController.getSimulation().getData();
+    SimulationMetaData simulationData = myMainController.getSimulation().data();
     Text infoText = new Text(MESSAGES.getString("INFO_DISPLAY_TITLE"));
     infoText.getStyleClass().add("secondary-title");
     Text name = createText(

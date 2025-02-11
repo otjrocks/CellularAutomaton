@@ -108,7 +108,7 @@ public class Grid {
    * @return The cell state updates that have occurred when the grid was updated
    */
   public List<CellStateUpdate> updateGrid(Simulation simulation) {
-    List<CellStateUpdate> nextStates = simulation.getRules().getNextStatesForAllCells(this);
+    List<CellStateUpdate> nextStates = simulation.rules().getNextStatesForAllCells(this);
     for (CellStateUpdate nextState : nextStates) {
       getCell(nextState.getRow(), nextState.getCol()).setState(nextState.getState());
     }

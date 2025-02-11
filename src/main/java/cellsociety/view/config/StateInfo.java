@@ -1,4 +1,4 @@
-package cellsociety.model.simulation;
+package cellsociety.view.config;
 
 import javafx.scene.paint.Color;
 

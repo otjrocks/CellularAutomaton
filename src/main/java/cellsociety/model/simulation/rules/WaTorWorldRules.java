@@ -89,6 +89,11 @@ public class WaTorWorldRules extends SimulationRules {
     return -1; // Not used
   }
 
+  @Override
+  public int getNumberStates() {
+    return 3;
+  }
+
 
   /**
    * @param grid - the grid object containing the cell objects

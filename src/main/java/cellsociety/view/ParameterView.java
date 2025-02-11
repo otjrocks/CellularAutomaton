@@ -22,7 +22,7 @@ public class ParameterView extends VBox {
    */
   public ParameterView(Simulation simulation) {
     this.setSpacing(ELEMENT_SPACING);
-    if (!simulation.getRules().getParameters().isEmpty()) {
+    if (!simulation.rules().getParameters().isEmpty()) {
       this.getStyleClass().add("info-box");
       createTitle();
       createParameters(simulation);
@@ -34,7 +34,7 @@ public class ParameterView extends VBox {
   }
 
   private void createParameters(Simulation simulation) {
-    Map<String, Double> parameters = simulation.getRules().getParameters();
+    Map<String, Double> parameters = simulation.rules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
       createText(String.format("• %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
     }

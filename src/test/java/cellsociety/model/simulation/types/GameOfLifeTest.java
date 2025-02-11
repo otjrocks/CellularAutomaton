@@ -4,11 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.StateInfo;
+import cellsociety.view.config.StateInfo;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.util.Map;
 import javafx.scene.paint.Color;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
