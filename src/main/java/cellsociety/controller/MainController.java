@@ -190,7 +190,7 @@ public class MainController {
       cell.setState(nextState);
       // create new cell instead of just updating cell status, to ensure that new cell has all other information reset for custom cell types
       myGrid.updateCell(
-          SimulationConfig.getNewCell(row, column, nextState, mySimulation.getData().type()));
+          SimulationConfig.getNewCell(row, column, nextState, mySimulation.data().type()));
       mySimulationView.setColor(row, column,
           StateDisplayConfig.getStateInfo(mySimulation, nextState).color());
     }
