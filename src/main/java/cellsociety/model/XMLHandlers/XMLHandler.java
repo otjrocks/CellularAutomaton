@@ -20,6 +20,8 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * Allows the program to collect data from an XML configuration file and store the associated date
@@ -66,17 +68,17 @@ public class XMLHandler {
             setSim();
 
         } catch (SAXException e) {
-            System.err.println("Warning: Malformed XML file. Please check the formatting.");
+            displayErrorMessage("Warning: Malformed XML file. Please check the formatting.");
         } catch (ParserConfigurationException e) {
-            System.err.println("Warning: XML parser configuration issue.");
+            displayErrorMessage("Warning: XML parser configuration issue.");
         } catch (IOException e) {
-            System.err.println("Warning: Unable to read the file. Check permissions and file path.");
+            displayErrorMessage("Warning: Unable to read the file. Check permissions and file path.");
         } catch (NumberFormatException e) {
-            System.err.println("Warning: Incorrect data format found in XML. Expected numerical values.");
+            displayErrorMessage("Warning: Incorrect data format found in XML. Expected numerical values.");
         } catch (NullPointerException e) {
-            System.err.println("Warning: Missing required data field. Please add required fields to XML.");
+            displayErrorMessage("Warning: Missing required data field. Please add required fields to XML.");
         } catch (Exception e) {
-            System.err.println("Warning: Unexpected issue while parsing the XML file.");
+            displayErrorMessage("Warning: Unexpected issue while parsing the XML file.");
         }
     }
 
@@ -195,4 +197,14 @@ public class XMLHandler {
     public Map<String, Double> getParams(){
         return myParameters;
     }
+
+    private void displayErrorMessage(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Configuration File Error");
+        alert.setHeaderText("Error Loading Simulation Configuration");
+        alert.setContentText(message);
+        
+        alert.showAndWait();
+    }
+
 }
