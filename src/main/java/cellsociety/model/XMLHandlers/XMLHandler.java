@@ -99,14 +99,12 @@ public class XMLHandler {
     private void parseGrid(Document gridDoc){
         myGrid = new Grid(myGridHeight, myGridWidth);
         NodeList rows = gridDoc.getElementsByTagName("Row");
-        System.out.println(rows.getLength());
         if (rows.getLength() > myGridHeight){
             displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
         }
         else{
             for (int i = 0; i < rows.getLength(); i++) {
                 String[] rowValues = rows.item(i).getTextContent().split(",");
-                System.out.println(rowValues.length);
                 if (rowValues.length > myGridWidth){
                     displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
                     break;
@@ -114,6 +112,11 @@ public class XMLHandler {
                 else{
                     for (int j = 0; j < rowValues.length; j++) {
                         int state = Integer.parseInt(rowValues[j]);
+                        if(state != 0 && state != 1 && state != 2){
+                            displayErrorMessage("Invalid numerical state. Check your XML file.");
+                            i = j = 10000;
+                            break;
+                        }
                         Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
                         myGrid.addCell(holdingCell);
                     }
@@ -216,6 +219,8 @@ public class XMLHandler {
         alert.setTitle("Configuration File Error");
         alert.setHeaderText("Error Loading Simulation Configuration");
         alert.setContentText(message);
+        alert.setResizable(true);
+        alert.getDialogPane().setPrefSize(480, 160);
         
         alert.showAndWait();
     }
