@@ -37,6 +37,20 @@ public class SimulationConfig {
       "WaTorWorld"
   };
 
+  private static Point2D getParameterRange(String parameter) {
+    switch (parameter) {
+      case "sharkReproductionTime", "fishReproductionTime", "sharkEnergyGain" -> {
+        return new Point2D.Double(0, 10);
+      }
+      default -> {
+        return new Point2D.Double(0, 1);
+      }
+      // unless specified otherwise above,
+      // parameters must be a double in the range [0, 1]
+      // representing a probability of some event or thing occurring.
+    }
+  }
+
   /**
    * Get the appropriate cell type for a simulation type
    *
@@ -139,6 +153,20 @@ public class SimulationConfig {
         throw new IllegalArgumentException(
             String.format(MESSAGES.getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
       }
+      validateParameterRange(parameter, parameters.get(parameter));
+    }
+  }
+
+  // ensure that a specified parameter is within a valid range for the parameter
+  private static void validateParameterRange(String parameter, java.lang.Double value) {
+    Point2D validRange = getParameterRange(parameter);
+    if (value < validRange.getX()) {
+      throw new IllegalArgumentException(
+          String.format(MESSAGES.getString("PARAMETER_TOO_SMALL"), parameter, validRange.getX()));
+    }
+    if (value > validRange.getY()) {
+      throw new IllegalArgumentException(
+          String.format(MESSAGES.getString("PARAMETER_TOO_LARGE"), parameter, validRange.getY()));
     }
   }
 

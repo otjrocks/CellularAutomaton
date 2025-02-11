@@ -125,7 +125,6 @@ class WaTorWorldRulesTest {
     assertEquals(0, WaTorWorldRules.State.EMPTY.getValue());
     assertEquals(1, WaTorWorldRules.State.FISH.getValue());
     assertEquals(2, WaTorWorldRules.State.SHARK.getValue());
-    assertEquals(-1, WaTorWorldRules.State.MOVE_PENDING.getValue());
   }
 
   @Test

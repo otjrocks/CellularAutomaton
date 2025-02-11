@@ -116,6 +116,9 @@ public class ViewModeView extends VBox {
       try {
         stopAnimationPlayIfRunning();
         myMainController.handleNewSimulationFromFile();
+      } catch (IllegalArgumentException e) {
+        myAlertField.flash(e.getMessage(), true);
+        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
       } catch (Exception e) {
         myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
