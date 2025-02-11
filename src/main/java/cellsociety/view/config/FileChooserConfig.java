@@ -1,4 +1,4 @@
-package cellsociety.config;
+package cellsociety.view.config;
 
 import static cellsociety.config.MainConfig.MESSAGES;
 

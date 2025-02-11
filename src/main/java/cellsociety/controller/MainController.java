@@ -1,11 +1,12 @@
 package cellsociety.controller;
 
+import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import cellsociety.config.FileChooserConfig;
+import cellsociety.view.config.FileChooserConfig;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
@@ -164,10 +165,8 @@ public class MainController {
   private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
-        List<Integer> states = mySimulation.getStates();
-        Collections.sort(states);
-        int initialState = states.getFirst();
-        String simulationType = mySimulation.getData().type();
+        int initialState = 0;
+        String simulationType = mySimulation.data().type();
         myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
       }
     }
@@ -186,21 +185,16 @@ public class MainController {
       int nextState = getNextAvailableState(cell);
       cell.setState(nextState);
       myGrid.updateCell(cell);
-      mySimulationView.setColor(row, column, mySimulation.getStateInfo(nextState).color());
+      mySimulationView.setColor(row, column,
+          StateDisplayConfig.getStateInfo(mySimulation, nextState).color());
     }
   }
 
   // From the states list from the simulation get the next available state from a sorted order
   private int getNextAvailableState(Cell cell) {
-    List<Integer> states = mySimulation.getStates();
-    Collections.sort(states);
-    int nextStateIndex = states.indexOf(cell.getState());
-    if (nextStateIndex == -1 || nextStateIndex == states.size() - 1) {
-      nextStateIndex = 0;
-    } else {
-      nextStateIndex++;
-    }
-    return states.get(nextStateIndex);
+   int numStates = mySimulation.rules().getNumberStates();
+   int currentState = cell.getState();
+   return (currentState + 1) % numStates;
   }
 
   /**

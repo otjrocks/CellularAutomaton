@@ -14,7 +14,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import cellsociety.config.FileChooserConfig;
+import cellsociety.view.config.FileChooserConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
@@ -35,7 +35,7 @@ public class XMLWriter {
      * 
      */
     public static void saveSimulationToXML(Simulation sim, Grid grid, Stage stage) {
-        File file = FileChooserConfig.makeSaveChooser(sim.getData().name()).showSaveDialog(stage);
+        File file = FileChooserConfig.makeSaveChooser(sim.data().name()).showSaveDialog(stage);
         if (file == null) {
             return; // User canceled the save operation
         }
@@ -47,7 +47,7 @@ public class XMLWriter {
             Element simElement = doc.createElement("Simulation");
             doc.appendChild(simElement);
 
-            SimulationMetaData simData = sim.getData();
+            SimulationMetaData simData = sim.data();
             addElement(doc, simElement, "Type", simData.type());
             addElement(doc, simElement, "Title", simData.name());
             addElement(doc, simElement, "Author", simData.author());
@@ -74,7 +74,7 @@ public class XMLWriter {
                 gridDataElement.appendChild(rowElement);
             }
 
-            SimulationRules rules = sim.getRules();
+            SimulationRules rules = sim.rules();
             Element parametersElement = doc.createElement("Parameters");
             simElement.appendChild(parametersElement);
 

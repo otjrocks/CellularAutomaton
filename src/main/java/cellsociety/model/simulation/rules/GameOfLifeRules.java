@@ -2,18 +2,10 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
-import java.util.Map;
 
 public class GameOfLifeRules extends SimulationRules {
-
-
-  public GameOfLifeRules() {
-    super();
-  }
-
 
   /**
    * @param cell - individual cell from grid
@@ -54,5 +46,10 @@ public class GameOfLifeRules extends SimulationRules {
       return 1;
     }
     return cell.getState();
+  }
+
+  @Override
+  public int getNumberStates() {
+    return 2;
   }
 }

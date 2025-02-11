@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.StateInfo;
-import cellsociety.model.simulation.rules.SegregationModelRules;
+import cellsociety.view.config.StateInfo;
 import cellsociety.model.simulation.rules.WaTorWorldRules;
 import java.util.HashMap;
 import java.util.Map;

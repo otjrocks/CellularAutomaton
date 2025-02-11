@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class SegregationModelRules extends SimulationRules {
 
-  private final Random random = new Random();
+  private final Random RANDOM = new Random();
 
   public SegregationModelRules(Map<String, Double> myParameters) {
     if (myParameters == null || myParameters.isEmpty()) {
@@ -92,6 +92,11 @@ public class SegregationModelRules extends SimulationRules {
   }
 
   @Override
+  public int getNumberStates() {
+    return 3;
+  }
+
+  @Override
   public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellStateUpdate> nextStates = new ArrayList<>();
     List<Cell> emptyCells = new ArrayList<>();
@@ -150,6 +155,6 @@ public class SegregationModelRules extends SimulationRules {
   }
 
   Cell getAndRemoveRandomEmptyCell(List<Cell> emptyCells) {
-    return emptyCells.remove(random.nextInt(emptyCells.size()));
+    return emptyCells.remove(RANDOM.nextInt(emptyCells.size()));
   }
 }

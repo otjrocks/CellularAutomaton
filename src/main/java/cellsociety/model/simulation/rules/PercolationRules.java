@@ -11,26 +11,22 @@ import java.util.List;
 // A cell with state 2 indicates it's filled and water has passed through this cell
 
 public class PercolationRules extends SimulationRules {
-  public PercolationRules() {
-    super();
-  }
 
   /**
-   * @param cell  - an individual cell from the grid
+   * @param cell - an individual cell from the grid
    * @param grid - the list of cell objects representing the grid
-   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and not diagonals)
+   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and not
+   * diagonals)
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell ,grid, false);
+    return super.getNeighbors(cell, grid, false);
   }
 
   /**
-   * Percolation:
-   * Water starts form the top row of the grid.
-   * Any open cell (1) in the first row becomes filled
-   * If a cell below a filled cell (2) is open, it becomes filled
-   * If a neighboring cell (not including diagonals) is open and is connected to another filled cell, it becomes filled
-   * If a bottom row cell becomes filled, percolation is successful
+   * Percolation: Water starts form the top row of the grid. Any open cell (1) in the first row
+   * becomes filled If a cell below a filled cell (2) is open, it becomes filled If a neighboring
+   * cell (not including diagonals) is open and is connected to another filled cell, it becomes
+   * filled If a bottom row cell becomes filled, percolation is successful
    *
    * @param cell - an individual cell from the grid
    * @param grid - the list of cell objects representing the grid
@@ -39,7 +35,8 @@ public class PercolationRules extends SimulationRules {
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols() || cell.getCol() < 0) {
+    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
+        || cell.getCol() < 0) {
       throw new IndexOutOfBoundsException("Cell position out of bounds");
     }
 
@@ -62,5 +59,10 @@ public class PercolationRules extends SimulationRules {
     }
 
     return 1;
+  }
+
+  @Override
+  public int getNumberStates() {
+    return 3;
   }
 }

@@ -1,6 +1,5 @@
 package cellsociety.model.simulation.rules;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +88,11 @@ public class WaTorWorldRules extends SimulationRules {
   @Override
   public int getNextState(Cell cell, Grid grid) {
     return -1; // Not used
+  }
+
+  @Override
+  public int getNumberStates() {
+    return 3;
   }
 
 
