@@ -102,4 +102,13 @@ class XMLTest {
         });
     
   }
+
+  @Test
+  void XMLHandler_loadInFileWithInvalidNumericalStates_throwsExceptionBasedOnAlert(){
+    assertThrows(ExceptionInInitializerError.class, 
+        () -> {
+          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/InvalidStates.xml");
+        });
+    
+  }
 }
