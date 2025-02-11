@@ -99,12 +99,25 @@ public class XMLHandler {
     private void parseGrid(Document gridDoc){
         myGrid = new Grid(myGridHeight, myGridWidth);
         NodeList rows = gridDoc.getElementsByTagName("Row");
-        for (int i = 0; i < rows.getLength(); i++) {
-            String[] rowValues = rows.item(i).getTextContent().split(",");
-            for (int j = 0; j < rowValues.length; j++) {
-                int state = Integer.parseInt(rowValues[j]);
-                Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
-                myGrid.addCell(holdingCell);
+        System.out.println(rows.getLength());
+        if (rows.getLength() > myGridHeight){
+            displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
+        }
+        else{
+            for (int i = 0; i < rows.getLength(); i++) {
+                String[] rowValues = rows.item(i).getTextContent().split(",");
+                System.out.println(rowValues.length);
+                if (rowValues.length > myGridWidth){
+                    displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
+                    break;
+                }
+                else{
+                    for (int j = 0; j < rowValues.length; j++) {
+                        int state = Integer.parseInt(rowValues[j]);
+                        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
+                        myGrid.addCell(holdingCell);
+                    }
+                }
             }
         }
     }
