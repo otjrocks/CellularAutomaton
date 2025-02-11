@@ -84,4 +84,22 @@ class XMLTest {
         });
     
   }
+
+  @Test
+  void XMLHandler_loadInFileWithGridTooTall_throwsExceptionBasedOnAlert(){
+    assertThrows(ExceptionInInitializerError.class, 
+        () -> {
+          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooTall.xml");
+        });
+    
+  }
+
+  @Test
+  void XMLHandler_loadInFileWithGridTooWide_throwsExceptionBasedOnAlert(){
+    assertThrows(ExceptionInInitializerError.class, 
+        () -> {
+          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooWide.xml");
+        });
+    
+  }
 }
