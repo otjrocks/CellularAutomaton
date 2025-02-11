@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Title>CornerCross</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
+    <InitialConfiguration>
+        <Row>1,0,1,0,0,0,0,1,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,0</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,0</Row>
+        <Row>1,0,1,0,0,0,0,1,0,1</Row>
+    </InitialConfiguration>
+</SimulationConfig>

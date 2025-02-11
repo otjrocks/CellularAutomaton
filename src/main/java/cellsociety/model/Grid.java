@@ -1,13 +1,14 @@
 package cellsociety.model;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.simulation.Simulation;
-import cellsociety.model.cell.CellStateUpdate;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.simulation.Simulation;
 
 /**
  * A class that handles working with cells within a simulation grid.
@@ -173,6 +174,5 @@ public class Grid {
         (cell.getLocation().getX() < myNumRows) &&
         (cell.getLocation().getY() < myNumCols);
   }
-
 
 }

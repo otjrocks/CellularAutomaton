@@ -157,7 +157,7 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, Double> parameters) {
+      Map<String, String> parameters) {
     myGrid = new Grid(rows, cols);
     mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();

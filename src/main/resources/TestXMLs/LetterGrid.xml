@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>GameOfLife</Type>
+    <Title>CornerCross</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>A,0,1,0,0,0,0,1,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,B</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>0,0,0,0,C,0,0,0,0,0</Row>
+        <Row>0,0,0,0,0,0,0,0,0,0</Row>
+        <Row>1,0,0,0,0,0,0,0,0,1</Row>
+        <Row>0,1,0,0,0,0,0,0,1,0</Row>
+        <Row>1,D,1,0,0,0,0,1,0,1</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <!-- No parameters are needed for Game of Life -->
+    </Parameters>
+</SimulationConfig>
