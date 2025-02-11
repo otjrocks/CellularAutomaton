@@ -18,24 +18,18 @@ class SimulationTest {
   @BeforeEach
   void setUp() {
     testRules = new GameOfLifeRules(); // I chose an example rules class
-    testData = new SimulationMetaData("Game of Life", "Tester", "Justin", "Justin's GOL Test");
-    testSimulation = new Simulation(testRules, testData) {
-      @Override
-      protected void initializeStateMap() {
-        stateMap.put(0, new StateInfo("Dead", Color.WHITE));
-        stateMap.put(1, new StateInfo("Alive", Color.BLACK));
-      }
-    };
+    testData = new SimulationMetaData("GameOfLife", "Tester", "Justin", "Justin's GOL Test");
+    testSimulation = new Simulation(testRules, testData);
   }
 
   @Test
   void getRules() {
-    assertEquals(testRules, testSimulation.getRules());
+    assertEquals(testRules, testSimulation.rules());
   }
 
   @Test
   void getData() {
-    assertEquals(testData, testSimulation.getData());
+    assertEquals(testData, testSimulation.data());
   }
 
   @Test
