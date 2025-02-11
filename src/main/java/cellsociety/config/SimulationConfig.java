@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
@@ -19,16 +20,7 @@ import cellsociety.model.simulation.rules.PercolationRules;
 import cellsociety.model.simulation.rules.SegregationModelRules;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
 import cellsociety.model.simulation.rules.WaTorWorldRules;
-import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.types.Percolation;
-import cellsociety.model.simulation.types.SegregationModel;
-import cellsociety.model.simulation.types.SpreadingOfFire;
-import cellsociety.model.simulation.types.WaTorWorld;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * Store all information pertaining to simulations
@@ -96,7 +88,10 @@ public class SimulationConfig {
       Map<String, String> parameters) {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
-    return new Simulation(getRules(simulationName, parameters), simulationMetaData);
+    if (simulationName.equals("GameOfLife")) {
+      return new Simulation(new GameOfLifeRules(parameters), simulationMetaData);
+    }
+    return new Simulation(getRules(simulationName, convertMap(parameters)), simulationMetaData);
   }
 
   private static SimulationRules getRules(String simulationName,
@@ -171,14 +166,14 @@ public class SimulationConfig {
   private static Map<String, java.lang.Double> convertMap(Map<String, String> stringMap) {
     Map<String, java.lang.Double> paramMap = new HashMap<>();
     for (String key : stringMap.keySet()) {
-        String value = stringMap.get(key);
-        if (value != null) {
-            try {
-                paramMap.put(key, java.lang.Double.valueOf(value));
-            } catch (NumberFormatException e) {
-                System.err.println("Warning: Invalid number format for key: " + key);
-            }
+      String value = stringMap.get(key);
+      if (value != null) {
+        try {
+          paramMap.put(key, java.lang.Double.valueOf(value));
+        } catch (NumberFormatException e) {
+          System.err.println("Warning: Invalid number format for key: " + key);
         }
+      }
     }
     return paramMap;
   }

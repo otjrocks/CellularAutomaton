@@ -37,11 +37,11 @@ class XMLTest {
 
   @Test
   void getSim_validVariables_returnTrue() {
-    assertThat(myXMLHandler.getSim().getRules(), instanceOf(GameOfLifeRules.class));
-    assertEquals(myXMLHandler.getSim().getData().type(), "GameOfLife");
-    assertEquals(myXMLHandler.getSim().getData().name(), "Glider");
-    assertEquals(myXMLHandler.getSim().getData().author(), "Richard K. Guy");
-    assertEquals(myXMLHandler.getSim().getData().description(), "A basic configuration that produces a glider that moves diagonally across the grid");
+    assertThat(myXMLHandler.getSim().rules(), instanceOf(GameOfLifeRules.class));
+    assertEquals(myXMLHandler.getSim().data().type(), "GameOfLife");
+    assertEquals(myXMLHandler.getSim().data().name(), "Glider");
+    assertEquals(myXMLHandler.getSim().data().author(), "Richard K. Guy");
+    assertEquals(myXMLHandler.getSim().data().description(), "A basic configuration that produces a glider that moves diagonally across the grid");
   }
 
   @Test
