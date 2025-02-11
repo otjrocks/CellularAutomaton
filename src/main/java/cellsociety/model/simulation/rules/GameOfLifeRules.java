@@ -2,8 +2,10 @@ package cellsociety.model.simulation.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
-import java.util.Map;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -88,5 +90,9 @@ public class GameOfLifeRules extends SimulationRules {
       System.out.println(ints[i]);
     }
     return ints;
+
+  @Override
+  public int getNumberStates() {
+    return 2;
   }
 }

@@ -1,9 +1,11 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.StateInfo;
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,15 +25,17 @@ public class StateInfoView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
-    this.setSpacing(10);
+    this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("info-box");
     createTitle();
-    simulation.getStateMap().forEach((key, value) -> {
-      createListItemFromStateInfo(value);
-    });
+    for (int i = 0; i < simulation.rules().getNumberStates(); i++) {
+      createListItemFromStateInfo(StateDisplayConfig.getStateInfo(simulation, i));
+    }
   }
 
   private void createTitle() {
     Text title = new Text(MESSAGES.getString("STATE_INFO_TITLE"));
+    title.getStyleClass().add("secondary-title");
     this.getChildren().add(title);
   }
 

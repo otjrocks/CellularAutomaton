@@ -1,4 +1,4 @@
-package cellsociety.config;
+package cellsociety.view.config;
 
 import static cellsociety.config.MainConfig.MESSAGES;
 
@@ -18,7 +18,7 @@ public class FileChooserConfig {
   public static final String DATA_FILE_EXTENSION = "*.xml";
   // default to start in the data folder to make it easy on the user to find
   public static final String DATA_FILE_FOLDER = System.getProperty("user.dir") + "/src/main/resources";
-  public static final String DATA_SAVE_FOLDER = DATA_FILE_FOLDER + "/simulations/custom";
+  public static final String DATA_SAVE_FOLDER = DATA_FILE_FOLDER + "/simulations";
   public static final String DEFAULT_SIMULATION_PATH =
       DATA_FILE_FOLDER + "/simulations/default.xml"; // default simulation
   // NOTE: make ONE chooser since generally accepted behavior is that it remembers where user left it last

@@ -13,6 +13,7 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.model.simulation.rules.PercolationRules;
 import cellsociety.model.simulation.rules.SegregationModelRules;
@@ -23,6 +24,11 @@ import cellsociety.model.simulation.types.Percolation;
 import cellsociety.model.simulation.types.SegregationModel;
 import cellsociety.model.simulation.types.SpreadingOfFire;
 import cellsociety.model.simulation.types.WaTorWorld;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Store all information pertaining to simulations
@@ -55,7 +61,6 @@ public class SimulationConfig {
       // representing a probability of some event or thing occurring.
     }
   }
-
 
   /**
    * Get the appropriate cell type for a simulation type
@@ -91,16 +96,29 @@ public class SimulationConfig {
       Map<String, String> parameters) {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
-    return switch (simulationName) {
-      case "Percolation" -> new Percolation(new PercolationRules(), simulationMetaData);
-      case "Segregation" ->
-          new SegregationModel(new SegregationModelRules(convertMap(parameters)), simulationMetaData);
-      case "SpreadingOfFire" ->
-          new SpreadingOfFire(new SpreadingOfFireRules(convertMap(parameters)), simulationMetaData);
-      case "WaTorWorld" -> new WaTorWorld(new WaTorWorldRules(convertMap(parameters)), simulationMetaData);
-      default ->
-          new GameOfLife(new GameOfLifeRules(parameters), simulationMetaData); // default game is GameOfLife
-    };
+    return new Simulation(getRules(simulationName, parameters), simulationMetaData);
+  }
+
+  private static SimulationRules getRules(String simulationName,
+      Map<String, java.lang.Double> parameters) {
+    validateSimulation(simulationName);
+    switch (simulationName) {
+      case "Percolation" -> {
+        return new PercolationRules();
+      }
+      case "Segregation" -> {
+        return new SegregationModelRules(parameters);
+      }
+      case "SpreadingOfFire" -> {
+        return new SpreadingOfFireRules();
+      }
+      case "WaTorWorld" -> {
+        return new WaTorWorldRules(parameters);
+      }
+      default -> { // default is game of life
+        return new GameOfLifeRules();
+      }
+    }
   }
 
   /**

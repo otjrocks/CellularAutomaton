@@ -78,4 +78,32 @@ class SimulationConfigTest {
     assertTrue(SimulationConfig.getParameters(simulationName).contains("sharkEnergyGain"));
     assertTrue(SimulationConfig.getParameters(simulationName).contains("fishReproductionTime"));
   }
+
+  @Test
+  void checkTooLargeParameters() {
+    Map<String, Double> parameters = new HashMap<>();
+    String simulationName = "Segregation";
+    parameters.put("toleranceThreshold", 1.1); // invalid parameter out of range [0,1]
+    assertThrows(IllegalArgumentException.class,
+        () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
+
+  }
+
+  @Test
+  void checkTooSmallParameters() {
+    Map<String, Double> parameters = new HashMap<>();
+    String simulationName = "Segregation";
+    parameters.put("toleranceThreshold", -0.1); // invalid parameter out of range [0,1]
+    assertThrows(IllegalArgumentException.class,
+        () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
+
+  }
+
+  @Test
+  void checkValidParameters() {
+    Map<String, Double> parameters = new HashMap<>();
+    String simulationName = "Segregation";
+    parameters.put("toleranceThreshold", 0.7); // invalid parameter out of range [0,1]
+    SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters);
+  }
 }

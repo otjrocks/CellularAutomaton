@@ -84,6 +84,11 @@ public class SpreadingOfFireRules extends SimulationRules {
     return currentState;
   }
 
+  @Override
+  public int getNumberStates() {
+    return 3;
+  }
+
   private Map<String, Double> setDefaultParameters() {
     Map<String, Double> parameters = new HashMap<>();
     parameters.put("ignitionWithoutNeighbors", 0.15);

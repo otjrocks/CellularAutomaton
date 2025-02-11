@@ -2,8 +2,8 @@ package cellsociety;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.types.GameOfLife;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.awt.geom.Point2D;
 
@@ -26,7 +26,7 @@ public class GameOfLifeExample {
       }
     }
 
-    GameOfLife simulation = new GameOfLife(
+    Simulation simulation = new Simulation(
         new GameOfLifeRules(),
         new SimulationMetaData("GOL", "GOL", "Author", "description")
     );

@@ -6,7 +6,6 @@ import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -15,8 +14,6 @@ import javafx.util.Duration;
  */
 public class AlertField extends VBox {
 
-  public static final Color ALERT_COLOR = Color.RED;
-  public static final Color INFO_COLOR = Color.CADETBLUE;
   public static final int HISTORY_SIZE = 5; // Maximum number of alerts to display, regardless of if alert timeline expires
   public static final int ALERT_DURATION_SECONDS = 5; // Time before an alert disappears
 
@@ -42,9 +39,9 @@ public class AlertField extends VBox {
         isWarning ? MESSAGES.getString("WARNING_PREFIX") : MESSAGES.getString("INFO_PREFIX");
     Text newMessage = new Text(String.format(alertPrefix, message));
     if (isWarning) {
-      newMessage.setFill(ALERT_COLOR);
+      newMessage.getStyleClass().add("alert-warning");
     } else {
-      newMessage.setFill(INFO_COLOR);
+      newMessage.getStyleClass().add("alert-info");
     }
     newMessage.setWrappingWidth(SIDEBAR_WIDTH);
     this.getChildren().add(newMessage);

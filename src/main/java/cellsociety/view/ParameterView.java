@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
 import java.util.Map;
@@ -20,26 +21,30 @@ public class ParameterView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public ParameterView(Simulation simulation) {
-    this.setSpacing(10);
-    if (!simulation.getRules().getParameters().isEmpty()) {
+    this.setSpacing(ELEMENT_SPACING);
+    if (!simulation.rules().getParameters().isEmpty()) {
+      this.getStyleClass().add("info-box");
       createTitle();
       createParameters(simulation);
     }
   }
 
   private void createTitle() {
-    createText(MESSAGES.getString("PARAMETER_TITLE"));
+    createText(MESSAGES.getString("PARAMETER_TITLE"), true);
   }
 
   private void createParameters(Simulation simulation) {
-    Map<String, Double> parameters = simulation.getRules().getParameters();
+    Map<String, Double> parameters = simulation.rules().getParameters();
     for (Map.Entry<String, Double> entry : parameters.entrySet()) {
-      createText(String.format("- %s%s %s", entry.getKey(), ": ", entry.getValue()));
+      createText(String.format("• %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
     }
   }
 
-  private void createText(String entry) {
+  private void createText(String entry, boolean title) {
     Text parameter = new Text(entry);
+    if (title) {
+      parameter.getStyleClass().add("secondary-title");
+    }
     this.getChildren().add(parameter);
   }
 }

@@ -2,9 +2,9 @@ package cellsociety;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
-import cellsociety.model.simulation.types.SpreadingOfFire;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
@@ -30,7 +30,7 @@ public class SpreadingOfFireExample {
     grid.addCell(new DefaultCell(2, new Point2D.Double(4, 6)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(5, 6)));
 
-    SpreadingOfFire sof = new SpreadingOfFire(
+    Simulation sof = new Simulation(
         new SpreadingOfFireRules(),
         new SimulationMetaData("SOF", "SOF", "Author", "SOF Simulation")
     );
