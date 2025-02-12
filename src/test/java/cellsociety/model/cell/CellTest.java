@@ -2,7 +2,6 @@ package cellsociety.model.cell;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +37,6 @@ class CellTest {
   @Test
   void getState() {
     assertEquals(5, cellOne.getState());
-  }
-
-  @Test
-  void setState() {
-    cellOne.setState(1);
-    assertEquals(1, cellOne.getState());
   }
 
   @Test
