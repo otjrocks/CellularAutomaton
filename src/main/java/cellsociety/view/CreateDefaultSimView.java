@@ -2,10 +2,10 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
-import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
@@ -18,7 +18,6 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -52,6 +51,7 @@ public abstract class CreateDefaultSimView extends VBox {
 
   /**
    * Abstracted method for error showing
+   *
    * @param message - the error message
    */
   protected abstract void flashErrorMessage(String message);
@@ -60,7 +60,7 @@ public abstract class CreateDefaultSimView extends VBox {
    * Handles the simulation selection process
    */
   protected void createSimulationTypeControl() {
-    Text createSimButtonText = new Text(MESSAGES.getString("NEW_SIM_BUTTON_TEXT"));
+    Text createSimButtonText = new Text(getMessages().getString("NEW_SIM_BUTTON_TEXT"));
 
     ObservableList<String> options =
         FXCollections.observableArrayList(SimulationConfig.simulations);
@@ -73,7 +73,7 @@ public abstract class CreateDefaultSimView extends VBox {
     HBox container = new HBox();
     container.setAlignment(Pos.CENTER_LEFT);
     container.setSpacing(5);
-    Text simulationTypeLabel = new Text(MESSAGES.getString("SIMULATION_TYPE_LABEL"));
+    Text simulationTypeLabel = new Text(getMessages().getString("SIMULATION_TYPE_LABEL"));
     container.getChildren().addAll(simulationTypeLabel, simulationSelector);
     this.getChildren().addAll(createSimButtonText, container);
   }
@@ -81,9 +81,8 @@ public abstract class CreateDefaultSimView extends VBox {
   private void addAllParameters(String simulationName) {
     parametersControlBox.getChildren().clear();
     myParameterTextFields.clear();
-    SimulationConfig.getParameters(simulationName);
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
-      Text parametersTitle = new Text(MESSAGES.getString("CUSTOMIZE_PARAMETERS_TITLE"));
+      Text parametersTitle = new Text(getMessages().getString("CUSTOMIZE_PARAMETERS_TITLE"));
       parametersTitle.getStyleClass().add("secondary-title");
       parametersControlBox.getChildren().add(parametersTitle);
     }
@@ -114,7 +113,7 @@ public abstract class CreateDefaultSimView extends VBox {
     rowField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumRows = parseIntegerField(rowField, 0));
 
-    HBox rowBox = new HBox(new Text(MESSAGES.getString("NUMBER_ROWS")), rowField);
+    HBox rowBox = new HBox(new Text(getMessages().getString("NUMBER_ROWS")), rowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
     rowBox.setSpacing(5);
     this.getChildren().add(rowBox);
@@ -129,7 +128,7 @@ public abstract class CreateDefaultSimView extends VBox {
     colField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumCols = parseIntegerField(colField, 0));
 
-    HBox colBox = new HBox(new Text(MESSAGES.getString("NUMBER_COLUMNS")), colField);
+    HBox colBox = new HBox(new Text(getMessages().getString("NUMBER_COLUMNS")), colField);
     colBox.setAlignment(Pos.CENTER_LEFT);
     colBox.setSpacing(5);
     this.getChildren().add(colBox);
@@ -147,12 +146,12 @@ public abstract class CreateDefaultSimView extends VBox {
    * Handles the text metadata for the simulation
    */
   protected void createSimulationMetaDataTextFields() {
-    myNameField = createTextField(MESSAGES.getString("NAME_LABEL"),
-        MESSAGES.getString("DEFAULT_NAME"), this);
-    myAuthorField = createTextField(MESSAGES.getString("AUTHOR_LABEL"),
-        MESSAGES.getString("DEFAULT_AUTHOR"), this);
-    myDescriptionField = createTextField(MESSAGES.getString("DESCRIPTION_LABEL"),
-        MESSAGES.getString("DEFAULT_DESCRIPTION"), this);
+    myNameField = createTextField(getMessages().getString("NAME_LABEL"),
+        getMessages().getString("DEFAULT_NAME"), this);
+    myAuthorField = createTextField(getMessages().getString("AUTHOR_LABEL"),
+        getMessages().getString("DEFAULT_AUTHOR"), this);
+    myDescriptionField = createTextField(getMessages().getString("DESCRIPTION_LABEL"),
+        getMessages().getString("DEFAULT_DESCRIPTION"), this);
   }
 
   private TextField createTextField(String label, String defaultValue, VBox target) {
@@ -169,35 +168,15 @@ public abstract class CreateDefaultSimView extends VBox {
 
   /**
    * Handles the initialization of the different parameter inputs
-   * @param parametersControlBox - the parameter inputs
+   *
    */
-  protected void initializeParametersControl(VBox parametersControlBox) {
+  protected void initializeParametersControl() {
     parametersControlBox.setAlignment(Pos.CENTER_LEFT);
     parametersControlBox.setSpacing(5);
     addAllParameters(simulationSelector.getValue());
     this.getChildren().add(parametersControlBox);
   }
 
-  /**
-   *
-   * @return - the validated and created parameters for the current simulation
-   */
-  protected Map<String, Double> createAndValidateParameters() {
-    Map<String, Double> parameters = new HashMap<>();
-    boolean validParameters = true;
-    for (String parameter : myParameterTextFields.keySet()) {
-      double value;
-      try {
-        value = Double.parseDouble(myParameterTextFields.get(parameter).getText());
-      } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("Invalid parameter: " + parameter + " with value: " + myParameterTextFields.get(parameter).getText());      }
-      parameters.put(parameter, value);
-    }
-    if (!validParameters) {
-      return null;
-    }
-    return parameters;
-  }
 
   SimulationMetaData createMetaData() {
     return new SimulationMetaData(
@@ -208,7 +187,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the number of grid rows from the input
    */
   protected int getRowCount() {
@@ -216,7 +194,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the number of grid cols from the input
    */
   protected int getColCount() {
@@ -224,7 +201,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the simulation selected
    */
   protected String getSelectedSimulation() {
@@ -243,7 +219,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - whether the input fields were valid inputs
    */
   protected boolean runValidationTests() {
@@ -259,7 +234,7 @@ public abstract class CreateDefaultSimView extends VBox {
 
   private boolean checkInvalidText(String text) {
     if (text.isEmpty()) {
-      flashErrorMessage(MESSAGES.getString("EMPTY_FIELD"));
+      flashErrorMessage(getMessages().getString("EMPTY_FIELD"));
       return true;
     }
     return false;
@@ -269,7 +244,7 @@ public abstract class CreateDefaultSimView extends VBox {
     boolean valid = numRows >= MIN_GRID_NUM_ROWS && numRows <= MAX_GRID_NUM_ROWS;
     if (!valid) {
       flashErrorMessage(String.format(
-          MESSAGES.getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
+          getMessages().getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
       return false;
     }
     return true;
@@ -279,44 +254,46 @@ public abstract class CreateDefaultSimView extends VBox {
     boolean valid = numCols >= MIN_GRID_NUM_COLS && numCols <= MAX_GRID_NUM_COLS;
     if (!valid) {
       flashErrorMessage(String.format(
-          MESSAGES.getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
+          getMessages().getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
       return false;
     }
     return true;
   }
 
   /**
-   * Begin the process for creating a simulation by making and validating the parameters then creating solution
+   * Begin the process for creating a simulation by making and validating the parameters then
+   * creating solution
    */
   protected void createNewSimulation() {
     SimulationMetaData metaData = createMetaData();
 
-    Map<String, Double> parameters = createAndValidateParameters();
+    Map<String, String> parameters = new HashMap<>();
+    for (String parameter: myParameterTextFields.keySet()) {
+      parameters.put(parameter, myParameterTextFields.get(parameter).getText());
+    }
     attemptCreatingNewSimulation(metaData, parameters);
   }
 
   /**
-   *
-   * @param metaData - the metadata of the Simulation attempting to be created
+   * @param metaData   - the metadata of the Simulation attempting to be created
    * @param parameters - the parameters of the Simulation
    */
   protected void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, Double> parameters) {
+      Map<String, String> parameters) {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
-      flashErrorMessage(String.format(MESSAGES.getString("NEW_SIMULATION_CREATED")));
+      flashErrorMessage(String.format(getMessages().getString("NEW_SIMULATION_CREATED")));
     } catch (IllegalArgumentException e) {
-      flashErrorMessage(String.format(MESSAGES.getString("ERROR_CREATING_SIMULATION")));
+      flashErrorMessage(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")));
       flashErrorMessage(String.format((e.getMessage())));
     } catch (Exception e) {
-      flashErrorMessage(String.format(MESSAGES.getString("ERROR_CREATING_SIMULATION")));
+      flashErrorMessage(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")));
       if (VERBOSE_ERROR_MESSAGES) {
         flashErrorMessage(String.format((e.getMessage())));
       }
     }
   }
-
 
 
 }

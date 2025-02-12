@@ -94,4 +94,18 @@ class SimulationConfigTest {
     parameters.put("toleranceThreshold", "0.7"); // invalid parameter out of range [0,1]
     SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters);
   }
+
+  @Test
+  void testValidParametersRockPaper() {
+    Map<String, String> parameters = new HashMap<>();
+    String simulationName = "RockPaperScissors";
+    parameters.put("numStates", "21"); // invalid number of states
+    parameters.put("minThreshold", "0.7");
+    assertThrows(IllegalArgumentException.class,
+        () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
+    parameters.clear();
+    parameters.put("numStates", "5"); // valid parameters
+    parameters.put("minThreshold", "0.7");
+    assertDoesNotThrow(() -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
+  }
 }

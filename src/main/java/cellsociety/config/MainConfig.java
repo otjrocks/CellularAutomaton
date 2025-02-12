@@ -3,32 +3,23 @@ package cellsociety.config;
 import java.util.ResourceBundle;
 
 public class MainConfig {
-  // Language configuration
-  public static LanguageConfig getLanguageConfig() {
-    return languageConfig;
-  }
-
-  public static void setLanguageConfig(LanguageConfig config) {
-    languageConfig = config;
-    MESSAGES = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + config.getLanguage());
-  }
-
-  // Dynamic getter for the ResourceBundle
-  public static ResourceBundle getMessage() {
-    return MESSAGES;
-  }
 
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
   private static final String DEFAULT_LANGUAGE = "English";
 
-  private static LanguageConfig languageConfig = new LanguageConfig(DEFAULT_LANGUAGE);
+  private static ResourceBundle myMessages = ResourceBundle.getBundle(
+      LANGUAGE_FILE_PATH + DEFAULT_LANGUAGE);
 
-  public static final String CURRENT_LANGUAGE = DEFAULT_LANGUAGE;
-  public static final String LANGUAGE_PATH = LANGUAGE_FILE_PATH + CURRENT_LANGUAGE;
+  public static ResourceBundle getMessages() {
+    return myMessages;
+  }
 
-  public static ResourceBundle MESSAGES = ResourceBundle.getBundle(LANGUAGE_PATH);
+  public static void setLanguage(String language) {
+    myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
+  }
 
-  public static final String TITLE = MESSAGES.getString("TITLE");
+
+  public static final String TITLE = getMessages().getString("TITLE");
   public static final int WIDTH = 1400;
   public static final int HEIGHT = 800;
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";

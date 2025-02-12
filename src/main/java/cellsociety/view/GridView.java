@@ -27,7 +27,8 @@ public class GridView extends Group {
    * @param numRows:    Number of rows in the grid
    * @param numColumns: Number of cells per row in the grid
    */
-  public GridView(int width, int height, int numRows, int numColumns, MainController mainController) {
+  public GridView(int width, int height, int numRows, int numColumns,
+      MainController mainController) {
     myNumRows = numRows;
     myNumColumns = numColumns;
     cellWidth = width / numColumns;
@@ -48,6 +49,19 @@ public class GridView extends Group {
    */
   public void setColor(int row, int col, Paint color) {
     myGrid[row][col].setFill(color);
+  }
+
+  /**
+   * Handle whether grid lines should be shown or not
+   *
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    for (int row = 0; row < myNumRows; row++) {
+      for (int col = 0; col < myNumColumns; col++) {
+        myGrid[row][col].setGridLines(selected);
+      }
+    }
   }
 
   private void initializeGrid() {

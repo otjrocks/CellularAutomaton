@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
@@ -34,7 +34,7 @@ public class StateInfoView extends VBox {
   }
 
   private void createTitle() {
-    Text title = new Text(MESSAGES.getString("STATE_INFO_TITLE"));
+    Text title = new Text(getMessages().getString("STATE_INFO_TITLE"));
     title.getStyleClass().add("secondary-title");
     this.getChildren().add(title);
   }

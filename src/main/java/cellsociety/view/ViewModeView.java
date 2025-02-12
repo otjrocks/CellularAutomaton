@@ -1,9 +1,9 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.controller.MainController;
@@ -67,7 +67,7 @@ public class ViewModeView extends VBox {
 
   private void initializeSpeedSlider() {
     double initialSliderValue = (1 / STEP_SPEED);
-    Text sliderLabel = new Text(MESSAGES.getString("SLIDER_LABEL"));
+    Text sliderLabel = new Text(getMessages().getString("SLIDER_LABEL"));
     Slider speedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
         initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
     speedSlider.valueProperty().addListener(
@@ -91,16 +91,16 @@ public class ViewModeView extends VBox {
 
   private void createSimulationMetaDataDisplay() {
     SimulationMetaData simulationData = myMainController.getSimulation().data();
-    Text infoText = new Text(MESSAGES.getString("INFO_DISPLAY_TITLE"));
+    Text infoText = new Text(getMessages().getString("INFO_DISPLAY_TITLE"));
     infoText.getStyleClass().add("secondary-title");
     Text name = createText(
-        String.format("%s %s", MESSAGES.getString("NAME_LABEL"), simulationData.name()));
+        String.format("%s %s", getMessages().getString("NAME_LABEL"), simulationData.name()));
     Text type = createText(
-        String.format("%s %s", MESSAGES.getString("TYPE_LABEL"), simulationData.type()));
+        String.format("%s %s", getMessages().getString("TYPE_LABEL"), simulationData.type()));
     Text author = createText(
-        String.format("%s %s", MESSAGES.getString("AUTHOR_LABEL"), simulationData.author()));
+        String.format("%s %s", getMessages().getString("AUTHOR_LABEL"), simulationData.author()));
     Text description = createText(
-        String.format("%s %s", MESSAGES.getString("DESCRIPTION_LABEL"),
+        String.format("%s %s", getMessages().getString("DESCRIPTION_LABEL"),
             simulationData.description())
     );
     VBox metaDataBox = new VBox();
@@ -111,16 +111,16 @@ public class ViewModeView extends VBox {
   }
 
   private void createFileChooserButton() {
-    myChooseFileButton = new Button(MESSAGES.getString("CHOOSE_FILE_BUTTON"));
+    myChooseFileButton = new Button(getMessages().getString("CHOOSE_FILE_BUTTON"));
     myChooseFileButton.setOnAction(event -> {
       try {
         stopAnimationPlayIfRunning();
         myMainController.handleNewSimulationFromFile();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
-        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
       } catch (Exception e) {
-        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
@@ -131,14 +131,14 @@ public class ViewModeView extends VBox {
   }
 
   private void createSaveFileButton() {
-    mySaveButton = new Button(MESSAGES.getString("SAVE_TO_XML"));
+    mySaveButton = new Button(getMessages().getString("SAVE_TO_XML"));
     mySaveButton.setOnMouseClicked(event -> {
       stopAnimationPlayIfRunning();
       try {
         myMainController.handleSavingToFile();
-        myAlertField.flash(MESSAGES.getString("FILE_SAVE_SUCCESS"), false);
+        myAlertField.flash(getMessages().getString("FILE_SAVE_SUCCESS"), false);
       } catch (Exception e) {
-        myAlertField.flash(MESSAGES.getString("FILE_SAVE_FAIL"), true);
+        myAlertField.flash(getMessages().getString("FILE_SAVE_FAIL"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
@@ -147,7 +147,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createStepButton() {
-    myStepButton = new Button(MESSAGES.getString("STEP_LABEL"));
+    myStepButton = new Button(getMessages().getString("STEP_LABEL"));
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
       myMainController.handleSingleStep();
@@ -155,7 +155,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createPlayPauseButton() {
-    myPlayPauseButton = new Button(MESSAGES.getString("PLAY_LABEL"));
+    myPlayPauseButton = new Button(getMessages().getString("PLAY_LABEL"));
     myPlayPauseButton.setOnAction(event -> {
       if (myMainController.isPlaying()) {
         stopAnimation();
@@ -169,13 +169,13 @@ public class ViewModeView extends VBox {
   private void startAnimation() {
     myMainController.startAnimation();
     setPlayPauseButtonText();
-    myAlertField.flash(MESSAGES.getString("ANIMATION_START"), false);
+    myAlertField.flash(getMessages().getString("ANIMATION_START"), false);
   }
 
   private void stopAnimation() {
     myMainController.stopAnimation();
     setPlayPauseButtonText();
-    myAlertField.flash(MESSAGES.getString("ANIMATION_PAUSE"), false);
+    myAlertField.flash(getMessages().getString("ANIMATION_PAUSE"), false);
   }
 
   private void stopAnimationPlayIfRunning() {
@@ -186,14 +186,14 @@ public class ViewModeView extends VBox {
 
   private void setPlayPauseButtonText() {
     if (myMainController.isPlaying()) {
-      myPlayPauseButton.setText(MESSAGES.getString("PAUSE_LABEL"));
+      myPlayPauseButton.setText(getMessages().getString("PAUSE_LABEL"));
     } else {
-      myPlayPauseButton.setText(MESSAGES.getString("PLAY_LABEL"));
+      myPlayPauseButton.setText(getMessages().getString("PLAY_LABEL"));
     }
   }
 
   private void initializeStaticContent() {
-    Text title = createText(MESSAGES.getString("TITLE"));
+    Text title = createText(getMessages().getString("TITLE"));
     title.getStyleClass().add("main-title");
     this.getChildren().addAll(title);
   }

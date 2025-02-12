@@ -45,4 +45,19 @@ public class CellView extends Rectangle {
     this(x, y, width, height);
     this.setFill(fill);
   }
+
+  /**
+   * Handle whether grid lines should be shown or not
+   *
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    if (selected) {
+      this.setStroke(BORDER_COLOR);
+      this.setStrokeWidth(BORDER_WIDTH);
+    } else {
+      this.setStroke(DEFAULT_COLOR);
+      this.setStrokeWidth(0);
+    }
+  }
 }

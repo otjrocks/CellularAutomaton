@@ -66,6 +66,11 @@ public class RockPaperScissorsRules extends SimulationRules {
     return checkForWinner(numStates, currentState, neighborCount, neighborThreshold);
   }
 
+  @Override
+  public int getNumberStates() {
+    return parameters.get("numStates").intValue();
+  }
+
   private static int checkForWinner(int numStates, int currentState, Map<Integer, Integer> neighborCount,
       double threshold) {
     int lastWinnningState = currentState;

@@ -1,21 +1,17 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 
-
-import cellsociety.config.LanguageConfig;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
-import cellsociety.view.components.IntegerField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -45,16 +41,13 @@ public class SplashScreenView extends CreateDefaultSimView {
 
   private void initializeSplashScreen(Runnable onStart) {
 
-    Text title = new Text(MESSAGES.getString("SPLASH_HEADER"));
-    Text description = new Text(MESSAGES.getString("SPLASH_DESCRIPTION"));
-    Text instructions = new Text(MESSAGES.getString("SPLASH_INSTRUCTIONS"));
+    Text title = new Text(getMessages().getString("SPLASH_HEADER"));
+    Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
+    Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
 
-    Text changeThemeButton = new Text(MESSAGES.getString("CHANGE_THEME"));
+    Text changeThemeButton = new Text(getMessages().getString("CHANGE_THEME"));
 
     this.getChildren().addAll(title, description, instructions);
-
-    VBox parametersControlBox = new VBox();
-    parametersControlBox.setSpacing(ELEMENT_SPACING);
 
     createLanguageDropdown();
     createFileChooserButton();
@@ -63,7 +56,7 @@ public class SplashScreenView extends CreateDefaultSimView {
     createRowControl();
     createColControl();
     createSimulationMetaDataTextFields();
-    initializeParametersControl(parametersControlBox);
+    initializeParametersControl();
 
     createNewSimulationButton();
 
@@ -73,13 +66,13 @@ public class SplashScreenView extends CreateDefaultSimView {
 
   private void createLanguageDropdown() {
     languageDropdown = new ComboBox<>();
-    Text changeLanguageText = new Text(MESSAGES.getString("CHANGE_LANGUAGE"));
+    Text changeLanguageText = new Text(getMessages().getString("CHANGE_LANGUAGE"));
 
     String propertiesFolderPath = "src/main/resources/cellsociety/languages/";
     List<String> languages = fetchLanguages(propertiesFolderPath);
 
     if (languages.isEmpty()) {
-      myAlertField.flash(MESSAGES.getString("NO_LANGUAGES_FOUND"), false);
+      myAlertField.flash(getMessages().getString("NO_LANGUAGES_FOUND"), false);
     }
 
     for (String language : languages) {
@@ -93,7 +86,7 @@ public class SplashScreenView extends CreateDefaultSimView {
 
     languageDropdown.setOnAction(event -> {
       String language = languageDropdown.getValue();
-      MainConfig.setLanguageConfig(new LanguageConfig(language));
+      MainConfig.setLanguage(language);
 
       mainController.clearSidebar(mainController);
       mainController.initializeSidebar(mainController);
@@ -122,8 +115,8 @@ public class SplashScreenView extends CreateDefaultSimView {
 
 
   private void createFileChooserButton() {
-    Button myChooseFileButton = new Button(MESSAGES.getString("CHOOSE_FILE_BUTTON"));
-    Text chooseFileText = new Text(MESSAGES.getString("LOAD_BUTTON_TEXT"));
+    Button myChooseFileButton = new Button(getMessages().getString("CHOOSE_FILE_BUTTON"));
+    Text chooseFileText = new Text(getMessages().getString("LOAD_BUTTON_TEXT"));
     myChooseFileButton.setOnAction(event -> {
       try {
         mainController.handleNewSimulationFromFile();
@@ -131,9 +124,9 @@ public class SplashScreenView extends CreateDefaultSimView {
         onStart.run();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
-        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
       } catch (Exception e) {
-        myAlertField.flash(MESSAGES.getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
@@ -143,7 +136,7 @@ public class SplashScreenView extends CreateDefaultSimView {
   }
 
   private void createNewSimulationButton() {
-    Button createSimButton = new Button(MESSAGES.getString("CREATE_NEW_GRID_HEADER"));
+    Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
 
     createSimButton.setOnAction(event -> {
       if (runValidationTests()) return;

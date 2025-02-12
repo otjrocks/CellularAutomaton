@@ -1,7 +1,7 @@
 package cellsociety.view.components;
 
-import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
+import static cellsociety.config.MainConfig.getMessages;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,7 +36,7 @@ public class AlertField extends VBox {
 
   private void createNewAlertMessage(String message, boolean isWarning) {
     String alertPrefix =
-        isWarning ? MESSAGES.getString("WARNING_PREFIX") : MESSAGES.getString("INFO_PREFIX");
+        isWarning ? getMessages().getString("WARNING_PREFIX") : getMessages().getString("INFO_PREFIX");
     Text newMessage = new Text(String.format(alertPrefix, message));
     if (isWarning) {
       newMessage.getStyleClass().add("alert-warning");
