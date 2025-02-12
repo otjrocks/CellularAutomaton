@@ -96,9 +96,8 @@ public class SidebarView extends VBox {
     myGridLinesCheckboxField.setSpacing(ELEMENT_SPACING);
     CheckBox gridLinesCheckbox = new CheckBox();
     gridLinesCheckbox.setSelected(true);
-    gridLinesCheckbox.setOnMouseClicked(event -> {
-      myMainController.setGridLines(gridLinesCheckbox.isSelected());
-    });
+    gridLinesCheckbox.setOnAction(
+        event -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
     Text title = new Text(getMessages().getString("GRID_LINES_LABEL"));
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
