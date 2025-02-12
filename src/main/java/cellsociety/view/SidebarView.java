@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -26,6 +27,7 @@ public class SidebarView extends VBox {
   private final MainController myMainController;
   private boolean isEditing = false;
   private Button myModeButton;
+  private CheckBox myGridLinesCheckBox;
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
   private final ViewModeView myViewModeView;
@@ -44,9 +46,10 @@ public class SidebarView extends VBox {
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
+    createShowGridLinesCheckbox();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
-    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
+    this.getChildren().addAll(myModeButton, myGridLinesCheckBox, myViewModeView, myAlertField);
   }
 
   public void update() {
@@ -63,14 +66,14 @@ public class SidebarView extends VBox {
   private void disableEditView() {
     this.getChildren().clear();
     myViewModeView.update();
-    this.getChildren().addAll(myModeButton, myViewModeView, myAlertField);
+    this.getChildren().addAll(myModeButton, myGridLinesCheckBox, myViewModeView, myAlertField);
   }
 
 
   private void enableEditView() {
     myEditModeView.updateStateInfo();
     this.getChildren().clear();
-    this.getChildren().addAll(myModeButton, myEditModeView, myAlertField);
+    this.getChildren().addAll(myModeButton, myGridLinesCheckBox, myEditModeView, myAlertField);
   }
 
   private void createChangeModeButton() {
@@ -89,6 +92,14 @@ public class SidebarView extends VBox {
         myMainController.setEditing(false);
         myAlertField.flash(MESSAGES.getString("EDIT_MODE_DISABLED"), false);
       }
+    });
+  }
+
+  private void createShowGridLinesCheckbox() {
+    myGridLinesCheckBox = new CheckBox();
+    myGridLinesCheckBox.setSelected(true);
+    myGridLinesCheckBox.setOnMouseClicked(event -> {
+      myMainController.setGridLines(myGridLinesCheckBox.isSelected());
     });
   }
 
