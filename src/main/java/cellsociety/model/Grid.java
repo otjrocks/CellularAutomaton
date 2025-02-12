@@ -2,6 +2,7 @@ package cellsociety.model;
 
 import cellsociety.config.SimulationConfig;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,6 +62,9 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(int row, int col) {
+    if (!cellExists(new Double(row, col))) {
+      return null;
+    }
     return myCells.get(new Point2D.Double(row, col));
   }
 
@@ -71,6 +75,9 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(Point2D point) {
+    if (!cellExists(point)) {
+      return null;
+    }
     return myCells.get(point);
   }
 
@@ -121,7 +128,7 @@ public class Grid {
   /**
    * Attempt to update a cell in the grid
    *
-   * @param cell: the cell you which to update. This will update the grid with the cell provided
+   * @param cell the cell you which to update. This will update the grid with the cell provided
    */
   public void updateCell(Cell cell) {
     if (!cellExists(cell.getLocation())) {
