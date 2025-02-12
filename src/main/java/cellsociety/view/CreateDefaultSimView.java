@@ -52,6 +52,7 @@ public abstract class CreateDefaultSimView extends VBox {
 
   /**
    * Abstracted method for error showing
+   *
    * @param message - the error message
    */
   protected abstract void flashErrorMessage(String message);
@@ -169,6 +170,7 @@ public abstract class CreateDefaultSimView extends VBox {
 
   /**
    * Handles the initialization of the different parameter inputs
+   *
    * @param parametersControlBox - the parameter inputs
    */
   protected void initializeParametersControl(VBox parametersControlBox) {
@@ -178,26 +180,6 @@ public abstract class CreateDefaultSimView extends VBox {
     this.getChildren().add(parametersControlBox);
   }
 
-  /**
-   *
-   * @return - the validated and created parameters for the current simulation
-   */
-  protected Map<String, Double> createAndValidateParameters() {
-    Map<String, Double> parameters = new HashMap<>();
-    boolean validParameters = true;
-    for (String parameter : myParameterTextFields.keySet()) {
-      double value;
-      try {
-        value = Double.parseDouble(myParameterTextFields.get(parameter).getText());
-      } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("Invalid parameter: " + parameter + " with value: " + myParameterTextFields.get(parameter).getText());      }
-      parameters.put(parameter, value);
-    }
-    if (!validParameters) {
-      return null;
-    }
-    return parameters;
-  }
 
   SimulationMetaData createMetaData() {
     return new SimulationMetaData(
@@ -208,7 +190,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the number of grid rows from the input
    */
   protected int getRowCount() {
@@ -216,7 +197,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the number of grid cols from the input
    */
   protected int getColCount() {
@@ -224,7 +204,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - the simulation selected
    */
   protected String getSelectedSimulation() {
@@ -243,7 +222,6 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   *
    * @return - whether the input fields were valid inputs
    */
   protected boolean runValidationTests() {
@@ -286,22 +264,25 @@ public abstract class CreateDefaultSimView extends VBox {
   }
 
   /**
-   * Begin the process for creating a simulation by making and validating the parameters then creating solution
+   * Begin the process for creating a simulation by making and validating the parameters then
+   * creating solution
    */
   protected void createNewSimulation() {
     SimulationMetaData metaData = createMetaData();
 
-    Map<String, Double> parameters = createAndValidateParameters();
+    Map<String, String> parameters = new HashMap<>();
+    for (String parameter: myParameterTextFields.keySet()) {
+      parameters.put(parameter, myParameterTextFields.get(parameter).getText());
+    }
     attemptCreatingNewSimulation(metaData, parameters);
   }
 
   /**
-   *
-   * @param metaData - the metadata of the Simulation attempting to be created
+   * @param metaData   - the metadata of the Simulation attempting to be created
    * @param parameters - the parameters of the Simulation
    */
   protected void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, Double> parameters) {
+      Map<String, String> parameters) {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
@@ -316,7 +297,6 @@ public abstract class CreateDefaultSimView extends VBox {
       }
     }
   }
-
 
 
 }
