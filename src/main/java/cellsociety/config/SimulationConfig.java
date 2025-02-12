@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ public class SimulationConfig {
       "Percolation",
       "Segregation",
       "SpreadingOfFire",
-      "WaTorWorld"
+      "WaTorWorld",
+      "RockPaperScissors"
   };
 
   private static Point2D getParameterRange(String parameter) {
@@ -109,6 +111,9 @@ public class SimulationConfig {
       }
       case "WaTorWorld" -> {
         return new WaTorWorldRules(parameters);
+      }
+      case "RockPaperScissors" -> {
+        return new RockPaperScissorsRules(parameters);
       }
       default -> { // default is game of life
         return new GameOfLifeRules();

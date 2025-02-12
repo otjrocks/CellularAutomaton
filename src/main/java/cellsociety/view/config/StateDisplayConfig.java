@@ -83,16 +83,25 @@ public class StateDisplayConfig {
   }
 
   private static StateInfo rockPaperScissorsStateInfo(int state) {
-    Color[] colors = {Color.GRAY, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE,
-        Color.PURPLE,
-        Color.MAGENTA, Color.MAROON, Color.ALICEBLUE, Color.CYAN, Color.DARKGRAY, Color.PINK,
-        Color.FUCHSIA, Color.INDIGO, Color.SIENNA, Color.CRIMSON, Color.MINTCREAM,
-        Color.LIGHTGREEN, Color.DARKGOLDENROD, Color.LIGHTGOLDENRODYELLOW};
-    if (state >= 0 && state < colors.length) {
-      return new StateInfo(MESSAGES.getString(String.valueOf(state)), colors[state]);
+    Color[] colors = {
+        Color.GRAY, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE,
+        Color.PURPLE, Color.MAGENTA, Color.MAROON, Color.ALICEBLUE, Color.CYAN, Color.DARKGRAY,
+        Color.PINK, Color.FUCHSIA, Color.INDIGO, Color.SIENNA, Color.CRIMSON, Color.MINTCREAM,
+        Color.LIGHTGREEN, Color.DARKGOLDENROD, Color.LIGHTGOLDENRODYELLOW
+    };
+
+    String[] states = {
+        "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN",
+        "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN",
+        "NINETEEN", "TWENTY"
+    };
+
+    if (state >= 0 && state < states.length) {
+      return new StateInfo(MESSAGES.getString(states[state]), colors[state]);
     }
     return getDefaultStateInfo(state);
   }
+
 
   private static StateInfo getDefaultStateInfo(int state) {
     return new StateInfo(String.format(MESSAGES.getString("STATE"), state), DEFAULT_COLOR);
