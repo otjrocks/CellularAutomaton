@@ -2,14 +2,6 @@
 The main stylesheet of the application
  */
 
-/** {*/
-/*  -fx-primary: rgb(232, 232, 232);*/
-/*  -fx-secondary: rgb(46, 46, 46);*/
-/*  -fx-light: rgb(214, 214, 214);*/
-/*  -fx-accent: rgb(61, 15, 255);*/
-/*  -fx-warning: rgb(239, 34, 34);*/
-/*}*/
-
 @font-face {
   font-family: Lato;
   src: url('./fonts/regular.ttf');
@@ -24,7 +16,14 @@ The main stylesheet of the application
   -fx-font-family: Lato;
   -fx-background: -fx-primary;
   -fx-font-size: 14px;
+  -fx-text-fill: -fx-secondary;
 }
+
+Label, Text {
+  -fx-fill: -fx-secondary;
+  -fx-text-fill: -fx-secondary;
+}
+
 
 .main-title {
   -fx-font-size: 24px;
@@ -40,7 +39,7 @@ The main stylesheet of the application
 
 .button {
   -fx-background-color: -fx-accent;
-  -fx-text-fill: -fx-light;
+  -fx-text-fill: -fx-light !important;
   -fx-font-size: 15px;
 }
 
