@@ -1,5 +1,7 @@
 package cellsociety.config;
 
+import static cellsociety.config.MainConfig.getMessages;
+
 import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -7,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static cellsociety.config.MainConfig.MESSAGES;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
@@ -21,7 +21,6 @@ import cellsociety.model.simulation.rules.PercolationRules;
 import cellsociety.model.simulation.rules.SegregationModelRules;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
 import cellsociety.model.simulation.rules.WaTorWorldRules;
-import java.util.Objects;
 
 /**
  * Store all information pertaining to simulations
@@ -154,7 +153,7 @@ public class SimulationConfig {
   private static void validateSimulation(String simulationName) {
     if (!List.of(simulations).contains(simulationName)) {
       throw new IllegalArgumentException(
-          String.format(MESSAGES.getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
+          String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
     }
   }
 
@@ -164,11 +163,11 @@ public class SimulationConfig {
     for (String parameter : requiredParameters) {
       if (parameters == null) {
         throw new NullPointerException(
-            MESSAGES.getString("NULL_SIMULATION_PARAMETERS_ERROR"));
+            getMessages().getString("NULL_SIMULATION_PARAMETERS_ERROR"));
       }
       if (!parameters.containsKey(parameter)) {
         throw new IllegalArgumentException(
-            String.format(MESSAGES.getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
+            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
       }
       validateParameterRange(parameter, java.lang.Double.valueOf(parameters.get(parameter)));
     }
@@ -194,11 +193,11 @@ public class SimulationConfig {
     Point2D validRange = getParameterRange(parameter);
     if (value < validRange.getX()) {
       throw new IllegalArgumentException(
-          String.format(MESSAGES.getString("PARAMETER_TOO_SMALL"), parameter, validRange.getX()));
+          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter, validRange.getX()));
     }
     if (value > validRange.getY()) {
       throw new IllegalArgumentException(
-          String.format(MESSAGES.getString("PARAMETER_TOO_LARGE"), parameter, validRange.getY()));
+          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter, validRange.getY()));
     }
   }
 

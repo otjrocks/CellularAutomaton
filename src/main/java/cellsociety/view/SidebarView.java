@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
@@ -74,20 +74,20 @@ public class SidebarView extends VBox {
   }
 
   private void createChangeModeButton() {
-    myModeButton = new Button(MESSAGES.getString("EDIT_MODE"));
+    myModeButton = new Button(getMessages().getString("EDIT_MODE"));
     myModeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
         myMainController.stopAnimation();
-        myModeButton.setText(MESSAGES.getString("VIEW_MODE"));
+        myModeButton.setText(getMessages().getString("VIEW_MODE"));
         myMainController.setEditing(true);
-        myAlertField.flash(MESSAGES.getString("EDIT_MODE_ENABLED"), false);
+        myAlertField.flash(getMessages().getString("EDIT_MODE_ENABLED"), false);
       } else {
         disableEditView();
-        myModeButton.setText(MESSAGES.getString("EDIT_MODE"));
+        myModeButton.setText(getMessages().getString("EDIT_MODE"));
         myMainController.setEditing(false);
-        myAlertField.flash(MESSAGES.getString("EDIT_MODE_DISABLED"), false);
+        myAlertField.flash(getMessages().getString("EDIT_MODE_DISABLED"), false);
       }
     });
   }
@@ -99,7 +99,7 @@ public class SidebarView extends VBox {
     gridLinesCheckbox.setOnMouseClicked(event -> {
       myMainController.setGridLines(gridLinesCheckbox.isSelected());
     });
-    Text title = new Text(MESSAGES.getString("GRID_LINES_LABEL"));
+    Text title = new Text(getMessages().getString("GRID_LINES_LABEL"));
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
 

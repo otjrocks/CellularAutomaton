@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.MESSAGES;
+import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.model.simulation.Simulation;
@@ -30,7 +30,7 @@ public class ParameterView extends VBox {
   }
 
   private void createTitle() {
-    createText(MESSAGES.getString("PARAMETER_TITLE"), true);
+    createText(getMessages().getString("PARAMETER_TITLE"), true);
   }
 
   private void createParameters(Simulation simulation) {
