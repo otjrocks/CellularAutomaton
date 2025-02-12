@@ -35,6 +35,16 @@ class CellTest {
   }
 
   @Test
+  void cannotAddNegativeState() {
+    assertThrows(IllegalArgumentException.class, () -> new Cell(-1,  new Double(0, 0)){});
+  }
+
+  @Test
+  void cannotAddNullLocation() {
+    assertThrows(IllegalArgumentException.class, () -> new Cell(0, null){});
+  }
+
+  @Test
   void getState() {
     assertEquals(5, cellOne.getState());
   }

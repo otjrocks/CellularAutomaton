@@ -47,6 +47,9 @@ public class SimulationConfig {
       case "sharkReproductionTime", "fishReproductionTime", "sharkEnergyGain" -> {
         return new Point2D.Double(0, 10);
       }
+      case "numStates" -> {  // number of states for rock paper scissors should be in range [3,20]
+        return new Point2D.Double(3, 20);
+      }
       default -> {
         return new Point2D.Double(0, 1);
       }
@@ -138,6 +141,9 @@ public class SimulationConfig {
       }
       case "WaTorWorld" -> {
         return List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime");
+      }
+      case "RockPaperScissors" -> {
+        return List.of("minThreshold", "numStates");
       }
       default -> {
         return new ArrayList<>();

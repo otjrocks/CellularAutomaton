@@ -45,7 +45,6 @@ public class EditModeView extends CreateDefaultSimView {
   private final AlertField myAlertField;
   private final VBox myHeaderBox = new VBox();
   private StateInfoView myStateInfoView;
-  private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
 
   /**
    * Create a edit mode view
@@ -79,8 +78,7 @@ public class EditModeView extends CreateDefaultSimView {
     createRowControl();
     createColControl();
     createSimulationMetaDataTextFields();
-    VBox parametersControlBox = new VBox();
-    initializeParametersControl(parametersControlBox);
+    initializeParametersControl();
     createUpdateButton();
   }
 

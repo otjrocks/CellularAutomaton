@@ -24,7 +24,7 @@ public abstract class Cell {
    */
   public Cell(int state, Point2D location) throws IllegalArgumentException {
     if (state < 0) {
-      throw new IllegalArgumentException("Invalid state, state must be a positive integer");
+      throw new IllegalArgumentException("Invalid state, state must be a positive integer or zero");
     }
     myState = state;
     if (location == null ||
