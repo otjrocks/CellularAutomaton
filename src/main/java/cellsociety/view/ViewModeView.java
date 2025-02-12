@@ -205,4 +205,5 @@ public class ViewModeView extends VBox {
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
+
 }
