@@ -92,5 +92,11 @@ public class SidebarView extends VBox {
     });
   }
 
+  /**
+   * removes all elements of the sidebar
+   */
+  public void clearSidebar() {
+    this.getChildren().clear();
+  }
 
 }

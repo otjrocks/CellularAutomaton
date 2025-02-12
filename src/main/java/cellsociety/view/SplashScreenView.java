@@ -4,6 +4,8 @@ import static cellsociety.config.MainConfig.MESSAGES;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 
 
+import cellsociety.config.LanguageConfig;
+import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
@@ -91,7 +93,11 @@ public class SplashScreenView extends CreateDefaultSimView {
 
     languageDropdown.setOnAction(event -> {
       String language = languageDropdown.getValue();
-      System.out.println("Selected language: " + language);
+      MainConfig.setLanguageConfig(new LanguageConfig(language));
+
+      mainController.clearSidebar(mainController);
+      mainController.initializeSidebar(mainController);
+
     });
 
     this.getChildren().addAll(changeLanguageText, languageDropdown);

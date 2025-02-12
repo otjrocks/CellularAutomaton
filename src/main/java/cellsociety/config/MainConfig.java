@@ -3,12 +3,30 @@ package cellsociety.config;
 import java.util.ResourceBundle;
 
 public class MainConfig {
-
   // Language configuration
+  public static LanguageConfig getLanguageConfig() {
+    return languageConfig;
+  }
+
+  public static void setLanguageConfig(LanguageConfig config) {
+    languageConfig = config;
+    MESSAGES = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + config.getLanguage());
+  }
+
+  // Dynamic getter for the ResourceBundle
+  public static ResourceBundle getMessage() {
+    return MESSAGES;
+  }
+
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
-  public static final String CURRENT_LANGUAGE = "English";
+  private static final String DEFAULT_LANGUAGE = "English";
+
+  private static LanguageConfig languageConfig = new LanguageConfig(DEFAULT_LANGUAGE);
+
+  public static final String CURRENT_LANGUAGE = DEFAULT_LANGUAGE;
   public static final String LANGUAGE_PATH = LANGUAGE_FILE_PATH + CURRENT_LANGUAGE;
-  public static final ResourceBundle MESSAGES = ResourceBundle.getBundle(LANGUAGE_PATH);
+
+  public static ResourceBundle MESSAGES = ResourceBundle.getBundle(LANGUAGE_PATH);
 
   public static final String TITLE = MESSAGES.getString("TITLE");
   public static final int WIDTH = 1400;

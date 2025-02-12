@@ -9,6 +9,8 @@ import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
+import cellsociety.Main;
+import cellsociety.config.MainConfig;
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.Simulation;
@@ -18,6 +20,7 @@ import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
