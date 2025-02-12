@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
@@ -38,10 +38,10 @@ class WaTorWorldRulesTest {
 
     grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
 
-    List<CellStateUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
     boolean fishMoved = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getRow() == 2 && update.getCol() == 3 &&
           update.getState() == WaTorWorldRules.State.FISH.getValue()) {
         fishMoved = true;
@@ -60,10 +60,10 @@ class WaTorWorldRulesTest {
     Cell fish = new WaTorCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
     grid.addCell(fish);
 
-    List<CellStateUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
     boolean fishEaten = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getRow() == 2 && update.getCol() == 3 &&
           update.getState() == State.SHARK.getValue()) {
         fishEaten = true;
@@ -78,10 +78,10 @@ class WaTorWorldRulesTest {
     Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
     grid.addCell(shark);
 
-    List<CellStateUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
     boolean sharkDied = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getRow() == 3 && update.getCol() == 3 &&
           update.getState() == WaTorWorldRules.State.EMPTY.getValue()) {
         sharkDied = true;
@@ -99,10 +99,10 @@ class WaTorWorldRulesTest {
 
     grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
 
-    List<CellStateUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
     boolean sharkMoved = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getRow() == 3 && update.getCol() == 4 &&
           update.getState() == WaTorWorldRules.State.SHARK.getValue()) {
         sharkMoved = true;

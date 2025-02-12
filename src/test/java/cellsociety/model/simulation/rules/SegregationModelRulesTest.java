@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.awt.geom.Point2D;
 
 
 class SegregationModelRulesTest {
@@ -111,10 +110,10 @@ class SegregationModelRulesTest {
     grid.updateCell(new DefaultCell(1, new Point2D.Double(0, 1)));
     grid.updateCell(new DefaultCell(2, new Point2D.Double(1, 0)));
 
-    List<CellStateUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
 
     boolean moved = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getState() == -1) {
         moved = true;
         break;
@@ -136,10 +135,10 @@ class SegregationModelRulesTest {
     grid.updateCell(new DefaultCell(1, new Point2D.Double(0, 0))); // Only one cell, should be unsatisfied
     grid.updateCell(new DefaultCell(0, new Point2D.Double(1, 1))); // Empty cell for movement
 
-    List<CellStateUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
 
     boolean cellMoved = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getState() == 1 && !(update.getRow() == 0) || !(update.getCol() == 0)) {
         cellMoved = true;
         break;
@@ -153,7 +152,7 @@ class SegregationModelRulesTest {
   //needed help with ChatGPT on this one
   @Test
   void testMoveCellToEmptyLocationIfAvailable() {
-    List<CellStateUpdate> updates = new ArrayList<>();
+    List<CellUpdate> updates = new ArrayList<>();
     List<Cell> emptyCells = new ArrayList<>();
 
     Cell movingCell = new DefaultCell(1, new Point2D.Double(2, 2));
@@ -167,7 +166,7 @@ class SegregationModelRulesTest {
 
     boolean cellMoved = false;
     boolean oldLocationEmpty = false;
-    for (CellStateUpdate update : updates) {
+    for (CellUpdate update : updates) {
       if (update.getRow() == 3 && update.getCol() == 3 && update.getState() == 1) {
         cellMoved = true;
       }

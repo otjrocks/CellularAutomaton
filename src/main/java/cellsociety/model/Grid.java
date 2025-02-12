@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
 
 /**
@@ -110,10 +110,10 @@ public class Grid {
    * @param simulation: The simulation you which to use to update the grid
    * @return The cell state updates that have occurred when the grid was updated
    */
-  public List<CellStateUpdate> updateGrid(Simulation simulation) {
-    List<CellStateUpdate> nextStates = simulation.rules().getNextStatesForAllCells(this);
-    for (CellStateUpdate nextState : nextStates) {
-      setState(nextState.getRow(), nextState.getCol(), nextState.getState(), simulation);
+  public List<CellUpdate> updateGrid(Simulation simulation) {
+    List<CellUpdate> nextStates = simulation.rules().getNextStatesForAllCells(this);
+    for (CellUpdate nextState : nextStates) {
+      updateCell(nextState.getNextCell());
     }
     return nextStates;
   }
