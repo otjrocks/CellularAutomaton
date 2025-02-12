@@ -82,7 +82,6 @@ public abstract class CreateDefaultSimView extends VBox {
   private void addAllParameters(String simulationName) {
     parametersControlBox.getChildren().clear();
     myParameterTextFields.clear();
-    SimulationConfig.getParameters(simulationName);
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
       Text parametersTitle = new Text(MESSAGES.getString("CUSTOMIZE_PARAMETERS_TITLE"));
       parametersTitle.getStyleClass().add("secondary-title");
@@ -171,9 +170,8 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * Handles the initialization of the different parameter inputs
    *
-   * @param parametersControlBox - the parameter inputs
    */
-  protected void initializeParametersControl(VBox parametersControlBox) {
+  protected void initializeParametersControl() {
     parametersControlBox.setAlignment(Pos.CENTER_LEFT);
     parametersControlBox.setSpacing(5);
     addAllParameters(simulationSelector.getValue());

@@ -53,9 +53,6 @@ public class SplashScreenView extends CreateDefaultSimView {
 
     this.getChildren().addAll(title, description, instructions);
 
-    VBox parametersControlBox = new VBox();
-    parametersControlBox.setSpacing(ELEMENT_SPACING);
-
     createLanguageDropdown();
     createFileChooserButton();
 
@@ -63,7 +60,7 @@ public class SplashScreenView extends CreateDefaultSimView {
     createRowControl();
     createColControl();
     createSimulationMetaDataTextFields();
-    initializeParametersControl(parametersControlBox);
+    initializeParametersControl();
 
     createNewSimulationButton();
 
