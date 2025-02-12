@@ -2,8 +2,6 @@ package cellsociety.controller;
 
 import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import cellsociety.view.config.FileChooserConfig;
@@ -48,6 +46,7 @@ public class MainController {
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
+  private boolean gridLinesEnabled = true;
 
   /**
    * Initialize the MainController
@@ -240,6 +239,7 @@ public class MainController {
     mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
         myGrid.getCols(),
         myGrid, mySimulation, this);
+    mySimulationView.setGridLines(gridLinesEnabled);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
 
@@ -279,4 +279,12 @@ public class MainController {
     mySidebarView.clearSidebar();
   }
 
+  /**
+   * Handle whether grid lines should be shown or not
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    gridLinesEnabled = selected;
+    mySimulationView.setGridLines(selected);
+  }
 }

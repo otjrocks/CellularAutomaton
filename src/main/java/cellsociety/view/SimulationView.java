@@ -17,24 +17,31 @@ import javafx.scene.paint.Paint;
  * @author Owen Jennings
  */
 public class SimulationView extends Group {
+
   private final GridView myGridView;
   private final Simulation mySimulation;
 
   /**
    * Create a simulation view
    *
-   * @param width:  width of simulation view
-   * @param height: height of simulation view
-   * @param grid: initial grid of the simulation view
+   * @param width:      width of simulation view
+   * @param height:     height of simulation view
+   * @param grid:       initial grid of the simulation view
    * @param simulation: initial simulation of the simulation view
    */
-  public SimulationView(int width, int height, int numRows, int numCols, Grid grid, Simulation simulation, MainController mainController) {
+  public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
+      Simulation simulation, MainController mainController) {
     myGridView = new GridView(width, height, numRows, numCols, mainController);
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
     getChildren().add(myGridView);
   }
 
+  /**
+   * Perform a single step of the animation
+   * @param grid: Grid of the simulation
+   * @param simulation: Simulation that contains rules for updating
+   */
   public void step(Grid grid, Simulation simulation) {
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
     for (CellUpdate stateUpdate : stateUpdates) {
@@ -59,5 +66,12 @@ public class SimulationView extends Group {
     }
   }
 
-
+  /**
+   * Handle whether grid lines should be shown or not
+   *
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    myGridView.setGridLines(selected);
+  }
 }
