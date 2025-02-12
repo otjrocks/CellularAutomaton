@@ -26,15 +26,9 @@ public class SplashScreenView extends VBox {
   public SplashScreenView(AlertField myAlertField, MainController mainController) {
     this.myAlertField = myAlertField;
     this.mainController = mainController;
-    this.createDefaultSimView = new CreateDefaultSimView(mainController) {
+    this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
       @Override
-      protected void flashErrorMessage(String message) {
-        myAlertField.flash(message, true);
-      }
-
-      @Override
-      public void handleNewSimulationCreation() {
-        super.handleNewSimulationCreation();
+      public void handleAdditionalButtonActions() {
         mainController.hideSplashScreen();
       }
     };

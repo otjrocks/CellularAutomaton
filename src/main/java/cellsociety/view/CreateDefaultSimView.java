@@ -11,6 +11,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public abstract class CreateDefaultSimView extends VBox {
+public class CreateDefaultSimView extends VBox {
 
   private final MainController mainController;
   private ComboBox<String> simulationSelector;
@@ -38,16 +39,18 @@ public abstract class CreateDefaultSimView extends VBox {
   private int myNumCols;
   private IntegerField rowField;
   private IntegerField colField;
+  private final AlertField myAlertField;
 
 
   private static final int DEFAULT_NUM_CELLS = 25;
 
-  public CreateDefaultSimView(MainController mainController) {
+  public CreateDefaultSimView(MainController mainController, AlertField alertField) {
     this.mainController = mainController;
     this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
     this.myNumRows = DEFAULT_NUM_CELLS;
     this.myNumCols = DEFAULT_NUM_CELLS;
+    this.myAlertField = alertField;
     initializeForm();
   }
 
@@ -59,13 +62,6 @@ public abstract class CreateDefaultSimView extends VBox {
     initializeParametersControl();
     createNewSimulationButton();
   }
-
-  /**
-   * Abstracted method for error showing
-   *
-   * @param message - the error message
-   */
-  protected abstract void flashErrorMessage(String message);
 
   /**
    * Handles the simulation selection process
@@ -231,7 +227,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * @return - whether the input fields were valid inputs
    */
-  private boolean runValidationTests() {
+  private boolean checkHasInvalidInput() {
     if (!validateRows(myNumRows) || !validateCols(myNumCols)) {
       return true;
     }
@@ -244,7 +240,7 @@ public abstract class CreateDefaultSimView extends VBox {
 
   private boolean checkInvalidText(String text) {
     if (text.isEmpty()) {
-      flashErrorMessage(getMessages().getString("EMPTY_FIELD"));
+      myAlertField.flash(getMessages().getString("EMPTY_FIELD"), true);
       return true;
     }
     return false;
@@ -253,8 +249,8 @@ public abstract class CreateDefaultSimView extends VBox {
   private boolean validateRows(int numRows) {
     boolean valid = numRows >= MIN_GRID_NUM_ROWS && numRows <= MAX_GRID_NUM_ROWS;
     if (!valid) {
-      flashErrorMessage(String.format(
-          getMessages().getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
+      myAlertField.flash(String.format(
+          getMessages().getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS), true);
       return false;
     }
     return true;
@@ -263,8 +259,8 @@ public abstract class CreateDefaultSimView extends VBox {
   private boolean validateCols(int numCols) {
     boolean valid = numCols >= MIN_GRID_NUM_COLS && numCols <= MAX_GRID_NUM_COLS;
     if (!valid) {
-      flashErrorMessage(String.format(
-          getMessages().getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
+      myAlertField.flash(String.format(
+          getMessages().getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS), true);
       return false;
     }
     return true;
@@ -274,7 +270,7 @@ public abstract class CreateDefaultSimView extends VBox {
    * Begin the process for creating a simulation by making and validating the parameters then
    * creating solution
    */
-  private void createNewSimulation() {
+  private void createNewSimulation() throws IllegalArgumentException {
     SimulationMetaData metaData = createMetaData();
 
     Map<String, String> parameters = new HashMap<>();
@@ -293,15 +289,13 @@ public abstract class CreateDefaultSimView extends VBox {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
-      flashErrorMessage(String.format(getMessages().getString("NEW_SIMULATION_CREATED")));
-    } catch (IllegalArgumentException e) {
-      flashErrorMessage(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")));
-      flashErrorMessage(String.format((e.getMessage())));
+      myAlertField.flash(String.format(getMessages().getString("NEW_SIMULATION_CREATED")), false);
     } catch (Exception e) {
-      flashErrorMessage(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")));
+      myAlertField.flash(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")), true);
       if (VERBOSE_ERROR_MESSAGES) {
-        flashErrorMessage(String.format((e.getMessage())));
+        myAlertField.flash(String.format((e.getMessage())), true);
       }
+      throw e;
     }
   }
 
@@ -309,21 +303,26 @@ public abstract class CreateDefaultSimView extends VBox {
     Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
 
     createSimButton.setOnAction(event -> {
-      if (runValidationTests()) {
+      if (checkHasInvalidInput()) {
         return;
       }
-      handleNewSimulationCreation();
+      try {
+        createNewSimulation();
+      } catch (IllegalArgumentException e) {
+        System.out.println("test");
+        return;
+      }
+      handleAdditionalButtonActions();
     });
     this.getChildren().add(createSimButton);
   }
 
 
   /**
-   * Handle the event when new simulation button is clicked
+   * Handle any addition button actions that you want to occur when the button is clicked and the
+   * simulation is created successfully
    */
-  protected void handleNewSimulationCreation() {
-    createNewSimulation();
-  }
+  protected void handleAdditionalButtonActions() throws IllegalArgumentException {}
 
 }
 

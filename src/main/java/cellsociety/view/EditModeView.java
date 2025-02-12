@@ -32,12 +32,8 @@ public class EditModeView extends VBox {
     this.myMainController = mainController;
     this.myAlertField = alertField;
     createHeader();
-    CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController) {
-      @Override
-      protected void flashErrorMessage(String message) {
-        myAlertField.flash(message, false);
-      }
-    };
+    CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController,
+        myAlertField);
     this.getChildren().addAll(createDefaultSimView);
   }
 
