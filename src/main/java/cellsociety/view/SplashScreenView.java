@@ -20,10 +20,24 @@ public class SplashScreenView extends VBox {
   private ComboBox<String> languageDropdown;
   private final MainController mainController;
 
+  private final CreateDefaultSimView createDefaultSimView;
+
 
   public SplashScreenView(AlertField myAlertField, MainController mainController) {
     this.myAlertField = myAlertField;
     this.mainController = mainController;
+    this.createDefaultSimView = new CreateDefaultSimView(mainController) {
+      @Override
+      protected void flashErrorMessage(String message) {
+        myAlertField.flash(message, true);
+      }
+
+      @Override
+      public void handleNewSimulationCreation() {
+        super.handleNewSimulationCreation();
+        mainController.hideSplashScreen();
+      }
+    };
 
     initializeSplashScreen();
   }
@@ -34,18 +48,10 @@ public class SplashScreenView extends VBox {
     Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
     Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
 
-    this.getChildren().addAll(title, description, instructions);
+    this.getChildren().addAll(title, description, instructions, createDefaultSimView, myAlertField);
 
     createLanguageDropdown();
     createFileChooserButton();
-
-//    createSimulationTypeControl();
-//    createRowControl();
-//    createColControl();
-//    createSimulationMetaDataTextFields();
-//    initializeParametersControl();
-
-    createNewSimulationButton();
 
   }
 
@@ -73,8 +79,6 @@ public class SplashScreenView extends VBox {
       String language = languageDropdown.getValue();
       MainConfig.setLanguage(language);
 
-      mainController.clearSidebar(mainController);
-      mainController.initializeSidebar(mainController);
 
     });
 
@@ -119,15 +123,5 @@ public class SplashScreenView extends VBox {
     this.getChildren().addAll(chooseFileText, myChooseFileButton);
   }
 
-  private void createNewSimulationButton() {
-    Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
-
-    createSimButton.setOnAction(event -> {
-//      if (runValidationTests()) return;
-
-//      createNewSimulation();
-    });
-    this.getChildren().add(createSimButton);
-  }
 
 }

@@ -44,7 +44,7 @@ public class MainController {
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
   private Simulation mySimulation;
-  private SplashScreenView mySplashScreenView;
+  private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
@@ -64,6 +64,9 @@ public class MainController {
     myRoot = root;
     mySplashScreenView = new SplashScreenView(new AlertField(), this);
     root.getChildren().add(mySplashScreenView);
+    createMainContainerAndView();
+    initializeSimulationAnimation();
+    myRoot.getChildren().remove(mySidebarView);
   }
 
   /**
@@ -71,8 +74,8 @@ public class MainController {
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySplashScreenView);
-    createMainContainerAndView();
-    initializeSimulationAnimation();
+    myRoot.getChildren().add(myMainViewContainer);
+    myRoot.getChildren().add(mySidebarView);
   }
 
   /**
@@ -153,24 +156,6 @@ public class MainController {
   }
 
   /**
-   * Get rows in the grid
-   *
-   * @return int number of rows
-   */
-  public int getGridRows() {
-    return myGrid.getRows();
-  }
-
-  /**
-   * Get columns in the grid
-   *
-   * @return int number of columns
-   */
-  public int getGridCols() {
-    return myGrid.getCols();
-  }
-
-  /**
    * Get whether the grid animation is currently playing
    *
    * @return true if the animation is playing, false otherwise
@@ -185,7 +170,6 @@ public class MainController {
     mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
-    createOrUpdateSidebar();
   }
 
   private void initializeGridWithCells() {
@@ -252,7 +236,7 @@ public class MainController {
 
   private void createOrUpdateSidebar() {
     if (mySidebarView == null) {
-      initializeSidebar(this);
+      initializeSidebar();
     } else {
       mySidebarView.update();
     }
@@ -288,12 +272,11 @@ public class MainController {
     myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
     myMainViewContainer.setAlignment(Pos.CENTER);
     updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    myRoot.getChildren().add(myMainViewContainer);
   }
 
-  public void initializeSidebar(MainController controller) {
+  public void initializeSidebar() {
     mySidebarView = new SidebarView(SIDEBAR_WIDTH,
-        GRID_HEIGHT - (2 * MARGIN), controller);
+        GRID_HEIGHT - (2 * MARGIN), this);
     mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);

@@ -18,6 +18,7 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -45,8 +46,18 @@ public abstract class CreateDefaultSimView extends VBox {
     this.mainController = mainController;
     this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
-    this.myNumRows = mainController.getGridRows();
-    this.myNumCols = mainController.getGridCols();
+    this.myNumRows = DEFAULT_NUM_CELLS;
+    this.myNumCols = DEFAULT_NUM_CELLS;
+    initializeForm();
+  }
+
+  private void initializeForm() {
+    createSimulationTypeControl();
+    createRowControl();
+    createColControl();
+    createSimulationMetaDataTextFields();
+    initializeParametersControl();
+    createNewSimulationButton();
   }
 
   /**
@@ -59,7 +70,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * Handles the simulation selection process
    */
-  protected void createSimulationTypeControl() {
+  private void createSimulationTypeControl() {
     Text createSimButtonText = new Text(getMessages().getString("NEW_SIM_BUTTON_TEXT"));
 
     ObservableList<String> options =
@@ -107,7 +118,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * Handles the row input for the simulation
    */
-  protected void createRowControl() {
+  private void createRowControl() {
     rowField = new IntegerField();
     rowField.setText(String.valueOf(DEFAULT_NUM_CELLS));
     rowField.textProperty()
@@ -122,7 +133,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * Handles the col input for the simulation
    */
-  protected void createColControl() {
+  private void createColControl() {
     colField = new IntegerField();
     colField.setText(Integer.toString(DEFAULT_NUM_CELLS));
     colField.textProperty()
@@ -145,7 +156,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * Handles the text metadata for the simulation
    */
-  protected void createSimulationMetaDataTextFields() {
+  private void createSimulationMetaDataTextFields() {
     myNameField = createTextField(getMessages().getString("NAME_LABEL"),
         getMessages().getString("DEFAULT_NAME"), this);
     myAuthorField = createTextField(getMessages().getString("AUTHOR_LABEL"),
@@ -168,9 +179,8 @@ public abstract class CreateDefaultSimView extends VBox {
 
   /**
    * Handles the initialization of the different parameter inputs
-   *
    */
-  protected void initializeParametersControl() {
+  private void initializeParametersControl() {
     parametersControlBox.setAlignment(Pos.CENTER_LEFT);
     parametersControlBox.setSpacing(5);
     addAllParameters(simulationSelector.getValue());
@@ -189,28 +199,28 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * @return - the number of grid rows from the input
    */
-  protected int getRowCount() {
+  private int getRowCount() {
     return parseIntegerField(rowField, DEFAULT_NUM_CELLS);
   }
 
   /**
    * @return - the number of grid cols from the input
    */
-  protected int getColCount() {
+  private int getColCount() {
     return parseIntegerField(colField, DEFAULT_NUM_CELLS);
   }
 
   /**
    * @return - the simulation selected
    */
-  protected String getSelectedSimulation() {
+  private String getSelectedSimulation() {
     return simulationSelector.getValue();
   }
 
   /**
    * Resets the fields back to nothing
    */
-  protected void resetFields() {
+  private void resetFields() {
     rowField.setText(Integer.toString(DEFAULT_NUM_CELLS));
     colField.setText(Integer.toString(DEFAULT_NUM_CELLS));
     myNameField.clear();
@@ -221,7 +231,7 @@ public abstract class CreateDefaultSimView extends VBox {
   /**
    * @return - whether the input fields were valid inputs
    */
-  protected boolean runValidationTests() {
+  private boolean runValidationTests() {
     if (!validateRows(myNumRows) || !validateCols(myNumCols)) {
       return true;
     }
@@ -264,11 +274,11 @@ public abstract class CreateDefaultSimView extends VBox {
    * Begin the process for creating a simulation by making and validating the parameters then
    * creating solution
    */
-  protected void createNewSimulation() {
+  private void createNewSimulation() {
     SimulationMetaData metaData = createMetaData();
 
     Map<String, String> parameters = new HashMap<>();
-    for (String parameter: myParameterTextFields.keySet()) {
+    for (String parameter : myParameterTextFields.keySet()) {
       parameters.put(parameter, myParameterTextFields.get(parameter).getText());
     }
     attemptCreatingNewSimulation(metaData, parameters);
@@ -278,7 +288,7 @@ public abstract class CreateDefaultSimView extends VBox {
    * @param metaData   - the metadata of the Simulation attempting to be created
    * @param parameters - the parameters of the Simulation
    */
-  protected void attemptCreatingNewSimulation(SimulationMetaData metaData,
+  private void attemptCreatingNewSimulation(SimulationMetaData metaData,
       Map<String, String> parameters) {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
@@ -295,6 +305,25 @@ public abstract class CreateDefaultSimView extends VBox {
     }
   }
 
+  private void createNewSimulationButton() {
+    Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
+
+    createSimButton.setOnAction(event -> {
+      if (runValidationTests()) {
+        return;
+      }
+      handleNewSimulationCreation();
+    });
+    this.getChildren().add(createSimButton);
+  }
+
+
+  /**
+   * Handle the event when new simulation button is clicked
+   */
+  protected void handleNewSimulationCreation() {
+    createNewSimulation();
+  }
 
 }
 
