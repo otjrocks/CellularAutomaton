@@ -1,5 +1,8 @@
 package cellsociety.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MESSAGES;

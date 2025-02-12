@@ -1,15 +1,17 @@
 package cellsociety.model.cell;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 /**
- * An abstract Cell model that allows for a state stored in an integer value
+ * An abstract Cell model that allows for a state stored in an integer value The Cell class is
+ * immutable, so that attributes cannot be improperly updated.
  *
  * @author Owen Jennings
  */
 public abstract class Cell {
 
-  private int myState;
+  private final int myState;
   private final Point2D myLocation;
 
   /**
@@ -33,7 +35,8 @@ public abstract class Cell {
       throw new IllegalArgumentException(
           "Invalid cell location, location must be represented as a positive integer");
     }
-    myLocation = location;
+    // create new Point for location to ensure point is immutable in the future
+    myLocation = new Double(location.getX(), location.getY());
   }
 
   /**
@@ -46,21 +49,12 @@ public abstract class Cell {
   }
 
   /**
-   * Modify the state of the current cell.
-   *
-   * @param newState: integer representation of the state you want the cell to have.
-   */
-  public void setState(int newState) {
-    myState = newState;
-  }
-
-  /**
-   * Get the location of a cell
+   * Get the location of a cell.
    *
    * @return The Point2D representation of a Cell's location
    */
   public Point2D getLocation() {
-    return myLocation;
+    return (Point2D) myLocation.clone();  // provide user with clone of location to prevent mutation
   }
 
   /**

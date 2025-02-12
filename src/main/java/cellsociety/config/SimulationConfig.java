@@ -1,5 +1,12 @@
 package cellsociety.config;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static cellsociety.config.MainConfig.MESSAGES;
 
 import cellsociety.model.cell.Cell;
@@ -7,21 +14,13 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.model.simulation.rules.PercolationRules;
 import cellsociety.model.simulation.rules.SegregationModelRules;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
 import cellsociety.model.simulation.rules.WaTorWorldRules;
-import cellsociety.model.simulation.types.GameOfLife;
-import cellsociety.model.simulation.types.Percolation;
-import cellsociety.model.simulation.types.SegregationModel;
-import cellsociety.model.simulation.types.SpreadingOfFire;
-import cellsociety.model.simulation.types.WaTorWorld;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * Store all information pertaining to simulations
@@ -86,19 +85,35 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, String> parameters) {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
-    return switch (simulationName) {
-      case "Percolation" -> new Percolation(new PercolationRules(), simulationMetaData);
-      case "Segregation" ->
-          new SegregationModel(new SegregationModelRules(parameters), simulationMetaData);
-      case "SpreadingOfFire" ->
-          new SpreadingOfFire(new SpreadingOfFireRules(parameters), simulationMetaData);
-      case "WaTorWorld" -> new WaTorWorld(new WaTorWorldRules(parameters), simulationMetaData);
-      default ->
-          new GameOfLife(new GameOfLifeRules(), simulationMetaData); // default game is GameOfLife
-    };
+    if (simulationName.equals("GameOfLife")) {
+      return new Simulation(new GameOfLifeRules(parameters), simulationMetaData);
+    }
+    return new Simulation(getRules(simulationName, convertMap(parameters)), simulationMetaData);
+  }
+
+  private static SimulationRules getRules(String simulationName,
+      Map<String, java.lang.Double> parameters) {
+    validateSimulation(simulationName);
+    switch (simulationName) {
+      case "Percolation" -> {
+        return new PercolationRules();
+      }
+      case "Segregation" -> {
+        return new SegregationModelRules(parameters);
+      }
+      case "SpreadingOfFire" -> {
+        return new SpreadingOfFireRules();
+      }
+      case "WaTorWorld" -> {
+        return new WaTorWorldRules(parameters);
+      }
+      default -> { // default is game of life
+        return new GameOfLifeRules();
+      }
+    }
   }
 
   /**
@@ -133,7 +148,7 @@ public class SimulationConfig {
   }
 
   private static void validateParameters(String simulationName,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, String> parameters) {
     List<String> requiredParameters = getParameters(simulationName);
     for (String parameter : requiredParameters) {
       if (parameters == null) {
@@ -144,8 +159,23 @@ public class SimulationConfig {
         throw new IllegalArgumentException(
             String.format(MESSAGES.getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
       }
-      validateParameterRange(parameter, parameters.get(parameter));
+      validateParameterRange(parameter, java.lang.Double.valueOf(parameters.get(parameter)));
     }
+  }
+
+  private static Map<String, java.lang.Double> convertMap(Map<String, String> stringMap) {
+    Map<String, java.lang.Double> paramMap = new HashMap<>();
+    for (String key : stringMap.keySet()) {
+      String value = stringMap.get(key);
+      if (value != null) {
+        try {
+          paramMap.put(key, java.lang.Double.valueOf(value));
+        } catch (NumberFormatException e) {
+          System.err.println("Warning: Invalid number format for key: " + key);
+        }
+      }
+    }
+    return paramMap;
   }
 
   // ensure that a specified parameter is within a valid range for the parameter

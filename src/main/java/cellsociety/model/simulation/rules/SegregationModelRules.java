@@ -2,7 +2,8 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 public class SegregationModelRules extends SimulationRules {
 
-  private final Random random = new Random();
+  private final Random RANDOM = new Random();
 
   public SegregationModelRules(Map<String, Double> myParameters) {
     if (myParameters == null || myParameters.isEmpty()) {
@@ -92,8 +93,13 @@ public class SegregationModelRules extends SimulationRules {
   }
 
   @Override
-  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
-    List<CellStateUpdate> nextStates = new ArrayList<>();
+  public int getNumberStates() {
+    return 3;
+  }
+
+  @Override
+  public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellUpdate> nextStates = new ArrayList<>();
     List<Cell> emptyCells = new ArrayList<>();
     getEmptyCells(grid, emptyCells);
 
@@ -107,7 +113,8 @@ public class SegregationModelRules extends SimulationRules {
       if (nextState == -1) {
         unsatisfiedCells.add(cell);
       } else {
-        nextStates.add(new CellStateUpdate(cell.getLocation(), nextState));
+        Cell newCell = new DefaultCell(nextState, cell.getLocation());
+        nextStates.add(new CellUpdate(cell.getLocation(), newCell));
       }
     }
 
@@ -119,15 +126,20 @@ public class SegregationModelRules extends SimulationRules {
 
 
   void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells,
-      List<CellStateUpdate> nextStates) {
+      List<CellUpdate> nextStates) {
     if (!emptyCells.isEmpty()) {
-      Cell newCell = getAndRemoveRandomEmptyCell(emptyCells);
-      nextStates.add(new CellStateUpdate(newCell.getLocation(), unsatisfiedCell.getState()));
-      nextStates.add(new CellStateUpdate(unsatisfiedCell.getLocation(), 0));
+      Cell newCellHome = getAndRemoveRandomEmptyCell(emptyCells);
+      Cell unsatisfiedCellWithUpdatedLocation = new DefaultCell(unsatisfiedCell.getState(),
+          newCellHome.getLocation());
+      nextStates.add(new CellUpdate(newCellHome.getLocation(), unsatisfiedCellWithUpdatedLocation));
+      nextStates.add(new CellUpdate(unsatisfiedCell.getLocation(),
+          new DefaultCell(0, unsatisfiedCell.getLocation())));
       emptyCells.add(unsatisfiedCell);
     } else {
+      Cell newUnsatisfiedCell = new DefaultCell(unsatisfiedCell.getState(),
+          unsatisfiedCell.getLocation());
       nextStates.add(
-          new CellStateUpdate(unsatisfiedCell.getLocation(), unsatisfiedCell.getState()));
+          new CellUpdate(unsatisfiedCell.getLocation(), newUnsatisfiedCell));
     }
   }
 
@@ -150,6 +162,6 @@ public class SegregationModelRules extends SimulationRules {
   }
 
   Cell getAndRemoveRandomEmptyCell(List<Cell> emptyCells) {
-    return emptyCells.remove(random.nextInt(emptyCells.size()));
+    return emptyCells.remove(RANDOM.nextInt(emptyCells.size()));
   }
 }

@@ -1,10 +1,11 @@
 package cellsociety.view;
 
 import cellsociety.controller.MainController;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.Grid;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.StateInfo;
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -35,10 +36,10 @@ public class SimulationView extends Group {
   }
 
   public void step(Grid grid, Simulation simulation) {
-    List<CellStateUpdate> stateUpdates = grid.updateGrid(simulation);
-    for (CellStateUpdate stateUpdate : stateUpdates) {
+    List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
+    for (CellUpdate stateUpdate : stateUpdates) {
       int nextState = stateUpdate.getState();
-      StateInfo nextStateInfo = simulation.getStateInfo(nextState);
+      StateInfo nextStateInfo = StateDisplayConfig.getStateInfo(mySimulation, nextState);
       Paint nextColor = nextStateInfo.color();
       myGridView.setColor(stateUpdate.getRow(), stateUpdate.getCol(), nextColor);
     }
@@ -52,7 +53,7 @@ public class SimulationView extends Group {
     for (int row = 0; row < numRows; row++) {
       for (int col = 0; col < numCols; col++) {
         int nextState = grid.getCell(row, col).getState();
-        Color nextColor = mySimulation.getStateInfo(nextState).color();
+        Color nextColor = StateDisplayConfig.getStateInfo(mySimulation, nextState).color();
         myGridView.setColor(row, col, nextColor);
       }
     }

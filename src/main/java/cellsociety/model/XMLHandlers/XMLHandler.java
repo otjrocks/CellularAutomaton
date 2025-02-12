@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,6 +20,8 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * Allows the program to collect data from an XML configuration file and store the associated date
@@ -28,16 +29,12 @@ import cellsociety.model.simulation.SimulationMetaData;
  * @author Troy Ludwig
  */
 public class XMLHandler {
-    private String myType;
-    private String myTitle;
-    private String myAuthor;
-    private String myDescription;
     private int myGridHeight;
     private int myGridWidth;
     private Grid myGrid;
     private Simulation mySim;
     private SimulationMetaData mySimData;
-    private Map<String, Double> myParameters;
+    private Map<String, String> myParameters;
 
     /**
     * XMLHandler constructor for referencing data
@@ -55,8 +52,6 @@ public class XMLHandler {
     *
     * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
     *                     represented as a String
-    * @param colors: An arraylist of colors to pass as options for SimulationData
-    *                Just a temporary variable until I can update the XML file tags
     */
     private void parseXMLFile(String xmlFilePath) {
         try {
@@ -66,32 +61,67 @@ public class XMLHandler {
             Document doc = builder.parse(xmlFile);
             doc.getDocumentElement().normalize();
 
-            myType = doc.getElementsByTagName("Type").item(0).getTextContent();
-            myTitle = doc.getElementsByTagName("Title").item(0).getTextContent();
-            myAuthor = doc.getElementsByTagName("Author").item(0).getTextContent();
-            myDescription = doc.getElementsByTagName("Description").item(0).getTextContent();
-
-            mySimData = new SimulationMetaData(myType, myTitle, myAuthor, myDescription);
-
-            Element gridDimensions = (Element) doc.getElementsByTagName("GridDimensions").item(0);
-            myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
-            myGridWidth = Integer.parseInt(gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
-
-            myGrid = new Grid(myGridHeight, myGridWidth);
-            NodeList rows = doc.getElementsByTagName("Row");
-            for (int i = 0; i < rows.getLength(); i++) {
-                String[] rowValues = rows.item(i).getTextContent().split(",");
-                for (int j = 0; j < rowValues.length; j++) {
-                    int state = Integer.parseInt(rowValues[j]);
-                    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, myType);
-                    myGrid.addCell(holdingCell);
-                }
-            }
-
+            parseSimData(doc);
+            parseDimensions(doc);
+            parseGrid(doc);
             parseParameters(doc);
             setSim();
 
-        } catch (IOException | NumberFormatException | ParserConfigurationException | DOMException | SAXException e) {
+        } catch (SAXException e) {
+            displayErrorMessage("Warning: Malformed XML file. Please check the formatting.");
+        } catch (ParserConfigurationException e) {
+            displayErrorMessage("Warning: XML parser configuration issue.");
+        } catch (IOException e) {
+            displayErrorMessage("Warning: Unable to read the file. Check permissions and file path.");
+        } catch (NumberFormatException e) {
+            displayErrorMessage("Warning: Incorrect data format found in XML. Expected numerical values.");
+        } catch (NullPointerException e) {
+            displayErrorMessage("Warning: Missing required data field. Please add required fields to XML.");
+        } catch (Exception e) {
+            displayErrorMessage("Warning: Unexpected issue while parsing the XML file.");
+        }
+    }
+
+    private void parseSimData(Document data){
+        String type = data.getElementsByTagName("Type").item(0).getTextContent();
+        String title = data.getElementsByTagName("Title").item(0).getTextContent();
+        String author = data.getElementsByTagName("Author").item(0).getTextContent();
+        String description = data.getElementsByTagName("Description").item(0).getTextContent();
+        mySimData = new SimulationMetaData(type, title, author, description);
+    }
+
+    private void parseDimensions(Document dimDoc){
+        Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
+        myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
+        myGridWidth = Integer.parseInt(gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
+    }
+
+    private void parseGrid(Document gridDoc){
+        myGrid = new Grid(myGridHeight, myGridWidth);
+        NodeList rows = gridDoc.getElementsByTagName("Row");
+        if (rows.getLength() > myGridHeight){
+            displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
+        }
+        else{
+            for (int i = 0; i < rows.getLength(); i++) {
+                String[] rowValues = rows.item(i).getTextContent().split(",");
+                if (rowValues.length > myGridWidth){
+                    displayErrorMessage("Warning: Initial grid outside of defined dimensions.");
+                    break;
+                }
+                else{
+                    for (int j = 0; j < rowValues.length; j++) {
+                        int state = Integer.parseInt(rowValues[j]);
+                        if(state != 0 && state != 1 && state != 2){
+                            displayErrorMessage("Invalid numerical state. Check your XML file.");
+                            i = j = 10000;
+                            break;
+                        }
+                        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
+                        myGrid.addCell(holdingCell);
+                    }
+                }
+            }
         }
     }
 
@@ -107,26 +137,39 @@ public class XMLHandler {
             Node param = params.item(0);
             if (param.getNodeType() == Node.ELEMENT_NODE) {
                 Element paramElement = (Element) param;
-
-                checkAndLoadParameter(paramElement, "ignitionWithoutNeighbors");
-                checkAndLoadParameter(paramElement, "growInEmptyCell");
-                checkAndLoadParameter(paramElement, "toleranceThreshold");
-                checkAndLoadParameter(paramElement, "fishReproductionTime");
-                checkAndLoadParameter(paramElement, "sharkReproductionTime");
-                checkAndLoadParameter(paramElement, "sharkEnergyGain");
+                
+                checkAndLoadRulestringParameter(paramElement);
+                checkAndLoadNumericParameter(paramElement, "ignitionWithoutNeighbors");
+                checkAndLoadNumericParameter(paramElement, "growInEmptyCell");
+                checkAndLoadNumericParameter(paramElement, "toleranceThreshold");
+                checkAndLoadNumericParameter(paramElement, "fishReproductionTime");
+                checkAndLoadNumericParameter(paramElement, "sharkReproductionTime");
+                checkAndLoadNumericParameter(paramElement, "sharkEnergyGain");
             }
         }
     }
 
-    private void checkAndLoadParameter(Element paramElement, String paramName){
+    /**
+    * Method that checks an XML file for a parameter with a given name
+    * @param paramElement: element containing all parameters for a given simulation
+    * @param paramName: name of the parameter being checked
+    */
+    private void checkAndLoadNumericParameter(Element paramElement, String paramName){
         if (paramElement.getElementsByTagName(paramName).getLength() > 0) {
             try {
-                double paramValue = Double.parseDouble(paramElement.getElementsByTagName(paramName).item(0).getTextContent());
+                String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
                 myParameters.put(paramName, paramValue);
             } catch (NumberFormatException e) {
                 System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
-                myParameters.put(paramName, 1.0);
+                myParameters.put(paramName, "1.0");
             }
+        }
+    }
+
+    private void checkAndLoadRulestringParameter(Element paramElement){
+        if (paramElement.getElementsByTagName("ruleString").getLength() > 0) {
+            String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+            myParameters.put("ruleString", paramString);
         }
     }
 
@@ -134,35 +177,7 @@ public class XMLHandler {
     * Method that assigns SimRules and Sim based on simulation type
     */
     private void setSim(){
-        mySim = SimulationConfig.getNewSimulation(myType, mySimData, myParameters);
-    }
-
-    /**
-    * Returns type associated with current simulation
-    */
-    public String getType() {
-        return myType;
-    }
-
-    /**
-    * Returns title of current simulation
-    */
-    public String getTitle() {
-        return myTitle;
-    }
-
-    /**
-    * Returns author of current simulation
-    */
-    public String getAuthor() {
-        return myAuthor;
-    }
-
-    /**
-    * Returns description of current simulation
-    */
-    public String getDescription() {
-        return myDescription;
+        mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
     }
 
     /**
@@ -203,7 +218,19 @@ public class XMLHandler {
     /**
     * Returns the current additional simulation parameters
     */
-    public Map<String, Double> getParams(){
+    public Map<String, String> getParams(){
         return myParameters;
     }
+
+    private void displayErrorMessage(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Configuration File Error");
+        alert.setHeaderText("Error Loading Simulation Configuration");
+        alert.setContentText(message);
+        alert.setResizable(true);
+        alert.getDialogPane().setPrefSize(480, 160);
+        
+        alert.showAndWait();
+    }
+
 }

@@ -1,19 +1,31 @@
 package cellsociety.model.simulation.rules;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellStateUpdate;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
 
 public class GameOfLifeRules extends SimulationRules {
 
+  private ArrayList<Integer> birthValues;
+  private ArrayList<Integer> surviveValues;
 
   public GameOfLifeRules() {
-    super();
+    birthValues = new ArrayList<>(Arrays.asList(2, 3));
+    surviveValues = new ArrayList<>(Arrays.asList(3));
   }
 
+  public GameOfLifeRules(Map<String, String> ruleStringMap) {
+    if (ruleStringMap == null || ruleStringMap.isEmpty()) {
+      birthValues = new ArrayList<>(Arrays.asList(3));
+      surviveValues = new ArrayList<>(Arrays.asList(2, 3));
+    } else {
+      initializeBSValues(ruleStringMap);
+    }
+  }
 
   /**
    * @param cell - individual cell from grid
@@ -48,11 +60,38 @@ public class GameOfLifeRules extends SimulationRules {
         aliveNeighbors++;
       }
     }
-    if (aliveNeighbors < 2 || aliveNeighbors > 3) {
+    if (!(surviveValues.contains(aliveNeighbors))) {
       return 0;
-    } else if (aliveNeighbors == 3) {
+    } else if (birthValues.contains(aliveNeighbors)) {
       return 1;
     }
     return cell.getState();
+  }
+
+  private void initializeBSValues(Map<String, String> ruleStringMap) {
+    String rulestring = ruleStringMap.get("ruleString");
+
+    String[] sStrings = rulestring.split("/")[0].split("");
+    String[] bStrings = rulestring.split("/")[1].split("");
+
+    Integer[] sValues = convertStringArray(sStrings);
+    Integer[] bValues = convertStringArray(bStrings);
+
+    surviveValues = new ArrayList(Arrays.asList(sValues));
+    birthValues = new ArrayList(Arrays.asList(bValues));
+  }
+
+  private Integer[] convertStringArray(String[] strings) {
+    Integer[] ints = new Integer[strings.length];
+    for (int i = 0; i < strings.length; i++) {
+      ints[i] = Integer.parseInt(strings[i]);
+      System.out.println(ints[i]);
+    }
+    return ints;
+  }
+
+  @Override
+  public int getNumberStates() {
+    return 2;
   }
 }

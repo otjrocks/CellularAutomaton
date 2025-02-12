@@ -1,15 +1,17 @@
 package cellsociety.model.simulation;
 
-import cellsociety.model.Grid;
-import cellsociety.model.cell.CellStateUpdate;
+import cellsociety.config.SimulationConfig;
+import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import cellsociety.model.cell.Cell;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellUpdate;
 
 public abstract class SimulationRules {
 
@@ -63,17 +65,30 @@ public abstract class SimulationRules {
 
   }
 
-  public List<CellStateUpdate> getNextStatesForAllCells(Grid grid) {
-    List<CellStateUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
+  /**
+   * A default implementation of algorithm to get the cell updates for all cells Note, this will
+   * call get next state to get next state values for all cells. The CellUpdate will use a default
+   * cell to provide state update.
+   * <p>
+   * If a specific simulation uses a different cell type, this method should be overwritten.
+   *
+   * @param grid: The grid that you wish to get the next states for
+   * @return A list of cell updates that should occur
+   */
+  public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
+    List<CellUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
-      nextStates.add(new CellStateUpdate(cell.getLocation(), getNextState(cell, grid)));
+      // next cell is a new default cell with the next state based on rules
+      // if specific simulation has a specific cell type, it should override this default implementation
+      Cell nextCell = new DefaultCell(getNextState(cell, grid), cell.getLocation());
+      nextStates.add(new CellUpdate(cell.getLocation(), nextCell));
     }
     return nextStates;
   }
 
-  //methods below depend on subclasses
   public abstract int getNextState(Cell cell, Grid grid);
 
+  public abstract int getNumberStates();
 }

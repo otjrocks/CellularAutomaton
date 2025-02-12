@@ -3,22 +3,25 @@ package cellsociety.model.cell;
 import java.awt.geom.Point2D;
 
 /**
- * A cell representation for the WaTor simulation
+ * A cell representation for the WaTor simulation. The cell is immutable to prevent any unintended
+ * changes in the grid
  *
  * @author Owen Jennings
  */
 public class WaTorCell extends Cell {
 
   public static final int DEFAULT_HEALTH = 5;
-  private int health;
-  private double reproductionEnergy;
+  private final int health;
+  private final double reproductionEnergy;
 
   /**
-   * Create a WaTor cell with the default health amount
+   * Create a WaTor cell with the default health amount. The cell is immutable to prevent unintended
+   * changes to the grid
    */
   public WaTorCell(int state, Point2D location) {
     super(state, location);
     this.health = DEFAULT_HEALTH;
+    this.reproductionEnergy = 0; // by default cell has no reproductive energy
   }
 
   /**
@@ -48,29 +51,6 @@ public class WaTorCell extends Cell {
   }
 
   /**
-   * Resets the health of the cell to the default health
-   */
-  public void resetHealth() {
-    this.health = DEFAULT_HEALTH;
-  }
-
-  /**
-   * Set health of a cell
-   */
-  public void setHealth(int health) {
-    this.health = health;
-  }
-
-  /**
-   * Add to a cells health
-   *
-   * @param amount: the amount you wish to add
-   */
-  public void addHealth(int amount) {
-    health += amount;
-  }
-
-  /**
    * Get the reproductive energy of the cell
    *
    * @return the reproductive energy of the cell
@@ -78,28 +58,4 @@ public class WaTorCell extends Cell {
   public double getReproductionEnergy() {
     return reproductionEnergy;
   }
-
-  /**
-   * Sets reproductive energy back to 0.
-   */
-  public void resetReproductionEnergy() {
-    reproductionEnergy = 0;
-  }
-
-  /**
-   * Set reproductive energy
-   *
-   * @param reproductionEnergy: new value for energy
-   */
-  public void setReproductionEnergy(double reproductionEnergy) {
-    this.reproductionEnergy = reproductionEnergy;
-  }
-
-  /**
-   * Decrease the health of cell
-   */
-  public void decreaseHealth() {
-    health -= 1;
-  }
-
 }
