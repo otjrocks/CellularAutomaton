@@ -53,6 +53,37 @@ class GridTest {
   }
 
   @Test
+  void getCellOutOfBounds() {
+    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(0, -1));
+  }
+
+  @Test
+  void getCellOutOfGridNumColumns() {
+    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(0, myNumCols));
+  }
+
+  @Test
+  void getCellOutOfGridNumRows() {
+    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(myNumRows, 0));
+  }
+
+  @Test
+  void getCellOutOfGridPoint() {
+    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(new Double(-1, 1)));
+  }
+
+  @Test
+  void getNonExistentCell() {
+    assertNull(myGrid.getCell(3, 3));
+  }
+
+  @Test
+  void getNonExistentCellFromPoint() {
+    assertNull(myGrid.getCell(new Point2D.Double(3, 3)));
+  }
+
+
+  @Test
   void testGetCellPoint() {
     assertEquals(myCell, myGrid.getCell(new Point2D.Double(1, 1)));
   }

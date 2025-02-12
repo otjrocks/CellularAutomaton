@@ -62,10 +62,14 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(int row, int col) {
+    if (checkOutOfBounds(new Double(row, col))) {
+      throw new IndexOutOfBoundsException(
+          "Invalid coordinate. Point must be within bounds of grid.");
+    }
     if (!cellExists(new Double(row, col))) {
       return null;
     }
-    return myCells.get(new Point2D.Double(row, col));
+    return myCells.get(new Double(row, col));
   }
 
   /**
@@ -73,8 +77,13 @@ public class Grid {
    *
    * @param point: point
    * @return The cell at the specified location if it exists, or null if it does not exist
+   * @throws IllegalArgumentException if you request a point that is not in the grid
    */
   public Cell getCell(Point2D point) {
+    if (checkOutOfBounds(point)) {
+      throw new IndexOutOfBoundsException(
+          "Invalid coordinate. Point must be within bounds of grid.");
+    }
     if (!cellExists(point)) {
       return null;
     }
@@ -161,18 +170,18 @@ public class Grid {
 
   private boolean attemptAddCell(Cell cell) {
     // attempts to add cell to grid. Fails and returns false if cell provided does not have a properly formatted location or does not fit within the grid's width and height
-    if (!checkInBounds(cell)) {
+    if (checkOutOfBounds(cell.getLocation())) {
       return false;
     }
     myCells.put(cell.getLocation(), cell);
     return true;
   }
 
-  private boolean checkInBounds(Cell cell) {
-    return (cell.getLocation().getX() >= 0) &&
-        (cell.getLocation().getY() >= 0) &&
-        (cell.getLocation().getX() < myNumRows) &&
-        (cell.getLocation().getY() < myNumCols);
+  private boolean checkOutOfBounds(Point2D location) {
+    return (!(location.getX() >= 0)) ||
+        (!(location.getY() >= 0)) ||
+        (!(location.getX() < myNumRows)) ||
+        (!(location.getY() < myNumCols));
   }
 
 }
