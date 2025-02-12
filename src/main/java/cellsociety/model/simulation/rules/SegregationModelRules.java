@@ -128,10 +128,10 @@ public class SegregationModelRules extends SimulationRules {
   void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells,
       List<CellUpdate> nextStates) {
     if (!emptyCells.isEmpty()) {
-      Cell newCell = getAndRemoveRandomEmptyCell(emptyCells);
-      Cell newUnsatisfiedCell = new DefaultCell(unsatisfiedCell.getState(),
-          unsatisfiedCell.getLocation());
-      nextStates.add(new CellUpdate(newCell.getLocation(), newUnsatisfiedCell));
+      Cell newCellHome = getAndRemoveRandomEmptyCell(emptyCells);
+      Cell unsatisfiedCellWithUpdatedLocation = new DefaultCell(unsatisfiedCell.getState(),
+          newCellHome.getLocation());
+      nextStates.add(new CellUpdate(newCellHome.getLocation(), unsatisfiedCellWithUpdatedLocation));
       nextStates.add(new CellUpdate(unsatisfiedCell.getLocation(),
           new DefaultCell(0, unsatisfiedCell.getLocation())));
       emptyCells.add(unsatisfiedCell);
