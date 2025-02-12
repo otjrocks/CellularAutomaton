@@ -186,8 +186,7 @@ public class MainController {
     if (isEditing) {
       Cell cell = myGrid.getCell(row, column);
       int nextState = getNextAvailableState(cell);
-
-      cell.setState(nextState);
+      myGrid.setState(row, column, nextState, mySimulation);
       // create new cell instead of just updating cell status, to ensure that new cell has all other information reset for custom cell types
       myGrid.updateCell(
           SimulationConfig.getNewCell(row, column, nextState, mySimulation.data().type()));
