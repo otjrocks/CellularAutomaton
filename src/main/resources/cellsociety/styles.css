@@ -1,6 +1,15 @@
 /*
 The main stylesheet of the application
  */
+
+/** {*/
+/*  -fx-primary: rgb(232, 232, 232);*/
+/*  -fx-secondary: rgb(46, 46, 46);*/
+/*  -fx-light: rgb(214, 214, 214);*/
+/*  -fx-accent: rgb(61, 15, 255);*/
+/*  -fx-warning: rgb(239, 34, 34);*/
+/*}*/
+
 @font-face {
   font-family: Lato;
   src: url('./fonts/regular.ttf');
@@ -11,17 +20,9 @@ The main stylesheet of the application
   src: url('./fonts/bold.ttf');
 }
 
-* {
-  -fx-light: rgb(232, 232, 232);
-  -fx-dark: rgb(46, 46, 46);
-  -fx-gray: rgb(214, 214, 214);
-  -fx-accent: rgb(61, 15, 255);
-  -fx-warning: rgb(239, 34, 34);
-}
-
 .root {
   -fx-font-family: Lato;
-  -fx-background: -fx-light;
+  -fx-background: -fx-primary;
   -fx-font-size: 14px;
 }
 
@@ -34,7 +35,7 @@ The main stylesheet of the application
 .secondary-title {
   -fx-font-size: 20px;
   -fx-font-family: Lato;
-  -fx-fill: -fx-dark;
+  -fx-fill: -fx-secondary;
 }
 
 .button {
@@ -60,7 +61,7 @@ The main stylesheet of the application
 
 .metadata-container {
   -fx-font-size: 15px;
-  -fx-background-color: -fx-gray;
+  -fx-background-color: -fx-light;
   -fx-padding: 15 10 15 10;
 }
 
@@ -71,7 +72,7 @@ The main stylesheet of the application
 .info-box {
   -fx-padding: 15 10 15 10;
   -fx-border-width: 2px;
-  -fx-border-color: -fx-dark;
+  -fx-border-color: -fx-secondary;
   -fx-border-style: solid;
 }
 
@@ -80,8 +81,8 @@ The main stylesheet of the application
   -fx-padding: 15 0 0 0;
 }
 .slider .track {
-  -fx-background-color: -fx-gray;
-  background-color: -fx-gray;
+  -fx-background-color: -fx-light;
+  background-color: -fx-light;
   -fx-background-radius: 0;
   -fx-background-insets: 2 -2 1 0;
 }

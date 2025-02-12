@@ -1,5 +1,7 @@
 package cellsociety.controller;
 
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.util.Map;
@@ -42,11 +44,14 @@ public class MainController {
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
   private Simulation mySimulation;
+  private SplashScreenView mySplashScreenView;
   private Grid myGrid;
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
   private boolean gridLinesEnabled = true;
+
+  private final ThemeController myThemeController;
 
   /**
    * Initialize the MainController
@@ -54,10 +59,29 @@ public class MainController {
    * @param root: the main root group of the program
    */
   public MainController(Stage stage, Group root) {
+    myThemeController = new ThemeController(stage);
     myStage = stage;
     myRoot = root;
+    mySplashScreenView = new SplashScreenView(new AlertField(), this);
+    root.getChildren().add(mySplashScreenView);
+  }
+
+  /**
+   * Hide the splash screen view
+   */
+  public void hideSplashScreen() {
+    myRoot.getChildren().remove(mySplashScreenView);
     createMainContainerAndView();
     initializeSimulationAnimation();
+  }
+
+  /**
+   * Set the theme to the themeName provided if it exists, otherwise fallback to default theme
+   *
+   * @param themeName: Name of theme you which to set
+   */
+  public void setTheme(String themeName) {
+    myThemeController.setTheme(themeName);
   }
 
   /**
@@ -196,9 +220,9 @@ public class MainController {
 
   // From the states list from the simulation get the next available state from a sorted order
   private int getNextAvailableState(Cell cell) {
-   int numStates = mySimulation.rules().getNumberStates();
-   int currentState = cell.getState();
-   return (currentState + 1) % numStates;
+    int numStates = mySimulation.rules().getNumberStates();
+    int currentState = cell.getState();
+    return (currentState + 1) % numStates;
   }
 
   /**
@@ -281,6 +305,7 @@ public class MainController {
 
   /**
    * Handle whether grid lines should be shown or not
+   *
    * @param selected: Whether to show grid lines
    */
   public void setGridLines(boolean selected) {

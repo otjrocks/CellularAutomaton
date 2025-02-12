@@ -4,9 +4,13 @@ import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
+import cellsociety.view.config.ThemeConfig;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -24,6 +28,7 @@ public class SidebarView extends VBox {
   private final MainController myMainController;
   private boolean isEditing = false;
   private Button myModeButton;
+  private HBox myThemeSelectorBox;
   private final HBox myGridLinesCheckboxField = new HBox();
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
@@ -43,10 +48,35 @@ public class SidebarView extends VBox {
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
+    createThemeSelector();
     createShowGridLinesCheckbox();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
-    this.getChildren().addAll(myModeButton, myGridLinesCheckboxField, myViewModeView, myAlertField);
+    addAllComponentsToSidebar();
+  }
+
+  private void addAllComponentsToSidebar() {
+    this.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myViewModeView, myAlertField);
+  }
+
+  private void addAllEditModeComponents() {
+    this.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myEditModeView, myAlertField);
+  }
+
+  private void createThemeSelector() {
+    ObservableList<String> options =
+        FXCollections.observableArrayList(ThemeConfig.THEMES);
+    ComboBox<String> myThemeSelector = new ComboBox<>(options);
+    myThemeSelector.setValue(options.getFirst());
+    myThemeSelector.valueProperty()
+        .addListener((ov, t, t1) -> {
+          myMainController.setTheme(myThemeSelector.getValue());
+        });
+    myThemeSelectorBox = new HBox();
+    myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
+    myThemeSelectorBox.setSpacing(5);
+    Text simulationTypeLabel = new Text(getMessages().getString("CHANGE_THEME"));
+    myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
   }
 
   public void update() {
@@ -63,14 +93,14 @@ public class SidebarView extends VBox {
   private void disableEditView() {
     this.getChildren().clear();
     myViewModeView.update();
-    this.getChildren().addAll(myModeButton, myGridLinesCheckboxField, myViewModeView, myAlertField);
+    addAllComponentsToSidebar();
   }
 
 
   private void enableEditView() {
     myEditModeView.updateStateInfo();
     this.getChildren().clear();
-    this.getChildren().addAll(myModeButton, myGridLinesCheckboxField, myEditModeView, myAlertField);
+    addAllEditModeComponents();
   }
 
   private void createChangeModeButton() {
