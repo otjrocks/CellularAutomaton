@@ -2,9 +2,8 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.getMessages;
-import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-
 import cellsociety.controller.MainController;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;

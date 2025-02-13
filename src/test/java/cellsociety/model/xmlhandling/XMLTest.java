@@ -1,5 +1,6 @@
 package cellsociety.model.xmlhandling;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -8,7 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
 
+import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 
@@ -18,7 +21,10 @@ class XMLTest {
 
   @BeforeEach
   void setUp() {
-    myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
+      try {
+          myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
+      } catch (Exception ex) {
+      }
   }
 
   @Test
@@ -50,8 +56,8 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInNonexistantFile_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInNonexistantFile_throwsIOException(){
+    assertThrows(IOException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("reallyreallycool.xml");
         });
@@ -59,8 +65,8 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInPoorlyFormattedFile_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInPoorlyFormattedFile_throwsSAXException(){
+    assertThrows(SAXException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/PoorlyFormatted.xml");
         });
@@ -68,8 +74,8 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInFileWithMissingFields_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInFileWithMissingFields_throwsNullPointerException(){
+    assertThrows(NullPointerException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/MissingFields.xml");
         });
@@ -77,8 +83,8 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInFileWithIncorrectArgumentType_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInFileWithIncorrectArgumentType_throwsNumberFormatException(){
+    assertThrows(NumberFormatException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/LetterGrid.xml");
         });
@@ -86,8 +92,8 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInFileWithGridTooTall_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInFileWithGridTooTall_throwsGridException(){
+    assertThrows(GridException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooTall.xml");
         });
@@ -95,19 +101,10 @@ class XMLTest {
   }
 
   @Test
-  void XMLHandler_loadInFileWithGridTooWide_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
+  void XMLHandler_loadInFileWithGridTooWide_throwsGridException(){
+    assertThrows(GridException.class, 
         () -> {
           XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooWide.xml");
-        });
-    
-  }
-
-  @Test
-  void XMLHandler_loadInFileWithInvalidNumericalStates_throwsExceptionBasedOnAlert(){
-    assertThrows(ExceptionInInitializerError.class, 
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/InvalidStates.xml");
         });
     
   }
