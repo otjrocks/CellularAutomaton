@@ -5,7 +5,6 @@ import static cellsociety.config.MainConfig.getMessages;
 import cellsociety.controller.MainController;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -14,7 +13,7 @@ import javafx.scene.text.Text;
  *
  * @author Owen Jennings
  */
-public class EditModeView extends CreateDefaultSimView {
+public class EditModeView extends VBox {
 
   private final MainController myMainController;
   private final AlertField myAlertField;
@@ -29,10 +28,12 @@ public class EditModeView extends CreateDefaultSimView {
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {
-    super(mainController);
     this.myMainController = mainController;
     this.myAlertField = alertField;
-    initialize();
+    createHeader();
+    CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController,
+        myAlertField);
+    this.getChildren().addAll(createDefaultSimView);
   }
 
   /**
@@ -47,16 +48,6 @@ public class EditModeView extends CreateDefaultSimView {
         .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
   }
 
-  private void initialize() {
-    createHeader();
-    createSimulationTypeControl();
-    createRowControl();
-    createColControl();
-    createSimulationMetaDataTextFields();
-    initializeParametersControl();
-    createUpdateButton();
-  }
-
   private void createHeader() {
     Text title = new Text(getMessages().getString("CREATE_NEW_GRID_HEADER"));
     title.getStyleClass().add("secondary-title");
@@ -67,26 +58,4 @@ public class EditModeView extends CreateDefaultSimView {
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
     myHeaderBox.getChildren().addAll(myStateInfoView, instructions, title);
   }
-
-  private void createUpdateButton() {
-    Button updateButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
-    updateButton.setOnAction(event -> {
-      if (runValidationTests()) return;
-
-      createNewSimulation();
-      resetFields();
-      updateStateInfo();
-
-    });
-    this.getChildren().add(updateButton);
-  }
-
-  @Override
-  protected void flashErrorMessage(String message) {
-    if (myAlertField != null) {
-      myAlertField.flash(message, true);
-    }
-  }
-
-
 }

@@ -22,13 +22,6 @@ public class MainConfig {
   public static final String TITLE = getMessages().getString("TITLE");
   public static final int WIDTH = 1400;
   public static final int HEIGHT = 800;
-  public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
-  public static final String DEFAULT_RESOURCE_FOLDER =
-      "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  public static final String STYLESHEET_PATH = DEFAULT_RESOURCE_FOLDER + "styles.css";
-  public static final String DEFAULT_FONT_PATH = DEFAULT_RESOURCE_FOLDER + "fonts.default.ttf";
-  public static final String BOLD_FONT_PATH = DEFAULT_RESOURCE_FOLDER + "fonts.bold.ttf";
-
   public static final int MARGIN = 20;
   public static final int GRID_WIDTH = (2 * WIDTH) / 3;
   public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
