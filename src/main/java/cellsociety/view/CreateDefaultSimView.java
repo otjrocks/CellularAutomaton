@@ -10,6 +10,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
@@ -26,7 +27,7 @@ import javafx.scene.text.Text;
 
 public abstract class CreateDefaultSimView extends VBox {
 
-  private final MainController mainController;
+  private final ViewController viewController;
   private ComboBox<String> simulationSelector;
   private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
   private final VBox parametersControlBox = new VBox();
@@ -41,12 +42,12 @@ public abstract class CreateDefaultSimView extends VBox {
 
   private static final int DEFAULT_NUM_CELLS = 25;
 
-  public CreateDefaultSimView(MainController mainController) {
-    this.mainController = mainController;
+  public CreateDefaultSimView(ViewController viewController) {
+    this.viewController = viewController;
     this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
-    this.myNumRows = mainController.getGridRows();
-    this.myNumCols = mainController.getGridCols();
+    this.myNumRows = viewController.getGridRows();
+    this.myNumCols = viewController.getGridCols();
   }
 
   /**
@@ -281,7 +282,7 @@ public abstract class CreateDefaultSimView extends VBox {
   protected void attemptCreatingNewSimulation(SimulationMetaData metaData,
       Map<String, String> parameters) {
     try {
-      mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
+      viewController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
       flashErrorMessage(String.format(getMessages().getString("NEW_SIMULATION_CREATED")));
     } catch (IllegalArgumentException e) {

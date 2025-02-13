@@ -6,10 +6,6 @@ import java.util.Map;
 
 import cellsociety.view.config.FileChooserConfig;
 
-import static cellsociety.config.MainConfig.GRID_HEIGHT;
-import static cellsociety.config.MainConfig.GRID_WIDTH;
-import static cellsociety.config.MainConfig.MARGIN;
-import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 
 import cellsociety.config.SimulationConfig;
@@ -24,11 +20,10 @@ import cellsociety.view.SimulationView;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.swing.text.View;
 
 /**
  * A class to handle the main interactions between the model and view classes
@@ -39,25 +34,27 @@ public class MainController {
 
   private final Group myRoot;
   private final Stage myStage;
+  private final ViewController myViewController;
   private SimulationView mySimulationView;
-  private SidebarView mySidebarView;
   private Simulation mySimulation;
   private Grid myGrid;
-  VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
-  private boolean gridLinesEnabled = true;
 
   /**
    * Initialize the MainController
    *
    * @param root: the main root group of the program
    */
-  public MainController(Stage stage, Group root) {
+  public MainController(Stage stage, Group root, ViewController viewController) {
     myStage = stage;
     myRoot = root;
-    createMainContainerAndView();
+    this.myViewController = viewController;
     initializeSimulationAnimation();
+  }
+
+  public void setSimulationView(SimulationView simulationView) {
+    this.mySimulationView = simulationView;
   }
 
   /**
@@ -85,6 +82,15 @@ public class MainController {
    */
   public Simulation getSimulation() {
     return mySimulation;
+  }
+
+  /**
+   * Returns the current Grid object
+   *
+   * @return - the active grid object
+   */
+  public Grid getGrid() {
+    return myGrid;
   }
 
   /**
@@ -160,8 +166,6 @@ public class MainController {
     myGrid = new Grid(rows, cols);
     mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
-    createNewMainViewAndUpdateViewContainer();
-    createOrUpdateSidebar();
   }
 
   private void initializeGridWithCells() {
@@ -209,7 +213,7 @@ public class MainController {
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
     if (file != null) { // only update simulation if a file was selected
       String filePath = file.getAbsolutePath();
-      updateSimulationFromFile(filePath);
+      myViewController.updateSimulationFromFile(filePath);
     }
   }
 
@@ -217,31 +221,13 @@ public class MainController {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
 
-  private void updateSimulationFromFile(String filePath) {
+  void updateSimulationFromFile(String filePath) {
     XMLHandler xmlHandler = new XMLHandler(filePath);
-
     mySimulation = xmlHandler.getSim();
     myGrid = xmlHandler.getGrid();
-    createNewMainViewAndUpdateViewContainer();
-    createOrUpdateSidebar();
+
   }
 
-  private void createOrUpdateSidebar() {
-    if (mySidebarView == null) {
-      initializeSidebar(this);
-    } else {
-      mySidebarView.update();
-    }
-  }
-
-  private void createNewMainViewAndUpdateViewContainer() {
-    myMainViewContainer.getChildren().clear();
-    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
-        myGrid.getCols(),
-        myGrid, mySimulation, this);
-    mySimulationView.setGridLines(gridLinesEnabled);
-    myMainViewContainer.getChildren().add(mySimulationView);
-  }
 
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -256,35 +242,6 @@ public class MainController {
   }
 
   private void step() {
-    mySimulationView.step(myGrid, mySimulation);
-  }
-
-  private void createMainContainerAndView() {
-    myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
-    myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
-    myMainViewContainer.setAlignment(Pos.CENTER);
-    updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    myRoot.getChildren().add(myMainViewContainer);
-  }
-
-  public void initializeSidebar(MainController controller) {
-    mySidebarView = new SidebarView(SIDEBAR_WIDTH,
-        GRID_HEIGHT - (2 * MARGIN), controller);
-    mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
-    mySidebarView.setLayoutY(MARGIN);
-    myRoot.getChildren().add(mySidebarView);
-  }
-
-  public void clearSidebar(MainController controller) {
-    mySidebarView.clearSidebar();
-  }
-
-  /**
-   * Handle whether grid lines should be shown or not
-   * @param selected: Whether to show grid lines
-   */
-  public void setGridLines(boolean selected) {
-    gridLinesEnabled = selected;
-    mySimulationView.setGridLines(selected);
+    myViewController.updateSimulationView(myGrid, mySimulation);
   }
 }

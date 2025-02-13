@@ -5,6 +5,7 @@ import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -25,16 +26,16 @@ public class SplashScreenView extends CreateDefaultSimView {
 
   private ComboBox<String> languageDropdown;
   private final Runnable onStart;
-  private final MainController mainController;
+  private final ViewController viewController;
 
 
-  public SplashScreenView(AlertField myAlertField, Stage stage, MainController mainController,
+  public SplashScreenView(AlertField myAlertField, Stage stage, ViewController viewController,
       Runnable onStart) {
-    super(mainController);
+    super(viewController);
     this.myAlertField = myAlertField;
     this.splashScreenStage = stage;
     this.onStart = onStart;
-    this.mainController = mainController;
+    this.viewController = viewController;
 
     initializeSplashScreen(onStart);
   }
@@ -88,8 +89,8 @@ public class SplashScreenView extends CreateDefaultSimView {
       String language = languageDropdown.getValue();
       MainConfig.setLanguage(language);
 
-      mainController.clearSidebar(mainController);
-      mainController.initializeSidebar(mainController);
+      viewController.clearSidebar();
+      viewController.initializeSidebar();
 
     });
 
@@ -119,7 +120,7 @@ public class SplashScreenView extends CreateDefaultSimView {
     Text chooseFileText = new Text(getMessages().getString("LOAD_BUTTON_TEXT"));
     myChooseFileButton.setOnAction(event -> {
       try {
-        mainController.handleNewSimulationFromFile();
+        viewController.handleNewSimulationFromFile();
         splashScreenStage.close();
         onStart.run();
       } catch (IllegalArgumentException e) {

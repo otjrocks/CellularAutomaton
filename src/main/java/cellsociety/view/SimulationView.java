@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.Grid;
 import cellsociety.model.simulation.Simulation;
@@ -30,8 +31,8 @@ public class SimulationView extends Group {
    * @param simulation: initial simulation of the simulation view
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
-      Simulation simulation, MainController mainController) {
-    myGridView = new GridView(width, height, numRows, numCols, mainController);
+      Simulation simulation, ViewController viewController) {
+    myGridView = new GridView(width, height, numRows, numCols, viewController);
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
     getChildren().add(myGridView);

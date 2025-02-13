@@ -8,6 +8,8 @@ import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
+import cellsociety.view.SidebarView;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import java.awt.SplashScreen;
@@ -31,8 +33,8 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    MainController mainController = new MainController(stage, root);
-    SplashScreenView splashScreen = new SplashScreenView(new AlertField(), stage, mainController, () -> initializeStage(stage));
+    ViewController viewController = new ViewController(stage, root);
+    SplashScreenView splashScreen = new SplashScreenView(new AlertField(), stage, viewController, () -> initializeStage(stage));
     splashScreen.show();
 
     //initializeStage(stage);

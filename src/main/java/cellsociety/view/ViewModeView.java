@@ -7,6 +7,7 @@ import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
@@ -27,7 +28,7 @@ public class ViewModeView extends VBox {
 
   public static final double SPEED_SLIDER_DELTA = 10;
 
-  private final MainController myMainController;
+  private final ViewController myViewController;
   private final AlertField myAlertField;
   private Button myPlayPauseButton;
   private Button myChooseFileButton;
@@ -39,12 +40,12 @@ public class ViewModeView extends VBox {
   /**
    * Initialize the ViewModeView.
    *
-   * @param mainController: the main controller of this view
+   * @param viewController: the view controller that handles view information
    * @param alertField:     the alert field to display alerts to the user
    */
-  public ViewModeView(MainController mainController, AlertField alertField) {
+  public ViewModeView(ViewController viewController, AlertField alertField) {
     this.setSpacing(ELEMENT_SPACING);
-    myMainController = mainController;
+    myViewController = viewController;
     myAlertField = alertField;
     myControlButtons = createAllButtons();
     initializeSpeedSlider();
@@ -58,8 +59,8 @@ public class ViewModeView extends VBox {
     this.getChildren().clear();
     initializeStaticContent();
     createSimulationMetaDataDisplay();
-    StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
+    StateInfoView myStateInfoView = new StateInfoView(myViewController.getSimulation());
+    ParameterView myParameterView = new ParameterView(myViewController.getSimulation());
     setPlayPauseButtonText();
     this.getChildren().addAll(myStateInfoView, myParameterView, myControlButtons, mySpeedSliderBox);
   }
@@ -71,8 +72,8 @@ public class ViewModeView extends VBox {
     Slider speedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
         initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
     speedSlider.valueProperty().addListener(
-        (observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(
-            1 / (Double) newValue, myMainController.isPlaying()));
+        (observable, oldValue, newValue) -> myViewController.updateAnimationSpeed(
+            1 / (Double) newValue, myViewController.isPlaying()));
     mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
   }
 
@@ -90,7 +91,7 @@ public class ViewModeView extends VBox {
   }
 
   private void createSimulationMetaDataDisplay() {
-    SimulationMetaData simulationData = myMainController.getSimulation().data();
+    SimulationMetaData simulationData = myViewController.getSimulation().data();
     Text infoText = new Text(getMessages().getString("INFO_DISPLAY_TITLE"));
     infoText.getStyleClass().add("secondary-title");
     Text name = createText(
@@ -115,7 +116,7 @@ public class ViewModeView extends VBox {
     myChooseFileButton.setOnAction(event -> {
       try {
         stopAnimationPlayIfRunning();
-        myMainController.handleNewSimulationFromFile();
+        myViewController.handleNewSimulationFromFile();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
         myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
@@ -135,7 +136,7 @@ public class ViewModeView extends VBox {
     mySaveButton.setOnMouseClicked(event -> {
       stopAnimationPlayIfRunning();
       try {
-        myMainController.handleSavingToFile();
+        myViewController.handleSavingToFile();
         myAlertField.flash(getMessages().getString("FILE_SAVE_SUCCESS"), false);
       } catch (Exception e) {
         myAlertField.flash(getMessages().getString("FILE_SAVE_FAIL"), true);
@@ -150,14 +151,14 @@ public class ViewModeView extends VBox {
     myStepButton = new Button(getMessages().getString("STEP_LABEL"));
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
-      myMainController.handleSingleStep();
+      myViewController.handleSingleStep();
     });
   }
 
   private void createPlayPauseButton() {
     myPlayPauseButton = new Button(getMessages().getString("PLAY_LABEL"));
     myPlayPauseButton.setOnAction(event -> {
-      if (myMainController.isPlaying()) {
+      if (myViewController.isPlaying()) {
         stopAnimation();
       } else {
         startAnimation();
@@ -167,25 +168,25 @@ public class ViewModeView extends VBox {
   }
 
   private void startAnimation() {
-    myMainController.startAnimation();
+    myViewController.startAnimation();
     setPlayPauseButtonText();
     myAlertField.flash(getMessages().getString("ANIMATION_START"), false);
   }
 
   private void stopAnimation() {
-    myMainController.stopAnimation();
+    myViewController.stopAnimation();
     setPlayPauseButtonText();
     myAlertField.flash(getMessages().getString("ANIMATION_PAUSE"), false);
   }
 
   private void stopAnimationPlayIfRunning() {
-    if (myMainController.isPlaying()) {
+    if (myViewController.isPlaying()) {
       stopAnimation();
     }
   }
 
   private void setPlayPauseButtonText() {
-    if (myMainController.isPlaying()) {
+    if (myViewController.isPlaying()) {
       myPlayPauseButton.setText(getMessages().getString("PAUSE_LABEL"));
     } else {
       myPlayPauseButton.setText(getMessages().getString("PLAY_LABEL"));
