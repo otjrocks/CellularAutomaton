@@ -11,6 +11,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import static cellsociety.config.MainConfig.GRID_HEIGHT;
+import static cellsociety.config.MainConfig.GRID_WIDTH;
+import static cellsociety.config.MainConfig.MARGIN;
+import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
@@ -27,10 +31,11 @@ import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.swing.text.View;
 
 /**
  * A class to handle the main interactions between the model and view classes
@@ -41,13 +46,15 @@ public class MainController {
 
   private final Group myRoot;
   private final Stage myStage;
-  private final ViewController myViewController;
   private SimulationView mySimulationView;
+  private SidebarView mySidebarView;
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
+  VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
+  private boolean gridLinesEnabled = true;
 
   private final ThemeController myThemeController;
 
@@ -56,13 +63,13 @@ public class MainController {
    *
    * @param root: the main root group of the program
    */
-  public MainController(Stage stage, Group root, ViewController viewController) {
-    this.myViewController = viewController;
+  public MainController(Stage stage, Group root) {
     myThemeController = new ThemeController(stage);
     myStage = stage;
     myRoot = root;
     mySplashScreenView = new SplashScreenView(new AlertField(), this);
     root.getChildren().add(mySplashScreenView);
+    createMainContainerAndView();
     initializeSimulationAnimation();
     myRoot.getChildren().remove(mySidebarView);
   }
@@ -83,10 +90,6 @@ public class MainController {
    */
   public void setTheme(String themeName) {
     myThemeController.setTheme(themeName);
-  }
-
-  public void setSimulationView(SimulationView simulationView) {
-    this.mySimulationView = simulationView;
   }
 
   /**
@@ -114,15 +117,6 @@ public class MainController {
    */
   public Simulation getSimulation() {
     return mySimulation;
-  }
-
-  /**
-   * Returns the current Grid object
-   *
-   * @return - the active grid object
-   */
-  public Grid getGrid() {
-    return myGrid;
   }
 
   /**
@@ -180,6 +174,7 @@ public class MainController {
     myGrid = new Grid(rows, cols);
     mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
+    createNewMainViewAndUpdateViewContainer();
   }
 
   private void initializeGridWithCells() {
@@ -207,7 +202,8 @@ public class MainController {
       // create new cell instead of just updating cell status, to ensure that new cell has all other information reset for custom cell types
       myGrid.updateCell(
           SimulationConfig.getNewCell(row, column, nextState, mySimulation.data().type()));
-      myViewController.updateColorForEditMode(row, column, StateDisplayConfig.getStateInfo(mySimulation, nextState).color());
+      mySimulationView.setColor(row, column,
+          StateDisplayConfig.getStateInfo(mySimulation, nextState).color());
     }
   }
 
@@ -226,7 +222,7 @@ public class MainController {
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
     if (file != null) { // only update simulation if a file was selected
       String filePath = file.getAbsolutePath();
-      myViewController.updateSimulationFromFile(filePath);
+      updateSimulationFromFile(filePath);
     }
   }
 
@@ -275,7 +271,6 @@ public class MainController {
     mySimulationView.setGridLines(gridLinesEnabled);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
->>>>>>> src/main/java/cellsociety/controller/MainController.java
 
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -290,7 +285,7 @@ public class MainController {
   }
 
   private void step() {
-    myViewController.updateSimulationView(myGrid, mySimulation);
+    mySimulationView.step(myGrid, mySimulation);
   }
 
   private void createMainContainerAndView() {
@@ -320,6 +315,5 @@ public class MainController {
   public void setGridLines(boolean selected) {
     gridLinesEnabled = selected;
     mySimulationView.setGridLines(selected);
->>>>>>> src/main/java/cellsociety/controller/MainController.java
   }
 }

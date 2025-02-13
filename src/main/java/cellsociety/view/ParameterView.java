@@ -47,5 +47,4 @@ public class ParameterView extends VBox {
     }
     this.getChildren().add(parameter);
   }
-
 }

@@ -10,7 +10,6 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
-import cellsociety.controller.ViewController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
@@ -29,7 +28,7 @@ import javafx.scene.text.Text;
 
 public class CreateDefaultSimView extends VBox {
 
-  private final ViewController viewController;
+  private final MainController mainController;
   private ComboBox<String> simulationSelector;
   private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
   private final VBox parametersControlBox = new VBox();
@@ -288,7 +287,7 @@ public class CreateDefaultSimView extends VBox {
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
       Map<String, String> parameters) {
     try {
-      viewController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
+      mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
       myAlertField.flash(String.format(getMessages().getString("NEW_SIMULATION_CREATED")), false);
     } catch (Exception e) {
