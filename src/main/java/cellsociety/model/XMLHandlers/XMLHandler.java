@@ -40,7 +40,7 @@ public class XMLHandler {
     * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
     *                     represented as a String
     */
-    public XMLHandler(String xmlFilePath) throws SAXException, IOException, ParserConfigurationException, Exception{
+    public XMLHandler(String xmlFilePath) throws SAXException, IOException, ParserConfigurationException, GridException{
         parseXMLFile(xmlFilePath);
     }
 
