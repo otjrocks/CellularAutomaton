@@ -1,7 +1,6 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.getMessages;
-
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
@@ -108,6 +107,10 @@ public class SidebarView extends VBox {
    */
   public void clearSidebar() {
     this.getChildren().clear();
+  }
+
+  public void flashWarning(String message){
+    myAlertField.flash(message, true);
   }
 
 }

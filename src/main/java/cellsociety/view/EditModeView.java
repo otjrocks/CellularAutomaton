@@ -2,9 +2,8 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.getMessages;
-import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-
 import cellsociety.controller.MainController;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -82,7 +81,7 @@ public class EditModeView extends CreateDefaultSimView {
     this.getChildren().add(updateButton);
   }
 
-
+  @Override
   protected void flashErrorMessage(String message) {
     if (myAlertField != null) {
       myAlertField.flash(message, true);

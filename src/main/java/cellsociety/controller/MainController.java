@@ -1,19 +1,21 @@
 package cellsociety.controller;
 
-import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
-import cellsociety.view.config.FileChooserConfig;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
@@ -21,6 +23,8 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import cellsociety.view.config.FileChooserConfig;
+import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -218,12 +222,28 @@ public class MainController {
   }
 
   private void updateSimulationFromFile(String filePath) {
-    XMLHandler xmlHandler = new XMLHandler(filePath);
+    try{
+      XMLHandler xmlHandler = new XMLHandler(filePath);
 
-    mySimulation = xmlHandler.getSim();
-    myGrid = xmlHandler.getGrid();
-    createNewMainViewAndUpdateViewContainer();
-    createOrUpdateSidebar();
+      mySimulation = xmlHandler.getSim();
+      myGrid = xmlHandler.getGrid();
+      createNewMainViewAndUpdateViewContainer();
+      createOrUpdateSidebar();
+      } catch (SAXException e) {
+        mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+      } catch (ParserConfigurationException e) {
+        mySidebarView.flashWarning("XML parser configuration issue.");
+      } catch (IOException e) {
+        mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+      } catch (NumberFormatException e) {
+        mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+      } catch (NullPointerException e) {
+        mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+      } catch (GridException e) {
+        mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
+      } catch (Exception e) {
+        mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      }
   }
 
   private void createOrUpdateSidebar() {
