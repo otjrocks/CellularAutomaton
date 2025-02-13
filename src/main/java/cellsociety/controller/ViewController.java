@@ -11,11 +11,13 @@ import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.config.FileChooserConfig;
+import cellsociety.view.config.StateDisplayConfig;
 import java.util.Map;
 
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class ViewController {
@@ -69,7 +71,10 @@ public class ViewController {
     myMainController.setSimulationView(mySimulationView);
     createOrUpdateSidebar();
 
+  }
 
+  protected void updateColorForEditMode(int row, int col, Paint color) {
+    mySimulationView.setColor(row, col, color);
   }
 
   private void createOrUpdateSidebar() {
