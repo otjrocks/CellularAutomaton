@@ -5,6 +5,7 @@ import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,14 +19,14 @@ public class SplashScreenView extends VBox {
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
-  private final MainController mainController;
-
+  private final ViewController viewController;
   private final CreateDefaultSimView createDefaultSimView;
 
-
-  public SplashScreenView(AlertField myAlertField, MainController mainController) {
+  public SplashScreenView(AlertField myAlertField, Stage stage, ViewController viewController,
+      Runnable onStart, MainController mainController) {
+    super(viewController);
     this.myAlertField = myAlertField;
-    this.mainController = mainController;
+    this.viewController = viewController;
     this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
       @Override
       public void handleAdditionalButtonActions() {
@@ -73,6 +74,9 @@ public class SplashScreenView extends VBox {
       String language = languageDropdown.getValue();
       MainConfig.setLanguage(language);
 
+
+      viewController.clearSidebar();
+      viewController.initializeSidebar();
 
     });
 

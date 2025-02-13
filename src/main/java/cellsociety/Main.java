@@ -5,6 +5,8 @@ import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.ViewController;
+import cellsociety.view.SidebarView;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import javafx.application.Application;

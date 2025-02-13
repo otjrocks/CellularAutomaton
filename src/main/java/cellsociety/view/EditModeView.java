@@ -3,7 +3,7 @@ package cellsociety.view;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.getMessages;
 import cellsociety.controller.MainController;
-import static cellsociety.view.SidebarView.ELEMENT_SPACING;
+import cellsociety.controller.ViewController;
 import cellsociety.view.components.AlertField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
  */
 public class EditModeView extends VBox {
 
-  private final MainController myMainController;
+  private final ViewController myViewController;
   private final AlertField myAlertField;
   private final VBox myHeaderBox = new VBox();
   private StateInfoView myStateInfoView;
@@ -23,12 +23,13 @@ public class EditModeView extends VBox {
   /**
    * Create a edit mode view
    *
-   * @param mainController: the main controller of this view
+   * @param viewController: the main controller of this view
    * @param alertField:     the alert field to display messages
    */
-  public EditModeView(MainController mainController,
+  public EditModeView(ViewController viewController,
       AlertField alertField) {
-    this.myMainController = mainController;
+    super(viewController);
+    this.myViewController = viewController;
     this.myAlertField = alertField;
     createHeader();
     CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController,
@@ -43,7 +44,7 @@ public class EditModeView extends VBox {
   public void updateStateInfo() {
     myHeaderBox.getChildren()
         .removeFirst(); // remove the current state info box before creating a new one
-    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myStateInfoView = new StateInfoView(myViewController.getSimulation());
     myHeaderBox.getChildren()
         .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
   }
@@ -55,7 +56,7 @@ public class EditModeView extends VBox {
     instructions.setWrappingWidth(SIDEBAR_WIDTH);
     myHeaderBox.setSpacing(ELEMENT_SPACING * 3);
     this.getChildren().add(myHeaderBox);
-    myStateInfoView = new StateInfoView(myMainController.getSimulation());
+    myStateInfoView = new StateInfoView(myViewController.getSimulation());
     myHeaderBox.getChildren().addAll(myStateInfoView, instructions, title);
   }
 }
