@@ -10,59 +10,44 @@ import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class SplashScreenView extends CreateDefaultSimView {
-  private final Stage splashScreenStage;
-  public static final double ELEMENT_SPACING = 5;
+public class SplashScreenView extends VBox {
 
   private final AlertField myAlertField;
-  public static final int WIDTH = 700;
-  public static final int HEIGHT = 800;
-
   private ComboBox<String> languageDropdown;
-  private final Runnable onStart;
   private final ViewController viewController;
-
+  private final CreateDefaultSimView createDefaultSimView;
 
   public SplashScreenView(AlertField myAlertField, Stage stage, ViewController viewController,
-      Runnable onStart) {
+      Runnable onStart, MainController mainController) {
     super(viewController);
     this.myAlertField = myAlertField;
-    this.splashScreenStage = stage;
-    this.onStart = onStart;
     this.viewController = viewController;
+    this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
+      @Override
+      public void handleAdditionalButtonActions() {
+        mainController.hideSplashScreen();
+      }
+    };
 
-    initializeSplashScreen(onStart);
+    initializeSplashScreen();
   }
 
-  private void initializeSplashScreen(Runnable onStart) {
+  private void initializeSplashScreen() {
 
     Text title = new Text(getMessages().getString("SPLASH_HEADER"));
     Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
     Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
 
-    Text changeThemeButton = new Text(getMessages().getString("CHANGE_THEME"));
-
-    this.getChildren().addAll(title, description, instructions);
+    this.getChildren().addAll(title, description, instructions, createDefaultSimView, myAlertField);
 
     createLanguageDropdown();
     createFileChooserButton();
 
-    createSimulationTypeControl();
-    createRowControl();
-    createColControl();
-    createSimulationMetaDataTextFields();
-    initializeParametersControl();
-
-    createNewSimulationButton();
-
-    Scene splashScreenScene = new Scene(this, WIDTH, HEIGHT);
-    splashScreenStage.setScene(splashScreenScene);
   }
 
   private void createLanguageDropdown() {
@@ -88,6 +73,7 @@ public class SplashScreenView extends CreateDefaultSimView {
     languageDropdown.setOnAction(event -> {
       String language = languageDropdown.getValue();
       MainConfig.setLanguage(language);
+
 
       viewController.clearSidebar();
       viewController.initializeSidebar();
@@ -120,9 +106,8 @@ public class SplashScreenView extends CreateDefaultSimView {
     Text chooseFileText = new Text(getMessages().getString("LOAD_BUTTON_TEXT"));
     myChooseFileButton.setOnAction(event -> {
       try {
-        viewController.handleNewSimulationFromFile();
-        splashScreenStage.close();
-        onStart.run();
+        mainController.handleNewSimulationFromFile();
+        mainController.hideSplashScreen();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
         myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
@@ -136,35 +121,5 @@ public class SplashScreenView extends CreateDefaultSimView {
     this.getChildren().addAll(chooseFileText, myChooseFileButton);
   }
 
-  private void createNewSimulationButton() {
-    Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
-
-    createSimButton.setOnAction(event -> {
-      if (runValidationTests()) return;
-
-      splashScreenStage.close();
-      onStart.run();
-      createNewSimulation();
-    });
-    this.getChildren().add(createSimButton);
-  }
-
-
-  /**
-   * @param message - the error message to display
-   */
-  @Override
-  protected void flashErrorMessage(String message) {
-    if (myAlertField != null) {
-      myAlertField.flash(message, true);
-    }
-  }
-
-  /**
-   * Displays the stage to the viewers
-   */
-  public void show() {
-    splashScreenStage.show();
-  }
 
 }

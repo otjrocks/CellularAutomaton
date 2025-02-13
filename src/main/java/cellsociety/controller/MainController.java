@@ -1,15 +1,20 @@
 package cellsociety.controller;
 
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
-import cellsociety.view.config.FileChooserConfig;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import static cellsociety.config.MainConfig.STEP_SPEED;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
@@ -17,6 +22,8 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import cellsociety.view.config.FileChooserConfig;
+import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -37,9 +44,12 @@ public class MainController {
   private final ViewController myViewController;
   private SimulationView mySimulationView;
   private Simulation mySimulation;
+  private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
+
+  private final ThemeController myThemeController;
 
   /**
    * Initialize the MainController
@@ -47,10 +57,32 @@ public class MainController {
    * @param root: the main root group of the program
    */
   public MainController(Stage stage, Group root, ViewController viewController) {
+    this.myViewController = viewController;
+    myThemeController = new ThemeController(stage);
     myStage = stage;
     myRoot = root;
-    this.myViewController = viewController;
+    mySplashScreenView = new SplashScreenView(new AlertField(), this);
+    root.getChildren().add(mySplashScreenView);
     initializeSimulationAnimation();
+    myRoot.getChildren().remove(mySidebarView);
+  }
+
+  /**
+   * Hide the splash screen view
+   */
+  public void hideSplashScreen() {
+    myRoot.getChildren().remove(mySplashScreenView);
+    myRoot.getChildren().add(myMainViewContainer);
+    myRoot.getChildren().add(mySidebarView);
+  }
+
+  /**
+   * Set the theme to the themeName provided if it exists, otherwise fallback to default theme
+   *
+   * @param themeName: Name of theme you which to set
+   */
+  public void setTheme(String themeName) {
+    myThemeController.setTheme(themeName);
   }
 
   public void setSimulationView(SimulationView simulationView) {
@@ -135,24 +167,6 @@ public class MainController {
   }
 
   /**
-   * Get rows in the grid
-   *
-   * @return int number of rows
-   */
-  public int getGridRows() {
-    return myGrid.getRows();
-  }
-
-  /**
-   * Get columns in the grid
-   *
-   * @return int number of columns
-   */
-  public int getGridCols() {
-    return myGrid.getCols();
-  }
-
-  /**
    * Get whether the grid animation is currently playing
    *
    * @return true if the animation is playing, false otherwise
@@ -199,9 +213,9 @@ public class MainController {
 
   // From the states list from the simulation get the next available state from a sorted order
   private int getNextAvailableState(Cell cell) {
-   int numStates = mySimulation.rules().getNumberStates();
-   int currentState = cell.getState();
-   return (currentState + 1) % numStates;
+    int numStates = mySimulation.rules().getNumberStates();
+    int currentState = cell.getState();
+    return (currentState + 1) % numStates;
   }
 
   /**
@@ -220,13 +234,48 @@ public class MainController {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
 
-  void updateSimulationFromFile(String filePath) {
-    XMLHandler xmlHandler = new XMLHandler(filePath);
-    mySimulation = xmlHandler.getSim();
-    myGrid = xmlHandler.getGrid();
+  private void updateSimulationFromFile(String filePath) {
+    try{
+      XMLHandler xmlHandler = new XMLHandler(filePath);
 
+      mySimulation = xmlHandler.getSim();
+      myGrid = xmlHandler.getGrid();
+      createNewMainViewAndUpdateViewContainer();
+      createOrUpdateSidebar();
+      } catch (SAXException e) {
+        mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+      } catch (ParserConfigurationException e) {
+        mySidebarView.flashWarning("XML parser configuration issue.");
+      } catch (IOException e) {
+        mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+      } catch (NumberFormatException e) {
+        mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+      } catch (NullPointerException e) {
+        mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+      } catch (GridException e) {
+        mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
+      } catch (Exception e) {
+        mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      }
   }
 
+  private void createOrUpdateSidebar() {
+    if (mySidebarView == null) {
+      initializeSidebar();
+    } else {
+      mySidebarView.update();
+    }
+  }
+
+  private void createNewMainViewAndUpdateViewContainer() {
+    myMainViewContainer.getChildren().clear();
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
+        myGrid.getCols(),
+        myGrid, mySimulation, this);
+    mySimulationView.setGridLines(gridLinesEnabled);
+    myMainViewContainer.getChildren().add(mySimulationView);
+  }
+>>>>>>> src/main/java/cellsociety/controller/MainController.java
 
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -242,5 +291,35 @@ public class MainController {
 
   private void step() {
     myViewController.updateSimulationView(myGrid, mySimulation);
+  }
+
+  private void createMainContainerAndView() {
+    myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
+    myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
+    myMainViewContainer.setAlignment(Pos.CENTER);
+    updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
+  }
+
+  public void initializeSidebar() {
+    mySidebarView = new SidebarView(SIDEBAR_WIDTH,
+        GRID_HEIGHT - (2 * MARGIN), this);
+    mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
+    mySidebarView.setLayoutY(MARGIN);
+    myRoot.getChildren().add(mySidebarView);
+  }
+
+  public void clearSidebar(MainController controller) {
+    mySidebarView.clearSidebar();
+  }
+
+  /**
+   * Handle whether grid lines should be shown or not
+   *
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    gridLinesEnabled = selected;
+    mySimulationView.setGridLines(selected);
+>>>>>>> src/main/java/cellsociety/controller/MainController.java
   }
 }
