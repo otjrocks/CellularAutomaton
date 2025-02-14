@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.HashMap;
@@ -16,10 +17,28 @@ import java.util.Map;
 
 public class RockPaperScissorsRules extends SimulationRules {
 
-  public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters) {
+  private final int myNumStates;
+  private final double myMinThreshold;
+
+  public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters)
+      throws InvalidParameterException {
     super(myParameters);
     if (myParameters == null || myParameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
+    }
+    checkMissingParameterAndThrowException("numStates");
+    checkMissingParameterAndThrowException("minThreshold");
+    myNumStates = getParameters().get("numStates").getInteger();
+    myMinThreshold = getParameters().get("minThreshold").getDouble();
+    validateParameterRange();
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (myNumStates < 1) {
+      throwInvalidParameterException("numStates");
+    }
+    if (myMinThreshold < 0 || myMinThreshold > 1) {
+      throwInvalidParameterException("minThreshold");
     }
   }
 
@@ -49,25 +68,22 @@ public class RockPaperScissorsRules extends SimulationRules {
 
     int currentState = cell.getState();
 
-    int numStates = getParameters().get("numStates").getInteger();
-    double threshold = getParameters().get("minThreshold").getDouble();
-
     Map<Integer, Integer> neighborCount = new HashMap<>();
-    for (int i = 0; i < numStates; i++) {
+    for (int i = 0; i < myNumStates; i++) {
       neighborCount.put(i, 0);
     }
 
     List<Cell> neighbors = getNeighbors(cell, grid);
     countNeighbors(neighbors, neighborCount);
 
-    int neighborThreshold = (int) Math.ceil(threshold * neighbors.size());
+    int neighborThreshold = (int) Math.ceil(myMinThreshold * neighbors.size());
 
-    return checkForWinner(numStates, currentState, neighborCount, neighborThreshold);
+    return checkForWinner(myNumStates, currentState, neighborCount, neighborThreshold);
   }
 
   @Override
   public int getNumberStates() {
-    return getParameters().get("numStates").getInteger();
+    return myNumStates;
   }
 
   private static int checkForWinner(int numStates, int currentState,

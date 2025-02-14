@@ -1,5 +1,7 @@
 package cellsociety.model.simulation;
 
+import static cellsociety.config.MainConfig.getMessages;
+
 /**
  * A class to handle the creation and storage of parameter values
  *
@@ -19,22 +21,40 @@ public class Parameter<T> {
     myValue = value;
   }
 
-  public String getString() throws ClassCastException {
-    return (String) myValue;
+  public String getString() throws InvalidParameterException {
+    try {
+      return (String) myValue;
+    } catch (Exception e) {
+      throw new InvalidParameterException(
+          String.format(getMessages().getString("INVALID_PARAMETER"),
+              myValue));
+    }
   }
 
-  public Double getDouble() throws ClassCastException {
-    if (myValue instanceof Double) {
-      return (Double) myValue;
+  public Double getDouble() throws InvalidParameterException {
+    try {
+      if (myValue instanceof Double) {
+        return (Double) myValue;
+      }
+      return Double.parseDouble((String) myValue);
+    } catch (Exception e) {
+      throw new InvalidParameterException(
+          String.format(getMessages().getString("INVALID_PARAMETER"),
+              myValue));
     }
-    return Double.parseDouble((String) myValue);
   }
 
-  public Integer getInteger() throws ClassCastException {
-    if (myValue instanceof Integer) {
-      return (Integer) myValue;
+  public Integer getInteger() throws InvalidParameterException {
+    try {
+      if (myValue instanceof Integer) {
+        return (Integer) myValue;
+      }
+      return getDouble().intValue();
+    } catch (Exception e) {
+      throw new InvalidParameterException(
+          String.format(getMessages().getString("INVALID_PARAMETER"),
+              myValue));
     }
-    return getDouble().intValue();
   }
 
   @Override

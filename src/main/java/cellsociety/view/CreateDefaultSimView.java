@@ -71,7 +71,7 @@ public class CreateDefaultSimView extends VBox {
     Text createSimButtonText = new Text(getMessages().getString("NEW_SIM_BUTTON_TEXT"));
 
     ObservableList<String> options =
-        FXCollections.observableArrayList(SimulationConfig.simulations);
+        FXCollections.observableArrayList(SimulationConfig.SIMULATIONS);
     simulationSelector = new ComboBox<>(options);
     simulationSelector.setValue(options.getFirst());
     simulationSelector.valueProperty()
@@ -293,9 +293,7 @@ public class CreateDefaultSimView extends VBox {
       myAlertField.flash(String.format(getMessages().getString("NEW_SIMULATION_CREATED")), false);
     } catch (Exception e) {
       myAlertField.flash(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(String.format((e.getMessage())), true);
-      }
+      myAlertField.flash(String.format((e.getMessage())), true);
       throw e;
     }
   }
@@ -309,8 +307,7 @@ public class CreateDefaultSimView extends VBox {
       }
       try {
         createNewSimulation();
-      } catch (IllegalArgumentException e) {
-        System.out.println("test");
+      } catch (Exception e) {
         return;
       }
       handleAdditionalButtonActions();

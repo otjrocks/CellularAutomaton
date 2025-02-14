@@ -19,7 +19,7 @@ class SimulationRulesTest {
   private SimulationRules testSimulationRules;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
 
     for (int row = 0; row < 5; row++) {

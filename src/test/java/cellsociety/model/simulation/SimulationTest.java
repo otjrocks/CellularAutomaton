@@ -2,10 +2,8 @@ package cellsociety.model.simulation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.config.SimulationConfig;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.config.StateDisplayConfig;
-import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +15,7 @@ class SimulationTest {
   private SimulationMetaData testData;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     testRules = new GameOfLifeRules(new HashMap<>()); // I chose an example rules class
     testData = new SimulationMetaData("GameOfLife", "Tester", "Justin", "Justin's GOL Test");
     testSimulation = new Simulation(testRules, testData);

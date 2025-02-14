@@ -1,5 +1,6 @@
 package cellsociety.controller;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
@@ -178,15 +179,12 @@ public class MainController {
     myGrid = new Grid(rows, cols);
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
     } catch (InvocationTargetException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchMethodException e) {
-      throw new RuntimeException(e);
-    } catch (InstantiationException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+      throw new RuntimeException(
+          e.getCause()
+              .getMessage());  // provide exception message thrown by class, not the reflection api
+    } catch (ClassNotFoundException | NoSuchMethodException |
+             InstantiationException | IllegalAccessException | InvalidParameterException e) {
       throw new RuntimeException(e);
     }
     initializeGridWithCells();
@@ -247,32 +245,33 @@ public class MainController {
   }
 
   private void updateSimulationFromFile(String filePath) {
-    try{
+    try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
 
       mySimulation = xmlHandler.getSim();
       myGrid = xmlHandler.getGrid();
       createNewMainViewAndUpdateViewContainer();
       createOrUpdateSidebar();
-      } catch (SAXException e) {
-        mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
-      } catch (ParserConfigurationException e) {
-        mySidebarView.flashWarning("XML parser configuration issue.");
-      } catch (IOException e) {
-        mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
-      } catch (NumberFormatException e) {
-        mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
-      } catch (NullPointerException e) {
-        mySidebarView.flashWarning("Missing required data field. Please add required fields.");
-      } catch (GridException e) {
-        mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
-      } catch (Exception e) {
+    } catch (SAXException e) {
+      mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+    } catch (ParserConfigurationException e) {
+      mySidebarView.flashWarning("XML parser configuration issue.");
+    } catch (IOException e) {
+      mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+    } catch (NumberFormatException e) {
+      mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+    } catch (NullPointerException e) {
+      mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+    } catch (GridException e) {
+      mySidebarView.flashWarning(
+          "Grid values out of bounds. Please adjust initialization configuration.");
+    } catch (Exception e) {
       e.printStackTrace();
-        mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
-        if (VERBOSE_ERROR_MESSAGES) {
-          mySidebarView.flashWarning(e.getMessage());
-        }
+      mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      if (VERBOSE_ERROR_MESSAGES) {
+        mySidebarView.flashWarning(e.getMessage());
       }
+    }
   }
 
   private void createOrUpdateSidebar() {

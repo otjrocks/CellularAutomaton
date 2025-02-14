@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class SpreadingOfFireRulesTest {
   private Grid grid;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     spreadingOfFireRules = new SpreadingOfFireRules(null);
     grid = new Grid(5, 5);
   }
@@ -70,7 +70,8 @@ class SpreadingOfFireRulesTest {
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 2))); // Right
 
     List<Cell> neighbors = spreadingOfFireRules.getNeighbors(cell, grid);
-    assertEquals(4, neighbors.size(), "Middle cell should only have 4 neighbors. Does not include diagonal neighbors");
+    assertEquals(4, neighbors.size(),
+        "Middle cell should only have 4 neighbors. Does not include diagonal neighbors");
   }
 
 

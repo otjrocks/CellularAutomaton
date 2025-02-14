@@ -6,6 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ class SegregationRulesTest {
   private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
     parameters.put("toleranceThreshold", new Parameter<>(0.3));
 
@@ -82,7 +83,7 @@ class SegregationRulesTest {
   }
 
   @Test
-  void testSetDefaultParameters() {
+  void testSetDefaultParameters() throws InvalidParameterException {
     assertEquals(0.3, segregationRules.getParameters().get("toleranceThreshold").getDouble());
   }
 

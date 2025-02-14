@@ -1,5 +1,6 @@
 package cellsociety.model.XMLHandlers;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.io.IOException;
@@ -29,182 +30,181 @@ import cellsociety.model.simulation.SimulationMetaData;
  * @author Troy Ludwig
  */
 public class XMLHandler {
-    private int myGridHeight;
-    private int myGridWidth;
-    private Grid myGrid;
-    private Simulation mySim;
-    private SimulationMetaData mySimData;
-    private Map<String, Parameter<?>> myParameters;
 
-    /**
-    * XMLHandler constructor for referencing data
-    *
-    * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
-    *                     represented as a String
-    */
-    public XMLHandler(String xmlFilePath) throws SAXException, IOException, ParserConfigurationException, GridException{
-        parseXMLFile(xmlFilePath);
-    }
+  private int myGridHeight;
+  private int myGridWidth;
+  private Grid myGrid;
+  private Simulation mySim;
+  private SimulationMetaData mySimData;
+  private Map<String, Parameter<?>> myParameters;
 
-    /**
-    * Method for parsing the XML file and initializing the XMLHandler instance variables with the
-    * associated data
-    *
-    * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
-    *                     represented as a String
-    */
-    private void parseXMLFile(String xmlFilePath) throws SAXException, IOException, ParserConfigurationException, GridException{
+  /**
+   * XMLHandler constructor for referencing data
+   *
+   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
+   *                     represented as a String
+   */
+  public XMLHandler(String xmlFilePath)
+      throws SAXException, IOException, ParserConfigurationException, GridException {
+    parseXMLFile(xmlFilePath);
+  }
 
-        File xmlFile = new File(xmlFilePath);
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(xmlFile);
-        doc.getDocumentElement().normalize();
+  /**
+   * Method for parsing the XML file and initializing the XMLHandler instance variables with the
+   * associated data
+   *
+   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
+   *                     represented as a String
+   */
+  private void parseXMLFile(String xmlFilePath)
+      throws SAXException, IOException, ParserConfigurationException, GridException {
 
-        parseSimData(doc);
-        parseDimensions(doc);
-        parseGrid(doc);
-        parseParameters(doc);
-        setSim();
-    }
+    File xmlFile = new File(xmlFilePath);
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+    Document doc = builder.parse(xmlFile);
+    doc.getDocumentElement().normalize();
 
-    private void parseSimData(Document data){
-        String type = data.getElementsByTagName("Type").item(0).getTextContent();
-        String title = data.getElementsByTagName("Title").item(0).getTextContent();
-        String author = data.getElementsByTagName("Author").item(0).getTextContent();
-        String description = data.getElementsByTagName("Description").item(0).getTextContent();
-        mySimData = new SimulationMetaData(type, title, author, description);
-    }
+    parseSimData(doc);
+    parseDimensions(doc);
+    parseGrid(doc);
+    parseParameters(doc);
+    setSim();
+  }
 
-    private void parseDimensions(Document dimDoc){
-        Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
-        myGridHeight = Integer.parseInt(gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
-        myGridWidth = Integer.parseInt(gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
-    }
+  private void parseSimData(Document data) {
+    String type = data.getElementsByTagName("Type").item(0).getTextContent();
+    String title = data.getElementsByTagName("Title").item(0).getTextContent();
+    String author = data.getElementsByTagName("Author").item(0).getTextContent();
+    String description = data.getElementsByTagName("Description").item(0).getTextContent();
+    mySimData = new SimulationMetaData(type, title, author, description);
+  }
 
-    private void parseGrid(Document gridDoc) throws GridException{
-        myGrid = new Grid(myGridHeight, myGridWidth);
-        NodeList rows = gridDoc.getElementsByTagName("Row");
-        
-        for (int i = 0; i < rows.getLength(); i++) {
-            if (rows.getLength() > myGridHeight){
-                throw new GridException();
-            }
-            String[] rowValues = rows.item(i).getTextContent().split(",");
-            if (rowValues.length > myGridWidth){
-                throw new GridException();
-            }
-            for (int j = 0; j < rowValues.length; j++) {
-                int state = Integer.parseInt(rowValues[j]);
-                Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
-                myGrid.addCell(holdingCell);  
-            }
-        }
-    }
-    
+  private void parseDimensions(Document dimDoc) {
+    Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
+    myGridHeight = Integer.parseInt(
+        gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
+    myGridWidth = Integer.parseInt(
+        gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
+  }
 
-    /**
-    * Method that assigns the parameters for the current simulation based on simulation type
-    * @param doc: parsed XML file containing the simulation data
-    *             most importantly for this function, the additional sim parameters
-    */
-    private void parseParameters(Document doc){
-        myParameters = new HashMap<>();
-        NodeList params = doc.getElementsByTagName("Parameters");
-        if (params.getLength() > 0) {
-            Node param = params.item(0);
-            if (param.getNodeType() == Node.ELEMENT_NODE) {
-                Element paramElement = (Element) param;
-                for (String paramString: SimulationConfig.getParameters(mySimData.type())){
-                    if (paramString.equals("ruleString")){
-                        checkAndLoadRulestring(paramElement);
-                    }
-                    else{
-                        checkAndLoadParameter(paramElement, paramString);
-                    }
-                }
-            }
-        }
-    }
+  private void parseGrid(Document gridDoc) throws GridException {
+    myGrid = new Grid(myGridHeight, myGridWidth);
+    NodeList rows = gridDoc.getElementsByTagName("Row");
 
-    /**
-    * Method that checks an XML file for a parameter with a given name
-    * @param paramElement: element containing all parameters for a given simulation
-    * @param paramName: name of the parameter being checked
-    */
-    private void checkAndLoadParameter(Element paramElement, String paramName){
-        try {
-            String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
-            myParameters.put(paramName, new Parameter<>(paramValue));
-        } catch (NumberFormatException e) {
-            System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
-            myParameters.put(paramName, new Parameter<Object>(1.0));
-        }
-    }
-
-    private void checkAndLoadRulestring(Element paramElement){
-        String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-        myParameters.put("ruleString", new Parameter<>(paramString));
-    }
-
-    /**
-    * Method that assigns SimRules and Sim based on simulation type
-    */
-    private void setSim(){
-      try {
-        mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
-      } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-      } catch (InvocationTargetException e) {
-        throw new RuntimeException(e);
-      } catch (NoSuchMethodException e) {
-        throw new RuntimeException(e);
-      } catch (InstantiationException e) {
-        throw new RuntimeException(e);
-      } catch (IllegalAccessException e) {
-        throw new RuntimeException(e);
+    for (int i = 0; i < rows.getLength(); i++) {
+      if (rows.getLength() > myGridHeight) {
+        throw new GridException();
+      }
+      String[] rowValues = rows.item(i).getTextContent().split(",");
+      if (rowValues.length > myGridWidth) {
+        throw new GridException();
+      }
+      for (int j = 0; j < rowValues.length; j++) {
+        int state = Integer.parseInt(rowValues[j]);
+        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
+        myGrid.addCell(holdingCell);
       }
     }
+  }
 
-    /**
-    * Returns the grid height of current simulation
-    */
-    public int getGridHeight() {
-        return myGridHeight;
-    }
 
-    /**
-    * Returns the grid width of current simulation
-    */
-    public int getGridWidth() {
-        return myGridWidth;
+  /**
+   * Method that assigns the parameters for the current simulation based on simulation type
+   *
+   * @param doc: parsed XML file containing the simulation data most importantly for this function,
+   *             the additional sim parameters
+   */
+  private void parseParameters(Document doc) {
+    myParameters = new HashMap<>();
+    NodeList params = doc.getElementsByTagName("Parameters");
+    if (params.getLength() > 0) {
+      Node param = params.item(0);
+      if (param.getNodeType() == Node.ELEMENT_NODE) {
+        Element paramElement = (Element) param;
+        for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
+          if (paramString.equals("ruleString")) {
+            checkAndLoadRulestring(paramElement);
+          } else {
+            checkAndLoadParameter(paramElement, paramString);
+          }
+        }
+      }
     }
+  }
 
-    /**
-    * Returns the initial grid
-    */
-    public Grid getGrid() {
-        return myGrid;
+  /**
+   * Method that checks an XML file for a parameter with a given name
+   *
+   * @param paramElement: element containing all parameters for a given simulation
+   * @param paramName:    name of the parameter being checked
+   */
+  private void checkAndLoadParameter(Element paramElement, String paramName) {
+    try {
+      String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
+      myParameters.put(paramName, new Parameter<>(paramValue));
+    } catch (NumberFormatException e) {
+      System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
+      myParameters.put(paramName, new Parameter<Object>(1.0));
     }
+  }
 
-    /**
-    * Returns the simulation data associated with current simulation
-    */
-    public SimulationMetaData getSimData() {
-        return mySimData;
-    }
+  private void checkAndLoadRulestring(Element paramElement) {
+    String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+    myParameters.put("ruleString", new Parameter<>(paramString));
+  }
 
-    /**
-    * Returns the current simulation object
-    */
-    public Simulation getSim(){
-        return mySim;
+  /**
+   * Method that assigns SimRules and Sim based on simulation type
+   */
+  private void setSim() {
+    try {
+      mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
+    } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
+             InstantiationException | IllegalAccessException | InvalidParameterException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    /**
-    * Returns the current additional simulation parameters
-    */
-    public Map<String, Parameter<?>> getParams(){
-        return myParameters;
-    }
+  /**
+   * Returns the grid height of current simulation
+   */
+  public int getGridHeight() {
+    return myGridHeight;
+  }
+
+  /**
+   * Returns the grid width of current simulation
+   */
+  public int getGridWidth() {
+    return myGridWidth;
+  }
+
+  /**
+   * Returns the initial grid
+   */
+  public Grid getGrid() {
+    return myGrid;
+  }
+
+  /**
+   * Returns the simulation data associated with current simulation
+   */
+  public SimulationMetaData getSimData() {
+    return mySimData;
+  }
+
+  /**
+   * Returns the current simulation object
+   */
+  public Simulation getSim() {
+    return mySim;
+  }
+
+  /**
+   * Returns the current additional simulation parameters
+   */
+  public Map<String, Parameter<?>> getParams() {
+    return myParameters;
+  }
 }

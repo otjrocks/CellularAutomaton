@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class RockPaperScissorsRulesTest {
   private Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
     parameters.put("minThreshold", new Parameter<>(0.5));
     parameters.put("numStates", new Parameter<>(3));
@@ -62,7 +63,7 @@ public class RockPaperScissorsRulesTest {
   }
 
   @Test
-  void constructor_DefaultParameters_InitializesWithDefaultThreshold() {
+  void constructor_DefaultParameters_InitializesWithDefaultThreshold() throws InvalidParameterException {
     assertEquals(0.5, rockPaperScissorsRules.getParameters().get("minThreshold").getDouble());
   }
 
