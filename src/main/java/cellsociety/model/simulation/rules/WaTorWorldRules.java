@@ -1,7 +1,7 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class WaTorWorldRules extends SimulationRules {
   private final int mySharkReproductionTime;
   private final int myFishReproductionTime;
 
-  public WaTorWorldRules(Map<String, Parameter<?>> parameters) throws InvalidParameterType {
+  public WaTorWorldRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());

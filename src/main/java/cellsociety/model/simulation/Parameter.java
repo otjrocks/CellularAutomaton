@@ -19,45 +19,38 @@ public class Parameter<T> {
     myValue = value;
   }
 
-  public String getString() throws InvalidParameterType {
+  public String getString() throws InvalidParameterException {
     try {
       return (String) myValue;
     } catch (Exception e) {
-      throw new InvalidParameterType("Invalid parameter type: " + myValue);
+      throw new InvalidParameterException("Invalid parameter type: " + myValue);
     }
   }
 
-  public Double getDouble() throws InvalidParameterType {
+  public Double getDouble() throws InvalidParameterException {
     try {
       if (myValue instanceof Double) {
         return (Double) myValue;
       }
       return Double.parseDouble((String) myValue);
     } catch (Exception e) {
-      throw new InvalidParameterType("Invalid parameter type: " + myValue);
+      throw new InvalidParameterException("Invalid parameter type: " + myValue);
     }
   }
 
-  public Integer getInteger() throws InvalidParameterType {
+  public Integer getInteger() throws InvalidParameterException {
     try {
       if (myValue instanceof Integer) {
         return (Integer) myValue;
       }
       return getDouble().intValue();
     } catch (Exception e) {
-      throw new InvalidParameterType("Invalid parameter type: " + myValue);
+      throw new InvalidParameterException("Invalid parameter type: " + myValue);
     }
   }
 
   @Override
   public String toString() {
     return myValue.toString();
-  }
-
-  public static class InvalidParameterType extends Exception {
-
-    public InvalidParameterType(String message) {
-      super(message);
-    }
   }
 }

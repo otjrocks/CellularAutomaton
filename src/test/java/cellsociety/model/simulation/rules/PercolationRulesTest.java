@@ -5,11 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
+import cellsociety.model.simulation.InvalidParameterException;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.awt.geom.Point2D.Double;
@@ -21,7 +19,7 @@ class PercolationRulesTest {
   private Grid fullGrid;
 
   @BeforeEach
-  void setUp() throws InvalidParameterType {
+  void setUp() throws InvalidParameterException {
     percolationRules = new PercolationRules(new HashMap<>());
     int[][] gridPattern = {
         {1, 0, 1, 0, 1},

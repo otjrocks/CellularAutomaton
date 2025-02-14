@@ -3,7 +3,6 @@ package cellsociety.model.simulation;
 import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +16,7 @@ import cellsociety.model.cell.CellUpdate;
 public abstract class SimulationRules {
   private Map<String, Parameter<?>> myParameters;
 
-  public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterType {
+  public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     myParameters = parameters;
   }
 

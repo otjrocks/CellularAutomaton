@@ -2,8 +2,8 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class PercolationRules extends SimulationRules {
 
   public PercolationRules(
-      Map<String, Parameter<?>> parameters) throws InvalidParameterType {
+      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
   }
 

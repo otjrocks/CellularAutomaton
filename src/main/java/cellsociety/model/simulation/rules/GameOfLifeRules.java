@@ -1,7 +1,7 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import cellsociety.model.Grid;
@@ -15,7 +15,7 @@ public class GameOfLifeRules extends SimulationRules {
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
 
-  public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterType {
+  public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
       birthValues = new ArrayList<>(Arrays.asList(3));
@@ -67,7 +67,7 @@ public class GameOfLifeRules extends SimulationRules {
   }
 
   private void initializeBSValues(Map<String, Parameter<?>> parameters)
-      throws InvalidParameterType {
+      throws InvalidParameterException {
     String rulestring = parameters.get("ruleString").getString();
 
     String[] sStrings = rulestring.split("/")[0].split("");

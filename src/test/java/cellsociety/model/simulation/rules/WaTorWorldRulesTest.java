@@ -7,8 +7,8 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ class WaTorWorldRulesTest {
   private Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() throws InvalidParameterType {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
     parameters.put("fishReproductionTime", new Parameter<>("3.0"));
     parameters.put("sharkReproductionTime", new Parameter<>("4.0"));
@@ -116,7 +116,7 @@ class WaTorWorldRulesTest {
   }
 
   @Test
-  void testSetDefaultParameters() throws InvalidParameterType {
+  void testSetDefaultParameters() throws InvalidParameterException {
     assertEquals(3.0, waTorWorldRules.getParameters().get("fishReproductionTime").getDouble());
     assertEquals(4.0, waTorWorldRules.getParameters().get("sharkReproductionTime").getDouble());
     assertEquals(2.0, waTorWorldRules.getParameters().get("sharkEnergyGain").getDouble());
