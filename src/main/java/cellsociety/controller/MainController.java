@@ -1,5 +1,6 @@
 package cellsociety.controller;
 
+import cellsociety.model.simulation.Parameter;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.StateDisplayConfig;
@@ -16,6 +17,8 @@ import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
@@ -170,7 +173,7 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
     mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     initializeGridWithCells();
@@ -252,6 +255,9 @@ public class MainController {
         mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
       } catch (Exception e) {
         mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+        if (VERBOSE_ERROR_MESSAGES) {
+          mySidebarView.flashWarning(e.getMessage());
+        }
       }
   }
 

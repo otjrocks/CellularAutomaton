@@ -1,6 +1,5 @@
 package cellsociety.model.simulation;
 
-import cellsociety.config.SimulationConfig;
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -14,27 +13,18 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 
 public abstract class SimulationRules {
+  private Map<String, Parameter<?>> myParameters;
 
-  protected Map<String, Double> parameters;
-
-  public SimulationRules() {
-    this.parameters = new HashMap<>();
+  public SimulationRules(Map<String, Parameter<?>> parameters) {
+    myParameters = parameters;
   }
 
-  public SimulationRules(Map<String, Double> parameters) {
-    this.parameters = parameters;
+  public void setParameters(Map<String, Parameter<?>> parameters) {
+    myParameters = parameters;
   }
 
-  public Map<String, Double> getParameters() {
-    return Map.copyOf(parameters);
-  }
-
-  public Double getParameter(String curParameter) {
-    return parameters.get(curParameter);
-  }
-
-  public void setParameter(String key, Double value) {
-    parameters.put(key, value);
+  public Map<String, Parameter<?>> getParameters() {
+    return myParameters;
   }
 
   //only two options, so moved the getNeighbors here and actually defined it.

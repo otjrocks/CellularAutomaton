@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,12 +42,10 @@ class SimulationConfigTest {
   @Test
   void getWaTor() {
     String simulationName = "WaTorWorld";
-    Map<String, String> parameters = new HashMap<>();
-    parameters.put("sharkReproductionTime", "1.0");
-    parameters.put("sharkEnergyGain", "1.0");
-    assertThrows(IllegalArgumentException.class,
-        () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
-    parameters.put("fishReproductionTime", "1.0");
+    Map<String, Parameter<?>> parameters = new HashMap<>();
+    parameters.put("sharkReproductionTime", new Parameter<>(1.0));
+    parameters.put("sharkEnergyGain", new Parameter<>(1.0));
+    parameters.put("fishReproductionTime", new Parameter<>(1.0));
     assertThrows(NullPointerException.class,
         () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, null));
   }
@@ -69,9 +68,9 @@ class SimulationConfigTest {
 
   @Test
   void checkTooLargeParameters() {
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, Parameter<?>> parameters = new HashMap<>();
     String simulationName = "Segregation";
-    parameters.put("toleranceThreshold", "1.1"); // invalid parameter out of range [0,1]
+    parameters.put("toleranceThreshold", new Parameter<>("1.1")); // invalid parameter out of range [0,1]
     assertThrows(IllegalArgumentException.class,
         () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
 
@@ -79,9 +78,9 @@ class SimulationConfigTest {
 
   @Test
   void checkTooSmallParameters() {
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, Parameter<?>> parameters = new HashMap<>();
     String simulationName = "Segregation";
-    parameters.put("toleranceThreshold", "-0.1"); // invalid parameter out of range [0,1]
+    parameters.put("toleranceThreshold", new Parameter<>("-0.1")); // invalid parameter out of range [0,1]
     assertThrows(IllegalArgumentException.class,
         () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
 
@@ -89,23 +88,23 @@ class SimulationConfigTest {
 
   @Test
   void checkValidParameters() {
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, Parameter<?>> parameters = new HashMap<>();
     String simulationName = "Segregation";
-    parameters.put("toleranceThreshold", "0.7"); // invalid parameter out of range [0,1]
+    parameters.put("toleranceThreshold", new Parameter<>("0.7")); // invalid parameter out of range [0,1]
     SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters);
   }
 
   @Test
   void testValidParametersRockPaper() {
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, Parameter<?>> parameters = new HashMap<>();
     String simulationName = "RockPaperScissors";
-    parameters.put("numStates", "21"); // invalid number of states
-    parameters.put("minThreshold", "0.7");
+    parameters.put("numStates", new Parameter<>("21")); // invalid number of states
+    parameters.put("minThreshold", new Parameter<>("0.7"));
     assertThrows(IllegalArgumentException.class,
         () -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
     parameters.clear();
-    parameters.put("numStates", "5"); // valid parameters
-    parameters.put("minThreshold", "0.7");
+    parameters.put("numStates", new Parameter<>("5")); // valid parameters
+    parameters.put("minThreshold", new Parameter<>("0.7"));
     assertDoesNotThrow(() -> SimulationConfig.getNewSimulation(simulationName, simMetaData, parameters));
   }
 }

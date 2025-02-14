@@ -7,6 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class SpreadingOfFireRulesTest {
 
   @BeforeEach
   void setUp() {
-    spreadingOfFireRules = new SpreadingOfFireRules();
+    spreadingOfFireRules = new SpreadingOfFireRules(null);
     grid = new Grid(5, 5);
   }
 

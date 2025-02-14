@@ -2,6 +2,7 @@ package cellsociety.config;
 
 import static cellsociety.config.MainConfig.getMessages;
 
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -89,27 +90,24 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters) {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
-    if (simulationName.equals("GameOfLife")) {
-      return new Simulation(new GameOfLifeRules(parameters), simulationMetaData);
-    }
-    return new Simulation(getRules(simulationName, convertMap(parameters)), simulationMetaData);
+    return new Simulation(getRules(simulationName, parameters), simulationMetaData);
   }
 
   private static SimulationRules getRules(String simulationName,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, Parameter<?>> parameters) {
     validateSimulation(simulationName);
     switch (simulationName) {
       case "Percolation" -> {
-        return new PercolationRules();
+        return new PercolationRules(parameters);
       }
       case "Segregation" -> {
         return new SegregationModelRules(parameters);
       }
       case "SpreadingOfFire" -> {
-        return new SpreadingOfFireRules();
+        return new SpreadingOfFireRules(parameters);
       }
       case "WaTorWorld" -> {
         return new WaTorWorldRules(parameters);
@@ -118,7 +116,7 @@ public class SimulationConfig {
         return new RockPaperScissorsRules(parameters);
       }
       default -> { // default is game of life
-        return new GameOfLifeRules();
+        return new GameOfLifeRules(parameters);
       }
     }
   }
@@ -158,7 +156,7 @@ public class SimulationConfig {
   }
 
   private static void validateParameters(String simulationName,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters) {
     List<String> requiredParameters = getParameters(simulationName);
     for (String parameter : requiredParameters) {
       if (parameters == null) {
@@ -167,25 +165,11 @@ public class SimulationConfig {
       }
       if (!parameters.containsKey(parameter)) {
         throw new IllegalArgumentException(
-            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
+            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"),
+                parameter));
       }
-      validateParameterRange(parameter, java.lang.Double.valueOf(parameters.get(parameter)));
+      validateParameterRange(parameter, parameters.get(parameter).getDouble());
     }
-  }
-
-  private static Map<String, java.lang.Double> convertMap(Map<String, String> stringMap) {
-    Map<String, java.lang.Double> paramMap = new HashMap<>();
-    for (String key : stringMap.keySet()) {
-      String value = stringMap.get(key);
-      if (value != null) {
-        try {
-          paramMap.put(key, java.lang.Double.valueOf(value));
-        } catch (NumberFormatException e) {
-          System.err.println("Warning: Invalid number format for key: " + key);
-        }
-      }
-    }
-    return paramMap;
   }
 
   // ensure that a specified parameter is within a valid range for the parameter
@@ -193,11 +177,13 @@ public class SimulationConfig {
     Point2D validRange = getParameterRange(parameter);
     if (value < validRange.getX()) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter, validRange.getX()));
+          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter,
+              validRange.getX()));
     }
     if (value > validRange.getY()) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter, validRange.getY()));
+          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter,
+              validRange.getY()));
     }
   }
 

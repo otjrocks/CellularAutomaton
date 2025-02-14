@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.HashMap;
 import java.util.List;
@@ -10,16 +11,15 @@ import java.util.Map;
 //For RockPaperScissors there can be any number of states up to 20
 // Winning depends on the next one in the circle (i.e with 3 states: 1 beats 2, 2 beats 3, 3 beats 1)
 //The number of states the current state beats as well as loses to is N/2 (rounded down)
-  // This is determined by (current state - opponent state + numStates) % numStates
+// This is determined by (current state - opponent state + numStates) % numStates
 
 
 public class RockPaperScissorsRules extends SimulationRules {
 
-  public RockPaperScissorsRules(Map<String, Double> myParameters)  {
+  public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters) {
+    super(myParameters);
     if (myParameters == null || myParameters.isEmpty()) {
-      this.parameters = setDefaultParameters();
-    } else {
-      this.parameters = new HashMap<>(myParameters);
+      this.setParameters(setDefaultParameters());
     }
   }
 
@@ -32,7 +32,6 @@ public class RockPaperScissorsRules extends SimulationRules {
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, true);
   }
-
 
 
   /**
@@ -50,8 +49,8 @@ public class RockPaperScissorsRules extends SimulationRules {
 
     int currentState = cell.getState();
 
-    int numStates = parameters.get("numStates").intValue();
-    double threshold = parameters.get("minThreshold");
+    int numStates = getParameters().get("numStates").getInteger();
+    double threshold = getParameters().get("minThreshold").getDouble();
 
     Map<Integer, Integer> neighborCount = new HashMap<>();
     for (int i = 0; i < numStates; i++) {
@@ -68,10 +67,11 @@ public class RockPaperScissorsRules extends SimulationRules {
 
   @Override
   public int getNumberStates() {
-    return parameters.get("numStates").intValue();
+    return getParameters().get("numStates").getInteger();
   }
 
-  private static int checkForWinner(int numStates, int currentState, Map<Integer, Integer> neighborCount,
+  private static int checkForWinner(int numStates, int currentState,
+      Map<Integer, Integer> neighborCount,
       double threshold) {
     int lastWinnningState = currentState;
 
@@ -104,16 +104,16 @@ public class RockPaperScissorsRules extends SimulationRules {
   private static void countNeighbors(List<Cell> neighbors, Map<Integer, Integer> neighborCount) {
     for (Cell neighbor : neighbors) {
       int neighborState = neighbor.getState();
-        neighborCount.put(neighborState, neighborCount.getOrDefault(neighborState, 0) + 1);
+      neighborCount.put(neighborState, neighborCount.getOrDefault(neighborState, 0) + 1);
     }
   }
 
 
-  private Map<String, Double> setDefaultParameters() {
-    Map<String, Double> myParameters = new HashMap<>();
-    myParameters.put("minThreshold", 0.5);
-    myParameters.put("numStates", 3.0);
-    return myParameters;
+  private Map<String, Parameter<?>> setDefaultParameters() {
+    Map<String, Parameter<?>> parameters = new HashMap<>();
+    parameters.put("minThreshold", new Parameter<>(0.5));
+    parameters.put("numStates", new Parameter<>(3));
+    return parameters;
   }
 
 }

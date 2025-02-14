@@ -7,6 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -18,14 +19,14 @@ import org.junit.jupiter.api.Test;
 class WaTorWorldRulesTest {
   private WaTorWorldRules waTorWorldRules;
   private Grid grid;
-  private Map<String, Double> parameters = new HashMap<>();
+  private Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
   void setUp() {
     grid = new Grid(5, 5);
-    parameters.put("fishReproductionTime", 3.0);
-    parameters.put("sharkReproductionTime", 4.0);
-    parameters.put("sharkEnergyGain", 2.0);
+    parameters.put("fishReproductionTime", new Parameter<>("3.0"));
+    parameters.put("sharkReproductionTime", new Parameter<>("4.0"));
+    parameters.put("sharkEnergyGain", new Parameter<>("2.0"));
 
     waTorWorldRules = new WaTorWorldRules(parameters);
   }
@@ -115,9 +116,9 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSetDefaultParameters() {
-    assertEquals(3.0, waTorWorldRules.getParameters().get("fishReproductionTime"));
-    assertEquals(4.0, waTorWorldRules.getParameters().get("sharkReproductionTime"));
-    assertEquals(2.0, waTorWorldRules.getParameters().get("sharkEnergyGain"));
+    assertEquals(3.0, waTorWorldRules.getParameters().get("fishReproductionTime").getDouble());
+    assertEquals(4.0, waTorWorldRules.getParameters().get("sharkReproductionTime").getDouble());
+    assertEquals(2.0, waTorWorldRules.getParameters().get("sharkEnergyGain").getDouble());
   }
 
   @Test

@@ -10,6 +10,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
@@ -273,9 +274,9 @@ public class CreateDefaultSimView extends VBox {
   private void createNewSimulation() throws IllegalArgumentException {
     SimulationMetaData metaData = createMetaData();
 
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, Parameter<?>> parameters = new HashMap<>();
     for (String parameter : myParameterTextFields.keySet()) {
-      parameters.put(parameter, myParameterTextFields.get(parameter).getText());
+      parameters.put(parameter, new Parameter<Object>(myParameterTextFields.get(parameter).getText()));
     }
     attemptCreatingNewSimulation(metaData, parameters);
   }
@@ -285,7 +286,7 @@ public class CreateDefaultSimView extends VBox {
    * @param parameters - the parameters of the Simulation
    */
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters) {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
