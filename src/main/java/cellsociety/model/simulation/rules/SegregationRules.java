@@ -31,6 +31,13 @@ public class SegregationRules extends SimulationRules {
     }
     checkMissingParameterAndThrowException("toleranceThreshold");
     myToleranceThreshold = getParameters().get("toleranceThreshold").getDouble();
+    validateParameterRange();
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (myToleranceThreshold < 0 || myToleranceThreshold > 1) {
+      throwInvalidParameterException("toleranceThreshold");
+    }
   }
 
 

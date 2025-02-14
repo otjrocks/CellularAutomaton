@@ -43,6 +43,19 @@ public class WaTorWorldRules extends SimulationRules {
     mySharkEnergyGain = getParameters().get("sharkEnergyGain").getInteger();
     mySharkReproductionTime = getParameters().get("sharkReproductionTime").getInteger();
     myFishReproductionTime = getParameters().get("fishReproductionTime").getInteger();
+    validateParameterRange();
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (mySharkEnergyGain < 0) {
+      throwInvalidParameterException("sharkEnergyGain");
+    }
+    if (mySharkReproductionTime < 0) {
+      throwInvalidParameterException("sharkReproductionTime");
+    }
+    if (myFishReproductionTime < 0) {
+      throwInvalidParameterException("fishReproductionTime");
+    }
   }
 
   private Map<String, Parameter<?>> setDefaultParameters() {

@@ -179,7 +179,11 @@ public class MainController {
     myGrid = new Grid(rows, cols);
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
-    } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(
+          e.getCause()
+              .getMessage());  // provide exception message thrown by class, not the reflection api
+    } catch (ClassNotFoundException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
       throw new RuntimeException(e);
     }

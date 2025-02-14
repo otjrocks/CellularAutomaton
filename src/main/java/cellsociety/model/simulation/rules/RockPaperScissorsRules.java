@@ -30,6 +30,16 @@ public class RockPaperScissorsRules extends SimulationRules {
     checkMissingParameterAndThrowException("minThreshold");
     myNumStates = getParameters().get("numStates").getInteger();
     myMinThreshold = getParameters().get("minThreshold").getDouble();
+    validateParameterRange();
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (myNumStates < 1) {
+      throwInvalidParameterException("numStates");
+    }
+    if (myMinThreshold < 0 || myMinThreshold > 1) {
+      throwInvalidParameterException("minThreshold");
+    }
   }
 
   /**

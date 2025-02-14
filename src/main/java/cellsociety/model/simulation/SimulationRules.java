@@ -88,4 +88,10 @@ public abstract class SimulationRules {
           String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
     }
   }
+
+  public static void throwInvalidParameterException(String minThreshold)
+      throws InvalidParameterException {
+    throw new InvalidParameterException(
+        String.format(getMessages().getString("INVALID_PARAMETER"), minThreshold));
+  }
 }
