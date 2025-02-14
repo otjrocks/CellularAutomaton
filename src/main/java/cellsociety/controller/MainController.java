@@ -6,6 +6,7 @@ import cellsociety.view.components.AlertField;
 import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -175,7 +176,19 @@ public class MainController {
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
-    mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
+    try {
+      mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(e);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    } catch (InstantiationException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
   }
@@ -254,6 +267,7 @@ public class MainController {
       } catch (GridException e) {
         mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
       } catch (Exception e) {
+      e.printStackTrace();
         mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
         if (VERBOSE_ERROR_MESSAGES) {
           mySidebarView.flashWarning(e.getMessage());
