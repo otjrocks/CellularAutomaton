@@ -2,8 +2,10 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
+import java.util.Map;
 
 //For a Percolation cell, there can be 3 states
 // A cell with state 0 indicates it's blocked
@@ -11,6 +13,11 @@ import java.util.List;
 // A cell with state 2 indicates it's filled and water has passed through this cell
 
 public class PercolationRules extends SimulationRules {
+
+  public PercolationRules(
+      Map<String, Parameter<?>> parameters) {
+    super(parameters);
+  }
 
   /**
    * @param cell - an individual cell from the grid

@@ -3,6 +3,7 @@ package cellsociety.view;
 import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import java.util.Map;
 import javafx.scene.layout.VBox;
@@ -34,8 +35,8 @@ public class ParameterView extends VBox {
   }
 
   private void createParameters(Simulation simulation) {
-    Map<String, Double> parameters = simulation.rules().getParameters();
-    for (Map.Entry<String, Double> entry : parameters.entrySet()) {
+    Map<String, Parameter<?>> parameters = simulation.rules().getParameters();
+    for (Map.Entry<String, Parameter<?>> entry : parameters.entrySet()) {
       createText(String.format("• %s%s %s", entry.getKey(), ": ", entry.getValue()), false);
     }
   }

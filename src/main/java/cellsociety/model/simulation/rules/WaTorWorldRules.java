@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,20 +28,19 @@ public class WaTorWorldRules extends SimulationRules {
 
   private final Random random = new Random();
 
-  public WaTorWorldRules(Map<String, Double> parameters) {
+  public WaTorWorldRules(Map<String, Parameter<?>> parameters) {
+    super(parameters);
     if (parameters == null || parameters.isEmpty()) {
-      this.parameters = setDefaultParameters();
-    } else {
-      super.parameters = parameters;
+      setParameters(setDefaultParameters());
     }
   }
 
-  private Map<String, Double> setDefaultParameters() {
-    Map<String, Double> parameters = new HashMap<>();
+  private Map<String, Parameter<?>> setDefaultParameters() {
+    Map<String, Parameter<?>> parameters = new HashMap<>();
 
-    parameters.put("fishReproductionTime", 3.0);
-    parameters.put("sharkReproductionTime", 4.0);
-    parameters.put("sharkEnergyGain", 2.0);
+    parameters.put("fishReproductionTime", new Parameter<>(3));
+    parameters.put("sharkReproductionTime", new Parameter<>(4));
+    parameters.put("sharkEnergyGain", new Parameter<>(1));
 
     return parameters;
   }
@@ -144,14 +144,14 @@ public class WaTorWorldRules extends SimulationRules {
     }
 
     boolean shouldReproduce =
-        shark.getReproductionEnergy() >= parameters.get("sharkReproductionTime");
+        shark.getReproductionEnergy() >= getParameters().get("sharkReproductionTime").getInteger();
     List<Cell> fishNeighbors = getNeighborsByState(shark, grid, State.FISH.getValue());
 
     if (!fishNeighbors.isEmpty()) {
       Cell fishCell = fishNeighbors.get(random.nextInt(fishNeighbors.size()));
       if (!updatedCells.contains(fishCell.getLocation())) {
         fishCells.remove(fishCell);
-        health += parameters.get("sharkEnergyGain").intValue();
+        health += getParameters().get("sharkEnergyGain").getInteger();
         checkReproductionAndMoveOutSharkCell(nextStates, shark, health, shouldReproduce, fishCell,
             updatedCells, grid);
         return;
@@ -208,7 +208,7 @@ public class WaTorWorldRules extends SimulationRules {
       Cell newLocation = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
 
       boolean shouldReproduce =
-          fish.getReproductionEnergy() >= parameters.get("fishReproductionTime");
+          fish.getReproductionEnergy() >= (int) getParameters().get("fishReproductionTime").getInteger();
 
       if (!updatedCells.contains(newLocation.getLocation())) {
         // set new cell to have original cells reproductive energy + 1 and new location

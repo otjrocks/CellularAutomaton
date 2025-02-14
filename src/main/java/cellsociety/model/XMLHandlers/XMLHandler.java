@@ -1,5 +1,6 @@
 package cellsociety.model.XMLHandlers;
 
+import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class XMLHandler {
     private Grid myGrid;
     private Simulation mySim;
     private SimulationMetaData mySimData;
-    private Map<String, String> myParameters;
+    private Map<String, Parameter<?>> myParameters;
 
     /**
     * XMLHandler constructor for referencing data
@@ -133,16 +134,16 @@ public class XMLHandler {
     private void checkAndLoadParameter(Element paramElement, String paramName){
         try {
             String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
-            myParameters.put(paramName, paramValue);
+            myParameters.put(paramName, new Parameter<>(paramValue));
         } catch (NumberFormatException e) {
             System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
-            myParameters.put(paramName, "1.0");
+            myParameters.put(paramName, new Parameter<Object>(1.0));
         }
     }
 
     private void checkAndLoadRulestring(Element paramElement){
         String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-        myParameters.put("ruleString", paramString);
+        myParameters.put("ruleString", new Parameter<>(paramString));
     }
 
     /**
@@ -190,7 +191,7 @@ public class XMLHandler {
     /**
     * Returns the current additional simulation parameters
     */
-    public Map<String, String> getParams(){
+    public Map<String, Parameter<?>> getParams(){
         return myParameters;
     }
 }

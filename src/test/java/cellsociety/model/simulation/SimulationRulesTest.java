@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.geom.Point2D.Double;
 
@@ -28,7 +29,7 @@ class SimulationRulesTest {
       }
     }
 
-    testSimulationRules = new SimulationRules() {
+    testSimulationRules = new SimulationRules(new HashMap<>()) {
 
       @Override
       public int getNextState(Cell cell, Grid grid) {
@@ -41,24 +42,6 @@ class SimulationRulesTest {
       }
     };
   }
-
-  @Test
-  void testDefaultConstructor() {
-    assertNull(testSimulationRules.getParameter("noKey"),
-        "Default constructor creates an empty parameter map.");
-  }
-
-  @Test
-  void testSetAndGetParameter() {
-    testSimulationRules.setParameter("fire", 0.7);
-    assertEquals(0.7, testSimulationRules.getParameter("fire"));
-  }
-
-  @Test
-  void testNoParameter() {
-    assertNull(testSimulationRules.getParameter("noParameter"));
-  }
-
 
   @Test
   void getNeighbors() {

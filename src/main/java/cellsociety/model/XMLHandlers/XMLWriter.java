@@ -1,5 +1,6 @@
 package cellsociety.model.XMLHandlers;
 
+import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ public class XMLWriter {
             Element parametersElement = doc.createElement("Parameters");
             simElement.appendChild(parametersElement);
 
-            for (Map.Entry<String, Double> entry : rules.getParameters().entrySet()) {
+            for (Map.Entry<String, Parameter<?>> entry : rules.getParameters().entrySet()) {
                 addElement(doc, parametersElement, entry.getKey(), String.valueOf(entry.getValue()));
             }
 

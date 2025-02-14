@@ -7,6 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class PercolationRulesTest {
 
   @BeforeEach
   void setUp() {
-    percolationRules = new PercolationRules();
+    percolationRules = new PercolationRules(new HashMap<>());
     int[][] gridPattern = {
         {1, 0, 1, 0, 1},
         {1, 1, 1, 0, 1},

@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +18,11 @@ import java.util.Random;
 public class SpreadingOfFireRules extends SimulationRules {
   private final Random random = new Random();
 
-  public SpreadingOfFireRules() {
-    this.parameters = new HashMap<>(setDefaultParameters());
-  }
-
-  public SpreadingOfFireRules(Map<String, Double> myParameters) {
-    this.parameters = myParameters;
+  public SpreadingOfFireRules(Map<String, Parameter<?>> parameters) {
+    super(parameters);
+    if (parameters == null || parameters.isEmpty()) {
+      setParameters(setDefaultParameters());
+    }
   }
 
   /**
@@ -62,7 +62,7 @@ public class SpreadingOfFireRules extends SimulationRules {
 
     //empty to tree
     if (currentState == 0) {
-      if (random.nextDouble() < parameters.get("growInEmptyCell")){
+      if (random.nextDouble() < getParameters().get("growInEmptyCell").getDouble()){
         return 1;
       }
       return 0;
@@ -77,7 +77,7 @@ public class SpreadingOfFireRules extends SimulationRules {
     }
 
     //random ignition of a tree cell
-    if (currentState == 1 && (random.nextDouble() < parameters.get("ignitionWithoutNeighbors"))){
+    if (currentState == 1 && (random.nextDouble() < getParameters().get("ignitionWithoutNeighbors").getDouble())){
       return 2;
     }
 
@@ -89,10 +89,10 @@ public class SpreadingOfFireRules extends SimulationRules {
     return 3;
   }
 
-  private Map<String, Double> setDefaultParameters() {
-    Map<String, Double> parameters = new HashMap<>();
-    parameters.put("ignitionWithoutNeighbors", 0.15);
-    parameters.put("growInEmptyCell", 0.1);
+  private Map<String, Parameter<?>> setDefaultParameters() {
+    Map<String, Parameter<?>> parameters = new HashMap<>();
+    parameters.put("ignitionWithoutNeighbors", new Parameter<>("0.15"));
+    parameters.put("growInEmptyCell", new Parameter<>("0.1"));
     return parameters;
   }
 }

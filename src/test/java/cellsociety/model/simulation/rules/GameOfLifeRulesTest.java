@@ -7,6 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class GameOfLifeRulesTest {
   @BeforeEach
   void setUp() {
     grid = new Grid(5, 5);
-    gameOfLifeRules = new GameOfLifeRules();
+    gameOfLifeRules = new GameOfLifeRules(new HashMap<>());
 
     int[][] gridPattern = {
         {0, 1, 0, 0, 0},
