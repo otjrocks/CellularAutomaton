@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 class SimulationConfigTest {
 
+  // I had ChatGPT assist me in refactoring these tests after updating the Simulation Config file to use reflection API
   SimulationMetaData mySimMetaData;
 
   @BeforeEach
@@ -60,7 +61,8 @@ class SimulationConfigTest {
     String simulationName = "Segregation";
     parameters.put("toleranceThreshold",
         new Parameter<>("0.7"));
-    assertDoesNotThrow(() -> SimulationConfig.getNewSimulation(simulationName, mySimMetaData, parameters));
+    assertDoesNotThrow(
+        () -> SimulationConfig.getNewSimulation(simulationName, mySimMetaData, parameters));
   }
 
 }
