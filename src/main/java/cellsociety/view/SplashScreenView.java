@@ -6,11 +6,16 @@ import static cellsociety.config.MainConfig.getMessages;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
+import cellsociety.view.config.ThemeConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -19,7 +24,7 @@ public class SplashScreenView extends VBox {
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
   private final MainController mainController;
-
+  private HBox myThemeSelectorBox;
   private final CreateDefaultSimView createDefaultSimView;
 
 
@@ -42,11 +47,31 @@ public class SplashScreenView extends VBox {
     Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
     Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
 
-    this.getChildren().addAll(title, description, instructions, createDefaultSimView, myAlertField);
+    createThemeSelector();
+
+    this.getChildren()
+        .addAll(title, description, instructions, createDefaultSimView, myThemeSelectorBox,
+            myAlertField);
 
     createLanguageDropdown();
     createFileChooserButton();
 
+  }
+
+  private void createThemeSelector() {
+    ObservableList<String> options =
+        FXCollections.observableArrayList(ThemeConfig.THEMES);
+    ComboBox<String> myThemeSelector = new ComboBox<>(options);
+    myThemeSelector.setValue(options.getFirst());
+    myThemeSelector.valueProperty()
+        .addListener((ov, t, t1) -> {
+          mainController.setTheme(myThemeSelector.getValue());
+        });
+    myThemeSelectorBox = new HBox();
+    myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
+    myThemeSelectorBox.setSpacing(5);
+    Text simulationTypeLabel = new Text(getMessages().getString("CHANGE_THEME"));
+    myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
   }
 
   private void createLanguageDropdown() {
@@ -72,8 +97,6 @@ public class SplashScreenView extends VBox {
     languageDropdown.setOnAction(event -> {
       String language = languageDropdown.getValue();
       MainConfig.setLanguage(language);
-
-
     });
 
     this.getChildren().addAll(changeLanguageText, languageDropdown);
