@@ -83,7 +83,7 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
-    mySidebarView.update();
+    initializeSidebar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
     myRoot.getChildren().add(mySidebarView);
@@ -321,10 +321,6 @@ public class MainController {
     mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);
-  }
-
-  public void clearSidebar(MainController controller) {
-    mySidebarView.clearSidebar();
   }
 
   /**
