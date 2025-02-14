@@ -5,6 +5,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,12 +22,15 @@ import java.util.Random;
 public class SegregationRules extends SimulationRules {
 
   private final Random RANDOM = new Random();
+  private final double myToleranceThreshold;
 
-  public SegregationRules(Map<String, Parameter<?>> parameters) {
+  public SegregationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterType {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
+    checkMissingParameterAndThrowException("toleranceThreshold");
+    myToleranceThreshold = getParameters().get("toleranceThreshold").getDouble();
   }
 
 
@@ -84,7 +88,7 @@ public class SegregationRules extends SimulationRules {
     double typePercentage = (double) sameType / totalNeighbors;
 
     // No occupied neighbors or satisfied-> stay
-    if (totalNeighbors == 0 || typePercentage >= getParameters().get("toleranceThreshold").getDouble()) {
+    if (totalNeighbors == 0 || typePercentage >= myToleranceThreshold) {
       return currentState;
     }
 

@@ -1,5 +1,6 @@
 package cellsociety.model;
 
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
@@ -28,7 +29,7 @@ class GridTest {
   int myNumRows, myNumCols;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterType {
     myNumRows = 4;
     myNumCols = 4;
     myGrid = new Grid(myNumRows, myNumCols);

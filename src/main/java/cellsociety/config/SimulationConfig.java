@@ -36,22 +36,30 @@ public class SimulationConfig {
       "RockPaperScissors"
   };
 
-  private static Point2D getParameterRange(String parameter) {
-    switch (parameter) {
-      case "sharkReproductionTime", "fishReproductionTime", "sharkEnergyGain" -> {
-        return new Point2D.Double(0, 10);
-      }
-      case "numStates" -> {  // number of states for rock paper scissors should be in range [3,20]
-        return new Point2D.Double(3, 20);
-      }
-      default -> {
-        return new Point2D.Double(0, 1);
-      }
-      // unless specified otherwise above,
-      // parameters must be a double in the range [0, 1]
-      // representing a probability of some event or thing occurring.
+  private static void validateSimulation(String simulationName) {
+    if (!List.of(simulations).contains(simulationName)) {
+      throw new IllegalArgumentException(
+          String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
     }
   }
+
+//
+//  private static Point2D getParameterRange(String parameter) {
+//    switch (parameter) {
+//      case "sharkReproductionTime", "fishReproductionTime", "sharkEnergyGain" -> {
+//        return new Point2D.Double(0, 10);
+//      }
+//      case "numStates" -> {  // number of states for rock paper scissors should be in range [3,20]
+//        return new Point2D.Double(3, 20);
+//      }
+//      default -> {
+//        return new Point2D.Double(0, 1);
+//      }
+//      // unless specified otherwise above,
+//      // parameters must be a double in the range [0, 1]
+//      // representing a probability of some event or thing occurring.
+//    }
+//  }
 
   /**
    * Get the appropriate cell type for a simulation type
@@ -87,7 +95,7 @@ public class SimulationConfig {
       Map<String, Parameter<?>> parameters)
       throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
     validateSimulation(simulationName);
-    validateParameters(simulationName, parameters);
+//    validateParameters(simulationName, parameters);
     return new Simulation(getRules(simulationName, parameters), simulationMetaData);
   }
 
@@ -128,43 +136,37 @@ public class SimulationConfig {
     }
   }
 
-  private static void validateSimulation(String simulationName) {
-    if (!List.of(simulations).contains(simulationName)) {
-      throw new IllegalArgumentException(
-          String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
-    }
-  }
-
-  private static void validateParameters(String simulationName,
-      Map<String, Parameter<?>> parameters) {
-    List<String> requiredParameters = getParameters(simulationName);
-    for (String parameter : requiredParameters) {
-      if (parameters == null) {
-        throw new NullPointerException(
-            getMessages().getString("NULL_SIMULATION_PARAMETERS_ERROR"));
-      }
-      if (!parameters.containsKey(parameter)) {
-        throw new IllegalArgumentException(
-            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"),
-                parameter));
-      }
-      validateParameterRange(parameter, parameters.get(parameter).getDouble());
-    }
-  }
-
-  // ensure that a specified parameter is within a valid range for the parameter
-  private static void validateParameterRange(String parameter, java.lang.Double value) {
-    Point2D validRange = getParameterRange(parameter);
-    if (value < validRange.getX()) {
-      throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter,
-              validRange.getX()));
-    }
-    if (value > validRange.getY()) {
-      throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter,
-              validRange.getY()));
-    }
-  }
+//
+//  private static void validateParameters(String simulationName,
+//      Map<String, Parameter<?>> parameters) {
+//    List<String> requiredParameters = getParameters(simulationName);
+//    for (String parameter : requiredParameters) {
+//      if (parameters == null) {
+//        throw new NullPointerException(
+//            getMessages().getString("NULL_SIMULATION_PARAMETERS_ERROR"));
+//      }
+//      if (!parameters.containsKey(parameter)) {
+//        throw new IllegalArgumentException(
+//            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"),
+//                parameter));
+//      }
+//      validateParameterRange(parameter, parameters.get(parameter).getDouble());
+//    }
+//  }
+//
+//  // ensure that a specified parameter is within a valid range for the parameter
+//  private static void validateParameterRange(String parameter, java.lang.Double value) {
+//    Point2D validRange = getParameterRange(parameter);
+//    if (value < validRange.getX()) {
+//      throw new IllegalArgumentException(
+//          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter,
+//              validRange.getX()));
+//    }
+//    if (value > validRange.getY()) {
+//      throw new IllegalArgumentException(
+//          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter,
+//              validRange.getY()));
+//    }
+//  }
 
 }

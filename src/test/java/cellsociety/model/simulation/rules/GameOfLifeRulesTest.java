@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ class GameOfLifeRulesTest {
   private GameOfLifeRules gameOfLifeRules;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterType {
     grid = new Grid(5, 5);
     gameOfLifeRules = new GameOfLifeRules(new HashMap<>());
 

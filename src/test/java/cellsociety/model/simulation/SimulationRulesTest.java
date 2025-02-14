@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.util.HashMap;
 import java.util.List;
 import java.awt.geom.Point2D.Double;
@@ -19,7 +20,7 @@ class SimulationRulesTest {
   private SimulationRules testSimulationRules;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterType {
     grid = new Grid(5, 5);
 
     for (int row = 0; row < 5; row++) {

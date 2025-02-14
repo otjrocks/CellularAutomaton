@@ -7,6 +7,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class RockPaperScissorsRulesTest {
   private Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterType {
     grid = new Grid(5, 5);
     parameters.put("minThreshold", new Parameter<>(0.5));
     parameters.put("numStates", new Parameter<>(3));
@@ -62,7 +63,7 @@ public class RockPaperScissorsRulesTest {
   }
 
   @Test
-  void constructor_DefaultParameters_InitializesWithDefaultThreshold() {
+  void constructor_DefaultParameters_InitializesWithDefaultThreshold() throws InvalidParameterType {
     assertEquals(0.5, rockPaperScissorsRules.getParameters().get("minThreshold").getDouble());
   }
 

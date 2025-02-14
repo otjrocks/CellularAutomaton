@@ -1,9 +1,11 @@
 package cellsociety.model.simulation;
 
+import static cellsociety.config.MainConfig.getMessages;
+
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.Parameter.InvalidParameterType;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ import cellsociety.model.cell.CellUpdate;
 public abstract class SimulationRules {
   private Map<String, Parameter<?>> myParameters;
 
-  public SimulationRules(Map<String, Parameter<?>> parameters) {
+  public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterType {
     myParameters = parameters;
   }
 
@@ -79,6 +81,12 @@ public abstract class SimulationRules {
   }
 
   public abstract int getNextState(Cell cell, Grid grid);
-
   public abstract int getNumberStates();
+
+  public void checkMissingParameterAndThrowException(String threshold) {
+    if (!getParameters().containsKey(threshold)) {
+      throw new IllegalArgumentException(
+          String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
+    }
+  }
 }
