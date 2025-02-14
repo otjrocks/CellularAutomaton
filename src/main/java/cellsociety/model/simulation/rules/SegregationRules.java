@@ -18,11 +18,11 @@ import java.util.Random;
 // A cell with state 1 indicates it's a part of Group 1
 // A cell with state 2 indicates it's a part of Group 2
 
-public class SegregationModelRules extends SimulationRules {
+public class SegregationRules extends SimulationRules {
 
   private final Random RANDOM = new Random();
 
-  public SegregationModelRules(Map<String, Parameter<?>> parameters) {
+  public SegregationRules(Map<String, Parameter<?>> parameters) {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());

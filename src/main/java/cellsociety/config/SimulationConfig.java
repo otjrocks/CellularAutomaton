@@ -3,11 +3,10 @@ package cellsociety.config;
 import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +16,6 @@ import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.rules.GameOfLifeRules;
-import cellsociety.model.simulation.rules.PercolationRules;
-import cellsociety.model.simulation.rules.SegregationModelRules;
-import cellsociety.model.simulation.rules.SpreadingOfFireRules;
-import cellsociety.model.simulation.rules.WaTorWorldRules;
 
 /**
  * Store all information pertaining to simulations
@@ -90,35 +84,21 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
-      Map<String, Parameter<?>> parameters) {
+      Map<String, Parameter<?>> parameters)
+      throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
     validateSimulation(simulationName);
     validateParameters(simulationName, parameters);
     return new Simulation(getRules(simulationName, parameters), simulationMetaData);
   }
 
   private static SimulationRules getRules(String simulationName,
-      Map<String, Parameter<?>> parameters) {
+      Map<String, Parameter<?>> parameters)
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     validateSimulation(simulationName);
-    switch (simulationName) {
-      case "Percolation" -> {
-        return new PercolationRules(parameters);
-      }
-      case "Segregation" -> {
-        return new SegregationModelRules(parameters);
-      }
-      case "SpreadingOfFire" -> {
-        return new SpreadingOfFireRules(parameters);
-      }
-      case "WaTorWorld" -> {
-        return new WaTorWorldRules(parameters);
-      }
-      case "RockPaperScissors" -> {
-        return new RockPaperScissorsRules(parameters);
-      }
-      default -> { // default is game of life
-        return new GameOfLifeRules(parameters);
-      }
-    }
+    String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
+        "Rules");
+    return (SimulationRules) Class.forName(className).getConstructor(Map.class)
+        .newInstance(parameters);
   }
 
   /**
