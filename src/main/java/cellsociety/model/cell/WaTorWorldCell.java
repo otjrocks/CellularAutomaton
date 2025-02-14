@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
  *
  * @author Owen Jennings
  */
-public class WaTorCell extends Cell {
+public class WaTorWorldCell extends Cell {
 
   public static final int DEFAULT_HEALTH = 5;
   private final int health;
@@ -18,7 +18,7 @@ public class WaTorCell extends Cell {
    * Create a WaTor cell with the default health amount. The cell is immutable to prevent unintended
    * changes to the grid
    */
-  public WaTorCell(int state, Point2D location) {
+  public WaTorWorldCell(int state, Point2D location) {
     super(state, location);
     this.health = DEFAULT_HEALTH;
     this.reproductionEnergy = 0; // by default cell has no reproductive energy
@@ -34,7 +34,7 @@ public class WaTorCell extends Cell {
    * @param health:             initial health of the cell
    * @param reproductionEnergy: initial reproduction energy of cell
    */
-  public WaTorCell(int state, Point2D location, int health, double reproductionEnergy)
+  public WaTorWorldCell(int state, Point2D location, int health, double reproductionEnergy)
       throws IllegalArgumentException {
     super(state, location);
     this.health = health;

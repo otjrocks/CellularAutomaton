@@ -6,7 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.cell.WaTorCell;
+import cellsociety.model.cell.WaTorWorldCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
@@ -35,10 +35,10 @@ class WaTorWorldRulesTest {
   //needed chatGPT to help process the list of updates and check for any matching
   @Test
   void testFishMovesToEmptySpace() {
-    Cell fish = new WaTorCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 2));
+    Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 2));
     grid.addCell(fish);
 
-    grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
+    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
@@ -56,10 +56,10 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkEatsFish() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(2, 2));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(2, 2));
     grid.addCell(shark);
 
-    Cell fish = new WaTorCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
+    Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
     grid.addCell(fish);
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
@@ -77,7 +77,7 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkDies() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
     grid.addCell(shark);
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
@@ -96,10 +96,10 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkMovesToEmptySpace() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3));
     grid.addCell(shark);
 
-    grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
+    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
