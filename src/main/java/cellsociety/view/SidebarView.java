@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.getMessages;
+
 import cellsociety.controller.MainController;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.ThemeConfig;
@@ -55,11 +56,15 @@ public class SidebarView extends VBox {
   }
 
   private void addAllComponentsToSidebar() {
-    this.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myViewModeView, myAlertField);
+    this.getChildren()
+        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myViewModeView,
+            myAlertField);
   }
 
   private void addAllEditModeComponents() {
-    this.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myEditModeView, myAlertField);
+    this.getChildren()
+        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myEditModeView,
+            myAlertField);
   }
 
   private void createThemeSelector() {
@@ -131,14 +136,7 @@ public class SidebarView extends VBox {
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
 
-  /**
-   * removes all elements of the sidebar
-   */
-  public void clearSidebar() {
-    this.getChildren().clear();
-  }
-
-  public void flashWarning(String message){
+  public void flashWarning(String message) {
     myAlertField.flash(message, true);
   }
 
