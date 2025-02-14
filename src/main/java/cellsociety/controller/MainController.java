@@ -83,6 +83,7 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
+    mySidebarView.update();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
     myRoot.getChildren().add(mySidebarView);
