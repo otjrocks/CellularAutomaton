@@ -1,8 +1,5 @@
 package cellsociety.controller;
 
-import cellsociety.view.SplashScreenView;
-import cellsociety.view.components.AlertField;
-import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -26,6 +23,8 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
 import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;

@@ -1,8 +1,5 @@
 package cellsociety.config;
 
-import static cellsociety.config.MainConfig.getMessages;
-
-import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
@@ -10,14 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cellsociety.config.MainConfig.getMessages;
+import cellsociety.model.cell.AntCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
+import cellsociety.model.simulation.rules.ForagingAntsRules;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.model.simulation.rules.PercolationRules;
+import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import cellsociety.model.simulation.rules.SegregationModelRules;
 import cellsociety.model.simulation.rules.SpreadingOfFireRules;
 import cellsociety.model.simulation.rules.WaTorWorldRules;
@@ -38,7 +39,8 @@ public class SimulationConfig {
       "Segregation",
       "SpreadingOfFire",
       "WaTorWorld",
-      "RockPaperScissors"
+      "RockPaperScissors",
+      "ForagingAnts"
   };
 
   private static Point2D getParameterRange(String parameter) {
@@ -72,6 +74,9 @@ public class SimulationConfig {
     validateSimulation(simulationName);
     if (simulationName.equals("WaTorWorld")) {
       return new WaTorCell(state, new Double(row, col));
+    }
+    if (simulationName.equals("ForagingAnts")) {
+      return new AntCell(state, new Double(row, col));
     }
     return new DefaultCell(state, new Point2D.Double(row, col));
   }
@@ -117,6 +122,9 @@ public class SimulationConfig {
       case "RockPaperScissors" -> {
         return new RockPaperScissorsRules(parameters);
       }
+      case "ForagingAnts" -> {
+        return new ForagingAntsRules(parameters);
+      }
       default -> { // default is game of life
         return new GameOfLifeRules();
       }
@@ -143,6 +151,9 @@ public class SimulationConfig {
       }
       case "RockPaperScissors" -> {
         return List.of("minThreshold", "numStates");
+      }
+      case "ForagingAnts" -> {
+        return List.of("pheromoneDecayRate", "antReproductionTime", "maxPheromoneAmount");
       }
       default -> {
         return new ArrayList<>();

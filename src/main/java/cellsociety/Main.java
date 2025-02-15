@@ -3,10 +3,7 @@ package cellsociety;
 import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
-
 import cellsociety.controller.MainController;
-import cellsociety.view.SplashScreenView;
-import cellsociety.view.components.AlertField;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;

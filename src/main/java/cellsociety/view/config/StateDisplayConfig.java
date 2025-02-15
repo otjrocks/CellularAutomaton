@@ -1,7 +1,6 @@
 package cellsociety.view.config;
 
 import static cellsociety.config.MainConfig.getMessages;
-
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 
@@ -35,6 +34,7 @@ public class StateDisplayConfig {
       case "SpreadingOfFire" -> spreadingOfFireStateInfo(state);
       case "WaTorWorld" -> waTorWorldStateInfo(state);
       case "RockPaperScissors" -> rockPaperScissorsStateInfo(state);
+      case "ForagingAnts" -> ForagingAntsStateInfo(state);
       default -> getDefaultStateInfo(state);
     };
   }
@@ -79,6 +79,16 @@ public class StateDisplayConfig {
       case 0 -> new StateInfo(getMessages().getString("EMPTY"), Color.BLACK);
       case 1 -> new StateInfo(getMessages().getString("FISH"), Color.GREEN);
       case 2 -> new StateInfo(getMessages().getString("SHARK"), Color.BLUE);
+      default -> getDefaultStateInfo(state);
+    };
+  }
+
+  private static StateInfo ForagingAntsStateInfo(int state) {
+    return switch (state) {
+      case 0 -> new StateInfo(getMessages().getString("EMPTY"), Color.BLACK);
+      case 1 -> new StateInfo(getMessages().getString("ANT"), Color.RED);
+      case 2 -> new StateInfo(getMessages().getString("FOOD"), Color.BLUE);
+      case 3 -> new StateInfo(getMessages().getString("NEST"), Color.PURPLE);
       default -> getDefaultStateInfo(state);
     };
   }

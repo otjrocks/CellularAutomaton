@@ -1,12 +1,13 @@
 package cellsociety.view;
 
+import java.util.List;
+
 import cellsociety.controller.MainController;
-import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
-import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
