@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 public class MainConfig {
 
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
+  public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
   private static final String DEFAULT_LANGUAGE = "English";
 
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
@@ -18,6 +19,11 @@ public class MainConfig {
     myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
   }
 
+  private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
+
+  public static ResourceBundle getCellColors() {
+    return myCellColors;
+  }
 
   public static final String TITLE = getMessages().getString("TITLE");
   public static final int WIDTH = 1400;

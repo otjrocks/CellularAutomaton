@@ -1,110 +1,92 @@
 package cellsociety.view.config;
 
+import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
- * A config file to determine how to display a given state in the front end This centralizes state
+ * A config file to determine how to display a given state in the front end. This centralizes state
  * display configurations for different simulations.
  *
  * @author Owen Jennings
  */
+// I used ChatGPT to assist with refactoring this code
 public class StateDisplayConfig {
 
-  private static final Color DEFAULT_COLOR = Color.LIGHTBLUE;
-
-  // I asked ChatGPT for assistance with refactoring our existing color config to this file
+  private static final Random RANDOM = new Random();
+  private static final Map<String, Color> RANDOM_COLORS_MAP = new HashMap<>();
+  // store the random colors previously used for undefined states so that all cells
+  // of the same state are assigned the same random color everytime they are generated.
 
   /**
-   * Get the state information for front-end display. If no custom color or name is defined use a
-   * default name and the default color
+   * Get the state information for front-end display. If no custom color or name is defined, use a
+   * default name and a randomly generated color that persists.
    *
-   * @param simulation The simulation you are running
-   * @param state      the state you are querying for
-   * @return the state information of the provided state and simulation
+   * @param simulation The simulation you are running.
+   * @param state      The state you are querying for.
+   * @return The state information of the provided state and simulation.
    */
   public static StateInfo getStateInfo(Simulation simulation, int state) {
-    String simulationType = simulation.data().type();
-    return switch (simulationType) {
-      case "GameOfLife" -> gameOfLifeStateInfo(state);
-      case "Percolation" -> percolationStateInfo(state);
-      case "Segregation" -> segregationStateInfo(state);
-      case "SpreadingOfFire" -> spreadingOfFireStateInfo(state);
-      case "WaTorWorld" -> waTorWorldStateInfo(state);
-      case "RockPaperScissors" -> rockPaperScissorsStateInfo(state);
-      default -> getDefaultStateInfo(state);
-    };
+    String simulationType = simulation.data().type().toUpperCase();
+    return getStateInfoFromSimulationTypeString(state, simulationType);
   }
 
-  private static StateInfo gameOfLifeStateInfo(int state) {
-    return switch (state) {
-      case 0 -> new StateInfo(getMessages().getString("DEAD"), Color.WHITE);
-      case 1 -> new StateInfo(getMessages().getString("ALIVE"), Color.BLACK);
-      default -> getDefaultStateInfo(state);
-    };
+  private static StateInfo getStateInfoFromSimulationTypeString(int state, String simulationType) {
+    String nameKey = simulationType + "_NAME_" + state;
+    String colorKey = simulationType + "_COLOR_" + state;
+
+    String stateName = getStateName(nameKey, state);
+    Color stateColor = getStateColor(colorKey, simulationType, state);
+
+    return new StateInfo(stateName, stateColor);
   }
 
-  private static StateInfo percolationStateInfo(int state) {
-    return switch (state) {
-      case 0 -> new StateInfo(getMessages().getString("BLOCKED"), Color.BLACK);
-      case 1 -> new StateInfo(getMessages().getString("OPEN"), Color.WHITE);
-      case 2 -> new StateInfo(getMessages().getString("FILLED"), Color.BLUE);
-      default -> getDefaultStateInfo(state);
-    };
-  }
-
-  private static StateInfo segregationStateInfo(int state) {
-    return switch (state) {
-      case 0 -> new StateInfo(getMessages().getString("EMPTY"), Color.WHITE);
-      case 1 -> new StateInfo(getMessages().getString("GROUP_ONE"), Color.RED);
-      case 2 -> new StateInfo(getMessages().getString("GROUP_TWO"), Color.BLUE);
-      default -> getDefaultStateInfo(state);
-    };
-  }
-
-  private static StateInfo spreadingOfFireStateInfo(int state) {
-    return switch (state) {
-      case 0 -> new StateInfo(getMessages().getString("EMPTY"), Color.BLACK);
-      case 1 -> new StateInfo(getMessages().getString("TREE"), Color.GREEN);
-      case 2 -> new StateInfo(getMessages().getString("BURNING"), Color.RED);
-      default -> getDefaultStateInfo(state);
-    };
-  }
-
-  private static StateInfo waTorWorldStateInfo(int state) {
-    return switch (state) {
-      case 0 -> new StateInfo(getMessages().getString("EMPTY"), Color.BLACK);
-      case 1 -> new StateInfo(getMessages().getString("FISH"), Color.GREEN);
-      case 2 -> new StateInfo(getMessages().getString("SHARK"), Color.BLUE);
-      default -> getDefaultStateInfo(state);
-    };
-  }
-
-  private static StateInfo rockPaperScissorsStateInfo(int state) {
-    Color[] colors = {
-        Color.GRAY, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE,
-        Color.PURPLE, Color.MAGENTA, Color.MAROON, Color.ALICEBLUE, Color.CYAN, Color.DARKGRAY,
-        Color.PINK, Color.FUCHSIA, Color.INDIGO, Color.SIENNA, Color.CRIMSON, Color.MINTCREAM,
-        Color.LIGHTGREEN, Color.DARKGOLDENROD, Color.LIGHTGOLDENRODYELLOW
-    };
-
-    String[] states = {
-        "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN",
-        "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN",
-        "NINETEEN", "TWENTY"
-    };
-
-    if (state >= 0 && state < states.length) {
-      return new StateInfo(getMessages().getString(states[state]), colors[state]);
+  /**
+   * Retrieves the state name from the messages configuration or defaults to "STATE {state}".
+   */
+  private static String getStateName(String key, int state) {
+    try {
+      return getMessages().getString(key);
+    } catch (Exception e) {
+      return String.format(getMessages().getString("STATE"), state); // "State k" as default name
     }
-    return getDefaultStateInfo(state);
   }
 
+  /**
+   * Retrieves the state color using reflection, falling back to a persistent randomly generated
+   * color if not found.
+   */
+  private static Color getStateColor(String key, String simulationType, int state) {
+    String stateKey = simulationType + "_" + state;
 
-  private static StateInfo getDefaultStateInfo(int state) {
-    return new StateInfo(String.format(getMessages().getString("STATE"), state), DEFAULT_COLOR);
+    // If a random color was already assigned, return it
+    if (RANDOM_COLORS_MAP.containsKey(stateKey)) {
+      return RANDOM_COLORS_MAP.get(stateKey);
+    }
+
+    try {
+      Field field = Color.class.getField(getCellColors().getString(key).toUpperCase());
+      Color color = (Color) field.get(null);
+      RANDOM_COLORS_MAP.put(stateKey, color); // Store the found color
+      return color;
+    } catch (Exception e) {
+      Color randomColor = getRandomColor();
+      RANDOM_COLORS_MAP.put(stateKey, randomColor); // Store the random color
+      return randomColor;
+    }
+  }
+
+  /**
+   * Generates a random color if a predefined one is not found.
+   */
+  private static Color getRandomColor() {
+    return Color.rgb(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
   }
 }
