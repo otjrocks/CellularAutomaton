@@ -111,10 +111,12 @@ public class FallingSandRules extends SimulationRules {
   // returns true if move was allowed, false otherwise
   private static boolean attemptMove(Grid grid, Cell otherCell, List<CellUpdate> updates,
       Cell sandCell) {
-    if (sandCell.getState() != State.SAND.getValue()) { // cannot move if not sand cell
+    if (sandCell == null
+        || sandCell.getState() != State.SAND.getValue()) { // cannot move if not sand cell
       return false;
     }
-    if (otherCell.getState() == State.EMPTY.getValue()) { // can move to other cell
+    if (otherCell != null
+        && otherCell.getState() == State.EMPTY.getValue()) { // can move to other cell
       Cell newSand = new DefaultCell(State.SAND.getValue(), otherCell.getLocation());
       Cell newEmpty = new DefaultCell(State.EMPTY.getValue(), sandCell.getLocation());
       updates.add(new CellUpdate(otherCell.getLocation(), newSand)); // move sand below
