@@ -15,6 +15,7 @@ public class ThemeConfig {
       "Night"
   };
 
+  public static final String DEFAULT_THEME = "Light";
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
   public static final String DEFAULT_RESOURCE_FOLDER =
       "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
@@ -24,8 +25,10 @@ public class ThemeConfig {
   public static final String THEMES_RESOURCES_FOLDER = DEFAULT_RESOURCE_FOLDER + "themes/";
 
   private static String myThemePath =
-      THEMES_RESOURCES_FOLDER + PreferencesController.getPreference("theme", "Light") + ".css";
-  private static String myCurrentTheme = THEMES[0];
+      THEMES_RESOURCES_FOLDER + PreferencesController.getPreference("theme", DEFAULT_THEME)
+          + ".css";
+  private static String myCurrentTheme = PreferencesController.getPreference("theme",
+      DEFAULT_THEME);
 
   /**
    * Get the path of the current theme's css file
