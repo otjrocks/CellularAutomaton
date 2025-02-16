@@ -7,6 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 /**
@@ -38,6 +39,7 @@ public class AlertField extends VBox {
     String alertPrefix =
         isWarning ? getMessages().getString("WARNING_PREFIX") : getMessages().getString("INFO_PREFIX");
     Text newMessage = new Text(String.format(alertPrefix, message));
+    newMessage.setTextAlignment(TextAlignment.CENTER);
     if (isWarning) {
       newMessage.getStyleClass().add("alert-warning");
     } else {
