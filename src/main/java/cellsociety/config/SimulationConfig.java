@@ -32,7 +32,8 @@ public class SimulationConfig {
       "Segregation",
       "SpreadingOfFire",
       "WaTorWorld",
-      "RockPaperScissors"
+      "RockPaperScissors",
+      "FallingSand"
   };
 
   /**
