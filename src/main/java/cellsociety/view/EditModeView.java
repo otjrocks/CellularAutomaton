@@ -32,14 +32,19 @@ public class EditModeView extends VBox {
     this.myAlertField = alertField;
     createHeader();
     CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController,
-        myAlertField);
+        myAlertField) {
+      @Override
+      protected void handleAdditionalButtonActions() throws IllegalArgumentException {
+        super.handleAdditionalButtonActions();
+        updateStateInfo(); // update state info when new simulation is created.
+      }
+    };
     this.getChildren().addAll(createDefaultSimView);
   }
 
   /**
    * Update the state info display for the edit more view
    */
-
   public void updateStateInfo() {
     myHeaderBox.getChildren()
         .removeFirst(); // remove the current state info box before creating a new one
