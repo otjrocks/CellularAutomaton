@@ -7,7 +7,10 @@ public class ThemeConfig {
    */
   public static final String[] THEMES = new String[]{
       "Light",
-      "Dark"
+      "Dark",
+      "Neon",
+      "Green",
+      "Night"
   };
 
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
