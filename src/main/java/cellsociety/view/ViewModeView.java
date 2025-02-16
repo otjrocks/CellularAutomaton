@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.INITIAL_STEP_SPEED;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
@@ -7,6 +8,7 @@ import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.PreferencesController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
@@ -66,13 +68,18 @@ public class ViewModeView extends VBox {
 
 
   private void initializeSpeedSlider() {
-    double initialSliderValue = (1 / STEP_SPEED);
+    double initialSliderValue = 1 / INITIAL_STEP_SPEED;
+    double currentSliderValue = Double.parseDouble(
+        PreferencesController.getPreference("animationSpeed", String.valueOf(initialSliderValue)));
     Text sliderLabel = new Text(getMessages().getString("SLIDER_LABEL"));
     Slider speedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
-        initialSliderValue * SPEED_SLIDER_DELTA, initialSliderValue);
+        initialSliderValue * SPEED_SLIDER_DELTA, currentSliderValue);
     speedSlider.valueProperty().addListener(
-        (observable, oldValue, newValue) -> myMainController.updateAnimationSpeed(
-            1 / (Double) newValue, myMainController.isPlaying()));
+        (observable, oldValue, newValue) -> {
+          myMainController.updateAnimationSpeed(
+              1 / (Double) newValue, myMainController.isPlaying());
+          PreferencesController.setPreference("animationSpeed", String.valueOf(newValue));
+        });
     mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
   }
 

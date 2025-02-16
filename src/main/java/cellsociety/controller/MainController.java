@@ -58,7 +58,8 @@ public class MainController {
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
-  private boolean gridLinesEnabled = Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true"));
+  private boolean gridLinesEnabled = Boolean.parseBoolean(
+      PreferencesController.getPreference("gridLines", "true"));
 
   private final ThemeController myThemeController;
 
@@ -142,6 +143,7 @@ public class MainController {
    *               stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
+    PreferencesController.setPreference("animationSpeed", String.valueOf(speed));
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
@@ -329,8 +331,6 @@ public class MainController {
    * @param selected: Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
-    PreferencesController.setPreference("gridLines", String.valueOf(selected));
-    System.out.println(Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesEnabled = selected;
     mySimulationView.setGridLines(selected);
   }
