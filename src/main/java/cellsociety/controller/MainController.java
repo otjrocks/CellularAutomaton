@@ -97,6 +97,7 @@ public class MainController {
    */
   public void setTheme(String themeName) {
     myThemeController.setTheme(themeName);
+    mySimulationView.updateGridLinesColor();
   }
 
   /**

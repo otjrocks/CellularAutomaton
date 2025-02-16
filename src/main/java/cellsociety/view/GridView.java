@@ -82,4 +82,15 @@ public class GridView extends Group {
   private int getColumn(double y) {
     return (int) (y / cellWidth);
   }
+
+  /**
+   * Reset the grid line colors on theme change
+   */
+  public void updateGridLinesColor() {
+    for (int row = 0; row < myNumRows; row++) {
+      for (int column = 0; column < myNumColumns; column++) {
+        myGrid[row][column].resetStrokeColor();
+      }
+    }
+  }
 }

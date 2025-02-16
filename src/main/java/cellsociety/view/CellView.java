@@ -43,6 +43,7 @@ public class CellView extends Rectangle {
    */
   public CellView(int x, int y, int width, int height, Paint fill) {
     this(x, y, width, height);
+    this.getStyleClass().add("cell-view");
     this.setFill(fill);
   }
 
@@ -53,11 +54,17 @@ public class CellView extends Rectangle {
    */
   public void setGridLines(boolean selected) {
     if (selected) {
-      this.setStroke(BORDER_COLOR);
       this.setStrokeWidth(BORDER_WIDTH);
     } else {
-      this.setStroke(DEFAULT_COLOR);
       this.setStrokeWidth(0);
     }
+  }
+
+  /**
+   * Reset the stroke color of the cell on theme updates
+   */
+  public void resetStrokeColor() {
+    this.getStyleClass().remove("cell-view");
+    this.getStyleClass().add("cell-view");
   }
 }
