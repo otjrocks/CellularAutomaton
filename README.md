@@ -21,6 +21,7 @@ This project implements a cellular automata simulator.
 * Resources used directly (including AI assistance)
 
 - https://github.com/antoniopelusi/JavaFX-Dark-Theme
+- For understanding falling sand rules: https://www.youtube.com/watch?v=5Ka3tbbT-9E
 
 ### Running the Program
 
@@ -66,6 +67,10 @@ This project implements a cellular automata simulator.
       so that users do not unintentionally modify the simulation. However, only a single if
       statement would need to be changed to allow grid state updating while the simulation is
       running.
+    * In Falling Sand, if a sand cell is able to moved directly down, it will automatically move
+      down. If it can only move to its left or right diagonal, it will randomly choose one of the
+      diagonals if both of them are empty. If only one diagonal is empty and it cannot fall directly
+      down, it will move to the only open diagonal.
 
 * Known Bugs:
 
