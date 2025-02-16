@@ -83,6 +83,7 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
+    mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
     createOrUpdateSidebar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
