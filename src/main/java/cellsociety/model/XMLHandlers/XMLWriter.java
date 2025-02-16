@@ -1,6 +1,5 @@
 package cellsociety.model.XMLHandlers;
 
-import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import org.w3c.dom.Element;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
@@ -55,16 +55,7 @@ public class XMLWriter {
             SimulationRules rules = sim.rules();
             writeParameters(doc, rules, simElement);
 
-            for (Map.Entry<String, Parameter<?>> entry : rules.getParameters().entrySet()) {
-                addElement(doc, parametersElement, entry.getKey(), String.valueOf(entry.getValue()));
-            }
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
-
-            transformer.transform(source, result);
+            transformXML(doc, file);
 
         } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
         }
@@ -114,7 +105,7 @@ public class XMLWriter {
         Element parametersElement = doc.createElement("Parameters");
         simElement.appendChild(parametersElement);
 
-        for (Map.Entry<String, Double> entry : rules.getParameters().entrySet()) {
+        for (Map.Entry<String, Parameter<?>> entry : rules.getParameters().entrySet()) {
             addElement(doc, parametersElement, entry.getKey(), String.valueOf(entry.getValue()));
         }
     }

@@ -11,25 +11,50 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.AntCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 
 public class ForagingAntsRules extends SimulationRules {
 
     private final Random random = new Random();
+    private final int myPheromoneDecayRate;
+    private final int myAntReproductionTime;
+    private final int myMaxPheromoneAmount;
 
-    public ForagingAntsRules(Map<String, Double> parameters) {
+        public ForagingAntsRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException{
+        super(parameters);
         if (parameters == null || parameters.isEmpty()) {
-            this.parameters = setDefaultParameters();
-        } else {
-            super.parameters = parameters;
+        setParameters(setDefaultParameters());
+        }
+        checkMissingParameterAndThrowException("pheromoneDecayRate");
+        checkMissingParameterAndThrowException("antReproductionTime");
+        checkMissingParameterAndThrowException("maxPheromoneAmount");
+        myPheromoneDecayRate = getParameters().get("pheromoneDecayRate").getInteger();
+        myAntReproductionTime = getParameters().get("antReproductionTime").getInteger();
+        myMaxPheromoneAmount = getParameters().get("maxPheromoneAmount").getInteger();
+        validateParameterRange();
+    }
+
+    private void validateParameterRange() throws InvalidParameterException {
+        if (myPheromoneDecayRate < 0) {
+        throwInvalidParameterException("pheromoneDecayRate");
+        }
+        if (myAntReproductionTime < 0) {
+        throwInvalidParameterException("antReproductionTime");
+        }
+        if (myMaxPheromoneAmount < 0) {
+        throwInvalidParameterException("maxPheromoneAmount");
         }
     }
 
-    private Map<String, Double> setDefaultParameters() {
-        Map<String, Double> parameters = new HashMap<>();
-        parameters.put("antReproductionTime", 3.0);
-        parameters.put("pheromoneDecayRate", 0.1);
-        parameters.put("maxPheromoneAmount", 100.0);
+    private Map<String, Parameter<?>> setDefaultParameters() {
+        Map<String, Parameter<?>> parameters = new HashMap<>();
+
+        parameters.put("pheromoneDecayRate", new Parameter<>(3));
+        parameters.put("antReproductionTime", new Parameter<>(4));
+        parameters.put("maxPheromoneAmount", new Parameter<>(1));
+
         return parameters;
     }
 
@@ -126,7 +151,7 @@ public class ForagingAntsRules extends SimulationRules {
 
     private void dropHomePheromone(AntCell antCell, Grid grid) {
         if (antCell.getState() == State.NEST.getValue()) {
-            antCell.setHomePheromone(parameters.get("maxPheromoneAmount"));
+            antCell.setHomePheromone(myMaxPheromoneAmount);
         } else {
             List<Cell> neighbors = getNeighbors(antCell, grid);
             double maxNeighborHomePheromone = 0;
@@ -149,7 +174,7 @@ public class ForagingAntsRules extends SimulationRules {
 
     private void dropFoodPheromone(AntCell antCell, Grid grid) {
         if (antCell.getState() == State.FOOD.getValue()) {
-            antCell.setFoodPheromone(parameters.get("maxPheromoneAmount"));
+            antCell.setFoodPheromone(myMaxPheromoneAmount);
         } else {
             List<Cell> neighbors = getNeighbors(antCell, grid);
             double maxNeighborFoodPheromone = 0;
@@ -172,7 +197,7 @@ public class ForagingAntsRules extends SimulationRules {
 
     private boolean shouldReproduce(AntCell ant) {
         boolean shouldReproduce =
-            ant.getReproductionTime() >= parameters.get("antReproductionTime");
+            ant.getReproductionTime() >= myAntReproductionTime;
         return shouldReproduce;
     }
 

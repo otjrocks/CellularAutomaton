@@ -1,8 +1,5 @@
 package cellsociety.config;
 
-import static cellsociety.config.MainConfig.getMessages;
-
-import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import static cellsociety.config.MainConfig.getMessages;
-import cellsociety.model.cell.AntCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.InvalidParameterException;
 
 /**
  * Store all information pertaining to simulations
@@ -35,7 +32,8 @@ public class SimulationConfig {
       "SpreadingOfFire",
       "WaTorWorld",
       "RockPaperScissors",
-      "FallingSand"
+      "FallingSand",
+      "ForagingAnts"
   };
 
   /**
@@ -45,7 +43,8 @@ public class SimulationConfig {
       "Segregation", List.of("toleranceThreshold"),
       "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
       "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
-      "RockPaperScissors", List.of("minThreshold", "numStates")
+      "RockPaperScissors", List.of("minThreshold", "numStates"),
+      "ForagingAnts", List.of("pheromoneDecayRate","maxPheromoneAmount", "antReproductionTime")
   );
 
   /**
