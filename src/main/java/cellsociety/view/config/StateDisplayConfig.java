@@ -2,7 +2,6 @@ package cellsociety.view.config;
 
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessages;
-
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 

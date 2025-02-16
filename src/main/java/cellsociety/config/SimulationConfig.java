@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static cellsociety.config.MainConfig.getMessages;
+import cellsociety.model.cell.AntCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.Simulation;

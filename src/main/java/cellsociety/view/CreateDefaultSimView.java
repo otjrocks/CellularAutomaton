@@ -1,21 +1,21 @@
 package cellsociety.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.getMessages;
-import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

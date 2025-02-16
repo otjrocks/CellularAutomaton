@@ -31,6 +31,8 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
