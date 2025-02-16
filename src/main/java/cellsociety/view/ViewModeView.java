@@ -11,9 +11,11 @@ import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
+import java.util.concurrent.Flow;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,7 +38,7 @@ public class ViewModeView extends VBox {
   private Button mySaveButton;
   private Button myStepButton;
   private final VBox mySpeedSliderBox = new VBox();
-  private HBox myControlButtons = new HBox();
+  private FlowPane myControlButtons = new FlowPane();
 
   /**
    * Initialize the ViewModeView.
@@ -83,13 +85,15 @@ public class ViewModeView extends VBox {
     mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
   }
 
-  private HBox createAllButtons() {
+  private FlowPane createAllButtons() {
     createPlayPauseButton();
     createStepButton();
     createFileChooserButton();
     createSaveFileButton();
     myControlButtons.setAlignment(Pos.CENTER_LEFT);
-    myControlButtons.setSpacing(ELEMENT_SPACING);
+    myControlButtons.setAlignment(Pos.CENTER);
+    myControlButtons.setHgap(ELEMENT_SPACING);
+    myControlButtons.setVgap(ELEMENT_SPACING);
     myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
         .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton);
@@ -119,6 +123,7 @@ public class ViewModeView extends VBox {
 
   private void createFileChooserButton() {
     myChooseFileButton = new Button(getMessages().getString("CHOOSE_FILE_BUTTON"));
+    myChooseFileButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myChooseFileButton.setOnAction(event -> {
       try {
         stopAnimationPlayIfRunning();
@@ -139,6 +144,7 @@ public class ViewModeView extends VBox {
 
   private void createSaveFileButton() {
     mySaveButton = new Button(getMessages().getString("SAVE_TO_XML"));
+    mySaveButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     mySaveButton.setOnMouseClicked(event -> {
       stopAnimationPlayIfRunning();
       try {
@@ -155,6 +161,7 @@ public class ViewModeView extends VBox {
 
   private void createStepButton() {
     myStepButton = new Button(getMessages().getString("STEP_LABEL"));
+    myStepButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
       myMainController.handleSingleStep();
@@ -163,6 +170,7 @@ public class ViewModeView extends VBox {
 
   private void createPlayPauseButton() {
     myPlayPauseButton = new Button(getMessages().getString("PLAY_LABEL"));
+    myPlayPauseButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myPlayPauseButton.setOnAction(event -> {
       if (myMainController.isPlaying()) {
         stopAnimation();
