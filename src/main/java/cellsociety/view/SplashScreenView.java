@@ -9,6 +9,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
+import cellsociety.controller.PreferencesController;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -84,7 +85,9 @@ public class SplashScreenView extends VBox {
     }
 
     languageDropdown.getItems().addAll(languages);
-    languageDropdown.setValue(languages.contains("English") ? "English" : languages.getFirst());
+    String defaultLanguage = languages.contains("English") ? "English" : languages.getFirst();
+    languageDropdown.setValue(
+        PreferencesController.getPreference("language", defaultLanguage));
     languageDropdown.setOnAction(event -> MainConfig.setLanguage(languageDropdown.getValue()));
 
     myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);

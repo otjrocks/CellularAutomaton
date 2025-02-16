@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.controller.PreferencesController;
 import java.util.ResourceBundle;
 
 public class MainConfig {
@@ -7,15 +8,18 @@ public class MainConfig {
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
   public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
   private static final String DEFAULT_LANGUAGE = "English";
+  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference("language",
+      DEFAULT_LANGUAGE);
 
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
-      LANGUAGE_FILE_PATH + DEFAULT_LANGUAGE);
+      LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
   public static ResourceBundle getMessages() {
     return myMessages;
   }
 
   public static void setLanguage(String language) {
+    PreferencesController.setPreference("language", language);
     myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
   }
 
@@ -31,7 +35,10 @@ public class MainConfig {
   public static final int MARGIN = 20;
   public static final int GRID_WIDTH = (2 * WIDTH) / 3;
   public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
-  public static final double STEP_SPEED = 0.5;
+  public static final double INITIAL_STEP_SPEED = 0.5;
+  public static final double STEP_SPEED =
+      1 / Double.parseDouble(PreferencesController.getPreference("animationSpeed",
+          String.valueOf(INITIAL_STEP_SPEED)));
   public static final int MAX_GRID_NUM_ROWS = 150;
   public static final int MAX_GRID_NUM_COLS = 150;
   public static final int MIN_GRID_NUM_ROWS = 5;

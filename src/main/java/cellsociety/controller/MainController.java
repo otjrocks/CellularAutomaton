@@ -20,7 +20,6 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
@@ -33,7 +32,6 @@ import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.config.FileChooserConfig;
-import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -60,7 +58,8 @@ public class MainController {
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
-  private boolean gridLinesEnabled = true;
+  private boolean gridLinesEnabled = Boolean.parseBoolean(
+      PreferencesController.getPreference("gridLines", "true"));
 
   private final ThemeController myThemeController;
 
@@ -84,6 +83,7 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
+    mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
     createOrUpdateSidebar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
@@ -144,6 +144,7 @@ public class MainController {
    *               stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
+    PreferencesController.setPreference("animationSpeed", String.valueOf(speed));
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
