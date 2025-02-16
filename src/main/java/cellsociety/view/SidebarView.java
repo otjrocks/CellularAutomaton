@@ -3,6 +3,7 @@ package cellsociety.view;
 import static cellsociety.config.MainConfig.getMessages;
 
 import cellsociety.controller.MainController;
+import cellsociety.controller.PreferencesController;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.ThemeConfig;
 import javafx.collections.FXCollections;
@@ -136,7 +137,8 @@ public class SidebarView extends VBox {
   private void createShowGridLinesCheckbox() {
     myGridLinesCheckboxField.setSpacing(ELEMENT_SPACING);
     CheckBox gridLinesCheckbox = new CheckBox();
-    gridLinesCheckbox.setSelected(true);
+    gridLinesCheckbox.setSelected(
+        Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
         event -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
     Text title = new Text(getMessages().getString("GRID_LINES_LABEL"));
