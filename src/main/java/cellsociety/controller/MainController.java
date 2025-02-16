@@ -20,6 +20,7 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.WIDTH;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
@@ -72,10 +73,10 @@ public class MainController {
     myThemeController = new ThemeController(stage);
     myStage = stage;
     myRoot = root;
-    mySplashScreenView = new SplashScreenView(new AlertField(), this);
-    root.getChildren().add(mySplashScreenView);
     createMainContainerAndView();
     initializeSimulationAnimation();
+    mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
+    root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
   }
 

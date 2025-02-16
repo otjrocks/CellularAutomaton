@@ -67,20 +67,27 @@ public class SidebarView extends VBox {
             myAlertField);
   }
 
-  private void createThemeSelector() {
+  /**
+   * Create the theme selector element, which can be accessed across multiple views
+   *
+   * @return A HBox containing the theme selector and its label
+   */
+  public HBox createThemeSelector() {
     ObservableList<String> options =
         FXCollections.observableArrayList(ThemeConfig.THEMES);
     ComboBox<String> myThemeSelector = new ComboBox<>(options);
-    myThemeSelector.setValue(options.getFirst());
+    myThemeSelector.setValue(ThemeConfig.getCurrentTheme());
     myThemeSelector.valueProperty()
         .addListener((ov, t, t1) -> {
           myMainController.setTheme(myThemeSelector.getValue());
+          myThemeSelector.setValue(myThemeSelector.getValue());
         });
     myThemeSelectorBox = new HBox();
     myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
     myThemeSelectorBox.setSpacing(5);
     Text simulationTypeLabel = new Text(getMessages().getString("CHANGE_THEME"));
     myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
+    return myThemeSelectorBox;
   }
 
   public void update() {

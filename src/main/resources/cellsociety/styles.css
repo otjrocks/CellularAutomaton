@@ -80,6 +80,7 @@ Label, Text {
 .slider {
   -fx-padding: 15 0 0 0;
 }
+
 .slider .track {
   -fx-background-color: -fx-light;
   background-color: -fx-light;
@@ -122,7 +123,7 @@ Label, Text {
 .combo-box {
   -fx-font-family: Lato;
   -fx-font-size: 14px;
-  -fx-text-fill: -fx-secondary;
+  -fx-text-fill: #fff;
   -fx-background-color: -fx-light;
   -fx-border-color: -fx-secondary;
   -fx-border-width: 1px;
@@ -147,6 +148,16 @@ Label, Text {
   -fx-background-color: -fx-primary;
 }
 
+.list-cell {
+  -fx-text-fill: -fx-secondary;
+  -fx-background-color: -fx-light;
+}
+
+.list-cell:hover {
+  -fx-background-color: -fx-accent;
+  -fx-text-fill: -fx-primary;
+}
+
 .text-field, .password-field {
   -fx-font-family: Lato;
   -fx-font-size: 14px;
@@ -159,6 +170,7 @@ Label, Text {
 
 .text-field:hover, .password-field:hover {
   -fx-border-color: -fx-accent;
+  -fx-border-radius: 5px;
 }
 
 .text-field:focused, .password-field:focused {
@@ -166,42 +178,18 @@ Label, Text {
   -fx-background-color: -fx-light;
 }
 
-.check-box {
-  -fx-font-family: Lato;
-  -fx-font-size: 14px;
-  -fx-text-fill: -fx-secondary;
-}
-
 .check-box .box {
   -fx-background-color: -fx-light;
-  -fx-border-color: -fx-secondary;
+  -fx-border-color: -fx-accent;
   -fx-border-width: 1px;
   -fx-border-radius: 5px;
 }
 
-.check-box:hover .box {
+.check-box:selected .mark {
+  -fx-background-color: -fx-accent;
   -fx-border-color: -fx-accent;
 }
 
-.check-box:selected .box {
-  -fx-background-color: -fx-primary;
-  -fx-border-color: -fx-primary;
-}
-
-.check-box:selected .mark {
-  -fx-background-color: -fx-light;
-  -fx-border-color: -fx-light;
-}
-
-.check-box:focused .box {
-  -fx-border-color: -fx-primary;
-  -fx-background-color: -fx-light;
-}
-
 .check-box .text {
-  -fx-text-fill: -fx-secondary;
-}
-
-.check-box .text:hover {
   -fx-text-fill: -fx-accent;
 }
