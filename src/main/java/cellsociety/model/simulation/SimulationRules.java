@@ -14,6 +14,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 
 public abstract class SimulationRules {
+
   private Map<String, Parameter<?>> myParameters;
 
   public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
@@ -25,7 +26,7 @@ public abstract class SimulationRules {
   }
 
   public Map<String, Parameter<?>> getParameters() {
-    return myParameters;
+    return Map.copyOf(myParameters);
   }
 
   //only two options, so moved the getNeighbors here and actually defined it.
@@ -80,6 +81,7 @@ public abstract class SimulationRules {
   }
 
   public abstract int getNextState(Cell cell, Grid grid);
+
   public abstract int getNumberStates();
 
   public void checkMissingParameterAndThrowException(String threshold) {

@@ -165,6 +165,7 @@ Label, Text {
   -fx-font-family: Lato;
   -fx-font-size: 14px;
   -fx-text-fill: -fx-secondary;
+  -fx-prompt-text-fill: -fx-accent;
   -fx-background-color: -fx-light;
   -fx-border-color: -fx-secondary;
   -fx-border-width: 1px;

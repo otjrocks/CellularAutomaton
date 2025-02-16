@@ -93,6 +93,7 @@ public class SidebarView extends VBox {
 
   public void update() {
     myViewModeView.update();
+    myEditModeView.updateDisplay();
   }
 
   private void initializeAlertField() {
@@ -110,7 +111,7 @@ public class SidebarView extends VBox {
 
 
   private void enableEditView() {
-    myEditModeView.updateStateInfo();
+    myEditModeView.updateDisplay();
     this.getChildren().clear();
     addAllEditModeComponents();
   }

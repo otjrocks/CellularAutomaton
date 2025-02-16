@@ -250,14 +250,23 @@ public class MainController {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
 
+  /**
+   * Update the main simulation of the program
+   *
+   * @param simulation: The simulation you wish to switch to
+   */
+  public void updateSimulation(Simulation simulation) {
+    mySimulation = simulation;
+    createNewMainViewAndUpdateViewContainer();
+    createOrUpdateSidebar();
+  }
+
   private void updateSimulationFromFile(String filePath) {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
 
-      mySimulation = xmlHandler.getSim();
       myGrid = xmlHandler.getGrid();
-      createNewMainViewAndUpdateViewContainer();
-      createOrUpdateSidebar();
+      updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
       mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
     } catch (ParserConfigurationException e) {

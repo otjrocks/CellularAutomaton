@@ -63,7 +63,7 @@ public class ViewModeView extends VBox {
     initializeStaticContent();
     createSimulationMetaDataDisplay();
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    ParameterView myParameterView = new ParameterView(myMainController.getSimulation());
+    ParameterView myParameterView = new ParameterView(myMainController, false);
     setPlayPauseButtonText();
     this.getChildren().addAll(myStateInfoView, myParameterView, myControlButtons, mySpeedSliderBox);
   }
