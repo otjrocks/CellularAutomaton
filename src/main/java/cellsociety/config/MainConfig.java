@@ -1,22 +1,25 @@
 package cellsociety.config;
 
+import cellsociety.controller.PreferencesController;
 import java.util.ResourceBundle;
 
 public class MainConfig {
 
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
   public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
-  public static final String PREFERENCES_FILE = "cellsociety.preferences.user";
   private static final String DEFAULT_LANGUAGE = "English";
+  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference("language",
+      DEFAULT_LANGUAGE);
 
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
-      LANGUAGE_FILE_PATH + DEFAULT_LANGUAGE);
+      LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
   public static ResourceBundle getMessages() {
     return myMessages;
   }
 
   public static void setLanguage(String language) {
+    PreferencesController.setPreference("language", language);
     myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
   }
 
