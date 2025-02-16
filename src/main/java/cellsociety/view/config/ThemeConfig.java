@@ -1,5 +1,7 @@
 package cellsociety.view.config;
 
+import cellsociety.controller.PreferencesController;
+
 public class ThemeConfig {
 
   /**
@@ -21,7 +23,8 @@ public class ThemeConfig {
   public static final String BOLD_FONT_PATH = DEFAULT_RESOURCE_FOLDER + "fonts.bold.ttf";
   public static final String THEMES_RESOURCES_FOLDER = DEFAULT_RESOURCE_FOLDER + "themes/";
 
-  private static String myThemePath = THEMES_RESOURCES_FOLDER + "Light.css";
+  private static String myThemePath =
+      THEMES_RESOURCES_FOLDER + PreferencesController.getPreference("theme", "Light") + ".css";
   private static String myCurrentTheme = THEMES[0];
 
   /**
@@ -50,6 +53,7 @@ public class ThemeConfig {
    */
   public static void setTheme(String themeName) {
     myThemePath = THEMES_RESOURCES_FOLDER + themeName + ".css";
+    PreferencesController.setPreference("theme", themeName);
     myCurrentTheme = themeName;
   }
 }
