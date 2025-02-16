@@ -104,6 +104,10 @@ public class ParameterView extends VBox {
   private void updateParameters() {
     Map<String, Parameter<?>> newParameters = new HashMap<>();
     setNewParametersMap(newParameters);
+    attemptCreatingNewSimulation(newParameters);
+  }
+
+  private void attemptCreatingNewSimulation(Map<String, Parameter<?>> newParameters) {
     Simulation currentSimulation = myMainController.getSimulation();
     Simulation newSimulation;
     try {
@@ -120,7 +124,6 @@ public class ParameterView extends VBox {
       throw new RuntimeException(e);
     }
     myMainController.updateSimulation(newSimulation);
-
   }
 
   private void setNewParametersMap(Map<String, Parameter<?>> newParameters) {
