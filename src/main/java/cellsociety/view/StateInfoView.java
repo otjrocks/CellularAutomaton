@@ -1,9 +1,8 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.getMessages;
-import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-
 import cellsociety.model.simulation.Simulation;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
 import javafx.geometry.Pos;
