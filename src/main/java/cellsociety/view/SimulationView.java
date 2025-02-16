@@ -36,11 +36,13 @@ public class SimulationView extends Group {
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
     getChildren().add(myGridView);
+    myGridView.updateGridLinesColor(); // ensure grid lines are proper color on simulation view initialization
   }
 
   /**
    * Perform a single step of the animation
-   * @param grid: Grid of the simulation
+   *
+   * @param grid:       Grid of the simulation
    * @param simulation: Simulation that contains rules for updating
    */
   public void step(Grid grid, Simulation simulation) {
@@ -74,5 +76,12 @@ public class SimulationView extends Group {
    */
   public void setGridLines(boolean selected) {
     myGridView.setGridLines(selected);
+  }
+
+  /**
+   * Reset the grid line colors on theme change
+   */
+  public void updateGridLinesColor() {
+    myGridView.updateGridLinesColor();
   }
 }

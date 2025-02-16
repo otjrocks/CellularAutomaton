@@ -1,7 +1,13 @@
 package cellsociety.controller;
 
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
+import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,6 +19,8 @@ import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
+import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
@@ -26,7 +34,6 @@ import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
-import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -53,7 +60,8 @@ public class MainController {
   VBox myMainViewContainer = new VBox();
   Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
-  private boolean gridLinesEnabled = true;
+  private boolean gridLinesEnabled = Boolean.parseBoolean(
+      PreferencesController.getPreference("gridLines", "true"));
 
   private final ThemeController myThemeController;
 
@@ -66,10 +74,10 @@ public class MainController {
     myThemeController = new ThemeController(stage);
     myStage = stage;
     myRoot = root;
-    mySplashScreenView = new SplashScreenView(new AlertField(), this);
-    root.getChildren().add(mySplashScreenView);
     createMainContainerAndView();
     initializeSimulationAnimation();
+    mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
+    root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
   }
 
@@ -77,6 +85,8 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
+    mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
+    createOrUpdateSidebar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
     myRoot.getChildren().add(mySidebarView);
@@ -89,6 +99,7 @@ public class MainController {
    */
   public void setTheme(String themeName) {
     myThemeController.setTheme(themeName);
+    mySimulationView.updateGridLinesColor();
   }
 
   /**
@@ -135,6 +146,7 @@ public class MainController {
    *               stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
+    PreferencesController.setPreference("animationSpeed", String.valueOf(speed));
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
@@ -169,9 +181,18 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
-    mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
+    try {
+      mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(
+          e.getCause()
+              .getMessage());  // provide exception message thrown by class, not the reflection api
+    } catch (ClassNotFoundException | NoSuchMethodException |
+             InstantiationException | IllegalAccessException | InvalidParameterException e) {
+      throw new RuntimeException(e);
+    }
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
   }
@@ -230,28 +251,33 @@ public class MainController {
   }
 
   private void updateSimulationFromFile(String filePath) {
-    try{
+    try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
 
       mySimulation = xmlHandler.getSim();
       myGrid = xmlHandler.getGrid();
       createNewMainViewAndUpdateViewContainer();
       createOrUpdateSidebar();
-      } catch (SAXException e) {
-        mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
-      } catch (ParserConfigurationException e) {
-        mySidebarView.flashWarning("XML parser configuration issue.");
-      } catch (IOException e) {
-        mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
-      } catch (NumberFormatException e) {
-        mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
-      } catch (NullPointerException e) {
-        mySidebarView.flashWarning("Missing required data field. Please add required fields.");
-      } catch (GridException e) {
-        mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
-      } catch (Exception e) {
-        mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+    } catch (SAXException e) {
+      mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+    } catch (ParserConfigurationException e) {
+      mySidebarView.flashWarning("XML parser configuration issue.");
+    } catch (IOException e) {
+      mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+    } catch (NumberFormatException e) {
+      mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+    } catch (NullPointerException e) {
+      mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+    } catch (GridException e) {
+      mySidebarView.flashWarning(
+          "Grid values out of bounds. Please adjust initialization configuration.");
+    } catch (Exception e) {
+      e.printStackTrace();
+      mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      if (VERBOSE_ERROR_MESSAGES) {
+        mySidebarView.flashWarning(e.getMessage());
       }
+    }
   }
 
   private void createOrUpdateSidebar() {
@@ -300,10 +326,6 @@ public class MainController {
     mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);
-  }
-
-  public void clearSidebar(MainController controller) {
-    mySidebarView.clearSidebar();
   }
 
   /**

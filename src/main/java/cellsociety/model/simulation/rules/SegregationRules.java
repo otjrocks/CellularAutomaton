@@ -4,6 +4,8 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,15 +19,24 @@ import java.util.Random;
 // A cell with state 1 indicates it's a part of Group 1
 // A cell with state 2 indicates it's a part of Group 2
 
-public class SegregationModelRules extends SimulationRules {
+public class SegregationRules extends SimulationRules {
 
   private final Random RANDOM = new Random();
+  private final double myToleranceThreshold;
 
-  public SegregationModelRules(Map<String, Double> myParameters) {
-    if (myParameters == null || myParameters.isEmpty()) {
-      this.parameters = setDefaultParameters();
-    } else {
-      this.parameters = new HashMap<>(myParameters);
+  public SegregationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+    super(parameters);
+    if (parameters == null || parameters.isEmpty()) {
+      this.setParameters(setDefaultParameters());
+    }
+    checkMissingParameterAndThrowException("toleranceThreshold");
+    myToleranceThreshold = getParameters().get("toleranceThreshold").getDouble();
+    validateParameterRange();
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (myToleranceThreshold < 0 || myToleranceThreshold > 1) {
+      throwInvalidParameterException("toleranceThreshold");
     }
   }
 
@@ -84,7 +95,7 @@ public class SegregationModelRules extends SimulationRules {
     double typePercentage = (double) sameType / totalNeighbors;
 
     // No occupied neighbors or satisfied-> stay
-    if (totalNeighbors == 0 || typePercentage >= parameters.get("toleranceThreshold")) {
+    if (totalNeighbors == 0 || typePercentage >= myToleranceThreshold) {
       return currentState;
     }
 
@@ -143,9 +154,9 @@ public class SegregationModelRules extends SimulationRules {
     }
   }
 
-  private Map<String, Double> setDefaultParameters() {
-    Map<String, Double> parameters = new HashMap<>();
-    parameters.put("toleranceThreshold", 0.3);
+  private Map<String, Parameter<?>> setDefaultParameters() {
+    Map<String, Parameter<?>> parameters = new HashMap<>();
+    parameters.put("toleranceThreshold", new Parameter<>(0.3));
     return parameters;
   }
 

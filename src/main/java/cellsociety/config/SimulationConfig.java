@@ -1,9 +1,11 @@
 package cellsociety.config;
 
+import static cellsociety.config.MainConfig.getMessages;
+
+import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,17 +13,10 @@ import static cellsociety.config.MainConfig.getMessages;
 import cellsociety.model.cell.AntCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.cell.WaTorCell;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.rules.ForagingAntsRules;
-import cellsociety.model.simulation.rules.GameOfLifeRules;
-import cellsociety.model.simulation.rules.PercolationRules;
-import cellsociety.model.simulation.rules.RockPaperScissorsRules;
-import cellsociety.model.simulation.rules.SegregationModelRules;
-import cellsociety.model.simulation.rules.SpreadingOfFireRules;
-import cellsociety.model.simulation.rules.WaTorWorldRules;
+import cellsociety.model.simulation.InvalidParameterException;
 
 /**
  * Store all information pertaining to simulations
@@ -33,31 +28,37 @@ public class SimulationConfig {
   /**
    * List of all the simulation names
    */
-  public static final String[] simulations = new String[]{
+  public static final String[] SIMULATIONS = new String[]{
       "GameOfLife",
       "Percolation",
       "Segregation",
       "SpreadingOfFire",
       "WaTorWorld",
       "RockPaperScissors",
-      "ForagingAnts"
+      "FallingSand"
   };
 
-  private static Point2D getParameterRange(String parameter) {
-    switch (parameter) {
-      case "sharkReproductionTime", "fishReproductionTime", "sharkEnergyGain" -> {
-        return new Point2D.Double(0, 10);
-      }
-      case "numStates" -> {  // number of states for rock paper scissors should be in range [3,20]
-        return new Point2D.Double(3, 20);
-      }
-      default -> {
-        return new Point2D.Double(0, 1);
-      }
-      // unless specified otherwise above,
-      // parameters must be a double in the range [0, 1]
-      // representing a probability of some event or thing occurring.
+  /**
+   * Map of all the required parameters for a given simulation
+   */
+  private static final Map<String, List<String>> PARAMETERS = Map.of(
+      "Segregation", List.of("toleranceThreshold"),
+      "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
+      "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
+      "RockPaperScissors", List.of("minThreshold", "numStates")
+  );
+
+  /**
+   * Get the list of required parameters for a given simulation name/typed
+   *
+   * @param simulationName: the name of the simulation you are querying for
+   * @return A list of strings representing the parameter names
+   */
+  public static List<String> getParameters(String simulationName) {
+    if (!PARAMETERS.containsKey(simulationName)) {
+      return new ArrayList<>();
     }
+    return PARAMETERS.get(simulationName);
   }
 
   /**
@@ -72,13 +73,17 @@ public class SimulationConfig {
    */
   public static Cell getNewCell(int row, int col, int state, String simulationName) {
     validateSimulation(simulationName);
-    if (simulationName.equals("WaTorWorld")) {
-      return new WaTorCell(state, new Double(row, col));
+    String className = String.format("cellsociety.model.cell.%sCell", simulationName);
+    try {
+      Class<?> cellClass = Class.forName(className);
+      return (Cell) cellClass.getConstructor(int.class, Point2D.class)
+          .newInstance(state, new Point2D.Double(row, col));
+    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException |
+             IllegalAccessException | InvocationTargetException e) {
+      // If specialized cell type does not exist for a simulation or an error occurs
+      // while trying to get specialized cell, fallback to default cell type
+      return new DefaultCell(state, new Point2D.Double(row, col));
     }
-    if (simulationName.equals("ForagingAnts")) {
-      return new AntCell(state, new Double(row, col));
-    }
-    return new DefaultCell(state, new Point2D.Double(row, col));
   }
 
   /**
@@ -94,121 +99,28 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData,
-      Map<String, String> parameters) {
+      Map<String, Parameter<?>> parameters)
+      throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidParameterException {
     validateSimulation(simulationName);
-    validateParameters(simulationName, parameters);
-    if (simulationName.equals("GameOfLife")) {
-      return new Simulation(new GameOfLifeRules(parameters), simulationMetaData);
-    }
-    return new Simulation(getRules(simulationName, convertMap(parameters)), simulationMetaData);
+    return new Simulation(getRules(simulationName, parameters), simulationMetaData);
   }
 
   private static SimulationRules getRules(String simulationName,
-      Map<String, java.lang.Double> parameters) {
+      Map<String, Parameter<?>> parameters)
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidParameterException {
     validateSimulation(simulationName);
-    switch (simulationName) {
-      case "Percolation" -> {
-        return new PercolationRules();
-      }
-      case "Segregation" -> {
-        return new SegregationModelRules(parameters);
-      }
-      case "SpreadingOfFire" -> {
-        return new SpreadingOfFireRules();
-      }
-      case "WaTorWorld" -> {
-        return new WaTorWorldRules(parameters);
-      }
-      case "RockPaperScissors" -> {
-        return new RockPaperScissorsRules(parameters);
-      }
-      case "ForagingAnts" -> {
-        return new ForagingAntsRules(parameters);
-      }
-      default -> { // default is game of life
-        return new GameOfLifeRules();
-      }
-    }
-  }
-
-  /**
-   * Get the list of required parameters for a given simulation name/typed
-   *
-   * @param simulationName: the name of the simulation you are querying for
-   * @return A list of strings representing the parameter names
-   */
-  public static List<String> getParameters(String simulationName) {
-    validateSimulation(simulationName);
-    switch (simulationName) {
-      case "Segregation" -> {
-        return List.of("toleranceThreshold");
-      }
-      case "SpreadingOfFire" -> {
-        return List.of("growInEmptyCell", "ignitionWithoutNeighbors");
-      }
-      case "WaTorWorld" -> {
-        return List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime");
-      }
-      case "RockPaperScissors" -> {
-        return List.of("minThreshold", "numStates");
-      }
-      case "ForagingAnts" -> {
-        return List.of("pheromoneDecayRate", "antReproductionTime", "maxPheromoneAmount");
-      }
-      default -> {
-        return new ArrayList<>();
-      }
-    }
+    String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
+        "Rules");
+    SimulationRules simulationRules;
+    simulationRules = (SimulationRules) Class.forName(className).getConstructor(Map.class)
+        .newInstance(parameters);
+    return simulationRules;
   }
 
   private static void validateSimulation(String simulationName) {
-    if (!List.of(simulations).contains(simulationName)) {
+    if (!List.of(SIMULATIONS).contains(simulationName)) {
       throw new IllegalArgumentException(
           String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
-    }
-  }
-
-  private static void validateParameters(String simulationName,
-      Map<String, String> parameters) {
-    List<String> requiredParameters = getParameters(simulationName);
-    for (String parameter : requiredParameters) {
-      if (parameters == null) {
-        throw new NullPointerException(
-            getMessages().getString("NULL_SIMULATION_PARAMETERS_ERROR"));
-      }
-      if (!parameters.containsKey(parameter)) {
-        throw new IllegalArgumentException(
-            String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
-      }
-      validateParameterRange(parameter, java.lang.Double.valueOf(parameters.get(parameter)));
-    }
-  }
-
-  private static Map<String, java.lang.Double> convertMap(Map<String, String> stringMap) {
-    Map<String, java.lang.Double> paramMap = new HashMap<>();
-    for (String key : stringMap.keySet()) {
-      String value = stringMap.get(key);
-      if (value != null) {
-        try {
-          paramMap.put(key, java.lang.Double.valueOf(value));
-        } catch (NumberFormatException e) {
-          System.err.println("Warning: Invalid number format for key: " + key);
-        }
-      }
-    }
-    return paramMap;
-  }
-
-  // ensure that a specified parameter is within a valid range for the parameter
-  private static void validateParameterRange(String parameter, java.lang.Double value) {
-    Point2D validRange = getParameterRange(parameter);
-    if (value < validRange.getX()) {
-      throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_SMALL"), parameter, validRange.getX()));
-    }
-    if (value > validRange.getY()) {
-      throw new IllegalArgumentException(
-          String.format(getMessages().getString("PARAMETER_TOO_LARGE"), parameter, validRange.getY()));
     }
   }
 

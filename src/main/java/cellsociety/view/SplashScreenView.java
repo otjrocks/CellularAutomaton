@@ -1,16 +1,23 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.WIDTH;
 import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
+import cellsociety.controller.PreferencesController;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -18,92 +25,95 @@ public class SplashScreenView extends VBox {
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
-  private final MainController mainController;
-
+  private final MainController myMainController;
   private final CreateDefaultSimView createDefaultSimView;
+  private final VBox myContentBox;
+  private final SidebarView mySidebarView;
 
-
-  public SplashScreenView(AlertField myAlertField, MainController mainController) {
-    this.myAlertField = myAlertField;
-    this.mainController = mainController;
+  public SplashScreenView(AlertField alertField, SidebarView sidebar,
+      MainController mainController) {
+    this.myAlertField = alertField;
+    this.mySidebarView = sidebar;
+    this.myMainController = mainController;
     this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
       @Override
       public void handleAdditionalButtonActions() {
         mainController.hideSplashScreen();
       }
     };
-
+    this.myContentBox = new VBox();
     initializeSplashScreen();
+    handleBoxSizingAndAlignment();
+  }
+
+  private void handleBoxSizingAndAlignment() {
+    myContentBox.setSpacing(ELEMENT_SPACING);
+    myContentBox.setAlignment(Pos.CENTER);
+    myContentBox.setPrefWidth((double) WIDTH / 2);
+    myAlertField.setAlignment(Pos.CENTER);
+    this.getChildren().add(myContentBox);
+    this.setPrefWidth(WIDTH);
+    this.setPrefHeight(HEIGHT - (MARGIN * 4));
+    this.setAlignment(Pos.CENTER);
+    createDefaultSimView.setMaxWidth((double) WIDTH / 2);
   }
 
   private void initializeSplashScreen() {
-
     Text title = new Text(getMessages().getString("SPLASH_HEADER"));
+    title.getStyleClass().add("main-title");
     Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
+    description.getStyleClass().add("secondary-title");
     Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
-
-    this.getChildren().addAll(title, description, instructions, createDefaultSimView, myAlertField);
+    HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
+    myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
+    myContentBox.getChildren()
+        .addAll(title, description, instructions, createDefaultSimView, myThemeSelectorBox);
 
     createLanguageDropdown();
     createFileChooserButton();
-
+    myContentBox.getChildren().add(myAlertField); // add alert field to end of view
   }
 
   private void createLanguageDropdown() {
     languageDropdown = new ComboBox<>();
     Text changeLanguageText = new Text(getMessages().getString("CHANGE_LANGUAGE"));
 
-    String propertiesFolderPath = "src/main/resources/cellsociety/languages/";
-    List<String> languages = fetchLanguages(propertiesFolderPath);
+    List<String> languages = fetchLanguages("src/main/resources/cellsociety/languages/");
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessages().getString("NO_LANGUAGES_FOUND"), false);
     }
 
-    for (String language : languages) {
-      languageDropdown.getItems().add(language);
-    }
-    if (languages.contains("English")) {
-      languageDropdown.setValue("English");
-    } else {
-      languageDropdown.setValue(languages.getFirst());
-    }
+    languageDropdown.getItems().addAll(languages);
+    String defaultLanguage = languages.contains("English") ? "English" : languages.getFirst();
+    languageDropdown.setValue(
+        PreferencesController.getPreference("language", defaultLanguage));
+    languageDropdown.setOnAction(event -> MainConfig.setLanguage(languageDropdown.getValue()));
 
-    languageDropdown.setOnAction(event -> {
-      String language = languageDropdown.getValue();
-      MainConfig.setLanguage(language);
-
-
-    });
-
-    this.getChildren().addAll(changeLanguageText, languageDropdown);
+    myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
   }
-
 
   private List<String> fetchLanguages(String propertiesFolderPath) {
     List<String> languages = new ArrayList<>();
     File directory = new File(propertiesFolderPath);
-    // this next line was from an LLM
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
 
     if (files != null) {
       for (File file : files) {
-        String fileNameWithoutExtension = file.getName().replace(".properties", "");
-        languages.add(fileNameWithoutExtension);
+        languages.add(file.getName().replace(".properties", ""));
       }
     }
-
     return languages;
   }
-
 
   private void createFileChooserButton() {
     Button myChooseFileButton = new Button(getMessages().getString("CHOOSE_FILE_BUTTON"));
     Text chooseFileText = new Text(getMessages().getString("LOAD_BUTTON_TEXT"));
+
     myChooseFileButton.setOnAction(event -> {
       try {
-        mainController.handleNewSimulationFromFile();
-        mainController.hideSplashScreen();
+        myMainController.handleNewSimulationFromFile();
+        myMainController.hideSplashScreen();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
         myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
@@ -114,8 +124,6 @@ public class SplashScreenView extends VBox {
         }
       }
     });
-    this.getChildren().addAll(chooseFileText, myChooseFileButton);
+    myContentBox.getChildren().addAll(chooseFileText, myChooseFileButton);
   }
-
-
 }

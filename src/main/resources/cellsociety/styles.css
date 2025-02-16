@@ -1,5 +1,6 @@
 /*
 The main stylesheet of the application
+I used ChatGPT to assist in generating CSS for combo box, text fields, scrollbar, and check box
  */
 
 @font-face {
@@ -10,6 +11,10 @@ The main stylesheet of the application
 @font-face {
   font-family: 'Lato Bold';
   src: url('./fonts/bold.ttf');
+}
+
+.cell-view {
+  -fx-stroke: -fx-primary;
 }
 
 .root {
@@ -24,10 +29,9 @@ Label, Text {
   -fx-text-fill: -fx-secondary;
 }
 
-
 .main-title {
-  -fx-font-size: 24px;
-  -fx-font-family: 'Lato Bold';
+  -fx-font-size: 28px;
+  -fx-font-family: 'Lato';
   -fx-font-weight: bold;
 }
 
@@ -79,6 +83,7 @@ Label, Text {
 .slider {
   -fx-padding: 15 0 0 0;
 }
+
 .slider .track {
   -fx-background-color: -fx-light;
   background-color: -fx-light;
@@ -116,4 +121,108 @@ Label, Text {
   -fx-border-color: -fx-accent;
   border-color: -fx-accent;
   -fx-opacity: 0.8;
+}
+
+.combo-box {
+  -fx-font-family: Lato;
+  -fx-font-size: 14px;
+  -fx-text-fill: #fff;
+  -fx-background-color: -fx-light;
+  -fx-border-color: -fx-secondary;
+  -fx-border-width: 1px;
+  -fx-border-radius: 5px;
+}
+
+.combo-box:hover {
+  -fx-border-color: -fx-accent;
+}
+
+.combo-box:focused {
+  -fx-border-color: -fx-primary;
+  -fx-background-color: -fx-light;
+}
+
+.combo-box .arrow-button {
+  -fx-background-color: -fx-accent;
+  -fx-text-fill: -fx-light;
+}
+
+.combo-box .arrow-button:hover {
+  -fx-background-color: -fx-primary;
+}
+
+.list-cell {
+  -fx-text-fill: -fx-secondary;
+  -fx-background-color: -fx-light;
+}
+
+.list-cell:hover {
+  -fx-background-color: -fx-accent;
+  -fx-text-fill: -fx-primary;
+}
+
+.text-field, .password-field {
+  -fx-font-family: Lato;
+  -fx-font-size: 14px;
+  -fx-text-fill: -fx-secondary;
+  -fx-background-color: -fx-light;
+  -fx-border-color: -fx-secondary;
+  -fx-border-width: 1px;
+  -fx-border-radius: 5px;
+}
+
+.text-field:hover, .password-field:hover {
+  -fx-border-color: -fx-accent;
+  -fx-border-radius: 5px;
+}
+
+.text-field:focused, .password-field:focused {
+  -fx-border-color: -fx-primary;
+  -fx-background-color: -fx-light;
+}
+
+.check-box .box {
+  -fx-background-color: -fx-light;
+  -fx-border-color: -fx-accent;
+  -fx-border-width: 1px;
+  -fx-border-radius: 5px;
+}
+
+.check-box:selected .mark {
+  -fx-background-color: -fx-accent;
+  -fx-border-color: -fx-accent;
+}
+
+.check-box .text {
+  -fx-text-fill: -fx-accent;
+}
+
+.scroll-bar {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: -fx-secondary;
+  -fx-background-radius: 5px;
+  -fx-pref-width: 5px;
+  -fx-pref-height: 5px;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: derive(-fx-accent, -10%);
+}
+
+.scroll-bar .thumb:pressed {
+  -fx-background-color: derive(-fx-accent, -20%);
+}
+
+.scroll-bar .track {
+  -fx-background-color: -fx-primary;
+  -fx-background-radius: 10px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-background-color: -fx-light;
+  -fx-background-radius: 10px;
 }

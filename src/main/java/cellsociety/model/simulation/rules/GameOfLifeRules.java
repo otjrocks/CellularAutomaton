@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import cellsociety.model.Grid;
@@ -13,17 +15,13 @@ public class GameOfLifeRules extends SimulationRules {
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
 
-  public GameOfLifeRules() {
-    birthValues = new ArrayList<>(Arrays.asList(2, 3));
-    surviveValues = new ArrayList<>(Arrays.asList(3));
-  }
-
-  public GameOfLifeRules(Map<String, String> ruleStringMap) {
-    if (ruleStringMap == null || ruleStringMap.isEmpty()) {
+  public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+    super(parameters);
+    if (parameters == null || parameters.isEmpty()) {
       birthValues = new ArrayList<>(Arrays.asList(3));
       surviveValues = new ArrayList<>(Arrays.asList(2, 3));
     } else {
-      initializeBSValues(ruleStringMap);
+      initializeBSValues(parameters);
     }
   }
 
@@ -68,8 +66,9 @@ public class GameOfLifeRules extends SimulationRules {
     return cell.getState();
   }
 
-  private void initializeBSValues(Map<String, String> ruleStringMap) {
-    String rulestring = ruleStringMap.get("ruleString");
+  private void initializeBSValues(Map<String, Parameter<?>> parameters)
+      throws InvalidParameterException {
+    String rulestring = parameters.get("ruleString").getString();
 
     String[] sStrings = rulestring.split("/")[0].split("");
     String[] bStrings = rulestring.split("/")[1].split("");
@@ -77,8 +76,8 @@ public class GameOfLifeRules extends SimulationRules {
     Integer[] sValues = convertStringArray(sStrings);
     Integer[] bValues = convertStringArray(bStrings);
 
-    surviveValues = new ArrayList(Arrays.asList(sValues));
-    birthValues = new ArrayList(Arrays.asList(bValues));
+    surviveValues = new ArrayList<>(Arrays.asList(sValues));
+    birthValues = new ArrayList<>(Arrays.asList(bValues));
   }
 
   private Integer[] convertStringArray(String[] strings) {

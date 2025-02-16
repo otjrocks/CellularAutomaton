@@ -1,10 +1,10 @@
 package cellsociety.model.simulation;
 
-import cellsociety.config.SimulationConfig;
+import static cellsociety.config.MainConfig.getMessages;
+
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,27 +14,18 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 
 public abstract class SimulationRules {
+  private Map<String, Parameter<?>> myParameters;
 
-  protected Map<String, Double> parameters;
-
-  public SimulationRules() {
-    this.parameters = new HashMap<>();
+  public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+    myParameters = parameters;
   }
 
-  public SimulationRules(Map<String, Double> parameters) {
-    this.parameters = parameters;
+  public void setParameters(Map<String, Parameter<?>> parameters) {
+    myParameters = parameters;
   }
 
-  public Map<String, Double> getParameters() {
-    return Map.copyOf(parameters);
-  }
-
-  public Double getParameter(String curParameter) {
-    return parameters.get(curParameter);
-  }
-
-  public void setParameter(String key, Double value) {
-    parameters.put(key, value);
+  public Map<String, Parameter<?>> getParameters() {
+    return myParameters;
   }
 
   //only two options, so moved the getNeighbors here and actually defined it.
@@ -89,6 +80,18 @@ public abstract class SimulationRules {
   }
 
   public abstract int getNextState(Cell cell, Grid grid);
-
   public abstract int getNumberStates();
+
+  public void checkMissingParameterAndThrowException(String threshold) {
+    if (!getParameters().containsKey(threshold)) {
+      throw new IllegalArgumentException(
+          String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
+    }
+  }
+
+  public static void throwInvalidParameterException(String minThreshold)
+      throws InvalidParameterException {
+    throw new InvalidParameterException(
+        String.format(getMessages().getString("INVALID_PARAMETER"), minThreshold));
+  }
 }

@@ -6,6 +6,8 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,18 +17,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-class SegregationModelRulesTest {
+class SegregationRulesTest {
 
-  private SegregationModelRules segregationModelRules;
+  private SegregationRules segregationRules;
   private Grid grid;
-  private Map<String, Double> parameters = new HashMap<>();
+  private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
-    parameters.put("toleranceThreshold", 0.3);
+    parameters.put("toleranceThreshold", new Parameter<>(0.3));
 
-    segregationModelRules = new SegregationModelRules(parameters);
+    segregationRules = new SegregationRules(parameters);
   }
 
   @Test
@@ -37,7 +39,7 @@ class SegregationModelRulesTest {
     grid.addCell(new DefaultCell(1, new Point2D.Double(0, 1)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 1)));
 
-    assertEquals(1, segregationModelRules.getNextState(cell, grid));
+    assertEquals(1, segregationRules.getNextState(cell, grid));
   }
 
   @Test
@@ -49,14 +51,14 @@ class SegregationModelRulesTest {
     grid.addCell(new DefaultCell(2, new Point2D.Double(0, 1)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 1)));
 
-    assertEquals(1, segregationModelRules.getNextState(cell, grid));
+    assertEquals(1, segregationRules.getNextState(cell, grid));
   }
 
   @Test
   void testCellInBounds() {
     Cell cell = new DefaultCell(1, new Point2D.Double(50, 50));
 
-    assertThrows(IndexOutOfBoundsException.class, () -> segregationModelRules.getNextState(cell, grid),
+    assertThrows(IndexOutOfBoundsException.class, () -> segregationRules.getNextState(cell, grid),
         "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
   }
 
@@ -64,7 +66,7 @@ class SegregationModelRulesTest {
   void testEmptyCell() {
     Cell cell = new DefaultCell(0, new Point2D.Double(2, 2));
 
-    assertEquals(0, segregationModelRules.getNextState(cell, grid));
+    assertEquals(0, segregationRules.getNextState(cell, grid));
   }
 
   @Test
@@ -77,12 +79,12 @@ class SegregationModelRulesTest {
     grid.addCell(new DefaultCell(2, new Point2D.Double(2, 1)));
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 2)));
 
-    assertEquals(-1, segregationModelRules.getNextState(cell, grid));
+    assertEquals(-1, segregationRules.getNextState(cell, grid));
   }
 
   @Test
-  void testSetDefaultParameters() {
-    assertEquals(0.3, segregationModelRules.getParameters().get("toleranceThreshold"));
+  void testSetDefaultParameters() throws InvalidParameterException {
+    assertEquals(0.3, segregationRules.getParameters().get("toleranceThreshold").getDouble());
   }
 
   @Test
@@ -94,7 +96,7 @@ class SegregationModelRulesTest {
     grid.addCell(new DefaultCell(1, new Point2D.Double(0, 3))); // Right
     grid.addCell(new DefaultCell(1, new Point2D.Double(1, 2))); // Below
 
-    List<Cell> neighbors = segregationModelRules.getNeighbors(cell, grid);
+    List<Cell> neighbors = segregationRules.getNeighbors(cell, grid);
     assertEquals(3, neighbors.size(), "Edge cell should have 3 neighbors.");
   }
 
@@ -110,7 +112,7 @@ class SegregationModelRulesTest {
     grid.updateCell(new DefaultCell(1, new Point2D.Double(0, 1)));
     grid.updateCell(new DefaultCell(2, new Point2D.Double(1, 0)));
 
-    List<CellUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = segregationRules.getNextStatesForAllCells(grid);
 
     boolean moved = false;
     for (CellUpdate update : updates) {
@@ -135,7 +137,7 @@ class SegregationModelRulesTest {
     grid.updateCell(new DefaultCell(1, new Point2D.Double(0, 0))); // Only one cell, should be unsatisfied
     grid.updateCell(new DefaultCell(0, new Point2D.Double(1, 1))); // Empty cell for movement
 
-    List<CellUpdate> updates = segregationModelRules.getNextStatesForAllCells(grid);
+    List<CellUpdate> updates = segregationRules.getNextStatesForAllCells(grid);
 
     boolean cellMoved = false;
     for (CellUpdate update : updates) {
@@ -162,7 +164,7 @@ class SegregationModelRulesTest {
     grid.addCell(emptyCell);
     emptyCells.add(emptyCell);
 
-    segregationModelRules.moveCellToEmptyLocationIfAvailable(movingCell, emptyCells, updates);
+    segregationRules.moveCellToEmptyLocationIfAvailable(movingCell, emptyCells, updates);
 
     boolean cellMoved = false;
     boolean oldLocationEmpty = false;
@@ -185,7 +187,7 @@ class SegregationModelRulesTest {
     emptyCells.add(new DefaultCell(0, new Point2D.Double(2, 2)));
     emptyCells.add(new DefaultCell(0, new Point2D.Double(3, 3)));
 
-    Cell removedCell = segregationModelRules.getAndRemoveRandomEmptyCell(emptyCells);
+    Cell removedCell = segregationRules.getAndRemoveRandomEmptyCell(emptyCells);
 
     assertNotNull(removedCell, "Removed cell should not be null");
     assertEquals(2, emptyCells.size(), "List size should decrease after removal");
@@ -201,7 +203,7 @@ class SegregationModelRulesTest {
     }
 
     List<Cell> emptyCells = new ArrayList<>();
-    segregationModelRules.getEmptyCells(grid, emptyCells);
+    segregationRules.getEmptyCells(grid, emptyCells);
 
     assertEquals(25, emptyCells.size(), "Should get all the empty cells");
     for (Cell cell : emptyCells) {

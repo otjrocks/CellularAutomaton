@@ -1,5 +1,6 @@
 package cellsociety.model.XMLHandlers;
 
+import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.util.Map;
 
@@ -54,7 +55,16 @@ public class XMLWriter {
             SimulationRules rules = sim.rules();
             writeParameters(doc, rules, simElement);
 
-            transformXML(doc, file);
+            for (Map.Entry<String, Parameter<?>> entry : rules.getParameters().entrySet()) {
+                addElement(doc, parametersElement, entry.getKey(), String.valueOf(entry.getValue()));
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(file);
+
+            transformer.transform(source, result);
 
         } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
         }

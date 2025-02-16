@@ -183,5 +183,5 @@ public class Grid {
         (!(location.getX() < myNumRows)) ||
         (!(location.getY() < myNumCols));
   }
-
+  
 }

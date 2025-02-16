@@ -1,5 +1,6 @@
 package cellsociety.model;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,13 +29,13 @@ class GridTest {
   int myNumRows, myNumCols;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     myNumRows = 4;
     myNumCols = 4;
     myGrid = new Grid(myNumRows, myNumCols);
     myCell = new DefaultCell(0, new Double(1, 1));
     myGrid.addCell(myCell);
-    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(), new SimulationMetaData("GameOfLife","","",""));
+    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>()), new SimulationMetaData("GameOfLife","","",""));
   }
 
   @Test

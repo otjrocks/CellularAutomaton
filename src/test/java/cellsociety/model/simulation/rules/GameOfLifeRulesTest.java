@@ -5,9 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.util.List;
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +19,9 @@ class GameOfLifeRulesTest {
   private GameOfLifeRules gameOfLifeRules;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
-    gameOfLifeRules = new GameOfLifeRules();
+    gameOfLifeRules = new GameOfLifeRules(new HashMap<>());
 
     int[][] gridPattern = {
         {0, 1, 0, 0, 0},

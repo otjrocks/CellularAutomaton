@@ -6,7 +6,9 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.cell.WaTorCell;
+import cellsociety.model.cell.WaTorWorldCell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -18,14 +20,14 @@ import org.junit.jupiter.api.Test;
 class WaTorWorldRulesTest {
   private WaTorWorldRules waTorWorldRules;
   private Grid grid;
-  private Map<String, Double> parameters = new HashMap<>();
+  private Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
-    parameters.put("fishReproductionTime", 3.0);
-    parameters.put("sharkReproductionTime", 4.0);
-    parameters.put("sharkEnergyGain", 2.0);
+    parameters.put("fishReproductionTime", new Parameter<>("3.0"));
+    parameters.put("sharkReproductionTime", new Parameter<>("4.0"));
+    parameters.put("sharkEnergyGain", new Parameter<>("2.0"));
 
     waTorWorldRules = new WaTorWorldRules(parameters);
   }
@@ -33,10 +35,10 @@ class WaTorWorldRulesTest {
   //needed chatGPT to help process the list of updates and check for any matching
   @Test
   void testFishMovesToEmptySpace() {
-    Cell fish = new WaTorCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 2));
+    Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 2));
     grid.addCell(fish);
 
-    grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
+    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
@@ -54,10 +56,10 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkEatsFish() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(2, 2));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(2, 2));
     grid.addCell(shark);
 
-    Cell fish = new WaTorCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
+    Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
     grid.addCell(fish);
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
@@ -75,7 +77,7 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkDies() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
     grid.addCell(shark);
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
@@ -94,10 +96,10 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkMovesToEmptySpace() {
-    Cell shark = new WaTorCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3));
     grid.addCell(shark);
 
-    grid.addCell(new WaTorCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
+    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
@@ -114,10 +116,10 @@ class WaTorWorldRulesTest {
   }
 
   @Test
-  void testSetDefaultParameters() {
-    assertEquals(3.0, waTorWorldRules.getParameters().get("fishReproductionTime"));
-    assertEquals(4.0, waTorWorldRules.getParameters().get("sharkReproductionTime"));
-    assertEquals(2.0, waTorWorldRules.getParameters().get("sharkEnergyGain"));
+  void testSetDefaultParameters() throws InvalidParameterException {
+    assertEquals(3.0, waTorWorldRules.getParameters().get("fishReproductionTime").getDouble());
+    assertEquals(4.0, waTorWorldRules.getParameters().get("sharkReproductionTime").getDouble());
+    assertEquals(2.0, waTorWorldRules.getParameters().get("sharkEnergyGain").getDouble());
   }
 
   @Test
