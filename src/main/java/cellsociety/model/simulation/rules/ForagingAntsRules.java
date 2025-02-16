@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.AntCell;
+import cellsociety.model.cell.ForagingAntsCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.InvalidParameterException;
@@ -120,7 +120,7 @@ public class ForagingAntsRules extends SimulationRules {
     }
 
     private void processAntMovement(Cell cell, Grid grid, List<CellUpdate> nextStates) {
-        AntCell ant = (AntCell) cell;
+        ForagingAntsCell ant = (ForagingAntsCell) cell;
         ant.reduceHealth(1);
         List<Cell> emptyNeighbors = getNeighborsByState(ant, grid, State.EMPTY.getValue());
         List<Cell> foodNeighbors = getNeighborsByState(ant, grid, State.FOOD.getValue());
@@ -130,14 +130,14 @@ public class ForagingAntsRules extends SimulationRules {
             Cell food = foodNeighbors.get(random.nextInt(foodNeighbors.size()));
             if (!food.getLocation().equals(ant.getLocation())) {
                 dropFoodPheromone(ant, grid);
-                nextStates.add(new CellUpdate(food.getLocation(), new AntCell(State.ANT.getValue(), food.getLocation())));
+                nextStates.add(new CellUpdate(food.getLocation(), new ForagingAntsCell(State.ANT.getValue(), food.getLocation())));
             }
         }
 
         if (!emptyNeighbors.isEmpty()) {
             Cell newLocation = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
             dropHomePheromone(ant, grid);
-            nextStates.add(new CellUpdate(newLocation.getLocation(), new AntCell(State.ANT.getValue(), newLocation.getLocation())));
+            nextStates.add(new CellUpdate(newLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), newLocation.getLocation())));
         }
 
         if (shouldReproduce(ant)) {
@@ -149,7 +149,7 @@ public class ForagingAntsRules extends SimulationRules {
 
     }
 
-    private void dropHomePheromone(AntCell antCell, Grid grid) {
+    private void dropHomePheromone(ForagingAntsCell antCell, Grid grid) {
         if (antCell.getState() == State.NEST.getValue()) {
             antCell.setHomePheromone(myMaxPheromoneAmount);
         } else {
@@ -157,8 +157,8 @@ public class ForagingAntsRules extends SimulationRules {
             double maxNeighborHomePheromone = 0;
 
             for (Cell neighbor : neighbors) {
-                if (neighbor instanceof AntCell) {
-                    AntCell antNeighbor = (AntCell) neighbor;
+                if (neighbor instanceof ForagingAntsCell) {
+                    ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
                     maxNeighborHomePheromone = Math.max(maxNeighborHomePheromone, antNeighbor.getHomePheromone());
                 }
             }
@@ -172,7 +172,7 @@ public class ForagingAntsRules extends SimulationRules {
         }
     }
 
-    private void dropFoodPheromone(AntCell antCell, Grid grid) {
+    private void dropFoodPheromone(ForagingAntsCell antCell, Grid grid) {
         if (antCell.getState() == State.FOOD.getValue()) {
             antCell.setFoodPheromone(myMaxPheromoneAmount);
         } else {
@@ -180,8 +180,8 @@ public class ForagingAntsRules extends SimulationRules {
             double maxNeighborFoodPheromone = 0;
 
             for (Cell neighbor : neighbors) {
-                if (neighbor instanceof AntCell) {
-                    AntCell antNeighbor = (AntCell) neighbor;
+                if (neighbor instanceof ForagingAntsCell) {
+                    ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
                     maxNeighborFoodPheromone = Math.max(maxNeighborFoodPheromone, antNeighbor.getFoodPheromone());
                 }
             }
@@ -195,14 +195,14 @@ public class ForagingAntsRules extends SimulationRules {
         }
     }
 
-    private boolean shouldReproduce(AntCell ant) {
+    private boolean shouldReproduce(ForagingAntsCell ant) {
         boolean shouldReproduce =
             ant.getReproductionTime() >= myAntReproductionTime;
         return shouldReproduce;
     }
 
-    private void reproduceAnt(AntCell ant, List<CellUpdate> nextStates) {
-        Cell offspringAnt = new AntCell(State.ANT.getValue(), ant.getLocation());
+    private void reproduceAnt(ForagingAntsCell ant, List<CellUpdate> nextStates) {
+        Cell offspringAnt = new ForagingAntsCell(State.ANT.getValue(), ant.getLocation());
         nextStates.add(new CellUpdate(ant.getLocation(), offspringAnt));
         ant.resetReproductionTime();
     }
