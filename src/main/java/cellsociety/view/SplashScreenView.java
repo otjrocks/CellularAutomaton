@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
 import static cellsociety.config.MainConfig.getMessages;
@@ -22,8 +24,7 @@ public class SplashScreenView extends VBox {
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
-  private final MainController mainController;
-  private HBox myThemeSelectorBox;
+  private final MainController myMainController;
   private final CreateDefaultSimView createDefaultSimView;
   private final VBox myContentBox;
   private final SidebarView mySidebarView;
@@ -32,7 +33,7 @@ public class SplashScreenView extends VBox {
       MainController mainController) {
     this.myAlertField = alertField;
     this.mySidebarView = sidebar;
-    this.mainController = mainController;
+    this.myMainController = mainController;
     this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
       @Override
       public void handleAdditionalButtonActions() {
@@ -47,23 +48,29 @@ public class SplashScreenView extends VBox {
   private void handleBoxSizingAndAlignment() {
     myContentBox.setSpacing(ELEMENT_SPACING);
     myContentBox.setAlignment(Pos.CENTER);
-    this.setAlignment(Pos.CENTER);
+    myContentBox.setPrefWidth((double) WIDTH / 2);
+    myAlertField.setAlignment(Pos.CENTER);
     this.getChildren().add(myContentBox);
     this.setPrefWidth(WIDTH);
+    this.setPrefHeight(HEIGHT - (MARGIN * 4));
+    this.setAlignment(Pos.CENTER);
     createDefaultSimView.setMaxWidth((double) WIDTH / 2);
   }
 
   private void initializeSplashScreen() {
     Text title = new Text(getMessages().getString("SPLASH_HEADER"));
+    title.getStyleClass().add("main-title");
     Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
+    description.getStyleClass().add("secondary-title");
     Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
-    myThemeSelectorBox = mySidebarView.createThemeSelector();
+    HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
+    myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
     myContentBox.getChildren()
-        .addAll(title, description, instructions, createDefaultSimView, myThemeSelectorBox,
-            myAlertField);
+        .addAll(title, description, instructions, createDefaultSimView, myThemeSelectorBox);
 
     createLanguageDropdown();
     createFileChooserButton();
+    myContentBox.getChildren().add(myAlertField); // add alert field to end of view
   }
 
   private void createLanguageDropdown() {
@@ -102,8 +109,8 @@ public class SplashScreenView extends VBox {
 
     myChooseFileButton.setOnAction(event -> {
       try {
-        mainController.handleNewSimulationFromFile();
-        mainController.hideSplashScreen();
+        myMainController.handleNewSimulationFromFile();
+        myMainController.hideSplashScreen();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
         myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);

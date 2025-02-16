@@ -4,7 +4,6 @@ import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessages;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
@@ -47,7 +46,7 @@ public class CreateDefaultSimView extends VBox {
 
   public CreateDefaultSimView(MainController mainController, AlertField alertField) {
     this.mainController = mainController;
-    this.setSpacing(ELEMENT_SPACING * 2);
+    this.setSpacing(ELEMENT_SPACING);
     this.setAlignment(Pos.CENTER_LEFT);
     this.myNumRows = DEFAULT_NUM_CELLS;
     this.myNumCols = DEFAULT_NUM_CELLS;
@@ -215,17 +214,6 @@ public class CreateDefaultSimView extends VBox {
   }
 
   /**
-   * Resets the fields back to nothing
-   */
-  private void resetFields() {
-    rowField.setText(Integer.toString(DEFAULT_NUM_CELLS));
-    colField.setText(Integer.toString(DEFAULT_NUM_CELLS));
-    myNameField.clear();
-    myAuthorField.clear();
-    myDescriptionField.clear();
-  }
-
-  /**
    * @return - whether the input fields were valid inputs
    */
   private boolean checkHasInvalidInput() {
@@ -276,7 +264,8 @@ public class CreateDefaultSimView extends VBox {
 
     Map<String, Parameter<?>> parameters = new HashMap<>();
     for (String parameter : myParameterTextFields.keySet()) {
-      parameters.put(parameter, new Parameter<Object>(myParameterTextFields.get(parameter).getText()));
+      parameters.put(parameter,
+          new Parameter<Object>(myParameterTextFields.get(parameter).getText()));
     }
     attemptCreatingNewSimulation(metaData, parameters);
   }
@@ -320,7 +309,8 @@ public class CreateDefaultSimView extends VBox {
    * Handle any addition button actions that you want to occur when the button is clicked and the
    * simulation is created successfully
    */
-  protected void handleAdditionalButtonActions() throws IllegalArgumentException {}
+  protected void handleAdditionalButtonActions() throws IllegalArgumentException {
+  }
 
 }
 

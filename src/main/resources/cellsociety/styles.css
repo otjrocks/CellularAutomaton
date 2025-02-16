@@ -1,6 +1,6 @@
 /*
 The main stylesheet of the application
-I used ChatGPT to assist in generating CSS for combo box, text fields, and check box
+I used ChatGPT to assist in generating CSS for combo box, text fields, scrollbar, and check box
  */
 
 @font-face {
@@ -25,10 +25,9 @@ Label, Text {
   -fx-text-fill: -fx-secondary;
 }
 
-
 .main-title {
-  -fx-font-size: 24px;
-  -fx-font-family: 'Lato Bold';
+  -fx-font-size: 28px;
+  -fx-font-family: 'Lato';
   -fx-font-weight: bold;
 }
 
@@ -192,4 +191,34 @@ Label, Text {
 
 .check-box .text {
   -fx-text-fill: -fx-accent;
+}
+
+.scroll-bar {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: -fx-secondary;
+  -fx-background-radius: 5px;
+  -fx-pref-width: 5px;
+  -fx-pref-height: 5px;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: derive(-fx-accent, -10%);
+}
+
+.scroll-bar .thumb:pressed {
+  -fx-background-color: derive(-fx-accent, -20%);
+}
+
+.scroll-bar .track {
+  -fx-background-color: -fx-primary;
+  -fx-background-radius: 10px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-background-color: -fx-light;
+  -fx-background-radius: 10px;
 }
