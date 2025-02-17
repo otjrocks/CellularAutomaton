@@ -9,8 +9,6 @@ import cellsociety.model.cell.PatchCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.rules.FallingSandRules.State;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -85,21 +83,28 @@ public class SugarscapeRules extends SimulationRules {
       moveAgentCell(nextStates, agentCell, biggestPatch);
 
       updatedCells.add(biggestPatch);
+      updatedCells.add(agentCell);
     }
   }
 
   private static void moveAgentCell(List<CellUpdate> nextStates, AgentCell agentCell,
       PatchCell biggestPatch) {
+    if (biggestPatch.getState() == State.AGENTS.getValue()) {
+      return;
+    }
+
     int newSugar = agentCell.getSugar() + biggestPatch.getSugar() - agentCell.getMetabolism();
     if (newSugar <= 0) {
       nextStates.add(new CellUpdate(agentCell.getLocation(), new DefaultCell(State.EMPTY.getValue(), agentCell.getLocation())));
       return;
     }
+
+    biggestPatch.setSugar(0);
+
     AgentCell newAgentCell = new AgentCell(State.AGENTS.getValue(), biggestPatch.getLocation(),
         agentCell.getVision(), agentCell.getMetabolism(), newSugar);
-    Cell emptyCell = new DefaultCell(State.EMPTY.getValue(), agentCell.getLocation());
 
-    nextStates.add(new CellUpdate(agentCell.getLocation(), emptyCell));
+    nextStates.add(new CellUpdate(agentCell.getLocation(), biggestPatch));
     nextStates.add(new CellUpdate(biggestPatch.getLocation(), newAgentCell));
   }
 
@@ -149,12 +154,12 @@ public class SugarscapeRules extends SimulationRules {
       int newRow = row + (i * rowIncrement);
       int newCol = col + (i * colIncrement);
 
-      if (newRow < 0 || newRow >= grid.getCols() || newCol < 0 || newCol >= grid.getRows()) {
+      if (newRow < 0 || newRow >= grid.getRows() || newCol < 0 || newCol >= grid.getCols()) {
         break;
       }
       Cell currentCell = grid.getCell(newRow, newCol);
 
-      if (currentCell.getState() != 1) {
+      if (currentCell.getState() != State.PATCHES.getValue()) {
         continue;
       }
 

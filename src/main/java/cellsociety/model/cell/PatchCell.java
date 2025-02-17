@@ -36,10 +36,11 @@ public class PatchCell  extends Cell {
   }
 
   /**
-   * a method that resets the sugar of a patch when collected by an agent
+   * setter for the sugar
+   * @param sugar - the current sugar contained in the cell
    */
-  public void collectSugar() {
-    sugar = 0;
+  public void setSugar(int sugar) {
+    this.sugar = sugar;
   }
 
   /**
