@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SimulationConfig>
     <Type>Segregation</Type>
-    <Title>RandomByNumStates</Title>
+    <Title>RandomByProbDistribution</Title>
     <Author>Troy Ludwig</Author>
-    <Description>A random segregation pattern with 25 members for group one and 25 members for group 2</Description>
+    <Description>A random segregation pattern with 50% of members from group one, 25% from group two, and 25% empty</Description>
 
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>
     </GridDimensions>
 
-    <RandomInit>
-        <State name="GROUPONE">25</State>
+    <RandomInitByProb>
+        <State name="GROUPONE">50</State>
         <State name="GROUPTWO">25</State>
-    </RandomInit>
+    </RandomInitByProb>
 
     <Parameters>
         <toleranceThreshold> 0.5 </toleranceThreshold>

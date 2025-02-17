@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Segregation</Type>
+    <Title>RandomByNumStates</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A random segregation pattern with 25 members for group one and 25 members for group 2</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <RandomInitByState>
+        <State name="GROUPONE">25</State>
+        <State name="GROUPTWO">25</State>
+    </RandomInitByState>
+
+    <Parameters>
+        <toleranceThreshold> 0.5 </toleranceThreshold>
+    </Parameters>
+</SimulationConfig>

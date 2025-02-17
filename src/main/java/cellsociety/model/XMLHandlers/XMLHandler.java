@@ -88,12 +88,11 @@ public class XMLHandler {
   }
 
   private static void parseGrid(Document gridDoc) throws GridException {
-    NodeList randomInitNodes = gridDoc.getElementsByTagName("RandomInit");
-
-    if (randomInitNodes.getLength() > 0) {
-      System.out.println("We get in the if statement");
+    if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
       myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySimData);
-    } else {
+    } else if(gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
+      myGrid = Grid.generateRandomGridFromDistribution(gridDoc, myGridHeight, myGridWidth, mySimData);
+    } else{
       myGrid = Grid.generateGrid(gridDoc, myGridHeight, myGridWidth, mySimData);
     }
   }
