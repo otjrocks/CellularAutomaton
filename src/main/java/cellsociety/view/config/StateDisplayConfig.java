@@ -1,18 +1,12 @@
 package cellsociety.view.config;
 
-import static cellsociety.config.MainConfig.getCellColors;
-import static cellsociety.config.MainConfig.getMessage;
-
-import cellsociety.model.simulation.Simulation;
-import javafx.scene.paint.Color;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import static cellsociety.config.MainConfig.getCellColors;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 

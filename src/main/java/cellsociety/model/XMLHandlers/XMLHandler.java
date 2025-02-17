@@ -71,6 +71,12 @@ public class XMLHandler {
     setSim();
   }
 
+  /**
+   * Helper method to parse simulation data from document
+   * 
+   * @param doc: Document from which you are extracting the simulation data
+   * 
+   */
   private void parseSimData(Document data) {
     String type = data.getElementsByTagName("Type").item(0).getTextContent();
     String title = data.getElementsByTagName("Title").item(0).getTextContent();
@@ -79,6 +85,12 @@ public class XMLHandler {
     mySimData = new SimulationMetaData(type, title, author, description);
   }
 
+  /**
+   * Helper method to parse grid dimensions from document
+   * 
+   * @param dimDoc: Document from which you are extracting the grid dimensions
+   * 
+   */
   private void parseDimensions(Document dimDoc) {
     Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
     myGridHeight = Integer.parseInt(
@@ -87,6 +99,12 @@ public class XMLHandler {
         gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
   }
 
+  /**
+   * Helper method to differentiate between explicit and random grid generation
+   * 
+   * @param dimDoc: Document from which you are extracting/generating the initial grid data
+   * 
+   */
   private static void parseGrid(Document gridDoc) throws GridException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
       myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySimData);
@@ -138,8 +156,12 @@ public class XMLHandler {
   }
 
   private void checkAndLoadRulestring(Element paramElement) {
-    String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-    myParameters.put("ruleString", new Parameter<>(paramString));
+    try{
+      String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+      myParameters.put("ruleString", new Parameter<>(paramString));
+    } catch (Exception e){
+      myParameters.clear();
+    }
   }
 
   /**
