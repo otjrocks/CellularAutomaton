@@ -135,7 +135,7 @@ public class SimulationConfig {
       return value;
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      return 1;
+      return 0;
     }
   }
 
