@@ -156,8 +156,12 @@ public class XMLHandler {
   }
 
   private void checkAndLoadRulestring(Element paramElement) {
-    String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-    myParameters.put("ruleString", new Parameter<>(paramString));
+    try{
+      String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+      myParameters.put("ruleString", new Parameter<>(paramString));
+    } catch (Exception e){
+      myParameters.clear();
+    }
   }
 
   /**

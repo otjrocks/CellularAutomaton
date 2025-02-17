@@ -54,7 +54,7 @@
     </InitialConfiguration>
 
     <Parameters>
-        <ruleString>3/12345</ruleString>
+        <ruleString>B3/S12345</ruleString>
     </Parameters>
 </SimulationConfig>
 

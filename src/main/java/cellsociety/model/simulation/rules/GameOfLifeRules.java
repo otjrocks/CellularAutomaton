@@ -1,14 +1,15 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import cellsociety.model.Grid;
-import cellsociety.model.cell.Cell;
-import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
+
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.SimulationRules;
 
 public class GameOfLifeRules extends SimulationRules {
 
@@ -58,7 +59,7 @@ public class GameOfLifeRules extends SimulationRules {
         aliveNeighbors++;
       }
     }
-    if (!(surviveValues.contains(aliveNeighbors))) {
+    if (!surviveValues.contains(aliveNeighbors)) {
       return 0;
     } else if (birthValues.contains(aliveNeighbors)) {
       return 1;
@@ -70,20 +71,23 @@ public class GameOfLifeRules extends SimulationRules {
       throws InvalidParameterException {
     String rulestring = parameters.get("ruleString").getString();
 
-    String[] sStrings = rulestring.split("/")[0].split("");
-    String[] bStrings = rulestring.split("/")[1].split("");
+    String[] bStrings = rulestring.split("/")[0].substring(1).split("");
+    String[] sStrings = rulestring.split("/")[1].substring(1).split("");
 
-    Integer[] sValues = convertStringArray(sStrings);
     Integer[] bValues = convertStringArray(bStrings);
+    Integer[] sValues = convertStringArray(sStrings);
 
     surviveValues = new ArrayList<>(Arrays.asList(sValues));
+    for (Integer i: surviveValues){
+      System.out.println(i);
+    }
     birthValues = new ArrayList<>(Arrays.asList(bValues));
   }
 
   private Integer[] convertStringArray(String[] strings) {
     Integer[] ints = new Integer[strings.length];
     for (int i = 0; i < strings.length; i++) {
-      ints[i] = Integer.parseInt(strings[i]);
+      ints[i] = Integer.valueOf(strings[i]);
       System.out.println(ints[i]);
     }
     return ints;
