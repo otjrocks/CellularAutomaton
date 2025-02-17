@@ -5,7 +5,6 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,7 @@ public class LangtonsLoopsRules extends SimulationRules {
     }
   }
 
-  // Helper method to add all 4 rotated rules to the map
+  // I asked ChatGPT for assistance in generating addRotatedRules and generateRotations. Helper method to add all 4 rotated rules to the map
   private void addRotatedRules(String key, int value) {
     String[] rotations = generateRotations(key);
     for (String rotation : rotations) {
