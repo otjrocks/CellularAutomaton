@@ -1,7 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
@@ -59,7 +59,7 @@ public class ParameterView extends VBox {
   }
 
   private void createTitle() {
-    createText(getMessages().getString("PARAMETER_TITLE"), true);
+    createText(getMessage("PARAMETER_TITLE"), true);
   }
 
   private void createParameters(Simulation simulation) {
@@ -96,7 +96,7 @@ public class ParameterView extends VBox {
   }
 
   private void createUpdateButton() {
-    Button updateButton = new Button(getMessages().getString("UPDATE_BUTTON"));
+    Button updateButton = new Button(getMessage("UPDATE_BUTTON"));
     updateButton.setOnAction(e -> updateParameters());
     this.getChildren().add(updateButton);
   }

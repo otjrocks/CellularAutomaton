@@ -14,8 +14,8 @@ public class MainConfig {
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
       LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
-  public static ResourceBundle getMessages() {
-    return myMessages;
+  public static String getMessage(String key) {
+    return myMessages.getString(key);
   }
 
   public static void setLanguage(String language) {
@@ -29,7 +29,7 @@ public class MainConfig {
     return myCellColors;
   }
 
-  public static final String TITLE = getMessages().getString("TITLE");
+  public static final String TITLE = getMessage("TITLE");
   public static final int WIDTH = 1500;
   public static final int HEIGHT = 800;
   public static final int MARGIN = 20;

@@ -1,6 +1,6 @@
 package cellsociety.model.simulation;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 
 /**
  * A class to handle the creation and storage of parameter values
@@ -26,7 +26,7 @@ public class Parameter<T> {
       return (String) myValue;
     } catch (Exception e) {
       throw new InvalidParameterException(
-          String.format(getMessages().getString("INVALID_PARAMETER"),
+          String.format(getMessage("INVALID_PARAMETER"),
               myValue));
     }
   }
@@ -39,7 +39,7 @@ public class Parameter<T> {
       return Double.parseDouble((String) myValue);
     } catch (Exception e) {
       throw new InvalidParameterException(
-          String.format(getMessages().getString("INVALID_PARAMETER"),
+          String.format(getMessage("INVALID_PARAMETER"),
               myValue));
     }
   }
@@ -52,7 +52,7 @@ public class Parameter<T> {
       return getDouble().intValue();
     } catch (Exception e) {
       throw new InvalidParameterException(
-          String.format(getMessages().getString("INVALID_PARAMETER"),
+          String.format(getMessage("INVALID_PARAMETER"),
               myValue));
     }
   }

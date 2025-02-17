@@ -1,7 +1,7 @@
 package cellsociety.view.config;
 
 import static cellsociety.config.MainConfig.getCellColors;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 
@@ -52,9 +52,9 @@ public class StateDisplayConfig {
    */
   private static String getStateName(String key, int state) {
     try {
-      return getMessages().getString(key);
+      return getMessage(key);
     } catch (Exception e) {
-      return String.format(getMessages().getString("STATE"), state); // "State k" as default name
+      return String.format(getMessage("STATE"), state); // "State k" as default name
     }
   }
 

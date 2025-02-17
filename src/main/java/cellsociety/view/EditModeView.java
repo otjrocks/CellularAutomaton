@@ -1,7 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
@@ -56,9 +56,9 @@ public class EditModeView extends VBox {
   }
 
   private void createHeader() {
-    Text title = new Text(getMessages().getString("CREATE_NEW_GRID_HEADER"));
+    Text title = new Text(getMessage("CREATE_NEW_GRID_HEADER"));
     title.getStyleClass().add("secondary-title");
-    Text instructions = new Text(getMessages().getString("EDIT_VIEW_INSTRUCTIONS"));
+    Text instructions = new Text(getMessage("EDIT_VIEW_INSTRUCTIONS"));
     instructions.setWrappingWidth(SIDEBAR_WIDTH);
     myHeaderBox.setSpacing(ELEMENT_SPACING * 3);
     this.getChildren().add(myHeaderBox);

@@ -1,6 +1,6 @@
 package cellsociety.model.simulation;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
@@ -87,13 +87,13 @@ public abstract class SimulationRules {
   public void checkMissingParameterAndThrowException(String threshold) {
     if (!getParameters().containsKey(threshold)) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
+          String.format(getMessage("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
     }
   }
 
   public static void throwInvalidParameterException(String minThreshold)
       throws InvalidParameterException {
     throw new InvalidParameterException(
-        String.format(getMessages().getString("INVALID_PARAMETER"), minThreshold));
+        String.format(getMessage("INVALID_PARAMETER"), minThreshold));
   }
 }
