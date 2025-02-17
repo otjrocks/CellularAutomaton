@@ -343,6 +343,7 @@ public class MainController {
    * @param selected: Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
+    PreferencesController.setPreference("gridLines", String.valueOf(selected));
     gridLinesEnabled = selected;
     mySimulationView.setGridLines(selected);
   }
