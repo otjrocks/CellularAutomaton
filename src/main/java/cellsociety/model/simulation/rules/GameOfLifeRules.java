@@ -59,10 +59,10 @@ public class GameOfLifeRules extends SimulationRules {
         aliveNeighbors++;
       }
     }
-    if (!surviveValues.contains(aliveNeighbors)) {
-      return 0;
-    } else if (birthValues.contains(aliveNeighbors)) {
+    if (birthValues.contains(aliveNeighbors) && cell.getState()==0) {
       return 1;
+    } else if (!surviveValues.contains(aliveNeighbors)) {
+      return 0;
     }
     return cell.getState();
   }
@@ -78,9 +78,6 @@ public class GameOfLifeRules extends SimulationRules {
     Integer[] sValues = convertStringArray(sStrings);
 
     surviveValues = new ArrayList<>(Arrays.asList(sValues));
-    for (Integer i: surviveValues){
-      System.out.println(i);
-    }
     birthValues = new ArrayList<>(Arrays.asList(bValues));
   }
 
@@ -88,7 +85,6 @@ public class GameOfLifeRules extends SimulationRules {
     Integer[] ints = new Integer[strings.length];
     for (int i = 0; i < strings.length; i++) {
       ints[i] = Integer.valueOf(strings[i]);
-      System.out.println(ints[i]);
     }
     return ints;
   }
