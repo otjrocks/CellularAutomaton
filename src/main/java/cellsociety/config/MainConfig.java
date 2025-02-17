@@ -30,8 +30,12 @@ public class MainConfig {
   }
 
   public static void setLanguage(String language) {
+    try {
+      myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Language file not found");
+    }
     PreferencesController.setPreference("language", language);
-    myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
   }
 
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
