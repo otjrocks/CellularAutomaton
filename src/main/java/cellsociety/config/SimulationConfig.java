@@ -37,7 +37,8 @@ public class SimulationConfig {
       "WaTorWorld",
       "RockPaperScissors",
       "FallingSand",
-      "ForagingAnts"
+      "ForagingAnts",
+      "LangtonsLoops"
   };
 
   /**
