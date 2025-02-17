@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
@@ -123,7 +123,7 @@ public class SimulationConfig {
   private static void validateSimulation(String simulationName) {
     if (!List.of(SIMULATIONS).contains(simulationName)) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
+          String.format(getMessage("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
     }
   }
 

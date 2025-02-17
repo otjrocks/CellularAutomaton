@@ -7,7 +7,7 @@ import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.Parameter;
@@ -67,7 +67,7 @@ public class CreateDefaultSimView extends VBox {
    * Handles the simulation selection process
    */
   private void createSimulationTypeControl() {
-    Text createSimButtonText = new Text(getMessages().getString("NEW_SIM_BUTTON_TEXT"));
+    Text createSimButtonText = new Text(getMessage("NEW_SIM_BUTTON_TEXT"));
 
     ObservableList<String> options =
         FXCollections.observableArrayList(SimulationConfig.SIMULATIONS);
@@ -80,7 +80,7 @@ public class CreateDefaultSimView extends VBox {
     HBox container = new HBox();
     container.setAlignment(Pos.CENTER_LEFT);
     container.setSpacing(5);
-    Text simulationTypeLabel = new Text(getMessages().getString("SIMULATION_TYPE_LABEL"));
+    Text simulationTypeLabel = new Text(getMessage("SIMULATION_TYPE_LABEL"));
     container.getChildren().addAll(simulationTypeLabel, simulationSelector);
     this.getChildren().addAll(createSimButtonText, container);
   }
@@ -89,7 +89,7 @@ public class CreateDefaultSimView extends VBox {
     parametersControlBox.getChildren().clear();
     myParameterTextFields.clear();
     if (!SimulationConfig.getParameters(simulationName).isEmpty()) {
-      Text parametersTitle = new Text(getMessages().getString("CUSTOMIZE_PARAMETERS_TITLE"));
+      Text parametersTitle = new Text(getMessage("CUSTOMIZE_PARAMETERS_TITLE"));
       parametersTitle.getStyleClass().add("secondary-title");
       parametersControlBox.getChildren().add(parametersTitle);
     }
@@ -120,7 +120,7 @@ public class CreateDefaultSimView extends VBox {
     rowField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumRows = parseIntegerField(rowField, 0));
 
-    HBox rowBox = new HBox(new Text(getMessages().getString("NUMBER_ROWS")), rowField);
+    HBox rowBox = new HBox(new Text(getMessage("NUMBER_ROWS")), rowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
     rowBox.setSpacing(5);
     this.getChildren().add(rowBox);
@@ -135,7 +135,7 @@ public class CreateDefaultSimView extends VBox {
     colField.textProperty()
         .addListener((obs, oldVal, newVal) -> myNumCols = parseIntegerField(colField, 0));
 
-    HBox colBox = new HBox(new Text(getMessages().getString("NUMBER_COLUMNS")), colField);
+    HBox colBox = new HBox(new Text(getMessage("NUMBER_COLUMNS")), colField);
     colBox.setAlignment(Pos.CENTER_LEFT);
     colBox.setSpacing(5);
     this.getChildren().add(colBox);
@@ -153,12 +153,12 @@ public class CreateDefaultSimView extends VBox {
    * Handles the text metadata for the simulation
    */
   private void createSimulationMetaDataTextFields() {
-    myNameField = createTextField(getMessages().getString("NAME_LABEL"),
-        getMessages().getString("DEFAULT_NAME"), this);
-    myAuthorField = createTextField(getMessages().getString("AUTHOR_LABEL"),
-        getMessages().getString("DEFAULT_AUTHOR"), this);
-    myDescriptionField = createTextField(getMessages().getString("DESCRIPTION_LABEL"),
-        getMessages().getString("DEFAULT_DESCRIPTION"), this);
+    myNameField = createTextField(getMessage("NAME_LABEL"),
+        getMessage("DEFAULT_NAME"), this);
+    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"),
+        getMessage("DEFAULT_AUTHOR"), this);
+    myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"),
+        getMessage("DEFAULT_DESCRIPTION"), this);
   }
 
   private TextField createTextField(String label, String defaultValue, VBox target) {
@@ -229,7 +229,7 @@ public class CreateDefaultSimView extends VBox {
 
   private boolean checkInvalidText(String text) {
     if (text.isEmpty()) {
-      myAlertField.flash(getMessages().getString("EMPTY_FIELD"), true);
+      myAlertField.flash(getMessage("EMPTY_FIELD"), true);
       return true;
     }
     return false;
@@ -239,7 +239,7 @@ public class CreateDefaultSimView extends VBox {
     boolean valid = numRows >= MIN_GRID_NUM_ROWS && numRows <= MAX_GRID_NUM_ROWS;
     if (!valid) {
       myAlertField.flash(String.format(
-          getMessages().getString("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS), true);
+          getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS), true);
       return false;
     }
     return true;
@@ -249,7 +249,7 @@ public class CreateDefaultSimView extends VBox {
     boolean valid = numCols >= MIN_GRID_NUM_COLS && numCols <= MAX_GRID_NUM_COLS;
     if (!valid) {
       myAlertField.flash(String.format(
-          getMessages().getString("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS), true);
+          getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS), true);
       return false;
     }
     return true;
@@ -279,16 +279,16 @@ public class CreateDefaultSimView extends VBox {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
-      myAlertField.flash(String.format(getMessages().getString("NEW_SIMULATION_CREATED")), false);
+      myAlertField.flash(String.format(getMessage("NEW_SIMULATION_CREATED")), false);
     } catch (Exception e) {
-      myAlertField.flash(String.format(getMessages().getString("ERROR_CREATING_SIMULATION")), true);
+      myAlertField.flash(String.format(getMessage("ERROR_CREATING_SIMULATION")), true);
       myAlertField.flash(String.format((e.getMessage())), true);
       throw e;
     }
   }
 
   private void createNewSimulationButton() {
-    Button createSimButton = new Button(getMessages().getString("CREATE_NEW_GRID_HEADER"));
+    Button createSimButton = new Button(getMessage("CREATE_NEW_GRID_HEADER"));
 
     createSimButton.setOnAction(event -> {
       if (checkHasInvalidInput()) {

@@ -2,14 +2,14 @@ package cellsociety.model.cell;
 
 import java.awt.geom.Point2D;
 
-public class AntCell extends Cell {
+public class ForagingAntsCell extends Cell {
 
     private double homePheromone;
     private double foodPheromone;
     private int health;
     private int reproductionTime;
 
-    public AntCell(int state, Point2D location) {
+    public ForagingAntsCell(int state, Point2D location) {
         super(state, location);
         this.homePheromone = 0.0;
         this.foodPheromone = 0.0;
@@ -17,7 +17,7 @@ public class AntCell extends Cell {
         this.reproductionTime = 0;
     }
 
-    public AntCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, int reproductionTime) {
+    public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, int reproductionTime) {
         super(state, location);
         this.homePheromone = homePheromone;
         this.foodPheromone = foodPheromone;

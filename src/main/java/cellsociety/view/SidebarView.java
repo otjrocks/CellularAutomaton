@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
@@ -86,13 +86,14 @@ public class SidebarView extends VBox {
     myThemeSelectorBox = new HBox();
     myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
     myThemeSelectorBox.setSpacing(5);
-    Text simulationTypeLabel = new Text(getMessages().getString("CHANGE_THEME"));
+    Text simulationTypeLabel = new Text(getMessage("CHANGE_THEME"));
     myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
     return myThemeSelectorBox;
   }
 
   public void update() {
     myViewModeView.update();
+    myEditModeView.updateDisplay();
   }
 
   private void initializeAlertField() {
@@ -110,26 +111,26 @@ public class SidebarView extends VBox {
 
 
   private void enableEditView() {
-    myEditModeView.updateStateInfo();
+    myEditModeView.updateDisplay();
     this.getChildren().clear();
     addAllEditModeComponents();
   }
 
   private void createChangeModeButton() {
-    myModeButton = new Button(getMessages().getString("EDIT_MODE"));
+    myModeButton = new Button(getMessage("EDIT_MODE"));
     myModeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
         myMainController.stopAnimation();
-        myModeButton.setText(getMessages().getString("VIEW_MODE"));
+        myModeButton.setText(getMessage("VIEW_MODE"));
         myMainController.setEditing(true);
-        myAlertField.flash(getMessages().getString("EDIT_MODE_ENABLED"), false);
+        myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
       } else {
         disableEditView();
-        myModeButton.setText(getMessages().getString("EDIT_MODE"));
+        myModeButton.setText(getMessage("EDIT_MODE"));
         myMainController.setEditing(false);
-        myAlertField.flash(getMessages().getString("EDIT_MODE_DISABLED"), false);
+        myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
       }
     });
   }
@@ -141,7 +142,7 @@ public class SidebarView extends VBox {
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
         event -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
-    Text title = new Text(getMessages().getString("GRID_LINES_LABEL"));
+    Text title = new Text(getMessage("GRID_LINES_LABEL"));
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
 

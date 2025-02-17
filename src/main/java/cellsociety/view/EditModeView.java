@@ -1,7 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
@@ -19,6 +19,7 @@ public class EditModeView extends VBox {
   private final AlertField myAlertField;
   private final VBox myHeaderBox = new VBox();
   private StateInfoView myStateInfoView;
+  private ParameterView myParameterView;
 
   /**
    * Create a edit mode view
@@ -36,31 +37,33 @@ public class EditModeView extends VBox {
       @Override
       protected void handleAdditionalButtonActions() throws IllegalArgumentException {
         super.handleAdditionalButtonActions();
-        updateStateInfo(); // update state info when new simulation is created.
+        updateDisplay(); // update state info when new simulation is created.
       }
     };
     this.getChildren().addAll(createDefaultSimView);
   }
 
   /**
-   * Update the state info display for the edit more view
+   * Update the edit display whenever the simulation potential has changed
    */
-  public void updateStateInfo() {
-    myHeaderBox.getChildren()
-        .removeFirst(); // remove the current state info box before creating a new one
+  public void updateDisplay() {
+    myHeaderBox.getChildren().remove(myStateInfoView);
+    myHeaderBox.getChildren().remove(myParameterView);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myHeaderBox.getChildren()
-        .addFirst(myStateInfoView); // add new current state info box to beginning of headerbox
+    myParameterView = new ParameterView(myMainController, true);
+    myHeaderBox.getChildren().addFirst(myParameterView);
+    myHeaderBox.getChildren().addFirst(myStateInfoView);
   }
 
   private void createHeader() {
-    Text title = new Text(getMessages().getString("CREATE_NEW_GRID_HEADER"));
+    Text title = new Text(getMessage("CREATE_NEW_GRID_HEADER"));
     title.getStyleClass().add("secondary-title");
-    Text instructions = new Text(getMessages().getString("EDIT_VIEW_INSTRUCTIONS"));
+    Text instructions = new Text(getMessage("EDIT_VIEW_INSTRUCTIONS"));
     instructions.setWrappingWidth(SIDEBAR_WIDTH);
     myHeaderBox.setSpacing(ELEMENT_SPACING * 3);
     this.getChildren().add(myHeaderBox);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
-    myHeaderBox.getChildren().addAll(myStateInfoView, instructions, title);
+    myParameterView = new ParameterView(myMainController, true);
+    myHeaderBox.getChildren().addAll(myStateInfoView, myParameterView, instructions, title);
   }
 }

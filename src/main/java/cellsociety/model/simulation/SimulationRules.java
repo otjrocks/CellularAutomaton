@@ -1,6 +1,6 @@
 package cellsociety.model.simulation;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
@@ -14,6 +14,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 
 public abstract class SimulationRules {
+
   private Map<String, Parameter<?>> myParameters;
 
   public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
@@ -25,7 +26,7 @@ public abstract class SimulationRules {
   }
 
   public Map<String, Parameter<?>> getParameters() {
-    return myParameters;
+    return Map.copyOf(myParameters);
   }
 
   //only two options, so moved the getNeighbors here and actually defined it.
@@ -80,18 +81,19 @@ public abstract class SimulationRules {
   }
 
   public abstract int getNextState(Cell cell, Grid grid);
+
   public abstract int getNumberStates();
 
   public void checkMissingParameterAndThrowException(String threshold) {
     if (!getParameters().containsKey(threshold)) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
+          String.format(getMessage("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
     }
   }
 
   public static void throwInvalidParameterException(String minThreshold)
       throws InvalidParameterException {
     throw new InvalidParameterException(
-        String.format(getMessages().getString("INVALID_PARAMETER"), minThreshold));
+        String.format(getMessage("INVALID_PARAMETER"), minThreshold));
   }
 }

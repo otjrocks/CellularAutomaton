@@ -1,5 +1,11 @@
 package cellsociety.view.config;
 
+import static cellsociety.config.MainConfig.getCellColors;
+import static cellsociety.config.MainConfig.getMessage;
+
+import cellsociety.model.simulation.Simulation;
+import javafx.scene.paint.Color;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,11 +57,12 @@ public class StateDisplayConfig {
    * Retrieves the state name from the messages configuration or defaults to "STATE {state}".
    */
   private static String getStateName(String key, int state) {
-    try {
-      return getMessages().getString(key);
-    } catch (Exception e) {
-      return String.format(getMessages().getString("STATE"), state); // "State k" as default name
+    String stateName = getMessage(key);
+    if (stateName.equals(getMessage("MISSING_KEY")) || stateName.equals(
+        "UNKNOWN")) {
+      return String.format(getMessage("STATE"), state); // State k as a default
     }
+    return stateName;
   }
 
   /**

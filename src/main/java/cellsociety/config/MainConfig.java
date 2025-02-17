@@ -14,13 +14,28 @@ public class MainConfig {
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
       LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
-  public static ResourceBundle getMessages() {
-    return myMessages;
+  public static String getMessage(String key) {
+    try {
+      return myMessages.getString(key);
+    } catch (Exception e) {
+      // queries key does not exist in language file or trouble finding messages file
+      // return a default string
+      try {
+        // try displaying to user that key is missing in their preferred language, fallback to english
+        return myMessages.getString("MISSING_KEY");
+      } catch (Exception e1) {
+        return "ERROR: MISSING KEY";
+      }
+    }
   }
 
   public static void setLanguage(String language) {
+    try {
+      myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Language file not found");
+    }
     PreferencesController.setPreference("language", language);
-    myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
   }
 
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
@@ -29,7 +44,7 @@ public class MainConfig {
     return myCellColors;
   }
 
-  public static final String TITLE = getMessages().getString("TITLE");
+  public static final String TITLE = getMessage("TITLE");
   public static final int WIDTH = 1500;
   public static final int HEIGHT = 800;
   public static final int MARGIN = 20;
