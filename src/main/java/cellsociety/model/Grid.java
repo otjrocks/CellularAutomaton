@@ -1,17 +1,24 @@
 package cellsociety.model;
 
-import cellsociety.config.SimulationConfig;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import cellsociety.config.SimulationConfig;
+import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationMetaData;
 
 /**
  * A class that handles working with cells within a simulation grid.
@@ -182,6 +189,120 @@ public class Grid {
         (!(location.getY() >= 0)) ||
         (!(location.getX() < myNumRows)) ||
         (!(location.getY() < myNumCols));
+  }
+
+  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData) throws GridException{
+    Grid grid = new Grid(gridHeight, gridWidth);
+    NodeList rows = gridDoc.getElementsByTagName("Row");
+
+    for (int i = 0; i < rows.getLength(); i++) {
+      if (rows.getLength() > gridHeight) {
+        throw new GridException();
+      }
+      String[] rowValues = rows.item(i).getTextContent().split(",");
+      if (rowValues.length <= gridWidth) {
+      } else {
+          throw new GridException();
+        }
+      for (int j = 0; j < rowValues.length; j++) {
+        int state = Integer.parseInt(rowValues[j]);
+        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, simData.type());
+        grid.addCell(holdingCell);
+      }
+    }
+
+    return grid;
+  }
+
+  public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
+    Grid grid = new Grid(gridHeight, gridWidth);
+    int totalCells = gridHeight * gridWidth;
+    
+    Map<Integer, Integer> stateCounts = new HashMap<>();
+    int assignedCells = 0;
+    
+    NodeList randomParams = gridDoc.getElementsByTagName("State");
+    for (int i = 0; i < randomParams.getLength(); i++) {
+        Element stateElement = (Element) randomParams.item(i);
+        String stateName = stateElement.getAttribute("name");
+        int stateValue = SimulationConfig.returnStateValueBasedOnName(simData.type(), stateName);
+        int count = Integer.parseInt(stateElement.getTextContent());
+        
+        stateCounts.put(stateValue, count);
+        assignedCells += count;
+    }
+
+    int remainingCells = totalCells - assignedCells;
+
+    List<Integer> cellStates = new ArrayList<>();
+    for (Map.Entry<Integer, Integer> entry : stateCounts.entrySet()) {
+        for (int i = 0; i < entry.getValue(); i++) {
+            cellStates.add(entry.getKey());
+        }
+    }
+    
+    for (int i = 0; i < remainingCells; i++) {
+        cellStates.add(0);
+    }
+
+    Collections.shuffle(cellStates);
+
+    int index = 0;
+    for (int row = 0; row < gridHeight; row++) {
+        for (int col = 0; col < gridWidth; col++) {
+            int state = cellStates.get(index);
+            Cell newCell = SimulationConfig.getNewCell(row, col, state, simData.type());
+            grid.addCell(newCell);
+            index++;
+        }
+    }
+    return grid;
+  }
+
+  public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
+    Grid grid = new Grid(gridHeight, gridWidth);
+    int totalCells = gridHeight * gridWidth;
+    
+    Map<Integer, Integer> stateCounts = new HashMap<>();
+    int assignedCells = 0;
+    
+    NodeList randomParams = gridDoc.getElementsByTagName("State");
+    for (int i = 0; i < randomParams.getLength(); i++) {
+        Element stateElement = (Element) randomParams.item(i);
+        String stateName = stateElement.getAttribute("name");
+        int stateValue = SimulationConfig.returnStateValueBasedOnName(simData.type(), stateName);
+        int prob = Integer.parseInt(stateElement.getTextContent());
+        int count = Math.round((prob * totalCells)/100);
+        
+        stateCounts.put(stateValue, count);
+        assignedCells += count;
+    }
+
+    int remainingCells = totalCells - assignedCells;
+
+    List<Integer> cellStates = new ArrayList<>();
+    for (Map.Entry<Integer, Integer> entry : stateCounts.entrySet()) {
+        for (int i = 0; i < entry.getValue(); i++) {
+            cellStates.add(entry.getKey());
+        }
+    }
+    
+    for (int i = 0; i < remainingCells; i++) {
+        cellStates.add(0);
+    }
+
+    Collections.shuffle(cellStates);
+
+    int index = 0;
+    for (int row = 0; row < gridHeight; row++) {
+        for (int col = 0; col < gridWidth; col++) {
+            int state = cellStates.get(index);
+            Cell newCell = SimulationConfig.getNewCell(row, col, state, simData.type());
+            grid.addCell(newCell);
+            index++;
+        }
+    }
+    return grid;
   }
   
 }
