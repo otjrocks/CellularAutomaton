@@ -1,10 +1,5 @@
 package cellsociety.controller;
 
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
-import cellsociety.view.SplashScreenView;
-import cellsociety.view.components.AlertField;
-import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -20,13 +15,14 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
@@ -34,6 +30,7 @@ import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
+import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -253,7 +250,6 @@ public class MainController {
   private void updateSimulationFromFile(String filePath) {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
-
       mySimulation = xmlHandler.getSim();
       myGrid = xmlHandler.getGrid();
       createNewMainViewAndUpdateViewContainer();
@@ -269,8 +265,7 @@ public class MainController {
     } catch (NullPointerException e) {
       mySidebarView.flashWarning("Missing required data field. Please add required fields.");
     } catch (GridException e) {
-      mySidebarView.flashWarning(
-          "Grid values out of bounds. Please adjust initialization configuration.");
+      mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
     } catch (Exception e) {
       e.printStackTrace();
       mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");

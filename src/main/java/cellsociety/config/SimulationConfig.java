@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.getMessages;
 import cellsociety.model.cell.Cell;
@@ -22,6 +23,9 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class SimulationConfig {
 
+  public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
+  private static final ResourceBundle myValues = ResourceBundle.getBundle(
+      VALUES_FILE_PATH);
   /**
    * List of all the simulation names
    */
@@ -120,6 +124,18 @@ public class SimulationConfig {
     if (!List.of(SIMULATIONS).contains(simulationName)) {
       throw new IllegalArgumentException(
           String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
+    }
+  }
+
+  public static int returnStateValueBasedOnName(String simType, String name){
+    String stateKey = simType + "_VALUE_" + name;
+    try {
+      String valueStr = myValues.getString(stateKey.toUpperCase());
+      Integer value = Integer.valueOf(valueStr);
+      return value;
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return 1;
     }
   }
 
