@@ -15,7 +15,18 @@ public class MainConfig {
       LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
   public static String getMessage(String key) {
-    return myMessages.getString(key);
+    try {
+      return myMessages.getString(key);
+    } catch (Exception e) {
+      // queries key does not exist in language file or trouble finding messages file
+      // return a default string
+      try {
+        // try displaying to user that key is missing in their preferred language, fallback to english
+        return myMessages.getString("MISSING_KEY");
+      } catch (Exception e1) {
+        return "ERROR: MISSING KEY";
+      }
+    }
   }
 
   public static void setLanguage(String language) {
