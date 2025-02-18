@@ -167,10 +167,10 @@ public class ViewModeView extends VBox {
   }
 
   private void createNewSimulationButton() {
-    CreateNewSimulation simulationManager = new CreateNewSimulation();
     newSimulationButton = new Button(getMessage("NEW_SIMULATION_LABEL"));
     newSimulationButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     newSimulationButton.setOnAction(event -> {
+      CreateNewSimulation simulationManager = new CreateNewSimulation();
       simulationManager.launchNewSimulation();
     });
   }
