@@ -15,6 +15,7 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
@@ -265,20 +266,19 @@ public class MainController {
       myGrid = xmlHandler.getGrid();
       updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
-      mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+      mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
     } catch (ParserConfigurationException e) {
-      mySidebarView.flashWarning("XML parser configuration issue.");
+      mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
     } catch (IOException e) {
-      mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+      mySidebarView.flashWarning(getMessage("ERROR_IO"));
     } catch (NumberFormatException e) {
-      mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+      mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
     } catch (NullPointerException e) {
-      mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+      mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
     } catch (GridException e) {
-      mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
+      mySidebarView.flashWarning(getMessage("ERROR_GRID"));
     } catch (Exception e) {
-      e.printStackTrace();
-      mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());
       }
