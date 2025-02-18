@@ -108,16 +108,18 @@ public class SplashScreenView extends VBox {
     myChooseFileButton.setOnAction(event -> {
       try {
         myMainController.handleNewSimulationFromFile();
-        myMainController.hideSplashScreen();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
         myAlertField.flash(getMessage("LOAD_ERROR"), true);
+        return;
       } catch (Exception e) {
         myAlertField.flash(getMessage("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }
+        return;
       }
+      myMainController.hideSplashScreen();
     });
     myContentBox.getChildren().addAll(chooseFileText, myChooseFileButton);
   }
