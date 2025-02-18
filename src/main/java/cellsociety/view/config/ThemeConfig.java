@@ -1,21 +1,11 @@
 package cellsociety.view.config;
 
 import cellsociety.controller.PreferencesController;
+import cellsociety.utility.FileUtility;
+import java.util.List;
 
 public class ThemeConfig {
 
-  /**
-   * A list of all themes available
-   */
-  public static final String[] THEMES = new String[]{
-      "Light",
-      "Dark",
-      "Neon",
-      "Green",
-      "Night"
-  };
-
-  public static final String DEFAULT_THEME = "Light";
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
   public static final String DEFAULT_RESOURCE_FOLDER =
       "/%s".formatted(DEFAULT_RESOURCE_PACKAGE.replace(".", "/"));
@@ -25,6 +15,11 @@ public class ThemeConfig {
   public static final String BOLD_FONT_PATH = "%sfonts.bold.ttf".formatted(DEFAULT_RESOURCE_FOLDER);
   public static final String THEMES_RESOURCES_FOLDER = "%sthemes/".formatted(
       DEFAULT_RESOURCE_FOLDER);
+  public static final String THEMES_RELATIVE_PATH = "src/main/resources/cellsociety/themes/";
+  public static final List<String> THEMES = FileUtility.getFileNamesInDirectory(
+      THEMES_RELATIVE_PATH, ".css");
+
+  public static final String DEFAULT_THEME = "Light";
 
   private static String myThemePath =
       "%s%s.css".formatted(THEMES_RESOURCES_FOLDER,

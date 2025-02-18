@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.LANGUAGE_FILE_PATH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
@@ -10,6 +11,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
+import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -96,16 +98,7 @@ public class SplashScreenView extends VBox {
   }
 
   private List<String> fetchLanguages() {
-    List<String> languages = new ArrayList<>();
-    File directory = new File(LANGUAGES_PATH);
-    File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
-
-    if (files != null) {
-      for (File file : files) {
-        languages.add(file.getName().replace(".properties", ""));
-      }
-    }
-    return languages;
+    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
   }
 
   private void createFileChooserButton() {

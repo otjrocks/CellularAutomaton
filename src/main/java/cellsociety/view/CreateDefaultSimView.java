@@ -68,7 +68,6 @@ public class CreateDefaultSimView extends VBox {
    */
   private void createSimulationTypeControl() {
     Text createSimButtonText = new Text(getMessage("NEW_SIM_BUTTON_TEXT"));
-
     ObservableList<String> options =
         FXCollections.observableArrayList(SimulationConfig.SIMULATIONS);
     simulationSelector = new ComboBox<>(options);

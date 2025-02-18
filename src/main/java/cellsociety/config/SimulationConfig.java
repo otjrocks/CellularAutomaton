@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.utility.FileUtility;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
@@ -23,23 +25,18 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class SimulationConfig {
 
+  public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
   public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
   private static final ResourceBundle myValues = ResourceBundle.getBundle(
       VALUES_FILE_PATH);
+
   /**
-   * List of all the simulation names
+   * List of all the simulation names Note: The simulation rules must follow the naming convention
+   * NameRules.java, to be included. Additionally, the rules file must be located in the correct
+   * rules package
    */
-  public static final String[] SIMULATIONS = new String[]{
-      "GameOfLife",
-      "Percolation",
-      "Segregation",
-      "SpreadingOfFire",
-      "WaTorWorld",
-      "RockPaperScissors",
-      "FallingSand",
-      "ForagingAnts",
-      "LangtonsLoops"
-  };
+  public static final String[] SIMULATIONS = FileUtility.getFileNamesInDirectory(
+      SIMULATION_RULES_RELATIVE_PATH, "Rules.java").toArray(new String[0]);
 
   /**
    * Map of all the required parameters for a given simulation
@@ -50,7 +47,7 @@ public class SimulationConfig {
       "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
       "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
       "RockPaperScissors", List.of("minThreshold", "numStates"),
-      "ForagingAnts", List.of("pheromoneDecayRate","maxPheromoneAmount", "antReproductionTime")
+      "ForagingAnts", List.of("pheromoneDecayRate", "maxPheromoneAmount", "antReproductionTime")
   );
 
   /**
@@ -129,7 +126,7 @@ public class SimulationConfig {
     }
   }
 
-  public static int returnStateValueBasedOnName(String simType, String name){
+  public static int returnStateValueBasedOnName(String simType, String name) {
     String stateKey = "%s_VALUE_%s".formatted(simType, name);
     try {
       String valueStr = myValues.getString(stateKey.toUpperCase());
