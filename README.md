@@ -71,6 +71,7 @@ This project implements a cellular automata simulator.
       down. If it can only move to its left or right diagonal, it will randomly choose one of the
       diagonals if both of them are empty. If only one diagonal is empty and it cannot fall directly
       down, it will move to the only open diagonal.
+    * In Sugarscape, an agent's metabolism will always be subtracted before checking its neighbors. Thus, it must have sufficient metabolism prior to movement. Then, it determines the maximum sugar patch within its vision. It breaks ties using a minimum distance. 
 
 * Known Bugs:
 
