@@ -44,6 +44,22 @@ public class PatchCell  extends Cell {
   }
 
   /**
+   * getter for the sugar grow back rate
+   * @return - the int value of how much to increment the sugar by
+   */
+  public int getSugarGrowBackRate() {
+    return sugarGrowBackRate;
+  }
+
+  /**
+   * getter for the sugar grow back interval
+   * @return - the int representation of the time it takes before sugar can be replenished.
+   */
+  public int getSugarGrowBackInterval() {
+    return sugarGrowBackInterval;
+  }
+
+  /**
    * setter to increment the current sugar by the grow back rate of sugar and reset the intervals back to 0
    */
   public void regenerateSugar() {

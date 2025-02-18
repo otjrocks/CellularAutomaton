@@ -55,4 +55,14 @@ class PatchCellTest {
     assertEquals(10, patchCell.getSugar());
   }
 
+  @Test
+  void getSugarGrowBackInterval_normalSugarGrowBack_returnInterval(){
+    assertEquals(3, patchCell.getSugarGrowBackInterval());
+  }
+
+  @Test
+  void getSugarGrowBackRate_normalSugarGrowBack_returnInterval(){
+    assertEquals(2, patchCell.getSugarGrowBackRate());
+  }
+
 }

@@ -111,7 +111,9 @@ public class SugarscapeRules extends SimulationRules {
     AgentCell newAgentCell = new AgentCell(State.AGENTS.getValue(), biggestPatch.getLocation(),
         agentCell.getVision(), agentCell.getMetabolism(), newSugar);
 
-    nextStates.add(new CellUpdate(agentCell.getLocation(), biggestPatch));
+    PatchCell newPatchCell = new PatchCell(State.PATCHES.getValue(), 0, biggestPatch.getSugarGrowBackInterval(), biggestPatch.getSugarGrowBackRate(), agentCell.getLocation());
+
+    nextStates.add(new CellUpdate(agentCell.getLocation(), newPatchCell));
     nextStates.add(new CellUpdate(biggestPatch.getLocation(), newAgentCell));
   }
 
