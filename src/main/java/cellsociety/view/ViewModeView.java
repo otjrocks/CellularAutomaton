@@ -57,7 +57,6 @@ public class ViewModeView extends VBox {
    */
   public void update() {
     this.getChildren().clear();
-    initializeStaticContent();
     createSimulationMetaDataDisplay();
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView myParameterView = new ParameterView(myMainController, false);
@@ -204,15 +203,8 @@ public class ViewModeView extends VBox {
     }
   }
 
-  private void initializeStaticContent() {
-    Text title = createText(getMessage("TITLE"));
-    title.getStyleClass().add("main-title");
-    this.getChildren().addAll(title);
-  }
-
   private Text createText(String message) {
     Text text = new Text(message);
-    text.setFill(Color.BLACK);
     text.setTextAlignment(TextAlignment.LEFT);
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;

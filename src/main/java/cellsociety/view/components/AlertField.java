@@ -40,7 +40,7 @@ public class AlertField extends VBox {
     String alertPrefix =
         isWarning ? getMessage("WARNING_PREFIX") : getMessage("INFO_PREFIX");
     Text newMessage = new Text(String.format(alertPrefix, message));
-    newMessage.setTextAlignment(TextAlignment.CENTER);
+    newMessage.setTextAlignment(TextAlignment.LEFT);
     if (isWarning) {
       newMessage.getStyleClass().add("alert-warning");
     } else {
