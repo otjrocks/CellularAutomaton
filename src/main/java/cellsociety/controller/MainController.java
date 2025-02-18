@@ -238,10 +238,11 @@ public class MainController {
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
-    if (file != null) { // only update simulation if a file was selected
-      String filePath = file.getAbsolutePath();
-      updateSimulationFromFile(filePath);
+    if (file == null) { // only update simulation if a file was selected
+      throw new IllegalArgumentException(getMessage("NO_FILE"));
     }
+    String filePath = file.getAbsolutePath();
+    updateSimulationFromFile(filePath);
   }
 
   public void handleSavingToFile() {
