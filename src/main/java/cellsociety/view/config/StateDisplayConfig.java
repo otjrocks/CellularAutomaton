@@ -39,8 +39,8 @@ public class StateDisplayConfig {
   }
 
   private static StateInfo getStateInfoFromSimulationTypeString(int state, String simulationType) {
-    String nameKey = simulationType + "_NAME_" + state;
-    String colorKey = simulationType + "_COLOR_" + state;
+    String nameKey = "%s_NAME_%d".formatted(simulationType, state);
+    String colorKey = "%s_COLOR_%d".formatted(simulationType, state);
 
     String stateName = getStateName(nameKey, state);
     Color stateColor = getStateColor(colorKey, simulationType, state);
@@ -65,7 +65,7 @@ public class StateDisplayConfig {
    * color if not found.
    */
   private static Color getStateColor(String key, String simulationType, int state) {
-    String stateKey = simulationType + "_" + state;
+    String stateKey = "%s_%d".formatted(simulationType, state);
 
     // If a random color was already assigned, return it
     if (RANDOM_COLORS_MAP.containsKey(stateKey)) {

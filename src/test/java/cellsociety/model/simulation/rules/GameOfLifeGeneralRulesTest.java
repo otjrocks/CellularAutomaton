@@ -21,7 +21,7 @@ class GameOfLifeGeneralRulesTest {
 
 
   @Test
-  void GameOfLifeGeneral_rulestringBS_throwsException() throws InvalidParameterException{
+  void GameOfLifeGeneral_rulestringBS_throwsException() {
     assertThrows(Exception.class, () -> gameOfLifeRules = new GameOfLifeRules(Map.of("ruleString", new Parameter<>("B/S"))),
         "Calling getNextState() on a null cell should throw NullPointerException.");
     

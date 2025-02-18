@@ -54,8 +54,8 @@ public class MainController {
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
-  VBox myMainViewContainer = new VBox();
-  Timeline mySimulationAnimation = new Timeline();
+  private final VBox myMainViewContainer = new VBox();
+  private final Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
   private boolean gridLinesEnabled = Boolean.parseBoolean(
       PreferencesController.getPreference("gridLines", "true"));
@@ -277,7 +277,6 @@ public class MainController {
     } catch (GridException e) {
       mySidebarView.flashWarning("Grid values out of bounds. Please adjust initialization configuration.");
     } catch (Exception e) {
-      e.printStackTrace();
       mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());

@@ -112,7 +112,7 @@ public class SimulationConfig {
 
   private static SimulationRules getRules(String simulationName,
       Map<String, Parameter<?>> parameters)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidParameterException {
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     validateSimulation(simulationName);
     String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
         "Rules");
@@ -130,11 +130,10 @@ public class SimulationConfig {
   }
 
   public static int returnStateValueBasedOnName(String simType, String name){
-    String stateKey = simType + "_VALUE_" + name;
+    String stateKey = "%s_VALUE_%s".formatted(simType, name);
     try {
       String valueStr = myValues.getString(stateKey.toUpperCase());
-      Integer value = Integer.valueOf(valueStr);
-      return value;
+      return Integer.parseInt(valueStr);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       return 0;

@@ -18,8 +18,7 @@ public class RockPaperScissorsRulesTest {
 
   private RockPaperScissorsRules rockPaperScissorsRules;
   private Grid grid;
-  private Grid fullGrid;
-  private Map<String, Parameter<?>> parameters = new HashMap<>();
+  private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
@@ -37,7 +36,7 @@ public class RockPaperScissorsRulesTest {
         {5, 1, 2, 3, 4}
     };
 
-    fullGrid = initializeGrid(gridPattern);
+    initializeGrid(gridPattern);
   }
 
   private Grid initializeGrid(int[][] states) {
