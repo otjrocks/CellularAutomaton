@@ -114,7 +114,7 @@ public class XMLWriter {
             for (int j = 0; j < grid.getCols(); j++) {
                 Cell cell = grid.getCell(i, j);
                 rowValues.append(cell.getState());
-                if (j < grid.getRows() - 1) {
+                if (j < grid.getCols() - 1) {
                     rowValues.append(",");
                 }
             }
