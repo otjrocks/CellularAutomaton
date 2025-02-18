@@ -19,7 +19,6 @@ import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
-import cellsociety.model.XMLHandlers.InvalidStateException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
@@ -279,8 +278,6 @@ public class MainController {
       mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
     } catch (GridException e) {
       mySidebarView.flashWarning(getMessage("ERROR_GRID"));
-    } catch (InvalidStateException e){
-      mySidebarView.flashWarning(getMessage("ERROR_STATE"));
     } catch (Exception e) {
       mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
