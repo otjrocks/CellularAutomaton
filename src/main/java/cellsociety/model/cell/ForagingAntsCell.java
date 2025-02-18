@@ -4,10 +4,11 @@ import java.awt.geom.Point2D;
 
 public class ForagingAntsCell extends Cell {
 
-    private double homePheromone;
-    private double foodPheromone;
+    private final double homePheromone;
+    private final double foodPheromone;
     private int health;
     private int reproductionTime;
+    private boolean hasFood;
 
     public ForagingAntsCell(int state, Point2D location) {
         super(state, location);
@@ -15,30 +16,28 @@ public class ForagingAntsCell extends Cell {
         this.foodPheromone = 0.0;
         this.health = 10;
         this.reproductionTime = 0;
+        this.hasFood = false;
     }
 
-    public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, int reproductionTime) {
+    public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, int reproductionTime, boolean hasFood) {
         super(state, location);
         this.homePheromone = homePheromone;
         this.foodPheromone = foodPheromone;
         this.health = health;
         this.reproductionTime = reproductionTime;
+        this.hasFood = hasFood;
+    }
+
+    public boolean getHasFood(){
+        return hasFood;
     }
 
     public double getHomePheromone() {
         return homePheromone;
     }
 
-    public void setHomePheromone(double homePheromone) {
-        this.homePheromone = homePheromone;
-    }
-
     public double getFoodPheromone() {
         return foodPheromone;
-    }
-
-    public void setFoodPheromone(double foodPheromone) {
-        this.foodPheromone = foodPheromone;
     }
 
     public int getHealth() {
@@ -58,23 +57,6 @@ public class ForagingAntsCell extends Cell {
 
     public void resetReproductionTime() {
         this.reproductionTime = 0;
-    }
-
-    public void incrementReproductionTime() {
-        this.reproductionTime++;
-    }
-
-    public void dropHomePheromone(double pheromoneAmount) {
-        this.homePheromone += pheromoneAmount;
-    }
-
-    public void dropFoodPheromone(double pheromoneAmount) {
-        this.foodPheromone += pheromoneAmount;
-    }
-
-    public void decayPheromones(double decayRate) {
-        this.homePheromone *= (1 - decayRate);
-        this.foodPheromone *= (1 - decayRate);
     }
 
 }
