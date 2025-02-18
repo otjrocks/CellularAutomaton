@@ -239,39 +239,32 @@ public class ForagingAntsRules extends SimulationRules {
         return neighborsByState;
     }
 
-    private Cell highestPheromoneNeighbor(List<Cell> emptyNeighbors, String type){
-        if(type.equals("home")){
-            double maxNeighborHomePheromone = 0;
-            Cell highestPheromoneNeighbor = new ForagingAntsCell(State.EMPTY.getValue(), emptyNeighbors.get(0).getLocation());
-            for (Cell neighbor : emptyNeighbors) {
-                ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
-                if(antNeighbor.getHomePheromone() > maxNeighborHomePheromone){
-                    maxNeighborHomePheromone = antNeighbor.getHomePheromone();
-                    highestPheromoneNeighbor = antNeighbor;
-                }
-            }
-            if (maxNeighborHomePheromone == 0){
-                Cell newAnt = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
-                return newAnt;
-            }
-            return highestPheromoneNeighbor;
+    private Cell highestPheromoneNeighbor(List<Cell> emptyNeighbors, String type) {
+        if (emptyNeighbors.isEmpty()) {
+            return null;
         }
-        else if(type.equals("food")){
-            double maxNeighborFoodPheromone = 0;
-            Cell highestPheromoneNeighbor = new ForagingAntsCell(State.EMPTY.getValue(), emptyNeighbors.get(0).getLocation());
-            for (Cell neighbor : emptyNeighbors) {
-                ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
-                if(antNeighbor.getFoodPheromone() > maxNeighborFoodPheromone){
-                    maxNeighborFoodPheromone = antNeighbor.getFoodPheromone();
-                    highestPheromoneNeighbor = antNeighbor;
-                }
+        List<Cell> candidates = new ArrayList<>();
+        double maxPheromone = 0;
+
+        for (Cell neighbor : emptyNeighbors) {
+            ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
+            double pheromoneLevel = (type.equals("home")) ? antNeighbor.getHomePheromone() : antNeighbor.getFoodPheromone();
+
+            if (pheromoneLevel > maxPheromone) {
+                maxPheromone = pheromoneLevel;
+                candidates.clear();
+                candidates.add(antNeighbor);
+            } else if (pheromoneLevel == maxPheromone) {
+                candidates.add(antNeighbor);
             }
-            if (maxNeighborFoodPheromone == 0){
-                Cell newAnt = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
-                return newAnt;
-            }
-            return highestPheromoneNeighbor;
         }
-        return emptyNeighbors.get(0);
+
+    
+        if (random.nextDouble() < 0.1) {
+            return emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
+        }
+
+        return candidates.get(random.nextInt(candidates.size()));
     }
+
 }
