@@ -14,7 +14,7 @@ public class SugarscapeCell extends Cell {
   private int agentSugar;
 
   /**
-   * Creates a SugarscapeCell that can act as a Patch or an Agent.
+   * Creates a Sugarscape Cell that can act as a Patch or an Agent.
    *
    * @param state - The type of cell (EMPTY, PATCH, or AGENT)
    * @param location - The cell's location in the grid
@@ -89,6 +89,9 @@ public class SugarscapeCell extends Cell {
    * @param sugar - the current sugar contained in the cell
    */
   public void setSugar(int sugar) {
+    if (sugar < 0) {
+      throw new IllegalArgumentException("All ints must be non-negative.");
+    }
     this.sugar = sugar;
   }
 
@@ -112,6 +115,10 @@ public class SugarscapeCell extends Cell {
    * setter to increment the current sugar by the grow back rate of sugar and reset the intervals back to 0
    */
   public void regenerateSugar() {
+    if (!isPatch()) {
+      return;
+    }
+
     intervalsSinceLastGrowBack++;
     if (intervalsSinceLastGrowBack >= sugarGrowBackInterval) {
       sugar += sugarGrowBackRate;

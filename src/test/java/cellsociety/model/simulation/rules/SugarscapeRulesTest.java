@@ -3,11 +3,9 @@ package cellsociety.model.simulation.rules;
 import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.AgentCell;
-import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.cell.PatchCell;
+import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.rules.SugarscapeRules.State;
@@ -45,7 +43,7 @@ class SugarscapeRulesTest {
 
   @Test
   void getNextStatesForAllCells_PatchSugarRegeneration_UpdatedSugar() {
-    PatchCell patch = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 3, 5, 10, new Point2D.Double(2, 2));
+    SugarscapeCell patch = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 2),3, 5, 10,0,0);
 
     patch.regenerateSugar();
     patch.regenerateSugar();
@@ -58,10 +56,10 @@ class SugarscapeRulesTest {
 
   @Test
   void getNextStatesForAllCells_AgentMovesToRichestPatch_UpdatedAgentCellAndSugar() {
-    AgentCell agent = new AgentCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 2, 1, 10);
-    PatchCell lowSugarPatch = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 2, 3, 1, new Point2D.Double(2, 3));
-    PatchCell anotherLowSugarPatch = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 2, 3, 1, new Point2D.Double(2, 4));
-    PatchCell highSugarPatch = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 8, 3, 1, new Point2D.Double(3, 2));
+    SugarscapeCell agent = new SugarscapeCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0,2, 1);
+    SugarscapeCell lowSugarPatch = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 2, 3, 1, 0, 0);
+    SugarscapeCell anotherLowSugarPatch = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 2, 3, 1, 0,0 );
+    SugarscapeCell highSugarPatch = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(3, 2), 8, 3, 1, 0,0);
 
     grid.updateCell(agent);
     grid.updateCell(lowSugarPatch);
@@ -75,12 +73,12 @@ class SugarscapeRulesTest {
     for (CellUpdate update : updates) {
       if (update.getNextCell().getLocation().equals(new Point2D.Double(3, 2)) && update.getNextCell().getState() == State.AGENTS.getValue()) {
         consumedPatch = true;
-        AgentCell agentCell = (AgentCell) update.getNextCell();
+        SugarscapeCell agentCell = (SugarscapeCell) update.getNextCell();
         newSugar = agentCell.getSugar();
       }
 
       if (update.getNextCell().getLocation().equals(new Point2D.Double(3, 2)) && update.getNextCell().getState() == State.PATCHES.getValue()) {
-        PatchCell patchCell = (PatchCell) update.getNextCell();
+        SugarscapeCell patchCell = (SugarscapeCell) update.getNextCell();
         assertEquals(0, patchCell.getSugar(), "Path cell reset to 0");
       }
     }
@@ -91,10 +89,10 @@ class SugarscapeRulesTest {
 
   @Test
   void getNextStatesForAllCells_AgentChoosesMinDistanceInTie_UpdatedAgentCell() {
-    AgentCell agent = new AgentCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 3, 1, 10);
-    PatchCell patch1 = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 5, 3, 1, new Point2D.Double(2, 3));
-    PatchCell patch2 = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 5, 3, 1, new Point2D.Double(2, 4));
-    PatchCell patch3 = new PatchCell(SugarscapeRules.State.PATCHES.getValue(), 5, 3, 1, new Point2D.Double(4, 2));
+    SugarscapeCell agent = new SugarscapeCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0, 1, 1);
+    SugarscapeCell patch1 = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 5, 3, 1, 0, 0);
+    SugarscapeCell patch2 = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 5, 3, 1, 0,0);
+    SugarscapeCell patch3 = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(4, 2), 5, 3, 1, 0, 0);
 
     grid.updateCell(agent);
     grid.updateCell(patch1);
@@ -105,6 +103,7 @@ class SugarscapeRulesTest {
     boolean consumedPatch = false;
 
     for (CellUpdate update : updates) {
+      System.out.println(update.getNextCell().getLocation());
       if (update.getNextCell().getLocation().equals(new Point2D.Double(2, 3)) && update.getNextCell().getState() == State.AGENTS.getValue()) {
         consumedPatch = true;
         break;
@@ -115,7 +114,7 @@ class SugarscapeRulesTest {
 
   @Test
   void getNextStatesForAllCells_SugarReachesZero_AgentDies() {
-    AgentCell agent = new AgentCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 2, 10, 5);
+    SugarscapeCell agent = new SugarscapeCell(SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 2, 1, 0, 5, 2);
 
     grid.updateCell(agent);
 

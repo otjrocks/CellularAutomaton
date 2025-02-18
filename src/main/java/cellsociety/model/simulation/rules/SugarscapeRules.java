@@ -1,11 +1,10 @@
 package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.AgentCell;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.cell.PatchCell;
+import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -16,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.sound.midi.Patch;
 
 /**
  * A rules class to to implement the sugarscape simulation
@@ -60,10 +58,10 @@ public class SugarscapeRules extends SimulationRules {
    */
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
-    List<PatchCell> patchCells = new ArrayList<>();
-    List<AgentCell> agentCells = new ArrayList<>();
+    List<SugarscapeCell> patchCells = new ArrayList<>();
+    List<SugarscapeCell> agentCells = new ArrayList<>();
     List<CellUpdate> nextStates = new ArrayList<>();
-    Set<Cell> updatedCells = new HashSet<>();
+    Set<SugarscapeCell> updatedCells = new HashSet<>();
 
     getCellsByType(grid, patchCells, agentCells);
 
@@ -73,10 +71,10 @@ public class SugarscapeRules extends SimulationRules {
     return nextStates;
   }
 
-  private void handleAgentCellUpdate(Grid grid, List<AgentCell> agentCells, Set<Cell> updatedCells,
+  private void handleAgentCellUpdate(Grid grid, List<SugarscapeCell> agentCells, Set<SugarscapeCell> updatedCells,
       List<CellUpdate> nextStates) {
-    for (AgentCell agentCell : agentCells) {
-      PatchCell biggestPatch = getBiggestPatchForAgent(agentCell, grid);
+    for (SugarscapeCell agentCell : agentCells) {
+      SugarscapeCell biggestPatch = getBiggestPatchForAgent(agentCell, grid);
 
       if (agentCell.getSugar() - agentCell.getMetabolism() <= 0) {
         nextStates.add(new CellUpdate(agentCell.getLocation(),
@@ -85,6 +83,7 @@ public class SugarscapeRules extends SimulationRules {
       }
 
       if (biggestPatch == null || biggestPatch.getState() == State.EMPTY.getValue() || updatedCells.contains(biggestPatch)) {
+        agentCell.setSugar(agentCell.getSugar() - agentCell.getMetabolism());
         continue;
       }
       moveAgentCell(nextStates, agentCell, biggestPatch);
@@ -94,8 +93,8 @@ public class SugarscapeRules extends SimulationRules {
     }
   }
 
-  private static void moveAgentCell(List<CellUpdate> nextStates, AgentCell agentCell,
-      PatchCell biggestPatch) {
+  private static void moveAgentCell(List<CellUpdate> nextStates, SugarscapeCell agentCell,
+      SugarscapeCell biggestPatch) {
     if (biggestPatch.getState() == State.AGENTS.getValue()) {
       return;
     }
@@ -108,29 +107,30 @@ public class SugarscapeRules extends SimulationRules {
 
     biggestPatch.setSugar(0);
 
-    AgentCell newAgentCell = new AgentCell(State.AGENTS.getValue(), biggestPatch.getLocation(),
-        agentCell.getVision(), agentCell.getMetabolism(), newSugar);
+    SugarscapeCell newAgentCell = new SugarscapeCell(State.AGENTS.getValue(), biggestPatch.getLocation(),
+        newSugar, 1, 0,
+        agentCell.getVision(), agentCell.getMetabolism());
 
-    PatchCell newPatchCell = new PatchCell(State.PATCHES.getValue(), 0, biggestPatch.getSugarGrowBackInterval(), biggestPatch.getSugarGrowBackRate(), agentCell.getLocation());
+    SugarscapeCell newPatchCell = new SugarscapeCell(State.PATCHES.getValue(),  agentCell.getLocation(), 0, biggestPatch.getSugarGrowBackInterval(), biggestPatch.getSugarGrowBackRate(), 0, 0);
 
     nextStates.add(new CellUpdate(agentCell.getLocation(), newPatchCell));
     nextStates.add(new CellUpdate(biggestPatch.getLocation(), newAgentCell));
   }
 
-  private void getCellsByType(Grid grid, List<PatchCell> patchCells, List<AgentCell> agentCells) {
+  private void getCellsByType(Grid grid, List<SugarscapeCell> patchCells, List<SugarscapeCell> agentCells) {
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
       if (cell.getState() == State.PATCHES.getValue()) {
-        patchCells.add((PatchCell) cell);
+        patchCells.add((SugarscapeCell) cell);
       } else if (cell.getState() == State.AGENTS.getValue()) {
-        agentCells.add((AgentCell) cell);
+        agentCells.add((SugarscapeCell) cell);
       }
     }
   }
 
-  private void handlePatchCellUpdate(List<PatchCell> patchCells) {
-    for (PatchCell patchCell : patchCells) {
+  private void handlePatchCellUpdate(List<SugarscapeCell> patchCells) {
+    for (SugarscapeCell patchCell : patchCells) {
       patchCell.regenerateSugar();
     }
   }
@@ -138,12 +138,12 @@ public class SugarscapeRules extends SimulationRules {
 
   //loops through all 4 directions up to vision amount of times in each direction
   // Chat GPT helped exclusively with the row/col increment logic as well as creating the MutableInt class,  everything else was me
-  private PatchCell getBiggestPatchForAgent(AgentCell cell, Grid grid) {
+  private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell cell, Grid grid) {
     int row = cell.getRow();
     int col = cell.getCol();
     int vision = cell.getVision();
 
-    PatchCell biggestPatch = null;
+    SugarscapeCell biggestPatch = null;
     MutableInt maxSugar = new MutableInt(-1);
     MutableInt minDistance = new MutableInt(vision + 1);
 
@@ -159,7 +159,7 @@ public class SugarscapeRules extends SimulationRules {
     return biggestPatch;
   }
 
-  private PatchCell checkAndUpdateBiggestPatch(int row, int col, int vision, int rowIncrement, int colIncrement, Grid grid, PatchCell biggestPatch, MutableInt maxSugar, MutableInt minDistance) {
+  private SugarscapeCell checkAndUpdateBiggestPatch(int row, int col, int vision, int rowIncrement, int colIncrement, Grid grid, SugarscapeCell biggestPatch, MutableInt maxSugar, MutableInt minDistance) {
     for (int i = 1; i <= vision; i++) {
       int newRow = row + (i * rowIncrement);
       int newCol = col + (i * colIncrement);
@@ -173,7 +173,7 @@ public class SugarscapeRules extends SimulationRules {
         continue;
       }
 
-      PatchCell curPatch = (PatchCell) currentCell;
+      SugarscapeCell curPatch = (SugarscapeCell) currentCell;
 
       if (curPatch.getSugar() > maxSugar.getValue()) {
         maxSugar.setValue(curPatch.getSugar());
