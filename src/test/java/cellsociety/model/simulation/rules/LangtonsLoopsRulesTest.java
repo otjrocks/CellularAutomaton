@@ -47,12 +47,11 @@ class LangtonsLoopsRulesTest {
       "612225", "700077", "701120", "701220", "701250", "702120", "702221", "702251",
       "702321", "702525", "702720"
   };
-
   private Map<String, Parameter<?>> parameters;
   private Grid grid;
 
   @BeforeEach
-  void setUp() {
+  void setup() {
     parameters = new HashMap<>();
     grid = new Grid(3, 3);
     grid.addCell(new DefaultCell(0, new Point2D.Double(1, 1)));
@@ -63,45 +62,41 @@ class LangtonsLoopsRulesTest {
   }
 
   @Test
-  void checkCorrectInitialization() {
+  void createSimulation_NoExceptionThrown_Success() {
     assertDoesNotThrow(this::createSimulation);
   }
 
   private Simulation createSimulation() throws InvalidParameterException {
     LangtonsLoopsRules rules = new LangtonsLoopsRules(parameters);
-    return new Simulation(rules,
-        new SimulationMetaData("LangtonsLoops", "", "", ""));
+    return new Simulation(rules, new SimulationMetaData("LangtonsLoops", "", "", ""));
   }
 
   @Test
-  void checkAllZeros() throws InvalidParameterException {
-    // Rule string 000000
+  void validateRuleString_AllZeros_StateZero() throws InvalidParameterException {
     validateRuleString("00000", 0);
   }
 
   @Test
-  void checkAllOnes() throws InvalidParameterException {
-    // Rule string 200522
+  void validateRuleString_AllOnes_StateTwo() throws InvalidParameterException {
     validateRuleString("20052", 2);
   }
 
   @Test
-  void checkAllRulesStrings() throws InvalidParameterException {
+  void validateRuleString_AllTransitionRules_CorrectNewState() throws InvalidParameterException {
     for (String ruleString : TRANSITION_RULES) {
       validateRuleString(ruleString.substring(0, 5), Integer.parseInt(ruleString.substring(5, 6)));
     }
   }
 
   @Test
-  void checkUnknownRuleStringReturnsSameState() throws InvalidParameterException {
-    // cannot have state 9, so 999991 should return the same state, which is 9, instead of 1
+  void validateRuleString_UnknownRuleString_SameStateReturned() throws InvalidParameterException {
     Simulation sim = createSimulation();
     validateRuleString("999991", 9);
     assertEquals(8, sim.rules().getNumberStates());
   }
 
   @Test
-  void checkNumStates() throws InvalidParameterException {
+  void getNumberStates_CorrectStateCount_ReturnsEight() throws InvalidParameterException {
     Simulation sim = createSimulation();
     assertEquals(8, sim.rules().getNumberStates());
   }
