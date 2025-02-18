@@ -9,6 +9,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -34,6 +35,7 @@ public class ViewModeView extends VBox {
   private Button myChooseFileButton;
   private Button mySaveButton;
   private Button myStepButton;
+  private Button newSimulationButton;
   private final VBox mySpeedSliderBox = new VBox();
   private FlowPane myControlButtons = new FlowPane();
 
@@ -87,11 +89,13 @@ public class ViewModeView extends VBox {
     createStepButton();
     createFileChooserButton();
     createSaveFileButton();
+    createNewSimulationButton();
     myControlButtons.setAlignment(Pos.CENTER_LEFT);
     myControlButtons.setHgap(ELEMENT_SPACING);
+    myControlButtons.setVgap(ELEMENT_SPACING);
     myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
-        .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton);
+        .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton, newSimulationButton);
     return myControlButtons;
   }
 
@@ -160,6 +164,15 @@ public class ViewModeView extends VBox {
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
       myMainController.handleSingleStep();
+    });
+  }
+
+  private void createNewSimulationButton() {
+    newSimulationButton = new Button(getMessage("NEW_SIMULATION_LABEL"));
+    newSimulationButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+    newSimulationButton.setOnAction(event -> {
+      CreateNewSimulation simulationManager = new CreateNewSimulation();
+      simulationManager.launchNewSimulation();
     });
   }
 
