@@ -5,10 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static cellsociety.config.MainConfig.getCellColors;
-import static cellsociety.config.MainConfig.getMessage;
-import cellsociety.model.simulation.Simulation;
-import javafx.scene.paint.Color;
 
 /**
  * A config file to determine how to display a given state in the front end. This centralizes state

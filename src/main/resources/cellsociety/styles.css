@@ -13,10 +13,6 @@ I used ChatGPT to assist in generating CSS for combo box, text fields, scrollbar
   src: url('./fonts/bold.ttf');
 }
 
-.cell-view {
-  -fx-stroke: -fx-primary;
-}
-
 .root {
   -fx-font-family: Lato;
   -fx-background: -fx-primary;
