@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Sugarscape</Type>
+    <Title>Example</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>Quite literally just making sure it gets read</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <InitialConfiguration>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+        <Row>0,0,1,1,1,5,1,1,0,0</Row>
+        <Row>0,1,1,2,2,2,2,1,1,0</Row>
+        <Row>1,1,2,4,3,3,2,5,1,1</Row>
+        <Row>1,1,2,3,3,3,3,2,1,1</Row>
+        <Row>1,4,2,3,5,3,4,2,1,1</Row>
+        <Row>1,1,2,2,3,3,2,2,1,1</Row>
+        <Row>0,1,1,2,2,2,2,1,5,0</Row>
+        <Row>0,0,1,4,1,1,1,1,0,0</Row>
+        <Row>0,0,0,1,1,1,1,0,0,0</Row>
+    </InitialConfiguration>
+
+    <Parameters>
+        <pathSugarGrowBackRate> 1.0 </pathSugarGrowBackRate>
+        <pathSugarGrowBackInterval> 1.0 </pathSugarGrowBackInterval>
+        <agentVision>5.0</agentVision>
+        <agentSugar>10.0</agentSugar>
+        <agentMetabolism>1.0</agentMetabolism>
+    </Parameters>
+</SimulationConfig>
