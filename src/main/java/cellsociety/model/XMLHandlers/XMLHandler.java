@@ -44,7 +44,7 @@ public class XMLHandler {
    *                     represented as a String
    */
   public XMLHandler(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException {
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException{
     parseXMLFile(xmlFilePath);
   }
 
@@ -56,7 +56,7 @@ public class XMLHandler {
    *                     represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException {
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException{
 
     File xmlFile = new File(xmlFilePath);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -105,7 +105,7 @@ public class XMLHandler {
    * @param dimDoc: Document from which you are extracting/generating the initial grid data
    * 
    */
-  private static void parseGrid(Document gridDoc) throws GridException {
+  private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
       myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySimData);
     } else if(gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
