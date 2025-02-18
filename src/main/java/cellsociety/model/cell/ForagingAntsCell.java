@@ -7,7 +7,6 @@ public class ForagingAntsCell extends Cell {
     private final double homePheromone;
     private final double foodPheromone;
     private int health;
-    private int reproductionTime;
     private boolean hasFood;
 
     public ForagingAntsCell(int state, Point2D location) {
@@ -15,16 +14,14 @@ public class ForagingAntsCell extends Cell {
         this.homePheromone = 0.0;
         this.foodPheromone = 0.0;
         this.health = 10;
-        this.reproductionTime = 0;
         this.hasFood = false;
     }
 
-    public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, int reproductionTime, boolean hasFood) {
+    public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone, int health, boolean hasFood) {
         super(state, location);
         this.homePheromone = homePheromone;
         this.foodPheromone = foodPheromone;
         this.health = health;
-        this.reproductionTime = reproductionTime;
         this.hasFood = hasFood;
     }
 
@@ -44,19 +41,11 @@ public class ForagingAntsCell extends Cell {
         return health;
     }
 
-    public int getReproductionTime() {
-        return reproductionTime;
-    }
-
     public void reduceHealth(int amount) {
         this.health -= amount;
         if (this.health < 0) {
             this.health = 0;
         }
-    }
-
-    public void resetReproductionTime() {
-        this.reproductionTime = 0;
     }
 
 }
