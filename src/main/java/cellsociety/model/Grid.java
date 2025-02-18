@@ -191,6 +191,15 @@ public class Grid {
         (!(location.getY() < myNumCols));
   }
 
+  /**
+   * Method to generate Grid from explicitly defined grid from XML data
+   * 
+   * @param gridDoc: Document from which you are parsing the explicit grid from
+   * @param gridHeight: Height of the grid you're looking to initialize
+   * @param gridWidth: Width of the grid you're looking to initialize
+   * @param simData: The data from the current simulation for getting correct cell types
+   * 
+   */
   public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData) throws GridException{
     Grid grid = new Grid(gridHeight, gridWidth);
     NodeList rows = gridDoc.getElementsByTagName("Row");
@@ -214,6 +223,15 @@ public class Grid {
     return grid;
   }
 
+  /**
+   * Method to generate random Grid from a number of defined states
+   * 
+   * @param gridDoc: Document from which you are parsing the random arguments from
+   * @param gridHeight: Height of the grid you're looking to initialize
+   * @param gridWidth: Width of the grid you're looking to initialize
+   * @param simData: The data from the current simulation for getting correct cell types
+   * 
+   */
   public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
     Grid grid = new Grid(gridHeight, gridWidth);
     int totalCells = gridHeight * gridWidth;
@@ -259,6 +277,15 @@ public class Grid {
     return grid;
   }
 
+  /**
+   * Method to generate random Grid from a distribution of defined states
+   * 
+   * @param gridDoc: Document from which you are parsing the random arguments from
+   * @param gridHeight: Height of the grid you're looking to initialize
+   * @param gridWidth: Width of the grid you're looking to initialize
+   * @param simData: The data from the current simulation for getting correct cell types
+   * 
+   */
   public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
     Grid grid = new Grid(gridHeight, gridWidth);
     int totalCells = gridHeight * gridWidth;

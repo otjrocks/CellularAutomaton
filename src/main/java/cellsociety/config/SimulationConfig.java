@@ -45,6 +45,7 @@ public class SimulationConfig {
    * Map of all the required parameters for a given simulation
    */
   private static final Map<String, List<String>> PARAMETERS = Map.of(
+      "GameOfLife", List.of("ruleString"),
       "Segregation", List.of("toleranceThreshold"),
       "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
       "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
@@ -136,7 +137,7 @@ public class SimulationConfig {
       return value;
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      return 1;
+      return 0;
     }
   }
 
