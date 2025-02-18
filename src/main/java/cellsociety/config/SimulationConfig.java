@@ -1,20 +1,22 @@
 package cellsociety.config;
 
-import static cellsociety.config.MainConfig.getMessages;
-
-import cellsociety.model.simulation.Parameter;
+import cellsociety.utility.FileUtility;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+
+import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
-import cellsociety.model.simulation.InvalidParameterException;
 
 /**
  * Store all information pertaining to simulations
@@ -23,27 +25,29 @@ import cellsociety.model.simulation.InvalidParameterException;
  */
 public class SimulationConfig {
 
+  public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
+  public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
+  private static final ResourceBundle myValues = ResourceBundle.getBundle(
+      VALUES_FILE_PATH);
+
   /**
-   * List of all the simulation names
+   * List of all the simulation names Note: The simulation rules must follow the naming convention
+   * NameRules.java, to be included. Additionally, the rules file must be located in the correct
+   * rules package
    */
-  public static final String[] SIMULATIONS = new String[]{
-      "GameOfLife",
-      "Percolation",
-      "Segregation",
-      "SpreadingOfFire",
-      "WaTorWorld",
-      "RockPaperScissors",
-      "FallingSand"
-  };
+  public static final String[] SIMULATIONS = FileUtility.getFileNamesInDirectory(
+      SIMULATION_RULES_RELATIVE_PATH, "Rules.java").toArray(new String[0]);
 
   /**
    * Map of all the required parameters for a given simulation
    */
   private static final Map<String, List<String>> PARAMETERS = Map.of(
+      "GameOfLife", List.of("ruleString"),
       "Segregation", List.of("toleranceThreshold"),
       "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
       "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
-      "RockPaperScissors", List.of("minThreshold", "numStates")
+      "RockPaperScissors", List.of("minThreshold", "numStates"),
+      "ForagingAnts", List.of("pheromoneDecayRate", "maxPheromoneAmount", "antReproductionTime")
   );
 
   /**
@@ -105,7 +109,7 @@ public class SimulationConfig {
 
   private static SimulationRules getRules(String simulationName,
       Map<String, Parameter<?>> parameters)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidParameterException {
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     validateSimulation(simulationName);
     String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
         "Rules");
@@ -118,7 +122,18 @@ public class SimulationConfig {
   private static void validateSimulation(String simulationName) {
     if (!List.of(SIMULATIONS).contains(simulationName)) {
       throw new IllegalArgumentException(
-          String.format(getMessages().getString("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
+          String.format(getMessage("INVALID_SIMULATION_TYPE_ERROR"), simulationName));
+    }
+  }
+
+  public static int returnStateValueBasedOnName(String simType, String name) {
+    String stateKey = "%s_VALUE_%s".formatted(simType, name);
+    try {
+      String valueStr = myValues.getString(stateKey.toUpperCase());
+      return Integer.parseInt(valueStr);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return 0;
     }
   }
 

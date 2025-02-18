@@ -1,15 +1,17 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.LANGUAGE_FILE_PATH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
+import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class SplashScreenView extends VBox {
+
+  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
@@ -59,11 +63,11 @@ public class SplashScreenView extends VBox {
   }
 
   private void initializeSplashScreen() {
-    Text title = new Text(getMessages().getString("SPLASH_HEADER"));
+    Text title = new Text(getMessage("SPLASH_HEADER"));
     title.getStyleClass().add("main-title");
-    Text description = new Text(getMessages().getString("SPLASH_DESCRIPTION"));
+    Text description = new Text(getMessage("SPLASH_DESCRIPTION"));
     description.getStyleClass().add("secondary-title");
-    Text instructions = new Text(getMessages().getString("SPLASH_INSTRUCTIONS"));
+    Text instructions = new Text(getMessage("SPLASH_INSTRUCTIONS"));
     HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
     myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
     myContentBox.getChildren()
@@ -76,12 +80,12 @@ public class SplashScreenView extends VBox {
 
   private void createLanguageDropdown() {
     languageDropdown = new ComboBox<>();
-    Text changeLanguageText = new Text(getMessages().getString("CHANGE_LANGUAGE"));
+    Text changeLanguageText = new Text(getMessage("CHANGE_LANGUAGE"));
 
-    List<String> languages = fetchLanguages("src/main/resources/cellsociety/languages/");
+    List<String> languages = fetchLanguages();
 
     if (languages.isEmpty()) {
-      myAlertField.flash(getMessages().getString("NO_LANGUAGES_FOUND"), false);
+      myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
     }
 
     languageDropdown.getItems().addAll(languages);
@@ -93,22 +97,13 @@ public class SplashScreenView extends VBox {
     myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
   }
 
-  private List<String> fetchLanguages(String propertiesFolderPath) {
-    List<String> languages = new ArrayList<>();
-    File directory = new File(propertiesFolderPath);
-    File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
-
-    if (files != null) {
-      for (File file : files) {
-        languages.add(file.getName().replace(".properties", ""));
-      }
-    }
-    return languages;
+  private List<String> fetchLanguages() {
+    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
   }
 
   private void createFileChooserButton() {
-    Button myChooseFileButton = new Button(getMessages().getString("CHOOSE_FILE_BUTTON"));
-    Text chooseFileText = new Text(getMessages().getString("LOAD_BUTTON_TEXT"));
+    Button myChooseFileButton = new Button(getMessage("CHOOSE_FILE_BUTTON"));
+    Text chooseFileText = new Text(getMessage("LOAD_BUTTON_TEXT"));
 
     myChooseFileButton.setOnAction(event -> {
       try {
@@ -116,9 +111,9 @@ public class SplashScreenView extends VBox {
         myMainController.hideSplashScreen();
       } catch (IllegalArgumentException e) {
         myAlertField.flash(e.getMessage(), true);
-        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessage("LOAD_ERROR"), true);
       } catch (Exception e) {
-        myAlertField.flash(getMessages().getString("LOAD_ERROR"), true);
+        myAlertField.flash(getMessage("LOAD_ERROR"), true);
         if (VERBOSE_ERROR_MESSAGES) {
           myAlertField.flash(e.getMessage(), true);
         }

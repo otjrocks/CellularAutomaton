@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.getMessages;
+import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
@@ -34,6 +34,7 @@ public class SidebarView extends VBox {
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
   private final ViewModeView myViewModeView;
+  private final HBox myControlsBox = new HBox();
 
 
   /**
@@ -46,6 +47,7 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("sidebar");
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
@@ -53,19 +55,28 @@ public class SidebarView extends VBox {
     createShowGridLinesCheckbox();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
+    addControlsToBox();
     addAllComponentsToSidebar();
   }
 
   private void addAllComponentsToSidebar() {
+    initializeTitle();
     this.getChildren()
-        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myViewModeView,
-            myAlertField);
+        .addAll(myControlsBox, myViewModeView, myAlertField);
+  }
+
+  private void addControlsToBox() {
+    myControlsBox.getChildren().clear();
+    myControlsBox.setAlignment(Pos.CENTER_LEFT);
+    myControlsBox.setSpacing(ELEMENT_SPACING * 2);
+    myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
   }
 
   private void addAllEditModeComponents() {
+    this.getChildren().clear();
+    initializeTitle();
     this.getChildren()
-        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myEditModeView,
-            myAlertField);
+        .addAll(myControlsBox, myEditModeView, myAlertField);
   }
 
   /**
@@ -86,13 +97,20 @@ public class SidebarView extends VBox {
     myThemeSelectorBox = new HBox();
     myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
     myThemeSelectorBox.setSpacing(5);
-    Text simulationTypeLabel = new Text(getMessages().getString("CHANGE_THEME"));
+    Text simulationTypeLabel = new Text(getMessage("CHANGE_THEME"));
     myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
     return myThemeSelectorBox;
   }
 
+  private void initializeTitle() {
+    Text title = new Text(getMessage("TITLE"));
+    title.getStyleClass().add("main-title");
+    this.getChildren().add(title);
+  }
+
   public void update() {
     myViewModeView.update();
+    myEditModeView.updateDisplay();
   }
 
   private void initializeAlertField() {
@@ -110,38 +128,38 @@ public class SidebarView extends VBox {
 
 
   private void enableEditView() {
-    myEditModeView.updateStateInfo();
-    this.getChildren().clear();
+    myEditModeView.updateDisplay();
     addAllEditModeComponents();
   }
 
   private void createChangeModeButton() {
-    myModeButton = new Button(getMessages().getString("EDIT_MODE"));
+    myModeButton = new Button(getMessage("EDIT_MODE"));
     myModeButton.setOnMouseClicked(event -> {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
         myMainController.stopAnimation();
-        myModeButton.setText(getMessages().getString("VIEW_MODE"));
+        myModeButton.setText(getMessage("VIEW_MODE"));
         myMainController.setEditing(true);
-        myAlertField.flash(getMessages().getString("EDIT_MODE_ENABLED"), false);
+        myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
       } else {
         disableEditView();
-        myModeButton.setText(getMessages().getString("EDIT_MODE"));
+        myModeButton.setText(getMessage("EDIT_MODE"));
         myMainController.setEditing(false);
-        myAlertField.flash(getMessages().getString("EDIT_MODE_DISABLED"), false);
+        myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
       }
     });
   }
 
   private void createShowGridLinesCheckbox() {
     myGridLinesCheckboxField.setSpacing(ELEMENT_SPACING);
+    myGridLinesCheckboxField.setAlignment(Pos.CENTER_LEFT);
     CheckBox gridLinesCheckbox = new CheckBox();
     gridLinesCheckbox.setSelected(
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
         event -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
-    Text title = new Text(getMessages().getString("GRID_LINES_LABEL"));
+    Text title = new Text(getMessage("GRID_LINES_LABEL"));
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
 

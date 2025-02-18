@@ -64,7 +64,6 @@ public class CellView extends Rectangle {
    * Reset the stroke color of the cell on theme updates
    */
   public void resetStrokeColor() {
-    this.getStyleClass().remove("cell-view");
-    this.getStyleClass().add("cell-view");
+    this.setStyle("-fx-stroke: -fx-primary;");
   }
 }

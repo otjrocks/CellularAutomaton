@@ -1,32 +1,29 @@
 package cellsociety.view.config;
 
 import cellsociety.controller.PreferencesController;
+import cellsociety.utility.FileUtility;
+import java.util.List;
 
 public class ThemeConfig {
 
-  /**
-   * A list of all themes available
-   */
-  public static final String[] THEMES = new String[]{
-      "Light",
-      "Dark",
-      "Neon",
-      "Green",
-      "Night"
-  };
-
-  public static final String DEFAULT_THEME = "Light";
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
   public static final String DEFAULT_RESOURCE_FOLDER =
-      "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  public static final String COMMON_STYLES_PATH = DEFAULT_RESOURCE_FOLDER + "styles.css";
-  public static final String DEFAULT_FONT_PATH = DEFAULT_RESOURCE_FOLDER + "fonts.default.ttf";
-  public static final String BOLD_FONT_PATH = DEFAULT_RESOURCE_FOLDER + "fonts.bold.ttf";
-  public static final String THEMES_RESOURCES_FOLDER = DEFAULT_RESOURCE_FOLDER + "themes/";
+      "/%s".formatted(DEFAULT_RESOURCE_PACKAGE.replace(".", "/"));
+  public static final String COMMON_STYLES_PATH = "%sstyles.css".formatted(DEFAULT_RESOURCE_FOLDER);
+  public static final String DEFAULT_FONT_PATH = "%sfonts.default.ttf".formatted(
+      DEFAULT_RESOURCE_FOLDER);
+  public static final String BOLD_FONT_PATH = "%sfonts.bold.ttf".formatted(DEFAULT_RESOURCE_FOLDER);
+  public static final String THEMES_RESOURCES_FOLDER = "%sthemes/".formatted(
+      DEFAULT_RESOURCE_FOLDER);
+  public static final String THEMES_RELATIVE_PATH = "src/main/resources/cellsociety/themes/";
+  public static final List<String> THEMES = FileUtility.getFileNamesInDirectory(
+      THEMES_RELATIVE_PATH, ".css");
+
+  public static final String DEFAULT_THEME = "Light";
 
   private static String myThemePath =
-      THEMES_RESOURCES_FOLDER + PreferencesController.getPreference("theme", DEFAULT_THEME)
-          + ".css";
+      "%s%s.css".formatted(THEMES_RESOURCES_FOLDER,
+          PreferencesController.getPreference("theme", DEFAULT_THEME));
   private static String myCurrentTheme = PreferencesController.getPreference("theme",
       DEFAULT_THEME);
 
@@ -55,7 +52,7 @@ public class ThemeConfig {
    * @param themeName: Name of the theme you want to set
    */
   public static void setTheme(String themeName) {
-    myThemePath = THEMES_RESOURCES_FOLDER + themeName + ".css";
+    myThemePath = "%s%s.css".formatted(THEMES_RESOURCES_FOLDER, themeName);
     PreferencesController.setPreference("theme", themeName);
     myCurrentTheme = themeName;
   }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>Segregation</Type>
+    <Title>RandomByProbDistribution</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A random segregation pattern with 50% of members from group one, 25% from group two, and 25% empty</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <RandomInitByProb>
+        <State name="GROUPONE">50</State>
+        <State name="GROUPTWO">25</State>
+    </RandomInitByProb>
+
+    <Parameters>
+        <toleranceThreshold> 0.5 </toleranceThreshold>
+    </Parameters>
+</SimulationConfig>

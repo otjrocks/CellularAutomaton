@@ -1,7 +1,5 @@
 package cellsociety.model.XMLHandlers;
 
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +18,8 @@ import org.xml.sax.SAXException;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 
@@ -31,12 +30,12 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
-  private int myGridHeight;
-  private int myGridWidth;
-  private Grid myGrid;
-  private Simulation mySim;
-  private SimulationMetaData mySimData;
-  private Map<String, Parameter<?>> myParameters;
+  private static int myGridHeight;
+  private static int myGridWidth;
+  private static Grid myGrid;
+  private static Simulation mySim;
+  private static SimulationMetaData mySimData;
+  private static Map<String, Parameter<?>> myParameters;
 
   /**
    * XMLHandler constructor for referencing data
@@ -72,6 +71,12 @@ public class XMLHandler {
     setSim();
   }
 
+  /**
+   * Helper method to parse simulation data from document
+   * 
+   * @param doc: Document from which you are extracting the simulation data
+   * 
+   */
   private void parseSimData(Document data) {
     String type = data.getElementsByTagName("Type").item(0).getTextContent();
     String title = data.getElementsByTagName("Title").item(0).getTextContent();
@@ -80,6 +85,12 @@ public class XMLHandler {
     mySimData = new SimulationMetaData(type, title, author, description);
   }
 
+  /**
+   * Helper method to parse grid dimensions from document
+   * 
+   * @param dimDoc: Document from which you are extracting the grid dimensions
+   * 
+   */
   private void parseDimensions(Document dimDoc) {
     Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
     myGridHeight = Integer.parseInt(
@@ -88,26 +99,21 @@ public class XMLHandler {
         gridDimensions.getElementsByTagName("Width").item(0).getTextContent());
   }
 
-  private void parseGrid(Document gridDoc) throws GridException {
-    myGrid = new Grid(myGridHeight, myGridWidth);
-    NodeList rows = gridDoc.getElementsByTagName("Row");
-
-    for (int i = 0; i < rows.getLength(); i++) {
-      if (rows.getLength() > myGridHeight) {
-        throw new GridException();
-      }
-      String[] rowValues = rows.item(i).getTextContent().split(",");
-      if (rowValues.length > myGridWidth) {
-        throw new GridException();
-      }
-      for (int j = 0; j < rowValues.length; j++) {
-        int state = Integer.parseInt(rowValues[j]);
-        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, mySimData.type());
-        myGrid.addCell(holdingCell);
-      }
+  /**
+   * Helper method to differentiate between explicit and random grid generation
+   * 
+   * @param dimDoc: Document from which you are extracting/generating the initial grid data
+   * 
+   */
+  private static void parseGrid(Document gridDoc) throws GridException {
+    if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
+      myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySimData);
+    } else if(gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
+      myGrid = Grid.generateRandomGridFromDistribution(gridDoc, myGridHeight, myGridWidth, mySimData);
+    } else{
+      myGrid = Grid.generateGrid(gridDoc, myGridHeight, myGridWidth, mySimData);
     }
   }
-
 
   /**
    * Method that assigns the parameters for the current simulation based on simulation type
@@ -150,8 +156,12 @@ public class XMLHandler {
   }
 
   private void checkAndLoadRulestring(Element paramElement) {
-    String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-    myParameters.put("ruleString", new Parameter<>(paramString));
+    try{
+      String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
+      myParameters.put("ruleString", new Parameter<>(paramString));
+    } catch (Exception e){
+      myParameters.clear();
+    }
   }
 
   /**

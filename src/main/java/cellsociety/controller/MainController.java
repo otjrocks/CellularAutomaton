@@ -1,10 +1,5 @@
 package cellsociety.controller;
 
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
-import cellsociety.view.SplashScreenView;
-import cellsociety.view.components.AlertField;
-import cellsociety.view.config.StateDisplayConfig;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -20,18 +15,23 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
 import cellsociety.model.XMLHandlers.XMLHandler;
 import cellsociety.model.XMLHandlers.XMLWriter;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
+import cellsociety.view.SplashScreenView;
+import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
+import cellsociety.view.config.StateDisplayConfig;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -55,8 +55,8 @@ public class MainController {
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
-  VBox myMainViewContainer = new VBox();
-  Timeline mySimulationAnimation = new Timeline();
+  private final VBox myMainViewContainer = new VBox();
+  private final Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
   private boolean gridLinesEnabled = Boolean.parseBoolean(
       PreferencesController.getPreference("gridLines", "true"));
@@ -83,11 +83,11 @@ public class MainController {
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
+    myRoot.getChildren().remove(mySidebarView);
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
     createOrUpdateSidebar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
-    myRoot.getChildren().add(mySidebarView);
   }
 
   /**
@@ -238,40 +238,48 @@ public class MainController {
   public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
-    if (file != null) { // only update simulation if a file was selected
-      String filePath = file.getAbsolutePath();
-      updateSimulationFromFile(filePath);
+    if (file == null) { // only update simulation if a file was selected
+      throw new IllegalArgumentException(getMessage("NO_FILE"));
     }
+    String filePath = file.getAbsolutePath();
+    updateSimulationFromFile(filePath);
   }
 
   public void handleSavingToFile() {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
 
+  /**
+   * Update the main simulation of the program
+   *
+   * @param simulation: The simulation you wish to switch to
+   */
+  public void updateSimulation(Simulation simulation) {
+    mySimulation = simulation;
+    createNewMainViewAndUpdateViewContainer();
+    createOrUpdateSidebar();
+  }
+
   private void updateSimulationFromFile(String filePath) {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
 
-      mySimulation = xmlHandler.getSim();
       myGrid = xmlHandler.getGrid();
-      createNewMainViewAndUpdateViewContainer();
-      createOrUpdateSidebar();
+      updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
-      mySidebarView.flashWarning("Malformed XML file. Please check the formatting.");
+      mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
     } catch (ParserConfigurationException e) {
-      mySidebarView.flashWarning("XML parser configuration issue.");
+      mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
     } catch (IOException e) {
-      mySidebarView.flashWarning("Unable to read the file. Check permissions and file path.");
+      mySidebarView.flashWarning(getMessage("ERROR_IO"));
     } catch (NumberFormatException e) {
-      mySidebarView.flashWarning("Incorrect data format found in XML. Expected numerical values.");
+      mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
     } catch (NullPointerException e) {
-      mySidebarView.flashWarning("Missing required data field. Please add required fields.");
+      mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
     } catch (GridException e) {
-      mySidebarView.flashWarning(
-          "Grid values out of bounds. Please adjust initialization configuration.");
+      mySidebarView.flashWarning(getMessage("ERROR_GRID"));
     } catch (Exception e) {
-      e.printStackTrace();
-      mySidebarView.flashWarning("Unexpected issue while parsing the XML file.");
+      mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());
       }
@@ -332,6 +340,7 @@ public class MainController {
    * @param selected: Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
+    PreferencesController.setPreference("gridLines", String.valueOf(selected));
     gridLinesEnabled = selected;
     mySimulationView.setGridLines(selected);
   }
