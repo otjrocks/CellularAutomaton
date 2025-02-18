@@ -92,6 +92,7 @@ public class ViewModeView extends VBox {
     createNewSimulationButton();
     myControlButtons.setAlignment(Pos.CENTER_LEFT);
     myControlButtons.setHgap(ELEMENT_SPACING);
+    myControlButtons.setVgap(ELEMENT_SPACING);
     myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
         .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton, newSimulationButton);
