@@ -47,6 +47,7 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("sidebar");
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
@@ -61,7 +62,7 @@ public class SidebarView extends VBox {
   private void addAllComponentsToSidebar() {
     initializeTitle();
     this.getChildren()
-        .addAll(myControlsBox, myAlertField, myViewModeView);
+        .addAll(myControlsBox, myViewModeView, myAlertField);
   }
 
   private void addControlsToBox() {
@@ -75,7 +76,7 @@ public class SidebarView extends VBox {
     this.getChildren().clear();
     initializeTitle();
     this.getChildren()
-        .addAll(myControlsBox, myAlertField, myEditModeView);
+        .addAll(myControlsBox, myEditModeView, myAlertField);
   }
 
   /**
@@ -114,8 +115,8 @@ public class SidebarView extends VBox {
 
   private void initializeAlertField() {
     myAlertField = new AlertField();
-//    VBox.setVgrow(myAlertField, Priority.ALWAYS);
-//    myAlertField.setAlignment(Pos.BOTTOM_LEFT);
+    VBox.setVgrow(myAlertField, Priority.ALWAYS);
+    myAlertField.setAlignment(Pos.BOTTOM_LEFT);
   }
 
 
