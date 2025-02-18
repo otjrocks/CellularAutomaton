@@ -136,20 +136,21 @@ public class SugarscapeRules extends SimulationRules {
 
     PatchCell biggestPatch = null;
     MutableInt maxSugar = new MutableInt(-1);
+    MutableInt minDistance = new MutableInt(vision + 1);
 
     // up
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, -1, 0, grid, biggestPatch, maxSugar);
+    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, -1, 0, grid, biggestPatch, maxSugar, minDistance);
     // down
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 1, 0, grid, biggestPatch, maxSugar);
+    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 1, 0, grid, biggestPatch, maxSugar, minDistance);
     // left
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, -1, grid, biggestPatch, maxSugar);
+    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, -1, grid, biggestPatch, maxSugar, minDistance);
     // right
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, 1, grid, biggestPatch, maxSugar);
+    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, 1, grid, biggestPatch, maxSugar, minDistance);
 
     return biggestPatch;
   }
 
-  private PatchCell checkAndUpdateBiggestPatch(int row, int col, int vision, int rowIncrement, int colIncrement, Grid grid, PatchCell biggestPatch, MutableInt maxSugar) {
+  private PatchCell checkAndUpdateBiggestPatch(int row, int col, int vision, int rowIncrement, int colIncrement, Grid grid, PatchCell biggestPatch, MutableInt maxSugar, MutableInt minDistance) {
     for (int i = 1; i <= vision; i++) {
       int newRow = row + (i * rowIncrement);
       int newCol = col + (i * colIncrement);
@@ -164,8 +165,13 @@ public class SugarscapeRules extends SimulationRules {
       }
 
       PatchCell curPatch = (PatchCell) currentCell;
+
       if (curPatch.getSugar() > maxSugar.getValue()) {
         maxSugar.setValue(curPatch.getSugar());
+        minDistance.setValue(i);
+        biggestPatch = curPatch;
+      } else if (curPatch.getSugar() == maxSugar.getValue() && i < minDistance.getValue()) {
+        minDistance.setValue(i);
         biggestPatch = curPatch;
       }
     }
