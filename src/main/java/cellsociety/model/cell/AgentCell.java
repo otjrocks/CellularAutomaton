@@ -49,20 +49,4 @@ public class AgentCell extends Cell {
     return sugar;
   }
 
-  /**
-   * a method that handles the consumption of sugar in each round
-   */
-  public void consumeSugar() {
-    sugar -= metabolism;
-    if (sugar < 0) sugar = 0;
-  }
-
-  /**
-   * methods to handle the consumption of sugar
-   * @param amount - the integer value of sugar that will be added to their current levels
-   */
-  public void addSugar(int amount) {
-    sugar += amount;
-  }
-
 }
