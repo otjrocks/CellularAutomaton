@@ -7,7 +7,7 @@ public class ForagingAntsCell extends Cell {
     private final double homePheromone;
     private final double foodPheromone;
     private int health;
-    private boolean hasFood;
+    private final boolean hasFood;
 
     public ForagingAntsCell(int state, Point2D location) {
         super(state, location);
