@@ -22,6 +22,10 @@ public class ForagingAntsRules extends SimulationRules {
     private final int myAntReproductionTime;
     private final int myMaxPheromoneAmount;
 
+    private int myReproductionTimer = 0;
+    private final List<Cell> nestCells = new ArrayList<>();
+    private final List<Cell> nestCellNeighbors = new ArrayList<>();
+
         public ForagingAntsRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException{
         super(parameters);
         if (parameters == null || parameters.isEmpty()) {
@@ -101,8 +105,8 @@ public class ForagingAntsRules extends SimulationRules {
     @Override
     public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
         List<CellUpdate> nextStates = new ArrayList<>();
-
         List<Cell> antCells = new ArrayList<>();
+        myReproductionTimer++;
 
         Iterator<Cell> cellIterator = grid.getCellIterator();
         while (cellIterator.hasNext()) {
@@ -110,10 +114,24 @@ public class ForagingAntsRules extends SimulationRules {
             if (cell.getState() == State.ANT.getValue()) {
                 antCells.add(cell);
             }
+            if (cell.getState() == State.NEST.getValue()) {
+                nestCells.add(cell);
+            }
         }
 
         for (Cell ant : antCells) {
             processAntMovement(ant, grid, nextStates);
+        }
+
+        if(myReproductionTimer >= myAntReproductionTime){
+            for (Cell nestCell: nestCells){
+                for(Cell neighbor: getNeighborsByState(nestCell, grid, State.EMPTY.getValue())){
+                    nestCellNeighbors.add(neighbor);
+                }
+            }
+            ForagingAntsCell newAnt = (ForagingAntsCell)nestCellNeighbors.get(random.nextInt(nestCellNeighbors.size()));
+            nextStates.add(new CellUpdate(newAnt.getLocation(), new ForagingAntsCell(State.ANT.getValue(), newAnt.getLocation(), newAnt.getHomePheromone(), newAnt.getFoodPheromone(), 10, false)));
+            myReproductionTimer = 0;
         }
 
         return nextStates;
@@ -124,36 +142,64 @@ public class ForagingAntsRules extends SimulationRules {
         ant.reduceHealth(1);
         List<Cell> emptyNeighbors = getNeighborsByState(ant, grid, State.EMPTY.getValue());
         List<Cell> foodNeighbors = getNeighborsByState(ant, grid, State.FOOD.getValue());
+        List<Cell> nestNeighbors = getNeighborsByState(ant, grid, State.NEST.getValue());
 
         if(!ant.getHasFood()){
-            if (!foodNeighbors.isEmpty()) {
+            if (!foodNeighbors.isEmpty() && !emptyNeighbors.isEmpty()){
                 ForagingAntsCell nextLocation = (ForagingAntsCell)highestPheromoneNeighbor(emptyNeighbors, "home");
-            nextStates.add((new CellUpdate(nextLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation()))));
+                nextStates.add(new CellUpdate(nextLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(), updateHomePheromone(nextLocation, grid), updateFoodPheromone(nextLocation, grid), ant.getHealth(), true)));
+                if (!nextLocation.getLocation().equals(ant.getLocation())) {
+                    Cell newEmpty = new ForagingAntsCell(State.EMPTY.getValue(), ant.getLocation(), ant.getHomePheromone(), ant.getFoodPheromone(), 0, false);
+                    nextStates.add(new CellUpdate(ant.getLocation(), newEmpty));
+                }
+            }
+            else if (!emptyNeighbors.isEmpty()) {
+                ForagingAntsCell nextLocation = (ForagingAntsCell)highestPheromoneNeighbor(emptyNeighbors, "food");
+                nextStates.add(new CellUpdate(nextLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(), updateHomePheromone(nextLocation, grid), updateFoodPheromone(nextLocation, grid), ant.getHealth(), ant.getHasFood())));
+                if (!nextLocation.getLocation().equals(ant.getLocation())) {
+                    Cell newEmpty = new ForagingAntsCell(State.EMPTY.getValue(), ant.getLocation(), ant.getHomePheromone(), ant.getFoodPheromone(), 0, false);
+                    nextStates.add(new CellUpdate(ant.getLocation(), newEmpty));
+                }
+            }
+        }
+        else{
+            if (!nestNeighbors.isEmpty() && !emptyNeighbors.isEmpty()){
+                ForagingAntsCell nextLocation = (ForagingAntsCell)highestPheromoneNeighbor(emptyNeighbors, "food");
+                nextStates.add(new CellUpdate(nextLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(), updateHomePheromone(nextLocation, grid), updateFoodPheromone(nextLocation, grid), ant.getHealth(), false)));
+                if (!nextLocation.getLocation().equals(ant.getLocation())) {
+                    Cell newEmpty = new ForagingAntsCell(State.EMPTY.getValue(), ant.getLocation(), ant.getHomePheromone(), ant.getFoodPheromone(), 0, false);
+                    nextStates.add(new CellUpdate(ant.getLocation(), newEmpty));
+                }
+            }
+            else if (!emptyNeighbors.isEmpty()) {
+                ForagingAntsCell nextLocation = (ForagingAntsCell)highestPheromoneNeighbor(emptyNeighbors, "home");
+                nextStates.add((new CellUpdate(nextLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(), updateHomePheromone(nextLocation, grid), updateFoodPheromone(nextLocation, grid), ant.getHealth(), ant.getHasFood()))));
+                if (!nextLocation.getLocation().equals(ant.getLocation())) {
+                    Cell newEmpty = new ForagingAntsCell(State.EMPTY.getValue(), ant.getLocation(), ant.getHomePheromone(), ant.getFoodPheromone(), 0, false);
+                    nextStates.add(new CellUpdate(ant.getLocation(), newEmpty));
+                }
             }
 
-            if (!emptyNeighbors.isEmpty()) {
-                Cell newLocation = emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
-                nextStates.add(new CellUpdate(newLocation.getLocation(), new ForagingAntsCell(State.ANT.getValue(), newLocation.getLocation())));
-            }
-
-            if (shouldReproduce(ant)) {
-                reproduceAnt(ant, nextStates);
-            }
-        
         }
     }
 
     private double updateHomePheromone(ForagingAntsCell antCell, Grid grid) {
         
         List<Cell> neighbors = getNeighbors(antCell, grid);
-        double maxNeighborFoodPheromone = 0;
+        double maxNeighborHomePheromone = 0;
 
         for (Cell neighbor : neighbors) {
+            if(neighbor.getState() == State.NEST.getValue()){
+                return myMaxPheromoneAmount;
+            }
             ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
-            maxNeighborFoodPheromone = Math.max(maxNeighborFoodPheromone, antNeighbor.getHomePheromone());
+            maxNeighborHomePheromone = Math.max(maxNeighborHomePheromone, antNeighbor.getHomePheromone());
         }
-
-        double desiredPheromone = maxNeighborFoodPheromone - 2;
+        
+        if(maxNeighborHomePheromone == 0){
+            return 0;
+        }
+        double desiredPheromone = maxNeighborHomePheromone - 2;
         double pheromoneDifference = desiredPheromone - antCell.getHomePheromone();
         
         return antCell.getHomePheromone() + pheromoneDifference;
@@ -165,26 +211,20 @@ public class ForagingAntsRules extends SimulationRules {
         double maxNeighborFoodPheromone = 0;
 
         for (Cell neighbor : neighbors) {
+            if(neighbor.getState() == State.FOOD.getValue()){
+                return myMaxPheromoneAmount;
+            }
             ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
             maxNeighborFoodPheromone = Math.max(maxNeighborFoodPheromone, antNeighbor.getFoodPheromone());
         }
 
+        if(maxNeighborFoodPheromone == 0){
+            return 0;
+        }
         double desiredPheromone = maxNeighborFoodPheromone - 2;
         double pheromoneDifference = desiredPheromone - antCell.getFoodPheromone();
         
         return antCell.getFoodPheromone() + pheromoneDifference;
-    }
-
-    private boolean shouldReproduce(ForagingAntsCell ant) {
-        boolean shouldReproduce =
-            ant.getReproductionTime() >= myAntReproductionTime;
-        return shouldReproduce;
-    }
-
-    private void reproduceAnt(ForagingAntsCell ant, List<CellUpdate> nextStates) {
-        Cell offspringAnt = new ForagingAntsCell(State.ANT.getValue(), ant.getLocation());
-        nextStates.add(new CellUpdate(ant.getLocation(), offspringAnt));
-        ant.resetReproductionTime();
     }
 
     private List<Cell> getNeighborsByState(Cell cell, Grid grid, int state) {
@@ -199,27 +239,32 @@ public class ForagingAntsRules extends SimulationRules {
         return neighborsByState;
     }
 
-    private Cell highestPheromoneNeighbor(List<Cell> emptyNeighbors, String type){
-        if(type.equals("home")){
-            double maxNeighborHomePheromone = 0;
-            Cell highestPheromoneNeighbor = new ForagingAntsCell(State.EMPTY.getValue(), emptyNeighbors.get(0).getLocation());
-            for (Cell neighbor : emptyNeighbors) {
-                ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
-                maxNeighborHomePheromone = Math.max(maxNeighborHomePheromone, antNeighbor.getHomePheromone());
-                highestPheromoneNeighbor = antNeighbor;
-            }
-            return highestPheromoneNeighbor;
+    private Cell highestPheromoneNeighbor(List<Cell> emptyNeighbors, String type) {
+        if (emptyNeighbors.isEmpty()) {
+            return null;
         }
-        else if(type.equals("food")){
-            double maxNeighborFoodPheromone = 0;
-            Cell highestPheromoneNeighbor = new ForagingAntsCell(State.EMPTY.getValue(), emptyNeighbors.get(0).getLocation());
-            for (Cell neighbor : emptyNeighbors) {
-                ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
-                maxNeighborFoodPheromone = Math.max(maxNeighborFoodPheromone, antNeighbor.getFoodPheromone());
-                highestPheromoneNeighbor = antNeighbor;
+        List<Cell> candidates = new ArrayList<>();
+        double maxPheromone = 0;
+
+        for (Cell neighbor : emptyNeighbors) {
+            ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
+            double pheromoneLevel = (type.equals("home")) ? antNeighbor.getHomePheromone() : antNeighbor.getFoodPheromone();
+
+            if (pheromoneLevel > maxPheromone) {
+                maxPheromone = pheromoneLevel;
+                candidates.clear();
+                candidates.add(antNeighbor);
+            } else if (pheromoneLevel == maxPheromone) {
+                candidates.add(antNeighbor);
             }
-            return highestPheromoneNeighbor;
         }
-        return emptyNeighbors.get(0);
+
+    
+        if (random.nextDouble() < 0.1) {
+            return emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
+        }
+
+        return candidates.get(random.nextInt(candidates.size()));
     }
+
 }
