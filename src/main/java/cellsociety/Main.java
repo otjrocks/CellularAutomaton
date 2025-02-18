@@ -4,6 +4,7 @@ import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
 import cellsociety.controller.MainController;
+import cellsociety.utility.CreateNewSimulation;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,24 +23,7 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) {
-    initializeStage(stage);
-    new MainController(stage, root);
-  }
-
-  private void initializeStage(Stage stage) {
-    ScrollPane scrollPane = createMainScrollPane();
-
-    Scene scene = new Scene(scrollPane, WIDTH, HEIGHT);
-    stage.setScene(scene);
-    stage.setTitle(TITLE);
-    stage.show();
-  }
-
-  private ScrollPane createMainScrollPane() {
-    ScrollPane scrollPane = new ScrollPane();
-    scrollPane.setFitToHeight(true);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setContent(root);
-    return scrollPane;
+    CreateNewSimulation simulationManager = new CreateNewSimulation();
+    simulationManager.launchNewSimulation();
   }
 }
