@@ -77,6 +77,13 @@ public class SugarscapeRules extends SimulationRules {
       List<CellUpdate> nextStates) {
     for (AgentCell agentCell : agentCells) {
       PatchCell biggestPatch = getBiggestPatchForAgent(agentCell, grid);
+
+      if (agentCell.getSugar() - agentCell.getMetabolism() <= 0) {
+        nextStates.add(new CellUpdate(agentCell.getLocation(),
+            new DefaultCell(State.EMPTY.getValue(), agentCell.getLocation())));
+        continue;
+      }
+
       if (biggestPatch == null || biggestPatch.getState() == State.EMPTY.getValue() || updatedCells.contains(biggestPatch)) {
         continue;
       }
