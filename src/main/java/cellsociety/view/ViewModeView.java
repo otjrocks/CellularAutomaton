@@ -57,12 +57,12 @@ public class ViewModeView extends VBox {
    */
   public void update() {
     this.getChildren().clear();
-    initializeStaticContent();
-    createSimulationMetaDataDisplay();
     StateInfoView myStateInfoView = new StateInfoView(myMainController.getSimulation());
     ParameterView myParameterView = new ParameterView(myMainController, false);
     setPlayPauseButtonText();
-    this.getChildren().addAll(myStateInfoView, myParameterView, myControlButtons, mySpeedSliderBox);
+    this.getChildren().addAll(myControlButtons, mySpeedSliderBox);
+    createSimulationMetaDataDisplay();
+    this.getChildren().addAll(myStateInfoView, myParameterView);
   }
 
 
@@ -88,9 +88,7 @@ public class ViewModeView extends VBox {
     createFileChooserButton();
     createSaveFileButton();
     myControlButtons.setAlignment(Pos.CENTER_LEFT);
-    myControlButtons.setAlignment(Pos.CENTER);
     myControlButtons.setHgap(ELEMENT_SPACING);
-    myControlButtons.setVgap(ELEMENT_SPACING);
     myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
         .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton);
@@ -204,15 +202,8 @@ public class ViewModeView extends VBox {
     }
   }
 
-  private void initializeStaticContent() {
-    Text title = createText(getMessage("TITLE"));
-    title.getStyleClass().add("main-title");
-    this.getChildren().addAll(title);
-  }
-
   private Text createText(String message) {
     Text text = new Text(message);
-    text.setFill(Color.BLACK);
     text.setTextAlignment(TextAlignment.LEFT);
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;

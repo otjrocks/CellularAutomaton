@@ -65,7 +65,11 @@ Label, Text {
 }
 
 .control-buttons {
-  -fx-padding: 50 0 10 0;
+  -fx-padding: 10 0 10 0;
+}
+
+.sidebar {
+  -fx-padding: 0 0 300 0;
 }
 
 .info-box {

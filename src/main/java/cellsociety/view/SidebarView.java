@@ -34,6 +34,7 @@ public class SidebarView extends VBox {
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
   private final ViewModeView myViewModeView;
+  private final HBox myControlsBox = new HBox();
 
 
   /**
@@ -46,6 +47,7 @@ public class SidebarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    this.getStyleClass().add("sidebar");
     myMainController = controller;
     initializeAlertField();
     createChangeModeButton();
@@ -53,19 +55,28 @@ public class SidebarView extends VBox {
     createShowGridLinesCheckbox();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
+    addControlsToBox();
     addAllComponentsToSidebar();
   }
 
   private void addAllComponentsToSidebar() {
+    initializeTitle();
     this.getChildren()
-        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myViewModeView,
-            myAlertField);
+        .addAll(myControlsBox, myViewModeView, myAlertField);
+  }
+
+  private void addControlsToBox() {
+    myControlsBox.getChildren().clear();
+    myControlsBox.setAlignment(Pos.CENTER_LEFT);
+    myControlsBox.setSpacing(ELEMENT_SPACING * 2);
+    myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
   }
 
   private void addAllEditModeComponents() {
+    this.getChildren().clear();
+    initializeTitle();
     this.getChildren()
-        .addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField, myEditModeView,
-            myAlertField);
+        .addAll(myControlsBox, myEditModeView, myAlertField);
   }
 
   /**
@@ -91,6 +102,12 @@ public class SidebarView extends VBox {
     return myThemeSelectorBox;
   }
 
+  private void initializeTitle() {
+    Text title = new Text(getMessage("TITLE"));
+    title.getStyleClass().add("main-title");
+    this.getChildren().add(title);
+  }
+
   public void update() {
     myViewModeView.update();
     myEditModeView.updateDisplay();
@@ -112,7 +129,6 @@ public class SidebarView extends VBox {
 
   private void enableEditView() {
     myEditModeView.updateDisplay();
-    this.getChildren().clear();
     addAllEditModeComponents();
   }
 
@@ -137,6 +153,7 @@ public class SidebarView extends VBox {
 
   private void createShowGridLinesCheckbox() {
     myGridLinesCheckboxField.setSpacing(ELEMENT_SPACING);
+    myGridLinesCheckboxField.setAlignment(Pos.CENTER_LEFT);
     CheckBox gridLinesCheckbox = new CheckBox();
     gridLinesCheckbox.setSelected(
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
