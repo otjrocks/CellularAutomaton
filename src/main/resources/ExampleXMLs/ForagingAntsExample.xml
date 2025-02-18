@@ -55,7 +55,7 @@
 
     <Parameters>
         <antReproductionTime>100</antReproductionTime>
-        <pheromoneDecayRate>0.1</pheromoneDecayRate>
+        <pheromoneDecayRate>.2</pheromoneDecayRate>
         <maxPheromoneAmount>100</maxPheromoneAmount>
     </Parameters>
 </SimulationConfig>

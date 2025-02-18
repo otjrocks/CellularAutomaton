@@ -16,7 +16,6 @@ import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.XMLHandlers.GridException;
@@ -149,7 +148,7 @@ public class MainController {
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(speed), _ -> {
+        .add(new KeyFrame(Duration.seconds(speed), e -> {
           try {
             step();
           } catch (Exception ex) {
@@ -236,8 +235,7 @@ public class MainController {
   /**
    * Handle the loading and creation of a new simulation from a file chooser
    */
-  public void handleNewSimulationFromFile()
-      throws GridException, ParserConfigurationException, IOException, SAXException {
+  public void handleNewSimulationFromFile() {
     stopAnimation(); // stop animation if it is currently running
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
     if (file == null) { // only update simulation if a file was selected
@@ -262,8 +260,7 @@ public class MainController {
     createOrUpdateSidebar();
   }
 
-  private void updateSimulationFromFile(String filePath)
-      throws SAXException, ParserConfigurationException, GridException, IOException {
+  private void updateSimulationFromFile(String filePath) {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
 
@@ -271,28 +268,21 @@ public class MainController {
       updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
       mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
-      throw e;
     } catch (ParserConfigurationException e) {
       mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
-      throw e;
     } catch (IOException e) {
       mySidebarView.flashWarning(getMessage("ERROR_IO"));
-      throw e;
     } catch (NumberFormatException e) {
       mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
-      throw e;
     } catch (NullPointerException e) {
       mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
-      throw e;
     } catch (GridException e) {
       mySidebarView.flashWarning(getMessage("ERROR_GRID"));
-      throw e;
     } catch (Exception e) {
       mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());
       }
-      throw e;
     }
   }
 
@@ -316,7 +306,7 @@ public class MainController {
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(STEP_SPEED), _ -> {
+        .add(new KeyFrame(Duration.seconds(STEP_SPEED), e -> {
           try {
             step();  // step function
           } catch (Exception ex) {
@@ -333,10 +323,7 @@ public class MainController {
     myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
     myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
     myMainViewContainer.setAlignment(Pos.CENTER);
-    try {
-      updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    } catch (Exception ignored) {
-    }
+    updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
   }
 
   public void initializeSidebar() {

@@ -151,6 +151,11 @@ public class XMLWriter {
     private static void transformXML(Document doc, File file) throws TransformerException{
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        
+        // Asked ChatGPT to help with formatting
+        transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(file);
 

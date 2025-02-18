@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.XMLHandlers.GridException;
+import cellsociety.model.XMLHandlers.InvalidStateException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
@@ -200,7 +201,7 @@ public class Grid {
    * @param simData: The data from the current simulation for getting correct cell types
    * 
    */
-  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData) throws GridException{
+  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData) throws GridException, InvalidStateException{
     Grid grid = new Grid(gridHeight, gridWidth);
     NodeList rows = gridDoc.getElementsByTagName("Row");
 
@@ -215,6 +216,7 @@ public class Grid {
         }
       for (int j = 0; j < rowValues.length; j++) {
         int state = Integer.parseInt(rowValues[j]);
+        checkValidState(state, simData);
         Cell holdingCell = SimulationConfig.getNewCell(i, j, state, simData.type());
         grid.addCell(holdingCell);
       }
@@ -330,6 +332,17 @@ public class Grid {
         }
     }
     return grid;
+  }
+
+  private static void checkValidState(int state, SimulationMetaData simData) throws InvalidStateException{
+    if (simData.type().equals("RockPaperScissors") || simData.type().equals("Sugarscape")){
+    }
+    else{
+      int maxState = SimulationConfig.returnMaxStateBasedOnName(simData.type());
+      if(state > maxState){
+        throw new InvalidStateException();
+      }
+    }
   }
   
 }
