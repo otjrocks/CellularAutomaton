@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
+import static cellsociety.config.MainConfig.LANGUAGE_FILE_PATH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
@@ -10,6 +11,7 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
+import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class SplashScreenView extends VBox {
+
+  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
@@ -78,7 +82,7 @@ public class SplashScreenView extends VBox {
     languageDropdown = new ComboBox<>();
     Text changeLanguageText = new Text(getMessage("CHANGE_LANGUAGE"));
 
-    List<String> languages = fetchLanguages("src/main/resources/cellsociety/languages/");
+    List<String> languages = fetchLanguages();
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
@@ -93,17 +97,8 @@ public class SplashScreenView extends VBox {
     myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
   }
 
-  private List<String> fetchLanguages(String propertiesFolderPath) {
-    List<String> languages = new ArrayList<>();
-    File directory = new File(propertiesFolderPath);
-    File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
-
-    if (files != null) {
-      for (File file : files) {
-        languages.add(file.getName().replace(".properties", ""));
-      }
-    }
-    return languages;
+  private List<String> fetchLanguages() {
+    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
   }
 
   private void createFileChooserButton() {

@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 class WaTorWorldRulesTest {
   private WaTorWorldRules waTorWorldRules;
   private Grid grid;
-  private Map<String, Parameter<?>> parameters = new HashMap<>();
+  private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
   void setUp() throws InvalidParameterException {

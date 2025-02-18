@@ -55,8 +55,8 @@ public class MainController {
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
-  VBox myMainViewContainer = new VBox();
-  Timeline mySimulationAnimation = new Timeline();
+  private final VBox myMainViewContainer = new VBox();
+  private final Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
   private boolean gridLinesEnabled = Boolean.parseBoolean(
       PreferencesController.getPreference("gridLines", "true"));

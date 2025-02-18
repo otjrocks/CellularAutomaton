@@ -1,14 +1,15 @@
 package cellsociety.view.config;
 
+import static cellsociety.config.MainConfig.getCellColors;
+import static cellsociety.config.MainConfig.getMessage;
+
+import cellsociety.model.simulation.Simulation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import static cellsociety.config.MainConfig.getCellColors;
-import static cellsociety.config.MainConfig.getMessage;
-import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
+
 
 /**
  * A config file to determine how to display a given state in the front end. This centralizes state
@@ -38,8 +39,8 @@ public class StateDisplayConfig {
   }
 
   private static StateInfo getStateInfoFromSimulationTypeString(int state, String simulationType) {
-    String nameKey = simulationType + "_NAME_" + state;
-    String colorKey = simulationType + "_COLOR_" + state;
+    String nameKey = "%s_NAME_%d".formatted(simulationType, state);
+    String colorKey = "%s_COLOR_%d".formatted(simulationType, state);
 
     String stateName = getStateName(nameKey, state);
     Color stateColor = getStateColor(colorKey, simulationType, state);
@@ -64,7 +65,7 @@ public class StateDisplayConfig {
    * color if not found.
    */
   private static Color getStateColor(String key, String simulationType, int state) {
-    String stateKey = simulationType + "_" + state;
+    String stateKey = "%s_%d".formatted(simulationType, state);
 
     // If a random color was already assigned, return it
     if (RANDOM_COLORS_MAP.containsKey(stateKey)) {

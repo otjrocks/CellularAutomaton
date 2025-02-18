@@ -74,8 +74,11 @@ public abstract class SimulationRules {
       Cell cell = cellIterator.next();
       // next cell is a new default cell with the next state based on rules
       // if specific simulation has a specific cell type, it should override this default implementation
-      Cell nextCell = new DefaultCell(getNextState(cell, grid), cell.getLocation());
-      nextStates.add(new CellUpdate(cell.getLocation(), nextCell));
+      // only add cell state update if the cell acquires a new state
+      if (getNextState(cell, grid) != grid.getCell(cell.getLocation()).getState()) {
+        Cell nextCell = new DefaultCell(getNextState(cell, grid), cell.getLocation());
+        nextStates.add(new CellUpdate(cell.getLocation(), nextCell));
+      }
     }
     return nextStates;
   }
