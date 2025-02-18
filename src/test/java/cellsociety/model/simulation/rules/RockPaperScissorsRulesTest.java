@@ -126,4 +126,58 @@ public class RockPaperScissorsRulesTest {
     assertEquals(2, rockPaperScissorsRules.getNextState(cell, grid));
   }
 
+  @Test
+  void getNextState_LotOfStates_ReturnWinner() throws InvalidParameterException {
+    parameters.put("numStates", new Parameter<>(20));
+    parameters.put("minThreshold", new Parameter<>(0.3));
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+
+    Cell cell = new DefaultCell(10, new Point2D.Double(2, 2));
+    grid.addCell(cell);
+
+    grid.addCell(new DefaultCell(13, new Point2D.Double(1, 2)));
+    grid.addCell(new DefaultCell(13, new Point2D.Double(2, 3)));
+    grid.addCell(new DefaultCell(13, new Point2D.Double(3, 2)));
+    grid.addCell(new DefaultCell(14, new Point2D.Double(3, 3)));
+
+    assertEquals(13, rockPaperScissorsRules.getNextState(cell, grid));
+  }
+
+  @Test
+  void getNextState_LotOfStates_ReturnCurrentState()
+      throws InvalidParameterException {
+    parameters.put("numStates", new Parameter<>(20));
+    parameters.put("minThreshold", new Parameter<>(0.25));
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+
+    Cell cell = new DefaultCell(15, new Point2D.Double(2, 2));
+    grid.addCell(cell);
+
+    grid.addCell(new DefaultCell(14, new Point2D.Double(1, 2)));
+    grid.addCell(new DefaultCell(11, new Point2D.Double(2, 3)));
+    grid.addCell(new DefaultCell(11, new Point2D.Double(3, 2)));
+    grid.addCell(new DefaultCell(11, new Point2D.Double(3, 3)));
+
+    assertEquals(15, rockPaperScissorsRules.getNextState(cell, grid));
+  }
+
+  @Test
+  void getNextState_TenStates_EdgeCaseWrapAroundLogic() throws InvalidParameterException {
+    parameters.put("numStates", new Parameter<>(10));
+    parameters.put("minThreshold", new Parameter<>(0.3));
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+
+    Cell cell = new DefaultCell(9, new Point2D.Double(2, 2));
+    grid.addCell(cell);
+
+    grid.addCell(new DefaultCell(1, new Point2D.Double(1, 2)));
+    grid.addCell(new DefaultCell(0, new Point2D.Double(2, 3)));
+    grid.addCell(new DefaultCell(1, new Point2D.Double(3, 2)));
+    grid.addCell(new DefaultCell(2, new Point2D.Double(3, 3)));
+
+    assertEquals(1, rockPaperScissorsRules.getNextState(cell, grid));
+  }
+
+
+
 }
