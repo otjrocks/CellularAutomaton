@@ -23,6 +23,8 @@ import javafx.scene.text.Text;
 
 public class SplashScreenView extends VBox {
 
+  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
+
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
   private final MainController myMainController;
@@ -78,7 +80,7 @@ public class SplashScreenView extends VBox {
     languageDropdown = new ComboBox<>();
     Text changeLanguageText = new Text(getMessage("CHANGE_LANGUAGE"));
 
-    List<String> languages = fetchLanguages("src/main/resources/cellsociety/languages/");
+    List<String> languages = fetchLanguages();
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
@@ -93,9 +95,9 @@ public class SplashScreenView extends VBox {
     myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
   }
 
-  private List<String> fetchLanguages(String propertiesFolderPath) {
+  private List<String> fetchLanguages() {
     List<String> languages = new ArrayList<>();
-    File directory = new File(propertiesFolderPath);
+    File directory = new File(LANGUAGES_PATH);
     File[] files = directory.listFiles((dir, name) -> name.endsWith(".properties"));
 
     if (files != null) {

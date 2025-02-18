@@ -48,7 +48,6 @@ class LangtonsLoopsRulesTest {
       "702321", "702525", "702720"
   };
 
-  private LangtonsLoopsRules rules;
   private Map<String, Parameter<?>> parameters;
   private Grid grid;
 
@@ -69,10 +68,9 @@ class LangtonsLoopsRulesTest {
   }
 
   private Simulation createSimulation() throws InvalidParameterException {
-    rules = new LangtonsLoopsRules(parameters);
-    Simulation simulation = new Simulation(rules,
+    LangtonsLoopsRules rules = new LangtonsLoopsRules(parameters);
+    return new Simulation(rules,
         new SimulationMetaData("LangtonsLoops", "", "", ""));
-    return simulation;
   }
 
   @Test
