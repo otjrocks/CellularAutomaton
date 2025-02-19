@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -34,7 +35,7 @@ public class SidebarView extends VBox {
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
   private final ViewModeView myViewModeView;
-  private final HBox myControlsBox = new HBox();
+  private final FlowPane myControlsBox = new FlowPane();
 
 
   /**
@@ -68,7 +69,8 @@ public class SidebarView extends VBox {
   private void addControlsToBox() {
     myControlsBox.getChildren().clear();
     myControlsBox.setAlignment(Pos.CENTER_LEFT);
-    myControlsBox.setSpacing(ELEMENT_SPACING * 2);
+    myControlsBox.setHgap(ELEMENT_SPACING);
+    myControlsBox.setVgap(ELEMENT_SPACING);
     myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
   }
 
@@ -90,7 +92,7 @@ public class SidebarView extends VBox {
     ComboBox<String> myThemeSelector = new ComboBox<>(options);
     myThemeSelector.setValue(ThemeConfig.getCurrentTheme());
     myThemeSelector.valueProperty()
-        .addListener((ov, t, t1) -> {
+        .addListener((_, _, _) -> {
           myMainController.setTheme(myThemeSelector.getValue());
           myThemeSelector.setValue(myThemeSelector.getValue());
         });
@@ -134,7 +136,7 @@ public class SidebarView extends VBox {
 
   private void createChangeModeButton() {
     myModeButton = new Button(getMessage("EDIT_MODE"));
-    myModeButton.setOnMouseClicked(event -> {
+    myModeButton.setOnMouseClicked(_ -> {
       isEditing = !isEditing;
       if (isEditing) {
         enableEditView();
@@ -158,7 +160,7 @@ public class SidebarView extends VBox {
     gridLinesCheckbox.setSelected(
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
-        event -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
+        _ -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
     Text title = new Text(getMessage("GRID_LINES_LABEL"));
     myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
   }
