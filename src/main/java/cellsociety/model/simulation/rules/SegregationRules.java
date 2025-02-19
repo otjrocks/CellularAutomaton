@@ -24,6 +24,12 @@ public class SegregationRules extends SimulationRules {
   private final Random RANDOM = new Random();
   private final double myToleranceThreshold;
 
+  /**
+   * The default constructor of a RockPaperScissors rules.
+   *
+   * @param parameters The required parameters map
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public SegregationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
@@ -114,6 +120,12 @@ public class SegregationRules extends SimulationRules {
     return 3;
   }
 
+  /**
+   * This method runs getNextState on all cells
+   *
+   * @param grid: The grid that you wish to get the next states for
+   * @return - A list of updates that will occur for the grid
+   */
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> nextStates = new ArrayList<>();

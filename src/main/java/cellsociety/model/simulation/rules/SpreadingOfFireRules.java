@@ -21,6 +21,12 @@ public class SpreadingOfFireRules extends SimulationRules {
   private final double myGrowthInEmptyCell;
   private final double myIgnitionWithoutNeighbors;
 
+  /**
+   * The default constructor of a Spreading of Fire rules.
+   *
+   * @param parameters The required parameters map
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public SpreadingOfFireRules(Map<String, Parameter<?>> parameters)
       throws InvalidParameterException {
     super(parameters);
@@ -111,6 +117,11 @@ public class SpreadingOfFireRules extends SimulationRules {
     return currentState;
   }
 
+  /**
+   * gets the total number of states
+   *
+   * @return - 3, the total number of states
+   */
   @Override
   public int getNumberStates() {
     return 3;

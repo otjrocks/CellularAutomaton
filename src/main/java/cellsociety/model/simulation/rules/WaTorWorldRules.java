@@ -32,6 +32,12 @@ public class WaTorWorldRules extends SimulationRules {
   private final int mySharkReproductionTime;
   private final int myFishReproductionTime;
 
+  /**
+   * The default constructor of a WaTorWorld rules.
+   *
+   * @param parameters The required parameters map
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public WaTorWorldRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {

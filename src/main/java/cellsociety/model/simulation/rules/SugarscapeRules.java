@@ -23,6 +23,12 @@ import java.util.Set;
  */
 public class SugarscapeRules extends SimulationRules {
 
+  /**
+   * The default constructor of a Sugerscape rules.
+   *
+   * @param parameters The required parameters map
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public SugarscapeRules(Map<String, Parameter<?>> parameters)
       throws InvalidParameterException {
     super(parameters);

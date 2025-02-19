@@ -44,6 +44,12 @@ public class CreateDefaultSimView extends VBox {
 
   private static final int DEFAULT_NUM_CELLS = 25;
 
+  /**
+   * This constructor creates the default sim view to display in splashscreen and the sim
+   *
+   * @param mainController - an instance of the main controller
+   * @param alertField - the field that flashes errors
+   */
   public CreateDefaultSimView(MainController mainController, AlertField alertField) {
     this.mainController = mainController;
     this.setSpacing(ELEMENT_SPACING);

@@ -20,6 +20,12 @@ public class RockPaperScissorsRules extends SimulationRules {
   private final int myNumStates;
   private final double myMinThreshold;
 
+  /**
+   * The default constructor of a RockPaperScissors rules.
+   *
+   * @param myParameters The required parameters map
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters)
       throws InvalidParameterException {
     super(myParameters);
@@ -90,6 +96,11 @@ public class RockPaperScissorsRules extends SimulationRules {
     return checkForWinner(myNumStates, currentState, neighborCount, neighborThreshold);
   }
 
+  /**
+   * gets the total number of states
+   *
+   * @return - the total number of states
+   */
   @Override
   public int getNumberStates() {
     return myNumStates;

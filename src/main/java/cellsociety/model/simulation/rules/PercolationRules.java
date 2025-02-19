@@ -15,6 +15,12 @@ import java.util.Map;
 
 public class PercolationRules extends SimulationRules {
 
+  /**
+   * constructor for percolation model
+   *
+   * @param parameters - the Map of string to the certain parameter
+   * @throws InvalidParameterException - throws when a parameter is invalid
+   */
   public PercolationRules(
       Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
@@ -70,6 +76,11 @@ public class PercolationRules extends SimulationRules {
     return 1;
   }
 
+  /**
+   * gets the total number of states
+   *
+   * @return - 3, the total number of states
+   */
   @Override
   public int getNumberStates() {
     return 3;
