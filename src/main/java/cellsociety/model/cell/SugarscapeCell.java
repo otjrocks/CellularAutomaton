@@ -13,7 +13,7 @@ public class SugarscapeCell extends Cell {
   private int vision;
   private int metabolism;
   private final int DEFAULT_VALUE = 2;
-  private final int MAX_SUGAR_AMOUNT = 10;
+  private final int MAX_SUGAR_AMOUNT = 5;
 
 
   public SugarscapeCell(int state, Point2D location) {

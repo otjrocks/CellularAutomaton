@@ -13,7 +13,7 @@ public abstract class Cell {
 
   private final int myState;
   private final Point2D myLocation;
-  private static final double DEFAULT_OPACITY = 0.5;
+  private static final double DEFAULT_OPACITY = 0.95;
 
   /**
    * The default constructor for a Cell
