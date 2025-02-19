@@ -19,7 +19,7 @@ public class GameOfLifeRules extends SimulationRules {
   public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
-      birthValues = new ArrayList<>(Arrays.asList(3));
+      birthValues = new ArrayList<>(List.of(3));
       surviveValues = new ArrayList<>(Arrays.asList(2, 3));
     } else {
       initializeBSValues(parameters);

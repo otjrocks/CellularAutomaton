@@ -22,7 +22,7 @@ public class FallingSandRules extends SimulationRules {
   private final Random RANDOM = new Random();
 
   /**
-   * Create falling sand rules class
+   * Create falling sand rules class. No parameters are required for this rules class.
    *
    * @param parameters: parameters for the simulation (may not be used)
    * @throws InvalidParameterException: an exception for missing or invalid parameters provided.
@@ -41,11 +41,13 @@ public class FallingSandRules extends SimulationRules {
     }
   }
 
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    return 0;
-  }
-
+  /**
+   * Get the next states cell update list for all cells in the simulation
+   *
+   * @param grid: The grid that you wish to get the next states for
+   * @return A list of cell updates representing changes that need to be made to the grid on next
+   * update
+   */
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> updates = new ArrayList<>();
@@ -61,6 +63,16 @@ public class FallingSandRules extends SimulationRules {
       }
     }
     return updates;
+  }
+
+  /**
+   * The simulation has 3 states: EMPTY, WALL, SAND
+   *
+   * @return 3 for number of states
+   */
+  @Override
+  public int getNumberStates() {
+    return State.values().length;
   }
 
   private void handleSandMovement(Grid grid, Cell sandCell, List<CellUpdate> updates) {
@@ -117,15 +129,20 @@ public class FallingSandRules extends SimulationRules {
     }
     if (otherCell != null
         && otherCell.getState() == State.EMPTY.getValue()) { // can move to other cell
-      Cell newSand = new DefaultCell(State.SAND.getValue(), otherCell.getLocation());
-      Cell newEmpty = new DefaultCell(State.EMPTY.getValue(), sandCell.getLocation());
-      updates.add(new CellUpdate(otherCell.getLocation(), newSand)); // move sand below
-      updates.add(new CellUpdate(sandCell.getLocation(), newEmpty)); // move empty up
-      grid.updateCell(newSand);
-      grid.updateCell(newEmpty);
+      swapSandAndEmptyCell(grid, otherCell, updates, sandCell);
       return true;
     }
     return false;
+  }
+
+  private static void swapSandAndEmptyCell(Grid grid, Cell otherCell, List<CellUpdate> updates,
+      Cell sandCell) {
+    Cell newSand = new DefaultCell(State.SAND.getValue(), otherCell.getLocation());
+    Cell newEmpty = new DefaultCell(State.EMPTY.getValue(), sandCell.getLocation());
+    updates.add(new CellUpdate(otherCell.getLocation(), newSand)); // move sand below
+    updates.add(new CellUpdate(sandCell.getLocation(), newEmpty)); // move empty up
+    grid.updateCell(newSand);
+    grid.updateCell(newEmpty);
   }
 
   private Cell getCellIfInBounds(Grid grid, int row, int col) {
@@ -136,13 +153,4 @@ public class FallingSandRules extends SimulationRules {
     }
   }
 
-  /**
-   * The simulation has 3 states: EMPTY, WALL, SAND
-   *
-   * @return 3 for number of states
-   */
-  @Override
-  public int getNumberStates() {
-    return State.values().length;
-  }
 }
