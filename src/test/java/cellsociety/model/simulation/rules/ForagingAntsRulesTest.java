@@ -27,6 +27,7 @@ class ForagingAntsRulesTest {
     parameters.put("antReproductionTime", new Parameter<>("3.0"));
     parameters.put("pheromoneDecayRate", new Parameter<>("0.2"));
     parameters.put("maxPheromoneAmount", new Parameter<>("100"));
+    parameters.put("newAntsNum", new Parameter<>("0"));
 
     FARules = new ForagingAntsRules(parameters);
   }
