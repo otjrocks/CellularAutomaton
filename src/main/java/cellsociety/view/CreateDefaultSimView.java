@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.simulation.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -257,7 +258,7 @@ public class CreateDefaultSimView extends VBox {
    * Begin the process for creating a simulation by making and validating the parameters then
    * creating solution
    */
-  private void createNewSimulation() throws IllegalArgumentException {
+  private void createNewSimulation() throws IllegalArgumentException, InvalidParameterException {
     SimulationMetaData metaData = createMetaData();
 
     Map<String, Parameter<?>> parameters = new HashMap<>();
@@ -273,7 +274,7 @@ public class CreateDefaultSimView extends VBox {
    * @param parameters - the parameters of the Simulation
    */
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, Parameter<?>> parameters) {
+      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     try {
       mainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);

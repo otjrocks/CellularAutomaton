@@ -1,5 +1,6 @@
 package cellsociety.controller;
 
+import cellsociety.model.cell.SugarscapeCell;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -180,7 +181,7 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, Parameter<?>> parameters) {
+      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     myGrid = new Grid(rows, cols);
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
@@ -192,16 +193,23 @@ public class MainController {
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
       throw new RuntimeException(e);
     }
-    initializeGridWithCells();
+    initializeGridWithCells(parameters);
     createNewMainViewAndUpdateViewContainer();
   }
 
-  private void initializeGridWithCells() {
+  private void initializeGridWithCells(Map<String, Parameter<?>> parameters)
+      throws InvalidParameterException {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
         int initialState = 0;
         String simulationType = mySimulation.data().type();
-        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
+        Cell cell = SimulationConfig.getNewCell(i, j, initialState, simulationType);
+        System.out.println("Available keys: " + parameters.keySet());
+        if (simulationType.equals("Sugarscape")) {
+          ((SugarscapeCell) cell).setParameters(parameters.get("agentSugar").getInteger(), parameters.get("patchSugarGrowBackRate").getInteger(), parameters.get("patchSugarGrowBackInterval").getInteger(), parameters.get("agentVision").getInteger(), parameters.get("agentMetabolism").getInteger());
+        }
+        myGrid.addCell(cell);
+
       }
     }
   }
