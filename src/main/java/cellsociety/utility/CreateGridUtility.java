@@ -80,31 +80,7 @@ public class CreateGridUtility {
       assignedCells += count;
     }
 
-    int remainingCells = totalCells - assignedCells;
-
-    List<Integer> cellStates = new ArrayList<>();
-    for (Map.Entry<Integer, Integer> entry : stateCounts.entrySet()) {
-      for (int i = 0; i < entry.getValue(); i++) {
-        cellStates.add(entry.getKey());
-      }
-    }
-
-    for (int i = 0; i < remainingCells; i++) {
-      cellStates.add(0);
-    }
-
-    Collections.shuffle(cellStates);
-
-    int index = 0;
-    for (int row = 0; row < gridHeight; row++) {
-      for (int col = 0; col < gridWidth; col++) {
-        int state = cellStates.get(index);
-        Cell newCell = SimulationConfig.getNewCell(row, col, state, sim.data().type());
-        grid.addCell(newCell);
-        index++;
-      }
-    }
-    return grid;
+    return initializeGrid(gridHeight, gridWidth, sim, grid, totalCells, stateCounts, assignedCells);
   }
 
   /**
@@ -129,12 +105,17 @@ public class CreateGridUtility {
       String stateName = stateElement.getAttribute("name");
       int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
       int prob = Integer.parseInt(stateElement.getTextContent());
-      int count = Math.round((prob * totalCells) / 100);
+      int count = Math.round((float) (prob * totalCells) / 100);
 
       stateCounts.put(stateValue, count);
       assignedCells += count;
     }
 
+    return initializeGrid(gridHeight, gridWidth, sim, grid, totalCells, stateCounts, assignedCells);
+  }
+
+  private static Grid initializeGrid(int gridHeight, int gridWidth, Simulation sim, Grid grid,
+      int totalCells, Map<Integer, Integer> stateCounts, int assignedCells) {
     int remainingCells = totalCells - assignedCells;
 
     List<Integer> cellStates = new ArrayList<>();
@@ -163,8 +144,7 @@ public class CreateGridUtility {
   }
 
   private static void checkValidState(int state, Simulation sim) throws InvalidStateException {
-    if (sim.data().type().equals("RockPaperScissors") || sim.data().type().equals("Sugarscape")) {
-    } else {
+    if (!sim.data().type().equals("RockPaperScissors") && !sim.data().type().equals("Sugarscape")) {
       int maxState = sim.rules().getNumberStates() - 1;
       if (state > maxState) {
         throw new InvalidStateException();
