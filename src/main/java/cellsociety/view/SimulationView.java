@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.cell.Cell;
 import java.util.List;
 
 import cellsociety.controller.MainController;
@@ -51,7 +52,9 @@ public class SimulationView extends Group {
       int nextState = stateUpdate.getState();
       StateInfo nextStateInfo = StateDisplayConfig.getStateInfo(mySimulation, nextState);
       Paint nextColor = nextStateInfo.color();
+      double nextOpacity = stateUpdate.getNextCell().getOpacity();
       myGridView.setColor(stateUpdate.getRow(), stateUpdate.getCol(), nextColor);
+      myGridView.setOpacity(stateUpdate.getRow(), stateUpdate.getCol(), nextOpacity);
     }
   }
 
@@ -85,9 +88,12 @@ public class SimulationView extends Group {
   private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
     for (int row = 0; row < numRows; row++) {
       for (int col = 0; col < numCols; col++) {
-        int nextState = grid.getCell(row, col).getState();
+        Cell nextCell = grid.getCell(row, col);
+        int nextState = nextCell.getState();
         Color nextColor = StateDisplayConfig.getStateInfo(mySimulation, nextState).color();
+        double nextOpacity = nextCell.getOpacity();
         myGridView.setColor(row, col, nextColor);
+        myGridView.setOpacity(row, col, nextOpacity);
       }
     }
   }
