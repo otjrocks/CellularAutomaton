@@ -281,10 +281,6 @@ public class MainController {
         int initialState = 0;
         String simulationType = mySimulation.data().type();
         Cell cell = SimulationConfig.getNewCell(i, j, initialState, simulationType);
-
-        if (simulationType.equals("Sugarscape")) {
-          ((SugarscapeCell) cell).setParameters(parameters.get("agentSugar").getInteger(), parameters.get("patchSugarGrowBackRate").getInteger(), parameters.get("patchSugarGrowBackInterval").getInteger(), parameters.get("agentVision").getInteger(), parameters.get("agentMetabolism").getInteger());
-        }
         myGrid.addCell(cell);
       }
     }

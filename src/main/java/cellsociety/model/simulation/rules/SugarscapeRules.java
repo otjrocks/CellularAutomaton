@@ -28,16 +28,6 @@ public class SugarscapeRules extends SimulationRules {
     super(parameters);
   }
 
-  /**
-   * Get a list of all required parameters for a simulation
-   *
-   * @return A list of strings representing the required parameter keys for this simulation
-   */
-  public static List<String> getRequiredParameters() {
-    return List.of("patchSugarGrowBackRate", "patchSugarGrowBackInterval", "agentVision",
-        "agentSugar", "agentMetabolism");
-  }
-
   // An enum to store the possible states for the simulation
   public enum State {
     EMPTY, PATCHES, AGENTS;
