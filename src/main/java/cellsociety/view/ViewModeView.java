@@ -94,7 +94,8 @@ public class ViewModeView extends VBox {
     myControlButtons.setVgap(ELEMENT_SPACING);
     myControlButtons.getStyleClass().add("control-buttons");
     myControlButtons.getChildren()
-        .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton, newSimulationButton);
+        .addAll(myPlayPauseButton, myStepButton, myChooseFileButton, mySaveButton,
+            newSimulationButton);
     return myControlButtons;
   }
 
@@ -123,38 +124,46 @@ public class ViewModeView extends VBox {
     myChooseFileButton = new Button(getMessage("CHOOSE_FILE_BUTTON"));
     myChooseFileButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myChooseFileButton.setOnAction(event -> {
-      try {
-        stopAnimationPlayIfRunning();
-        myMainController.handleNewSimulationFromFile();
-      } catch (IllegalArgumentException e) {
-        myAlertField.flash(e.getMessage(), true);
-        myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      } catch (Exception e) {
-        myAlertField.flash(getMessage("LOAD_ERROR"), true);
-        if (VERBOSE_ERROR_MESSAGES) {
-          myAlertField.flash(e.getMessage(), true);
-        }
-      }
-      stopAnimationPlayIfRunning();
+      handleFileChooserAction();
     });
     this.getChildren().add(myChooseFileButton);
+  }
+
+  private void handleFileChooserAction() {
+    try {
+      stopAnimationPlayIfRunning();
+      myMainController.handleNewSimulationFromFile();
+    } catch (IllegalArgumentException e) {
+      myAlertField.flash(e.getMessage(), true);
+      myAlertField.flash(getMessage("LOAD_ERROR"), true);
+    } catch (Exception e) {
+      myAlertField.flash(getMessage("LOAD_ERROR"), true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+    }
+    stopAnimationPlayIfRunning();
   }
 
   private void createSaveFileButton() {
     mySaveButton = new Button(getMessage("SAVE_TO_XML"));
     mySaveButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-    mySaveButton.setOnMouseClicked(event -> {
-      stopAnimationPlayIfRunning();
-      try {
-        myMainController.handleSavingToFile();
-        myAlertField.flash(getMessage("FILE_SAVE_SUCCESS"), false);
-      } catch (Exception e) {
-        myAlertField.flash(getMessage("FILE_SAVE_FAIL"), true);
-        if (VERBOSE_ERROR_MESSAGES) {
-          myAlertField.flash(e.getMessage(), true);
-        }
-      }
+    mySaveButton.setOnMouseClicked(_ -> {
+      handleFileSaveAction();
     });
+  }
+
+  private void handleFileSaveAction() {
+    stopAnimationPlayIfRunning();
+    try {
+      myMainController.handleSavingToFile();
+      myAlertField.flash(getMessage("FILE_SAVE_SUCCESS"), false);
+    } catch (Exception e) {
+      myAlertField.flash(getMessage("FILE_SAVE_FAIL"), true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+    }
   }
 
   private void createStepButton() {
@@ -178,14 +187,18 @@ public class ViewModeView extends VBox {
   private void createPlayPauseButton() {
     myPlayPauseButton = new Button(getMessage("PLAY_LABEL"));
     myPlayPauseButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-    myPlayPauseButton.setOnAction(event -> {
-      if (myMainController.isPlaying()) {
-        stopAnimation();
-      } else {
-        startAnimation();
-      }
+    myPlayPauseButton.setOnAction(_ -> {
+      handlePlayPauseButtonAction();
     });
     this.getChildren().addAll(myPlayPauseButton);
+  }
+
+  private void handlePlayPauseButtonAction() {
+    if (myMainController.isPlaying()) {
+      stopAnimation();
+    } else {
+      startAnimation();
+    }
   }
 
   private void startAnimation() {

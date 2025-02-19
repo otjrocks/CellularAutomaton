@@ -53,32 +53,11 @@ public class SidebarView extends VBox {
     initializeAlertField();
     createChangeModeButton();
     createThemeSelector();
-    createShowGridLinesCheckbox();
+    createShowGridLinesCheckboxField();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
     addControlsToBox();
     addAllComponentsToSidebar();
-  }
-
-  private void addAllComponentsToSidebar() {
-    initializeTitle();
-    this.getChildren()
-        .addAll(myControlsBox, myViewModeView, myAlertField);
-  }
-
-  private void addControlsToBox() {
-    myControlsBox.getChildren().clear();
-    myControlsBox.setAlignment(Pos.CENTER_LEFT);
-    myControlsBox.setHgap(ELEMENT_SPACING);
-    myControlsBox.setVgap(ELEMENT_SPACING);
-    myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
-  }
-
-  private void addAllEditModeComponents() {
-    this.getChildren().clear();
-    initializeTitle();
-    this.getChildren()
-        .addAll(myControlsBox, myEditModeView, myAlertField);
   }
 
   /**
@@ -102,6 +81,36 @@ public class SidebarView extends VBox {
     Text simulationTypeLabel = new Text(getMessage("CHANGE_THEME"));
     myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
     return myThemeSelectorBox;
+  }
+
+  /**
+   * Flash a warning on the sidebar view's alert field.
+   *
+   * @param message The message you want to display with the warning
+   */
+  public void flashWarning(String message) {
+    myAlertField.flash(message, true);
+  }
+
+  private void addAllComponentsToSidebar() {
+    initializeTitle();
+    this.getChildren()
+        .addAll(myControlsBox, myViewModeView, myAlertField);
+  }
+
+  private void addControlsToBox() {
+    myControlsBox.getChildren().clear();
+    myControlsBox.setAlignment(Pos.CENTER_LEFT);
+    myControlsBox.setHgap(ELEMENT_SPACING);
+    myControlsBox.setVgap(ELEMENT_SPACING);
+    myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
+  }
+
+  private void addAllEditModeComponents() {
+    this.getChildren().clear();
+    initializeTitle();
+    this.getChildren()
+        .addAll(myControlsBox, myEditModeView, myAlertField);
   }
 
   private void initializeTitle() {
@@ -144,33 +153,42 @@ public class SidebarView extends VBox {
   private void handleChangeModeButtonClick() {
     isEditing = !isEditing;
     if (isEditing) {
-      enableEditView();
-      myMainController.stopAnimation();
-      myModeButton.setText(getMessage("VIEW_MODE"));
-      myMainController.setEditing(true);
-      myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
+      handleButtonActionEnableEditing();
     } else {
-      disableEditView();
-      myModeButton.setText(getMessage("EDIT_MODE"));
-      myMainController.setEditing(false);
-      myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
+      handleButtonActionDisableEditing();
     }
   }
 
-  private void createShowGridLinesCheckbox() {
+  private void handleButtonActionDisableEditing() {
+    disableEditView();
+    myModeButton.setText(getMessage("EDIT_MODE"));
+    myMainController.setEditing(false);
+    myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
+  }
+
+  private void handleButtonActionEnableEditing() {
+    enableEditView();
+    myMainController.stopAnimation();
+    myModeButton.setText(getMessage("VIEW_MODE"));
+    myMainController.setEditing(true);
+    myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
+  }
+
+  private void createShowGridLinesCheckboxField() {
     myGridLinesCheckboxField.setSpacing(ELEMENT_SPACING);
     myGridLinesCheckboxField.setAlignment(Pos.CENTER_LEFT);
+    CheckBox gridLinesCheckbox = createGridLinesCheckbox();
+    Text title = new Text(getMessage("GRID_LINES_LABEL"));
+    myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
+  }
+
+  private CheckBox createGridLinesCheckbox() {
     CheckBox gridLinesCheckbox = new CheckBox();
     gridLinesCheckbox.setSelected(
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
         _ -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
-    Text title = new Text(getMessage("GRID_LINES_LABEL"));
-    myGridLinesCheckboxField.getChildren().addAll(gridLinesCheckbox, title);
-  }
-
-  public void flashWarning(String message) {
-    myAlertField.flash(message, true);
+    return gridLinesCheckbox;
   }
 
 }

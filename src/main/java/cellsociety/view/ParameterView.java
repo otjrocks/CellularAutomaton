@@ -47,6 +47,12 @@ public class ParameterView extends VBox {
 
   private void initializeView(MainController mainController, boolean isEditing) {
     Simulation simulation = mainController.getSimulation();
+    createParameterBoxIfSimulationHasParameters(isEditing, simulation);
+    this.getChildren().add(myAlertField);
+  }
+
+  private void createParameterBoxIfSimulationHasParameters(boolean isEditing,
+      Simulation simulation) {
     if (!simulation.rules().getParameters().isEmpty()) {
       this.getStyleClass().add("info-box");
       createTitle();
@@ -55,7 +61,6 @@ public class ParameterView extends VBox {
         createUpdateButton();
       }
     }
-    this.getChildren().add(myAlertField);
   }
 
   private void createTitle() {
@@ -64,6 +69,10 @@ public class ParameterView extends VBox {
 
   private void createParameters(Simulation simulation) {
     Map<String, Parameter<?>> parameters = simulation.rules().getParameters();
+    createParameterDisplaysFromParameters(parameters);
+  }
+
+  private void createParameterDisplaysFromParameters(Map<String, Parameter<?>> parameters) {
     for (Entry<String, Parameter<?>> entry : parameters.entrySet()) {
       String key = entry.getKey();
       Parameter<?> param = entry.getValue();
@@ -76,15 +85,20 @@ public class ParameterView extends VBox {
   }
 
   private void createEditableParameter(Parameter<?> param, String key) {
+    TextField field = attemptCreatingTextFieldFromParameter(param);
+    parameterFields.put(key, field);
+    createParameterBulletPoint(key, param);
+    this.getChildren().add(field);
+  }
+
+  private static TextField attemptCreatingTextFieldFromParameter(Parameter<?> param) {
     TextField field = new TextField();
     try {
       field.setText(param.getString());
     } catch (InvalidParameterException e) {
       throw new RuntimeException(e);
     }
-    parameterFields.put(key, field);
-    createParameterBulletPoint(key, param);
-    this.getChildren().add(field);
+    return field;
   }
 
   private void createParameterBulletPoint(String key, Parameter<?> param) {
@@ -110,12 +124,22 @@ public class ParameterView extends VBox {
   private void attemptCreatingNewSimulation(Map<String, Parameter<?>> newParameters) {
     Simulation currentSimulation = myMainController.getSimulation();
     Simulation newSimulation;
+    newSimulation = getNewSimulation(newParameters, currentSimulation);
+    if (newSimulation == null) {
+      return;
+    }
+    myMainController.updateSimulation(newSimulation);
+  }
+
+  private Simulation getNewSimulation(Map<String, Parameter<?>> newParameters,
+      Simulation currentSimulation) {
+    Simulation newSimulation;
     try {
       newSimulation = SimulationConfig.getNewSimulation(currentSimulation.data().type(),
           currentSimulation.data(), newParameters);
     } catch (InvocationTargetException e) {
       myAlertField.flash(e.getCause().getMessage(), true);
-      return;
+      return null;
     } catch (ClassNotFoundException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
       if (VERBOSE_ERROR_MESSAGES) {
@@ -123,7 +147,7 @@ public class ParameterView extends VBox {
       }
       throw new RuntimeException(e);
     }
-    myMainController.updateSimulation(newSimulation);
+    return newSimulation;
   }
 
   private void setNewParametersMap(Map<String, Parameter<?>> newParameters) {

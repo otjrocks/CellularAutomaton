@@ -19,6 +19,9 @@ public class AlertField extends VBox {
   public static final int HISTORY_SIZE = 5; // Maximum number of alerts to display, regardless of if alert timeline expires
   public static final int ALERT_DURATION_SECONDS = 5; // Time before an alert disappears
 
+  /**
+   * Initialize the alert field
+   */
   public AlertField() {
     setSpacing(5); // Adds spacing between messages
   }
@@ -37,8 +40,22 @@ public class AlertField extends VBox {
   }
 
   private void createNewAlertMessage(String message, boolean isWarning) {
-    String alertPrefix =
-        isWarning ? getMessage("WARNING_PREFIX") : getMessage("INFO_PREFIX");
+    String alertPrefix = getAlertPrefix(isWarning);
+    Text newMessage = createAlertText(message, isWarning, alertPrefix);
+    this.getChildren().add(newMessage);
+    handleAlertDismissalTimeline(newMessage);
+  }
+
+  private void handleAlertDismissalTimeline(Text newMessage) {
+    // Remove message after a predetermined amount of time
+    Timeline timeline = new Timeline(
+        new KeyFrame(Duration.seconds(ALERT_DURATION_SECONDS), _ -> getChildren().remove(
+            newMessage)));
+    timeline.setCycleCount(1);
+    timeline.play();
+  }
+
+  private static Text createAlertText(String message, boolean isWarning, String alertPrefix) {
     Text newMessage = new Text(String.format(alertPrefix, message));
     newMessage.setTextAlignment(TextAlignment.LEFT);
     if (isWarning) {
@@ -47,11 +64,10 @@ public class AlertField extends VBox {
       newMessage.getStyleClass().add("alert-info");
     }
     newMessage.setWrappingWidth(SIDEBAR_WIDTH - (MARGIN * 2));
-    this.getChildren().add(newMessage);
+    return newMessage;
+  }
 
-    // Remove message after a predetermined amount of time
-    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(ALERT_DURATION_SECONDS), _ -> getChildren().remove(newMessage)));
-    timeline.setCycleCount(1);
-    timeline.play();
+  private static String getAlertPrefix(boolean isWarning) {
+    return isWarning ? getMessage("WARNING_PREFIX") : getMessage("INFO_PREFIX");
   }
 }

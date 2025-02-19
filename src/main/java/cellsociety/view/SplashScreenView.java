@@ -27,7 +27,7 @@ public class SplashScreenView extends VBox {
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
   private final MainController myMainController;
-  private final CreateDefaultSimView createDefaultSimView;
+  private final CreateDefaultSimView myCreateDefaultSimView;
   private final VBox myContentBox;
   private final SidebarView mySidebarView;
 
@@ -36,7 +36,7 @@ public class SplashScreenView extends VBox {
     this.myAlertField = alertField;
     this.mySidebarView = sidebar;
     this.myMainController = mainController;
-    this.createDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
+    this.myCreateDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
       @Override
       public void handleAdditionalButtonActions() {
         mainController.hideSplashScreen();
@@ -56,7 +56,7 @@ public class SplashScreenView extends VBox {
     this.setPrefWidth(WIDTH);
     this.setPrefHeight(HEIGHT - (MARGIN * 4));
     this.setAlignment(Pos.CENTER);
-    createDefaultSimView.setMaxWidth((double) WIDTH / 2);
+    myCreateDefaultSimView.setMaxWidth((double) WIDTH / 2);
   }
 
   private void initializeSplashScreen() {
@@ -68,7 +68,7 @@ public class SplashScreenView extends VBox {
     HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
     myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
     myContentBox.getChildren()
-        .addAll(title, description, instructions, createDefaultSimView, myThemeSelectorBox);
+        .addAll(title, description, instructions, myCreateDefaultSimView, myThemeSelectorBox);
 
     createLanguageDropdown();
     createFileChooserButton();
