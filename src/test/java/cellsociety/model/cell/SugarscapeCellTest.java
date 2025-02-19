@@ -18,7 +18,7 @@ class SugarscapeCellTest {
   }
 
   @Test
-  void constructor_testSugerscapeCellThrowsExceptionForNegativeValues_throwsException() {
+  void constructor_testSugarscapeCellThrowsExceptionForNegativeValues_throwsException() {
     assertThrows(IllegalArgumentException.class, () -> new SugarscapeCell(1, new Point2D.Double(0, 0), -1, 1, 1, 1, 1),
         "Should throw exception for negative vision");
 
