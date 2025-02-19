@@ -137,20 +137,24 @@ public class SidebarView extends VBox {
   private void createChangeModeButton() {
     myModeButton = new Button(getMessage("EDIT_MODE"));
     myModeButton.setOnMouseClicked(_ -> {
-      isEditing = !isEditing;
-      if (isEditing) {
-        enableEditView();
-        myMainController.stopAnimation();
-        myModeButton.setText(getMessage("VIEW_MODE"));
-        myMainController.setEditing(true);
-        myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
-      } else {
-        disableEditView();
-        myModeButton.setText(getMessage("EDIT_MODE"));
-        myMainController.setEditing(false);
-        myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
-      }
+      handleChangeModeButtonClick();
     });
+  }
+
+  private void handleChangeModeButtonClick() {
+    isEditing = !isEditing;
+    if (isEditing) {
+      enableEditView();
+      myMainController.stopAnimation();
+      myModeButton.setText(getMessage("VIEW_MODE"));
+      myMainController.setEditing(true);
+      myAlertField.flash(getMessage("EDIT_MODE_ENABLED"), false);
+    } else {
+      disableEditView();
+      myModeButton.setText(getMessage("EDIT_MODE"));
+      myMainController.setEditing(false);
+      myAlertField.flash(getMessage("EDIT_MODE_DISABLED"), false);
+    }
   }
 
   private void createShowGridLinesCheckbox() {

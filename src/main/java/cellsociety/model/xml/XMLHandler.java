@@ -1,4 +1,4 @@
-package cellsociety.model.XMLHandlers;
+package cellsociety.model.xml;
 
 import cellsociety.utility.CreateGridUtility;
 import java.io.File;

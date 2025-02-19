@@ -145,10 +145,7 @@ public abstract class SimulationRules {
       // next cell is a new default cell with the next state based on rules
       // if specific simulation has a specific cell type, it should override this default implementation
       // only add cell state update if the cell acquires a new state
-      if (getNextState(cell, grid) != grid.getCell(cell.getLocation()).getState()) {
-        Cell nextCell = new DefaultCell(getNextState(cell, grid), cell.getLocation());
-        nextStates.add(new CellUpdate(cell.getLocation(), nextCell));
-      }
+      createCellUpdateIfCellStateChanged(grid, cell, nextStates);
     }
     return nextStates;
   }
@@ -200,5 +197,13 @@ public abstract class SimulationRules {
       directions = new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
     }
     return directions;
+  }
+
+  private void createCellUpdateIfCellStateChanged(Grid grid, Cell cell,
+      List<CellUpdate> nextStates) {
+    if (getNextState(cell, grid) != grid.getCell(cell.getLocation()).getState()) {
+      Cell nextCell = new DefaultCell(getNextState(cell, grid), cell.getLocation());
+      nextStates.add(new CellUpdate(cell.getLocation(), nextCell));
+    }
   }
 }
