@@ -33,7 +33,7 @@ public class Parameter<T> {
     } catch (Exception e) {
       throw new InvalidParameterException(
           String.format(getMessage("INVALID_PARAMETER"),
-              myValue));
+              getMessage("INVALID_PARAMETER_TYPE")));
     }
   }
 
@@ -53,7 +53,7 @@ public class Parameter<T> {
     } catch (Exception e) {
       throw new InvalidParameterException(
           String.format(getMessage("INVALID_PARAMETER"),
-              myValue));
+              getMessage("INVALID_PARAMETER_TYPE")));
     }
   }
 
@@ -73,7 +73,7 @@ public class Parameter<T> {
     } catch (Exception e) {
       throw new InvalidParameterException(
           String.format(getMessage("INVALID_PARAMETER"),
-              myValue));
+              getMessage("INVALID_PARAMETER_TYPE")));
     }
   }
 
