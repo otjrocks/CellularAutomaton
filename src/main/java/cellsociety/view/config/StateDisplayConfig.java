@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.model.simulation.Simulation;
 import javafx.scene.paint.Color;
 
@@ -71,7 +72,11 @@ public class StateDisplayConfig {
     if (RANDOM_COLORS_MAP.containsKey(stateKey)) {
       return RANDOM_COLORS_MAP.get(stateKey);
     }
+    return attemptGettingColorFromPropertyFileOrReturnDefaultColor(key, stateKey);
+  }
 
+  private static Color attemptGettingColorFromPropertyFileOrReturnDefaultColor(String key,
+      String stateKey) {
     try {
       Field field = Color.class.getField(getCellColors().getString(key).toUpperCase());
       Color color = (Color) field.get(null);
