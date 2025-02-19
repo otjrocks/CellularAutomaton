@@ -19,7 +19,6 @@ import cellsociety.model.XMLHandlers.InvalidStateException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationMetaData;
 
 /**
  * A class that handles working with cells within a simulation grid.
@@ -198,10 +197,10 @@ public class Grid {
    * @param gridDoc: Document from which you are parsing the explicit grid from
    * @param gridHeight: Height of the grid you're looking to initialize
    * @param gridWidth: Width of the grid you're looking to initialize
-   * @param simData: The data from the current simulation for getting correct cell types
+   * @param sim: The current simulation for getting correct cell types
    * 
    */
-  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData) throws GridException, InvalidStateException{
+  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, Simulation sim) throws GridException, InvalidStateException{
     Grid grid = new Grid(gridHeight, gridWidth);
     NodeList rows = gridDoc.getElementsByTagName("Row");
 
@@ -216,8 +215,8 @@ public class Grid {
         }
       for (int j = 0; j < rowValues.length; j++) {
         int state = Integer.parseInt(rowValues[j]);
-        checkValidState(state, simData);
-        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, simData.type());
+        checkValidState(state, sim);
+        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
         grid.addCell(holdingCell);
       }
     }
@@ -231,10 +230,10 @@ public class Grid {
    * @param gridDoc: Document from which you are parsing the random arguments from
    * @param gridHeight: Height of the grid you're looking to initialize
    * @param gridWidth: Width of the grid you're looking to initialize
-   * @param simData: The data from the current simulation for getting correct cell types
+   * @param sim: The current simulation for getting correct cell types
    * 
    */
-  public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
+  public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight, int gridWidth, Simulation sim){
     Grid grid = new Grid(gridHeight, gridWidth);
     int totalCells = gridHeight * gridWidth;
     
@@ -245,7 +244,7 @@ public class Grid {
     for (int i = 0; i < randomParams.getLength(); i++) {
         Element stateElement = (Element) randomParams.item(i);
         String stateName = stateElement.getAttribute("name");
-        int stateValue = SimulationConfig.returnStateValueBasedOnName(simData.type(), stateName);
+        int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
         int count = Integer.parseInt(stateElement.getTextContent());
         
         stateCounts.put(stateValue, count);
@@ -271,7 +270,7 @@ public class Grid {
     for (int row = 0; row < gridHeight; row++) {
         for (int col = 0; col < gridWidth; col++) {
             int state = cellStates.get(index);
-            Cell newCell = SimulationConfig.getNewCell(row, col, state, simData.type());
+            Cell newCell = SimulationConfig.getNewCell(row, col, state, sim.data().type());
             grid.addCell(newCell);
             index++;
         }
@@ -285,10 +284,10 @@ public class Grid {
    * @param gridDoc: Document from which you are parsing the random arguments from
    * @param gridHeight: Height of the grid you're looking to initialize
    * @param gridWidth: Width of the grid you're looking to initialize
-   * @param simData: The data from the current simulation for getting correct cell types
+   * @param sim: The current simulation for getting correct cell types
    * 
    */
-  public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight, int gridWidth, SimulationMetaData simData){
+  public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight, int gridWidth, Simulation  sim){
     Grid grid = new Grid(gridHeight, gridWidth);
     int totalCells = gridHeight * gridWidth;
     
@@ -299,7 +298,7 @@ public class Grid {
     for (int i = 0; i < randomParams.getLength(); i++) {
         Element stateElement = (Element) randomParams.item(i);
         String stateName = stateElement.getAttribute("name");
-        int stateValue = SimulationConfig.returnStateValueBasedOnName(simData.type(), stateName);
+        int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
         int prob = Integer.parseInt(stateElement.getTextContent());
         int count = Math.round((prob * totalCells)/100);
         
@@ -326,7 +325,7 @@ public class Grid {
     for (int row = 0; row < gridHeight; row++) {
         for (int col = 0; col < gridWidth; col++) {
             int state = cellStates.get(index);
-            Cell newCell = SimulationConfig.getNewCell(row, col, state, simData.type());
+            Cell newCell = SimulationConfig.getNewCell(row, col, state, sim.data().type());
             grid.addCell(newCell);
             index++;
         }
@@ -334,11 +333,11 @@ public class Grid {
     return grid;
   }
 
-  private static void checkValidState(int state, SimulationMetaData simData) throws InvalidStateException{
-    if (simData.type().equals("RockPaperScissors") || simData.type().equals("Sugarscape")){
+  private static void checkValidState(int state, Simulation sim) throws InvalidStateException{
+    if (sim.data().type().equals("RockPaperScissors") || sim.data().type().equals("Sugarscape")){
     }
     else{
-      int maxState = SimulationConfig.returnMaxStateBasedOnName(simData.type());
+      int maxState = sim.rules().getNumberStates()-1;
       if(state > maxState){
         throw new InvalidStateException();
       }

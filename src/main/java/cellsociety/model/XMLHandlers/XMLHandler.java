@@ -66,9 +66,9 @@ public class XMLHandler {
 
     parseSimData(doc);
     parseDimensions(doc);
-    parseGrid(doc);
     parseParameters(doc);
     setSim();
+    parseGrid(doc);
   }
 
   /**
@@ -107,11 +107,11 @@ public class XMLHandler {
    */
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
-      myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySimData);
+      myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySim);
     } else if(gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
-      myGrid = Grid.generateRandomGridFromDistribution(gridDoc, myGridHeight, myGridWidth, mySimData);
+      myGrid = Grid.generateRandomGridFromDistribution(gridDoc, myGridHeight, myGridWidth, mySim);
     } else{
-      myGrid = Grid.generateGrid(gridDoc, myGridHeight, myGridWidth, mySimData);
+      myGrid = Grid.generateGrid(gridDoc, myGridHeight, myGridWidth, mySim);
     }
   }
 
