@@ -13,16 +13,30 @@ import cellsociety.model.simulation.SimulationRules;
 
 public class GameOfLifeRules extends SimulationRules {
 
+  private String myRuleString;
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
 
   public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
+      myRuleString = "B3/S23";
       birthValues = new ArrayList<>(List.of(3));
       surviveValues = new ArrayList<>(Arrays.asList(2, 3));
     } else {
-      initializeBSValues(parameters);
+      checkMissingParameterAndThrowException("ruleString");
+      myRuleString = getParameters().get("ruleString").getString();
+      validateParameterRange();
+      initializeBSValues();
+    }
+  }
+
+  private void validateParameterRange() throws InvalidParameterException {
+    if (myRuleString.equals("")) {
+      myRuleString = "B3/S23";
+    }
+    if (!myRuleString.contains("/") || !myRuleString.contains("B") || !myRuleString.contains("S")) {
+      throwInvalidParameterException("ruleString");
     }
   }
 
@@ -77,12 +91,11 @@ public class GameOfLifeRules extends SimulationRules {
     return cell.getState();
   }
 
-  private void initializeBSValues(Map<String, Parameter<?>> parameters)
+  private void initializeBSValues()
       throws InvalidParameterException {
-    String rulestring = parameters.get("ruleString").getString();
 
-    String[] bStrings = rulestring.split("/")[0].substring(1).split("");
-    String[] sStrings = rulestring.split("/")[1].substring(1).split("");
+    String[] bStrings = myRuleString.split("/")[0].substring(1).split("");
+    String[] sStrings = myRuleString.split("/")[1].substring(1).split("");
 
     Integer[] bValues = convertStringArray(bStrings);
     Integer[] sValues = convertStringArray(sStrings);
