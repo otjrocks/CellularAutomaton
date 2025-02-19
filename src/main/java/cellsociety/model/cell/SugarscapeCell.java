@@ -18,7 +18,7 @@ public class SugarscapeCell extends Cell {
 
   public SugarscapeCell(int state, Point2D location) {
     super(state, location);
-    sugar = DEFAULT_VALUE;
+    sugar = DEFAULT_VALUE*3;
     sugarGrowBackRate = DEFAULT_VALUE;
     sugarGrowBackInterval = DEFAULT_VALUE;
     intervalsSinceLastGrowBack = DEFAULT_VALUE;
