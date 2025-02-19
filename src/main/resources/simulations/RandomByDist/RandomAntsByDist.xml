@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>ForagingAnts</Type>
+    <Title>RandomAnts</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A random ForagingAnts pattern with 5% hills, 15% ants, and 15% food</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <RandomInitByProb>
+        <State name="ANT">15</State>
+        <State name="FOOD">15</State>
+        <State name="NEST">15</State>
+    </RandomInitByProb>
+
+    <Parameters>
+        <pheromoneDecayRate>0.2</pheromoneDecayRate>
+        <maxPheromoneAmount>100</maxPheromoneAmount>
+        <antReproductionTime>50</antReproductionTime>
+        <newAntsNum>2</newAntsNum>
+    </Parameters>
+</SimulationConfig>

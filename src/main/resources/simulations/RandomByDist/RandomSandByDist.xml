@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>FallingSand</Type>
+    <Title>RandomSand</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A random FallingSand pattern with 20% walls and 40% sand</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <RandomInitByProb>
+        <State name="WALL">20</State>
+        <State name="SAND">40</State>
+    </RandomInitByProb>
+
+    <Parameters>
+    </Parameters>
+</SimulationConfig>
