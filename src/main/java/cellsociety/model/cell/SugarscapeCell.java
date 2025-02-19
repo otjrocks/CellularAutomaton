@@ -119,7 +119,7 @@ public class SugarscapeCell extends Cell {
 
   @Override
   public double getOpacity() {
-    return Math.min(0.1, (double) sugar / MAX_SUGAR_AMOUNT);
+    return Math.max(0.1, Math.min(1.0, (double) sugar / MAX_SUGAR_AMOUNT));
   }
 
   /**
