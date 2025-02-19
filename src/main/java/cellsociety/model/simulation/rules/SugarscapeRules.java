@@ -58,7 +58,7 @@ public class SugarscapeRules extends SimulationRules {
 
     getCellsByType(grid, patchCells, agentCells);
 
-    handlePatchCellUpdate(patchCells);
+    handlePatchCellUpdate(patchCells, nextStates);
     handleAgentCellUpdate(grid, agentCells, updatedCells, nextStates);
 
     return nextStates;
@@ -129,9 +129,10 @@ public class SugarscapeRules extends SimulationRules {
     }
   }
 
-  private void handlePatchCellUpdate(List<SugarscapeCell> patchCells) {
+  private void handlePatchCellUpdate(List<SugarscapeCell> patchCells, List<CellUpdate> nextStates) {
     for (SugarscapeCell patchCell : patchCells) {
       patchCell.regenerateSugar();
+      nextStates.add(new CellUpdate(patchCell.getLocation(), patchCell));
     }
   }
 
