@@ -226,6 +226,7 @@ public class Grid {
 
         if (sim.data().type().equals("Sugarscape") && param != 0) {
           ((SugarscapeCell) holdingCell).setSugar(param);
+          
         }
 
         grid.addCell(holdingCell);

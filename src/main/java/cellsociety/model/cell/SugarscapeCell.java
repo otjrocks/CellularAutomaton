@@ -22,7 +22,7 @@ public class SugarscapeCell extends Cell {
     sugarGrowBackRate = DEFAULT_VALUE;
     sugarGrowBackInterval = DEFAULT_VALUE;
     intervalsSinceLastGrowBack = DEFAULT_VALUE;
-    vision = DEFAULT_VALUE;
+    vision = 3;
     metabolism = DEFAULT_VALUE;
     agentSugar = DEFAULT_VALUE;
 
