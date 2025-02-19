@@ -40,6 +40,16 @@ public class SegregationRules extends SimulationRules {
     }
   }
 
+  /**
+   * Get a list of all required parameters for a simulation
+   *
+   * @return A list of strings representing the required parameter keys for this simulation
+   */
+  public static List<String> getRequiredParameters() {
+    return List.of("toleranceThreshold");
+  }
+
+
 
   /**
    * @param cell -  individual cell from grid

@@ -5,6 +5,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class PercolationRules extends SimulationRules {
       Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
   }
+
 
   /**
    * @param cell - an individual cell from the grid

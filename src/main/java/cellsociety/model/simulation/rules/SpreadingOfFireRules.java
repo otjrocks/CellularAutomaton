@@ -5,6 +5,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,15 @@ public class SpreadingOfFireRules extends SimulationRules {
     if (myIgnitionWithoutNeighbors < 0 || myIgnitionWithoutNeighbors > 1) {
       throwInvalidParameterException("ignitionWithoutNeighbors");
     }
+  }
+
+  /**
+   * Get a list of all required parameters for a simulation
+   *
+   * @return A list of strings representing the required parameter keys for this simulation
+   */
+  public static List<String> getRequiredParameters() {
+    return List.of("growInEmptyCell", "ignitionWithoutNeighbors");
   }
 
   /**

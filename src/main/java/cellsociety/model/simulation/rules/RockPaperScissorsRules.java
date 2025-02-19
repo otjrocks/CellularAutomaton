@@ -5,6 +5,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,15 @@ public class RockPaperScissorsRules extends SimulationRules {
     myNumStates = getParameters().get("numStates").getInteger();
     myMinThreshold = getParameters().get("minThreshold").getDouble();
     validateParameterRange();
+  }
+
+  /**
+   * Get a list of all required parameters for a simulation
+   *
+   * @return A list of strings representing the required parameter keys for this simulation
+   */
+  public static List<String> getRequiredParameters() {
+    return List.of("minThreshold", "numStates");
   }
 
   private void validateParameterRange() throws InvalidParameterException {

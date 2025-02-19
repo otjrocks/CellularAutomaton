@@ -2,12 +2,14 @@ package cellsociety.config;
 
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
@@ -24,6 +26,7 @@ import cellsociety.utility.FileUtility;
  */
 public class SimulationConfig {
 
+  private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
   public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
   public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
   private static final ResourceBundle myValues = ResourceBundle.getBundle(
@@ -38,30 +41,31 @@ public class SimulationConfig {
       SIMULATION_RULES_RELATIVE_PATH, "Rules.java").toArray(new String[0]);
 
   /**
-   * Map of all the required parameters for a given simulation
-   */
-  private static final Map<String, List<String>> PARAMETERS = Map.of(
-      "GameOfLife", List.of("ruleString"),
-      "Segregation", List.of("toleranceThreshold"),
-      "SpreadingOfFire", List.of("growInEmptyCell", "ignitionWithoutNeighbors"),
-      "WaTorWorld", List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime"),
-      "RockPaperScissors", List.of("minThreshold", "numStates"),
-      "ForagingAnts", List.of("pheromoneDecayRate", "maxPheromoneAmount", "antReproductionTime"),
-      "Sugarscape", List.of("pathSugarGrowBackRate", "pathSugarGrowBackInterval", "agentVision", "agentSugar", "agentMetabolism")
-  );
-
-  /**
-   * Get the list of required parameters for a given simulation name/typed
+   * Get the list of required parameters for a given simulation name/typed Calls the static method
+   * getRequiredParameters() from a simulation rules class if it exists, or returns an empty list if
+   * no required parameters method is available for a class.
    *
    * @param simulationName: the name of the simulation you are querying for
    * @return A list of strings representing the parameter names
    */
   public static List<String> getParameters(String simulationName) {
-    if (!PARAMETERS.containsKey(simulationName)) {
+    validateSimulation(simulationName);
+    try {
+      // Get class name for simulation queried
+      String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
+      Class<?> ruleClass = Class.forName(className);
+      Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
+      @SuppressWarnings("unchecked") // call static method to get parameters
+      List<String> parameters = (List<String>) method.invoke(null);
+      return parameters;
+    } catch (NoSuchMethodException e) {
+      // if class does not have getRequiredParameters method, just return empty list (no required parameters)
       return new ArrayList<>();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
-    return PARAMETERS.get(simulationName);
   }
+
 
   /**
    * Get the appropriate cell type for a simulation type
