@@ -10,12 +10,12 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.components.AlertField;
-import cellsociety.view.components.DoubleField;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -28,7 +28,7 @@ public class ParameterView extends VBox {
 
   private final MainController myMainController;
   private final boolean isEditing;
-  private final Map<String, DoubleField> parameterFields = new HashMap<>();
+  private final Map<String, TextField> parameterFields = new HashMap<>();
   private final AlertField myAlertField;
 
   /**
@@ -76,7 +76,7 @@ public class ParameterView extends VBox {
   }
 
   private void createEditableParameter(Parameter<?> param, String key) {
-    DoubleField field = new DoubleField();
+    TextField field = new TextField();
     try {
       field.setText(param.getString());
     } catch (InvalidParameterException e) {
@@ -127,9 +127,9 @@ public class ParameterView extends VBox {
   }
 
   private void setNewParametersMap(Map<String, Parameter<?>> newParameters) {
-    for (Entry<String, DoubleField> entry : parameterFields.entrySet()) {
+    for (Entry<String, TextField> entry : parameterFields.entrySet()) {
       String key = entry.getKey();
-      DoubleField field = entry.getValue();
+      TextField field = entry.getValue();
       try {
         String newValue = field.getText();
         newParameters.put(key, new Parameter<>(newValue));
