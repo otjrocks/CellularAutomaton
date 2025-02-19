@@ -34,7 +34,8 @@ public class GridView extends Group {
     cellHeight = height / numRows;
     myGrid = new CellView[myNumRows][myNumColumns];
     initializeGrid();
-    this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()), this.getColumn(event.getX())));
+    this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()),
+        this.getColumn(event.getX())));
   }
 
   /**
@@ -89,5 +90,16 @@ public class GridView extends Group {
         myGrid[row][column].resetStrokeColor();
       }
     }
+  }
+
+  /**
+   * Set the opacity of provided cell
+   *
+   * @param row         Row of cell
+   * @param col         Column of cell
+   * @param nextOpacity next opacity level for cell
+   */
+  public void setOpacity(int row, int col, double nextOpacity) {
+    myGrid[row][col].setOpacity(nextOpacity);
   }
 }

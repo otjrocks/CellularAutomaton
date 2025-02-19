@@ -13,6 +13,7 @@ public abstract class Cell {
 
   private final int myState;
   private final Point2D myLocation;
+  private static final double DEFAULT_OPACITY = 0.5;
 
   /**
    * The default constructor for a Cell
@@ -39,6 +40,15 @@ public abstract class Cell {
    */
   public int getState() {
     return myState;
+  }
+
+  /**
+   * Get the opacity of a cell
+   *
+   * @return double representing the opacity of a cell
+   */
+  public double getOpacity() {
+    return DEFAULT_OPACITY;
   }
 
   /**
