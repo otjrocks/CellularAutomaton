@@ -14,7 +14,6 @@ import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.view.components.AlertField;
-import cellsociety.view.components.DoubleField;
 import cellsociety.view.components.IntegerField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +29,7 @@ public class CreateDefaultSimView extends VBox {
 
   private final MainController mainController;
   private ComboBox<String> simulationSelector;
-  private final Map<String, DoubleField> myParameterTextFields = new HashMap<>();
+  private final Map<String, TextField> myParameterTextFields = new HashMap<>();
   private final VBox parametersControlBox = new VBox();
   private TextField myNameField;
   private TextField myAuthorField;
@@ -93,21 +92,21 @@ public class CreateDefaultSimView extends VBox {
       parametersControlBox.getChildren().add(parametersTitle);
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
-      DoubleField newParameterField = createDoubleField(parameter, parametersControlBox);
+      TextField newParameterField = createTextField(parameter, parametersControlBox);
       myParameterTextFields.put(parameter, newParameterField);
     }
   }
 
-  private DoubleField createDoubleField(String label, VBox target) {
+  private TextField createTextField(String label, VBox target) {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
-    DoubleField doubleTextField = new DoubleField();
-    doubleTextField.setText("0");
+    TextField textField = new TextField();
+    textField.setText("0");
     Text textFieldLabel = new Text(label);
-    box.getChildren().addAll(textFieldLabel, doubleTextField);
+    box.getChildren().addAll(textFieldLabel, textField);
     target.getChildren().add(box);
-    return doubleTextField;
+    return textField;
   }
 
   /**
