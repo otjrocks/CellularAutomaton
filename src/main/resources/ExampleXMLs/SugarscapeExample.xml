@@ -11,22 +11,22 @@
     </GridDimensions>
 
     <InitialConfiguration>
-        <Row>2.5,0.0,0.0,1.1,1.1,1.1,1.1,0.0,0.0,2.5</Row>
+        <Row>2.5,0.0,1.1,1.1,1.1,1.1,1.1,1.1,0.0,2.5</Row>
         <Row>0.0,0.0,1.2,1.2,1.2,1.2,1.2,1.2,0.0,0.0</Row>
         <Row>0.0,0.0,1.3,1.3,1.3,1.3,1.3,1.3,0.0,0.0</Row>
-        <Row>0.0,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,0.0</Row>
+        <Row>1.1,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.1</Row>
         <Row>1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5</Row>
         <Row>1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5</Row>
-        <Row>0.0,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,0.0</Row>
+        <Row>1.1,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.1</Row>
         <Row>0.0,0.0,1.3,1.3,1.3,1.3,1.3,1.3,0.0,0.0</Row>
         <Row>0.0,0.0,0.0,1.2,1.2,1.2,1.2,0.0,0.0,0.0</Row>
-        <Row>2.5,0.0,0.0,1.1,1.1,1.1,1.1,0.0,0.0,2.5</Row>
+        <Row>2.5,0.0,1.1,1.1,1.1,1.1,1.1,1.1,0.0,2.5</Row>
     </InitialConfiguration>
 
     <Parameters>
         <patchSugarGrowBackRate> 2.0 </patchSugarGrowBackRate>
         <patchSugarGrowBackInterval> 2.0 </patchSugarGrowBackInterval>
-        <agentVision>3.0</agentVision>
+        <agentVision>4.0</agentVision>
         <agentSugar>10.0</agentSugar>
         <agentMetabolism>2.0</agentMetabolism>
     </Parameters>
