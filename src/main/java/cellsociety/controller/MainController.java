@@ -1,5 +1,6 @@
 package cellsociety.controller;
 
+import cellsociety.model.cell.SugarscapeCell;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -181,7 +182,7 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, Parameter<?>> parameters) {
+      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     myGrid = new Grid(rows, cols);
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
@@ -193,7 +194,7 @@ public class MainController {
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
       throw new RuntimeException(e);
     }
-    initializeGridWithCells();
+    initializeGridWithCells(parameters);
     createNewMainViewAndUpdateViewContainer();
   }
 

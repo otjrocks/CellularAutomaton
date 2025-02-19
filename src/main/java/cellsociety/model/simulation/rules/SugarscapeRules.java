@@ -34,7 +34,7 @@ public class SugarscapeRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("pathSugarGrowBackRate", "pathSugarGrowBackInterval", "agentVision",
+    return List.of("patchSugarGrowBackRate", "patchSugarGrowBackInterval", "agentVision",
         "agentSugar", "agentMetabolism");
   }
 
@@ -207,6 +207,16 @@ public class SugarscapeRules extends SimulationRules {
   @Override
   public int getNumberStates() {
     return SugarscapeRules.State.values().length;
+  }
+
+  private Map<String, Parameter<?>> setDefaultParameters() {
+    Map<String, Parameter<?>> parameters = new HashMap<>();
+    parameters.put("patchSugarGrowBackRate", new Parameter<>(4));
+    parameters.put("patchSugarGrowBackInteral", new Parameter<>(3));
+    parameters.put("agentVision", new Parameter<>(3));
+    parameters.put("agentSugar", new Parameter<>(10));
+    parameters.put("agentMetabolism", new Parameter<>(2));
+    return parameters;
   }
 
   //This class was added so that I could have as close to an int value as a pass by reference, not by value

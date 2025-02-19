@@ -1,12 +1,14 @@
 package cellsociety.model;
 
+import cellsociety.model.cell.SugarscapeCell;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.lang.Double;
+
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.cell.Cell;
@@ -62,14 +64,14 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(int row, int col) {
-    if (checkOutOfBounds(new Double(row, col))) {
+    if (checkOutOfBounds(new Point2D.Double(row, col))) {
       throw new IndexOutOfBoundsException(
           "Invalid coordinate. Point must be within bounds of grid.");
     }
-    if (!cellExists(new Double(row, col))) {
+    if (!cellExists(new Point2D.Double(row, col))) {
       return null;
     }
-    return myCells.get(new Double(row, col));
+    return myCells.get(new Point2D.Double(row, col));
   }
 
   /**
