@@ -13,24 +13,55 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 
+/**
+ * An abstract class to handle the rules of a cellular automaton simulation.
+ *
+ * @author Owen Jennings, Troy Ludwig, Justin Aronwald
+ */
 public abstract class SimulationRules {
 
   private Map<String, Parameter<?>> myParameters;
 
+  /**
+   * The default constructor of a simulation rules class
+   *
+   * @param parameters The parameters map for the simulation rule. Each simulation rules
+   *                   implementation should validate and ensure that parameters are present and
+   *                   correct in the constructor. If no parameters are required for a given rules
+   *                   class, then this can be nulll
+   * @throws InvalidParameterException This exception should be thrown whenever a simulation rules
+   *                                   instance is created with invalid or missing parameter
+   *                                   values.
+   */
   public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     myParameters = parameters;
   }
 
+  /**
+   * Set the parameters for the current simulation rules.
+   *
+   * @param parameters A map where the key is the parameter name and the value is a parameter value
+   * @see Parameter for implementation of the parameter value wrapper class.
+   */
   public void setParameters(Map<String, Parameter<?>> parameters) {
     myParameters = parameters;
   }
 
+  /**
+   * Get the parameters map for the current simulation rules class.
+   *
+   * @return A map where the key is the parameter name and the value is a parameter value
+   * @see Parameter for implementation of the parameter value wrapper class.
+   */
   public Map<String, Parameter<?>> getParameters() {
     return Map.copyOf(myParameters);
   }
 
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation. If a simulation rules set requires
+   * parameters, then this method should be overwritten to declare all required parameters for the
+   * simulation. If no parameters are required, then you do not need to implement this static
+   * method.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */
@@ -38,21 +69,21 @@ public abstract class SimulationRules {
     return new ArrayList<>();
   }
 
-  //only two options, so moved the getNeighbors here and actually defined it.
+  /**
+   * The default implementation of getNeighbors. This provides a list of cells which are neighbors
+   * of the provided cell object. This method can be overwritten by a specific simulation rules
+   * class if it has a unique way to find neighbors.
+   *
+   * @param cell              The cell you are querying for neighbors.
+   * @param grid              The grid of the simulation you are looking for neighbors in
+   * @param includesDiagonals Whether the neighbors should include diagonal neighbors or not.
+   * @return A list of cells that are neighbors of the provided cell.
+   */
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
 
     List<Cell> neighbors = new ArrayList<>();
 
-    int[][] directions = {
-        {0, -1}, {0, 1},   // left, right
-        {-1, 0}, {1, 0},   // up, down
-        {-1, -1}, {-1, 1}, // top diagonals (left, right)
-        {1, -1}, {1, 1}    // bottom diagonals (left, right)
-    };
-
-    if (!includesDiagonals) {
-      directions = new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-    }
+    int[][] directions = getDirectionsArray(includesDiagonals);
 
     for (int[] dir : directions) {
       Point2D neighborLocation = new Point2D.Double(cell.getRow() + dir[0], cell.getCol() + dir[1]);
@@ -66,15 +97,45 @@ public abstract class SimulationRules {
 
   }
 
+  /*
+  A simulation's state is updated through the following 2 methods: getNextStates and getNextStatesForAllCells.
+  By default, getNextState returns the current state of a cell.
+  getNextState is used by the default implementation of getNextStatesForAllCells
+  which returns a list of CellUpdates indicating the cells that need to be updated in the grid on the next step update.
+  A specific implementation of SimulationRules must overwrite or implement one or both of these methods to function.
+  By overwriting getNextStates, you indicate all the next states for the simulation step, which will be used by getNextStatesForAllCells.
+  If a specific simulation rules requires updating grid state in a specific order or updating cell state while determining next state (such as changing a cells health), then
+  getNextStatesForAllCells can be overwritten.
+  */
+
   /**
-   * A default implementation of algorithm to get the cell updates for all cells Note, this will
-   * call get next state to get next state values for all cells. The CellUpdate will use a default
-   * cell to provide state update.
+   * Get the next state of a cell based on its neighbors which can be found using getNeighbors or
+   * through interaction with the entire grid. This method should be overwritten if the default
+   * implementation of getNextStatesForAllCells is used. If a given simulation rules class decides
+   * to overwrite the getNextStatesForAllCells method and finds the next states in that, then this
+   * does not need to be overwritten.
+   *
+   * @param cell The cell you are trying to find the next state for.
+   * @param grid The grid that the cell is a part of
+   * @return An int representing the next cell state for a provided cell.
+   */
+  public int getNextState(Cell cell, Grid grid) {
+    return cell.getState();
+  }
+
+  /**
+   * A default implementation of the algorithm to get the cellUpdates for all cells in the grid.
+   * Note, this default implementation will call getNextState to get the next state values for all
+   * cells in the grid. The CellUpdate will then create a cellUpdate with a default cell to provide
+   * state update.
    * <p>
-   * If a specific simulation uses a different cell type, this method should be overwritten.
+   * If a specific simulation uses a different cell type or needs to modify the state of cells at
+   * the same time as determining the next states of the entire grid, this method should be
+   * overwritten.
    *
    * @param grid: The grid that you wish to get the next states for
    * @return A list of cell updates that should occur
+   * @see CellUpdate
    */
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> nextStates = new ArrayList<>(); // calculate next states in first pass, then update all next states in second pass
@@ -92,20 +153,52 @@ public abstract class SimulationRules {
     return nextStates;
   }
 
-  public abstract int getNextState(Cell cell, Grid grid);
-
+  /**
+   * Get the total number of states for a simulation rule. By design, the first state must be 0 and
+   * the last state must be the total number of states - 1. For example, if a simulation rules has 4
+   * states, then the integer representation of the four states must be the sequential [0, 1, 2, 3]
+   *
+   * @return An int representing the total number of states for a simulation rule.
+   */
   public abstract int getNumberStates();
 
-  public void checkMissingParameterAndThrowException(String threshold) {
-    if (!getParameters().containsKey(threshold)) {
+  /**
+   * A helper method to check for a missing parameter for a simulation
+   *
+   * @param parameter The parameter you want to check if is missing.
+   */
+  public void checkMissingParameterAndThrowException(String parameter) {
+    if (!getParameters().containsKey(parameter)) {
       throw new IllegalArgumentException(
-          String.format(getMessage("MISSING_SIMULATION_PARAMETER_ERROR"), threshold));
+          String.format(getMessage("MISSING_SIMULATION_PARAMETER_ERROR"), parameter));
     }
   }
 
-  public static void throwInvalidParameterException(String minThreshold)
+  /**
+   * Throw an invalid parameter exception that includes the provided string.
+   *
+   * @param exceptionMessage The message you want to include in the exceptions message.
+   * @throws InvalidParameterException The exception that is thrown by this method.
+   */
+  public static void throwInvalidParameterException(String exceptionMessage)
       throws InvalidParameterException {
     throw new InvalidParameterException(
-        String.format(getMessage("INVALID_PARAMETER"), minThreshold));
+        String.format(getMessage("INVALID_PARAMETER"), exceptionMessage));
+  }
+
+  private static int[][] getDirectionsArray(boolean includesDiagonals) {
+    int[][] directions;
+
+    if (includesDiagonals) {
+      directions = new int[][]{
+          {0, -1}, {0, 1},   // left, right
+          {-1, 0}, {1, 0},   // up, down
+          {-1, -1}, {-1, 1}, // top diagonals (left, right)
+          {1, -1}, {1, 1}    // bottom diagonals (left, right)
+      };
+    } else {
+      directions = new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+    }
+    return directions;
   }
 }
