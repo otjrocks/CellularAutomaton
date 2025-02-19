@@ -29,6 +29,15 @@ public abstract class SimulationRules {
     return Map.copyOf(myParameters);
   }
 
+  /**
+   * Get a list of all required parameters for a simulation
+   *
+   * @return A list of strings representing the required parameter keys for this simulation
+   */
+  public static List<String> getRequiredParameters() {
+    return new ArrayList<>();
+  }
+
   //only two options, so moved the getNeighbors here and actually defined it.
   public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
 

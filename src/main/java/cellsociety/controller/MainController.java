@@ -282,6 +282,7 @@ public class MainController {
     }catch (InvalidStateException e){
       mySidebarView.flashWarning(getMessage("ERROR_STATE"));
     } catch (Exception e) {
+      System.out.println(e.getMessage());
       mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());
