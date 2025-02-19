@@ -67,6 +67,7 @@ This project implements a cellular automata simulator.
       so that users do not unintentionally modify the simulation. However, only a single if
       statement would need to be changed to allow grid state updating while the simulation is
       running.
+    * In Foraging Ants, we assume there can only be one ant per state and that ants cannot travel in a diagonal path. Ants are produced from ant hills after a number of turns specified by the user.
     * In Falling Sand, if a sand cell is able to moved directly down, it will automatically move
       down. If it can only move to its left or right diagonal, it will randomly choose one of the
       diagonals if both of them are empty. If only one diagonal is empty and it cannot fall directly

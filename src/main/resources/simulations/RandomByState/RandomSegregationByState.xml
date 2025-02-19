@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SimulationConfig>
     <Type>Segregation</Type>
-    <Title>RandomByNumStates</Title>
+    <Title>Random Segregation</Title>
     <Author>Troy Ludwig</Author>
-    <Description>A random segregation pattern with 25 members for group one and 25 members for group 2</Description>
+    <Description>A random segregation pattern with 40 of members from group one, 40 from group two, and 20 empty</Description>
 
     <GridDimensions>
         <Height>10</Height>
@@ -11,8 +11,8 @@
     </GridDimensions>
 
     <RandomInitByState>
-        <State name="GROUPONE">25</State>
-        <State name="GROUPTWO">25</State>
+        <State name="GROUPONE">40</State>
+        <State name="GROUPTWO">40</State>
     </RandomInitByState>
 
     <Parameters>
