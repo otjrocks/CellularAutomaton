@@ -1,4 +1,4 @@
-package cellsociety.model.XMLHandlers;
+package cellsociety.model.xml;
 
 import java.io.File;
 import java.util.Map;
@@ -57,7 +57,7 @@ public class XMLWriter {
 
             transformXML(doc, file);
 
-        } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
+        } catch (ParserConfigurationException | javax.xml.transform.TransformerException _) {
         }
     }
 

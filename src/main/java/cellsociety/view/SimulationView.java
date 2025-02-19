@@ -55,18 +55,15 @@ public class SimulationView extends Group {
     }
   }
 
+  /**
+   * Set the color of a cell in the grid
+   *
+   * @param row   The row of the cell you want to update
+   * @param col   The column of the cell you want to update
+   * @param color The new color you want to set
+   */
   public void setColor(int row, int col, Paint color) {
     myGridView.setColor(row, col, color);
-  }
-
-  private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
-    for (int row = 0; row < numRows; row++) {
-      for (int col = 0; col < numCols; col++) {
-        int nextState = grid.getCell(row, col).getState();
-        Color nextColor = StateDisplayConfig.getStateInfo(mySimulation, nextState).color();
-        myGridView.setColor(row, col, nextColor);
-      }
-    }
   }
 
   /**
@@ -83,5 +80,15 @@ public class SimulationView extends Group {
    */
   public void updateGridLinesColor() {
     myGridView.updateGridLinesColor();
+  }
+
+  private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
+    for (int row = 0; row < numRows; row++) {
+      for (int col = 0; col < numCols; col++) {
+        int nextState = grid.getCell(row, col).getState();
+        Color nextColor = StateDisplayConfig.getStateInfo(mySimulation, nextState).color();
+        myGridView.setColor(row, col, nextColor);
+      }
+    }
   }
 }

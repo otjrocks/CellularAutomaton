@@ -5,7 +5,6 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +50,15 @@ public class LangtonsLoopsRules extends SimulationRules {
       "612225", "700077", "701120", "701220", "701250", "702120", "702221", "702251",
       "702321", "702525", "702720"
   };
-
   private static final Map<String, Integer> TRANSITIONS_MAP = new HashMap<>();
 
+  /**
+   * The default constructor of a LangtonsLoop rules.
+   *
+   * @param parameters The required parameters map. This rules class does not require parameters, so
+   *                   this will be ignored.
+   * @throws InvalidParameterException This is thrown for invalid parameters provided.
+   */
   public LangtonsLoopsRules(
       Map<String, Parameter<?>> parameters)
       throws InvalidParameterException {
@@ -63,6 +68,26 @@ public class LangtonsLoopsRules extends SimulationRules {
       int value = Integer.parseInt(rule.substring(5, 6));
       addRotatedRules(key, value);
     }
+  }
+
+  /**
+   * Get the next state based on the Langton's Loops rule strings above
+   *
+   * @param cell The cell you are trying to find the next state for.
+   * @param grid The grid that the cell is a part of
+   * @return The int representing the next state of the current cell.
+   */
+  @Override
+  public int getNextState(Cell cell, Grid grid) {
+    int[] states = new int[5]; // store your state and neighbors states
+    states[0] = cell.getState();
+    List<Cell> neighbors = getNeighbors(cell, grid, false);
+    populateStatesList(cell, neighbors, states);
+    String stateKey = getStateString(states);
+    if (TRANSITIONS_MAP.containsKey(stateKey)) {
+      return TRANSITIONS_MAP.get(stateKey);
+    }
+    return cell.getState();
   }
 
   // I asked ChatGPT for assistance in generating addRotatedRules and generateRotations. Helper method to add all 4 rotated rules to the map
@@ -88,19 +113,6 @@ public class LangtonsLoopsRules extends SimulationRules {
         "%s%s%s%s%s".formatted(key.charAt(0), key.charAt(4), key.charAt(1), key.charAt(2),
             key.charAt(3))
     };
-  }
-
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    int[] states = new int[5]; // store your state and neighbors states
-    states[0] = cell.getState();
-    List<Cell> neighbors = getNeighbors(cell, grid, false);
-    populateStatesList(cell, neighbors, states);
-    String stateKey = getStateString(states);
-    if (TRANSITIONS_MAP.containsKey(stateKey)) {
-      return TRANSITIONS_MAP.get(stateKey);
-    }
-    return cell.getState();
   }
 
   private static String getStateString(int[] states) {

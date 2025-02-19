@@ -79,33 +79,10 @@ public class WaTorWorldRules extends SimulationRules {
 
   // I asked ChatGPT for help with implementing this enum
   public enum State {
-    EMPTY(0),
-    FISH(1),
-    SHARK(2);
+    EMPTY, FISH, SHARK;
 
-    private final int value;
-
-    State(int value) {
-      this.value = value;
-    }
-
-    /**
-     * @return the value of a state
-     */
     public int getValue() {
-      return value;
-    }
-
-    /**
-     * @param value - the value of a state
-     */
-    public static void fromValue(int value) {
-      for (State state : values()) {
-        if (state.value == value) {
-          return;
-        }
-      }
-      throw new IllegalArgumentException("Invalid WaTorState value: " + value);
+      return ordinal();
     }
   }
 
@@ -114,11 +91,6 @@ public class WaTorWorldRules extends SimulationRules {
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, false);
-  }
-
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    return -1; // Not used
   }
 
   @Override
@@ -185,7 +157,7 @@ public class WaTorWorldRules extends SimulationRules {
         fishCells.remove(fishCell);
         health += mySharkEnergyGain;
         checkReproductionAndMoveOutSharkCell(nextStates, shark, health, shouldReproduce, fishCell,
-            updatedCells, grid);
+            updatedCells);
         return;
       }
     }
@@ -193,7 +165,8 @@ public class WaTorWorldRules extends SimulationRules {
     moveSharkToNewLocation(grid, nextStates, updatedCells, shark, health, shouldReproduce);
   }
 
-  private void moveSharkToNewLocation(Grid grid, List<CellUpdate> nextStates, Set<Point2D> updatedCells,
+  private void moveSharkToNewLocation(Grid grid, List<CellUpdate> nextStates,
+      Set<Point2D> updatedCells,
       WaTorWorldCell shark, int health, boolean shouldReproduce) {
     List<Cell> emptyNeighbors = getNeighborsByState(shark, grid, State.EMPTY.getValue());
     if (!emptyNeighbors.isEmpty()) {
@@ -201,14 +174,14 @@ public class WaTorWorldRules extends SimulationRules {
       if (!updatedCells.contains(newLocation.getLocation())) {
         checkReproductionAndMoveOutSharkCell(nextStates, shark, health, shouldReproduce,
             newLocation,
-            updatedCells, grid);
+            updatedCells);
       }
     }
   }
 
   private void checkReproductionAndMoveOutSharkCell(List<CellUpdate> nextStates,
       WaTorWorldCell shark, int health,
-      boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells, Grid grid) {
+      boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells) {
     if (!updatedCells.contains(newLocation.getLocation())) {
       // update grid with a shark in a new location that retains the original shark's health and
       // reproductive energy + 1 when it moves

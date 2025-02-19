@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * A rules class to to implement the sugarscape simulation
  *
- * @Author Justin Aronwald
+ * @author Justin Aronwald
  */
 public class SugarscapeRules extends SimulationRules {
 
@@ -45,18 +45,6 @@ public class SugarscapeRules extends SimulationRules {
     public int getValue() {
       return ordinal();
     }
-  }
-
-
-  /**
-   * @param cell -  individual cell from grid
-   * @param grid - the collection of cell objects representing the grid
-   * @return - the next state of a cell based on the rules of Sugarscape Model
-   */
-
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    return 0;
   }
 
   /**

@@ -73,9 +73,7 @@ public class CreateDefaultSimView extends VBox {
     simulationSelector = new ComboBox<>(options);
     simulationSelector.setValue(options.getFirst());
     simulationSelector.valueProperty()
-        .addListener((ov, t, t1) -> {
-          addAllParameters(simulationSelector.getValue());
-        });
+        .addListener((_, _, _) -> addAllParameters(simulationSelector.getValue()));
     HBox container = new HBox();
     container.setAlignment(Pos.CENTER_LEFT);
     container.setSpacing(5);

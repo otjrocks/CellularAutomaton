@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 class SugarscapeRulesTest {
   private Grid grid;
   private SugarscapeRules sugarscapeRules;
-  private Map<String, Parameter<?>> parameters = new HashMap<>();
+  private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
   void setUp() throws InvalidParameterException {

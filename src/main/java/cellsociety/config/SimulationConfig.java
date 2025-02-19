@@ -51,19 +51,24 @@ public class SimulationConfig {
   public static List<String> getParameters(String simulationName) {
     validateSimulation(simulationName);
     try {
-      // Get class name for simulation queried
-      String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
-      Class<?> ruleClass = Class.forName(className);
-      Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
-      @SuppressWarnings("unchecked") // call static method to get parameters
-      List<String> parameters = (List<String>) method.invoke(null);
-      return parameters;
+      return getRequiredParametersForSimulationRulesClass(simulationName);
     } catch (NoSuchMethodException e) {
       // if class does not have getRequiredParameters method, just return empty list (no required parameters)
       return new ArrayList<>();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
+      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    // Get class name for simulation queried
+    String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
+    Class<?> ruleClass = Class.forName(className);
+    Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
+    @SuppressWarnings("unchecked") // call static method to get parameters
+    List<String> parameters = (List<String>) method.invoke(null);
+    return parameters;
   }
 
 
@@ -132,17 +137,6 @@ public class SimulationConfig {
 
   public static int returnStateValueBasedOnName(String simType, String name) {
     String stateKey = "%s_VALUE_%s".formatted(simType, name);
-    try {
-      String valueStr = myValues.getString(stateKey.toUpperCase());
-      return Integer.parseInt(valueStr);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      return 0;
-    }
-  }
-
-  public static int returnMaxStateBasedOnName(String simType) {
-    String stateKey = "%s_MAXSTATE".formatted(simType);
     try {
       String valueStr = myValues.getString(stateKey.toUpperCase());
       return Integer.parseInt(valueStr);

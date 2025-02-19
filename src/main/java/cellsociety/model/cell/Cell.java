@@ -27,14 +27,7 @@ public abstract class Cell {
       throw new IllegalArgumentException("Invalid state, state must be a positive integer or zero");
     }
     myState = state;
-    if (location == null ||
-        location.getX() < 0 ||
-        location.getY() < 0 ||
-        location.getX() % 1 != 0 ||
-        location.getY() % 1 != 0) { // Throw exception if
-      throw new IllegalArgumentException(
-          "Invalid cell location, location must be represented as a positive integer");
-    }
+    checkValidLocation(location);
     // create new Point for location to ensure point is immutable in the future
     myLocation = new Double(location.getX(), location.getY());
   }
@@ -73,6 +66,17 @@ public abstract class Cell {
    */
   public int getCol() {
     return (int) myLocation.getY();
+  }
+
+  private static void checkValidLocation(Point2D location) {
+    if (location == null ||
+        location.getX() < 0 ||
+        location.getY() < 0 ||
+        location.getX() % 1 != 0 ||
+        location.getY() % 1 != 0) { // Throw exception if
+      throw new IllegalArgumentException(
+          "Invalid cell location, location must be represented as a positive integer");
+    }
   }
 
 }
