@@ -1,4 +1,4 @@
-package cellsociety.model.XMLHandlers;
+package cellsociety.model.xml;
 
 public class InvalidStateException extends Exception {
 

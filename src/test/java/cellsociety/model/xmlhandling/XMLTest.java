@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-import cellsociety.model.XMLHandlers.GridException;
-import cellsociety.model.XMLHandlers.XMLHandler;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.XMLHandler;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 
 class XMLTest {

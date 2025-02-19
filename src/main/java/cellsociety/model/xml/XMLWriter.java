@@ -1,4 +1,4 @@
-package cellsociety.model.XMLHandlers;
+package cellsociety.model.xml;
 
 import java.io.File;
 import java.util.Map;

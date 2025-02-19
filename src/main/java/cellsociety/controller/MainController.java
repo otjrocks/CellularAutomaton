@@ -16,12 +16,13 @@ import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.XMLHandlers.GridException;
-import cellsociety.model.XMLHandlers.InvalidStateException;
-import cellsociety.model.XMLHandlers.XMLHandler;
-import cellsociety.model.XMLHandlers.XMLWriter;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
+import cellsociety.model.xml.XMLHandler;
+import cellsociety.model.xml.XMLWriter;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
@@ -196,16 +197,6 @@ public class MainController {
     createNewMainViewAndUpdateViewContainer();
   }
 
-  private void initializeGridWithCells() {
-    for (int i = 0; i < myGrid.getRows(); i++) {
-      for (int j = 0; j < myGrid.getCols(); j++) {
-        int initialState = 0;
-        String simulationType = mySimulation.data().type();
-        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
-      }
-    }
-  }
-
   /**
    * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
    * from user input. The cell state will only be changed if the user is currently in editing mode
@@ -226,17 +217,11 @@ public class MainController {
     }
   }
 
-  // From the states list from the simulation get the next available state from a sorted order
-  private int getNextAvailableState(Cell cell) {
-    int numStates = mySimulation.rules().getNumberStates();
-    int currentState = cell.getState();
-    return (currentState + 1) % numStates;
-  }
-
   /**
    * Handle the loading and creation of a new simulation from a file chooser
    */
-  public void handleNewSimulationFromFile() {
+  public void handleNewSimulationFromFile()
+      throws GridException, InvalidStateException, IOException, ParserConfigurationException, SAXException {
     stopAnimation(); // stop animation if it is currently running
     File file = FileChooserConfig.FILE_CHOOSER.showOpenDialog(myStage);
     if (file == null) { // only update simulation if a file was selected
@@ -246,6 +231,10 @@ public class MainController {
     updateSimulationFromFile(filePath);
   }
 
+  /**
+   * A method to handle the saving of the current state of the program to an XML file using the
+   * XMLWriter
+   */
   public void handleSavingToFile() {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
   }
@@ -261,32 +250,84 @@ public class MainController {
     createOrUpdateSidebar();
   }
 
-  private void updateSimulationFromFile(String filePath) {
+  /**
+   * Initialize the sidebar of the program
+   */
+  public void initializeSidebar() {
+    mySidebarView = new SidebarView(SIDEBAR_WIDTH,
+        GRID_HEIGHT - (2 * MARGIN), this);
+    mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
+    mySidebarView.setLayoutY(MARGIN);
+    myRoot.getChildren().add(mySidebarView);
+  }
+
+  /**
+   * Handle whether grid lines should be shown or not
+   *
+   * @param selected: Whether to show grid lines
+   */
+  public void setGridLines(boolean selected) {
+    PreferencesController.setPreference("gridLines", String.valueOf(selected));
+    gridLinesEnabled = selected;
+    mySimulationView.setGridLines(selected);
+  }
+
+
+  private void initializeGridWithCells() {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getCols(); j++) {
+        int initialState = 0;
+        String simulationType = mySimulation.data().type();
+        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
+      }
+    }
+  }
+
+  // From the states list from the simulation get the next available state from a sorted order
+  private int getNextAvailableState(Cell cell) {
+    int numStates = mySimulation.rules().getNumberStates();
+    int currentState = cell.getState();
+    return (currentState + 1) % numStates;
+  }
+
+  private void updateSimulationFromFile(String filePath)
+      throws SAXException, InvalidStateException, GridException, IOException, ParserConfigurationException {
+    attemptGettingGridAndSimulationFromXMLHandler(filePath);
+  }
+
+  private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
+      throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
-
       myGrid = xmlHandler.getGrid();
       updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
       mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
+      throw e;
     } catch (ParserConfigurationException e) {
       mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
+      throw e;
     } catch (IOException e) {
       mySidebarView.flashWarning(getMessage("ERROR_IO"));
+      throw e;
     } catch (NumberFormatException e) {
       mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
+      throw e;
     } catch (NullPointerException e) {
       mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
+      throw e;
     } catch (GridException e) {
       mySidebarView.flashWarning(getMessage("ERROR_GRID"));
-    }catch (InvalidStateException e){
+      throw e;
+    } catch (InvalidStateException e) {
       mySidebarView.flashWarning(getMessage("ERROR_STATE"));
+      throw e;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
       mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
       if (VERBOSE_ERROR_MESSAGES) {
         mySidebarView.flashWarning(e.getMessage());
       }
+      throw e;
     }
   }
 
@@ -327,25 +368,9 @@ public class MainController {
     myMainViewContainer.setPrefWidth(GRID_WIDTH + 2 * MARGIN);
     myMainViewContainer.setPrefHeight(GRID_HEIGHT + 2 * MARGIN);
     myMainViewContainer.setAlignment(Pos.CENTER);
-    updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-  }
-
-  public void initializeSidebar() {
-    mySidebarView = new SidebarView(SIDEBAR_WIDTH,
-        GRID_HEIGHT - (2 * MARGIN), this);
-    mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
-    mySidebarView.setLayoutY(MARGIN);
-    myRoot.getChildren().add(mySidebarView);
-  }
-
-  /**
-   * Handle whether grid lines should be shown or not
-   *
-   * @param selected: Whether to show grid lines
-   */
-  public void setGridLines(boolean selected) {
-    PreferencesController.setPreference("gridLines", String.valueOf(selected));
-    gridLinesEnabled = selected;
-    mySimulationView.setGridLines(selected);
+    try {
+      updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
+    } catch (Exception _) {
+    } // can ignore thrown exception since we already handled them earlier in the chain
   }
 }

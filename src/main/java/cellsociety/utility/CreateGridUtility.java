@@ -2,8 +2,8 @@ package cellsociety.utility;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
-import cellsociety.model.XMLHandlers.GridException;
-import cellsociety.model.XMLHandlers.InvalidStateException;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
 import java.util.ArrayList;

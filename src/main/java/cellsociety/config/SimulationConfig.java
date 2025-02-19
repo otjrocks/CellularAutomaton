@@ -51,19 +51,24 @@ public class SimulationConfig {
   public static List<String> getParameters(String simulationName) {
     validateSimulation(simulationName);
     try {
-      // Get class name for simulation queried
-      String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
-      Class<?> ruleClass = Class.forName(className);
-      Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
-      @SuppressWarnings("unchecked") // call static method to get parameters
-      List<String> parameters = (List<String>) method.invoke(null);
-      return parameters;
+      return getRequiredParametersForSimulationRulesClass(simulationName);
     } catch (NoSuchMethodException e) {
       // if class does not have getRequiredParameters method, just return empty list (no required parameters)
       return new ArrayList<>();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
+      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    // Get class name for simulation queried
+    String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
+    Class<?> ruleClass = Class.forName(className);
+    Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
+    @SuppressWarnings("unchecked") // call static method to get parameters
+    List<String> parameters = (List<String>) method.invoke(null);
+    return parameters;
   }
 
 
