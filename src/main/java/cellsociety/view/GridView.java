@@ -1,7 +1,6 @@
 package cellsociety.view;
 
 import cellsociety.controller.MainController;
-import cellsociety.model.Grid;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 
@@ -35,9 +34,7 @@ public class GridView extends Group {
     cellHeight = height / numRows;
     myGrid = new CellView[myNumRows][myNumColumns];
     initializeGrid();
-    this.setOnMouseClicked(event -> {
-      mainController.changeCellState(this.getRow(event.getY()), this.getColumn(event.getX()));
-    });
+    this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()), this.getColumn(event.getX())));
   }
 
   /**

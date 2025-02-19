@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * A rules class to to implement the sugarscape simulation
  *
- * @Author Justin Aronwald
+ * @author Justin Aronwald
  */
 public class SugarscapeRules extends SimulationRules {
 
@@ -207,16 +207,6 @@ public class SugarscapeRules extends SimulationRules {
   @Override
   public int getNumberStates() {
     return SugarscapeRules.State.values().length;
-  }
-
-  private Map<String, Parameter<?>> setDefaultParameters() {
-    Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("pathSugarGrowBackRate", new Parameter<>(4));
-    parameters.put("pathSugarGrowBackInteral", new Parameter<>(3));
-    parameters.put("agentVision", new Parameter<>(3));
-    parameters.put("agentSugar", new Parameter<>(10));
-    parameters.put("agentMetabolism", new Parameter<>(2));
-    return parameters;
   }
 
   //This class was added so that I could have as close to an int value as a pass by reference, not by value

@@ -35,7 +35,8 @@ class GridTest {
     myGrid = new Grid(myNumRows, myNumCols);
     myCell = new DefaultCell(0, new Double(1, 1));
     myGrid.addCell(myCell);
-    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>()), new SimulationMetaData("GameOfLife","","",""));
+    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>()),
+        new SimulationMetaData("GameOfLife", "", "", ""));
   }
 
   @Test
@@ -158,9 +159,5 @@ class GridTest {
     myGrid.addCell(new DefaultCell(0, new Double(0, 0)));
     myGrid.setState(0, 0, 1, myGameOfLifeSimulation);
     assertEquals(1, myGrid.getCell(0, 0).getState());
-  }
-
-  @Test
-  void getNextStatesForAllCells() {
   }
 }

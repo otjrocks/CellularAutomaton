@@ -134,7 +134,7 @@ public class ParameterView extends VBox {
         String newValue = field.getText();
         newParameters.put(key, new Parameter<>(newValue));
       } catch (NumberFormatException ignored) {
-        System.out.println("Unable to add parameter: " + key);
+        System.out.printf("Unable to add parameter: %s%n", key);
       }
     }
   }

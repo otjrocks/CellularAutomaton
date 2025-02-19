@@ -1,8 +1,5 @@
 package cellsociety.model.simulation;
 
-
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Assertions;

@@ -11,7 +11,6 @@ public class SugarscapeCell extends Cell {
 
   private final int vision;
   private final int metabolism;
-  private int agentSugar;
 
   /**
    * Creates a Sugarscape Cell that can act as a Patch or an Agent.

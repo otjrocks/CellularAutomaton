@@ -1,7 +1,6 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
-import static cellsociety.config.MainConfig.LANGUAGE_FILE_PATH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
@@ -13,8 +12,6 @@ import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

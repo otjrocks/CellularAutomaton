@@ -1,5 +1,6 @@
 package cellsociety.model.XMLHandlers;
 
+import cellsociety.utility.CreateGridUtility;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +45,7 @@ public class XMLHandler {
    *                     represented as a String
    */
   public XMLHandler(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException{
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
     parseXMLFile(xmlFilePath);
   }
 
@@ -56,7 +57,7 @@ public class XMLHandler {
    *                     represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException{
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
 
     File xmlFile = new File(xmlFilePath);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -73,9 +74,8 @@ public class XMLHandler {
 
   /**
    * Helper method to parse simulation data from document
-   * 
-   * @param doc: Document from which you are extracting the simulation data
-   * 
+   *
+   * @param data: Document from which you are extracting the simulation data
    */
   private void parseSimData(Document data) {
     String type = data.getElementsByTagName("Type").item(0).getTextContent();
@@ -87,9 +87,8 @@ public class XMLHandler {
 
   /**
    * Helper method to parse grid dimensions from document
-   * 
+   *
    * @param dimDoc: Document from which you are extracting the grid dimensions
-   * 
    */
   private void parseDimensions(Document dimDoc) {
     Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
@@ -101,17 +100,18 @@ public class XMLHandler {
 
   /**
    * Helper method to differentiate between explicit and random grid generation
-   * 
-   * @param dimDoc: Document from which you are extracting/generating the initial grid data
-   * 
+   *
+   * @param gridDoc: Document from which you are extracting/generating the initial grid data
    */
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
-      myGrid = Grid.generateRandomGridFromStateNumber(gridDoc, myGridHeight, myGridWidth, mySim);
-    } else if(gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
-      myGrid = Grid.generateRandomGridFromDistribution(gridDoc, myGridHeight, myGridWidth, mySim);
-    } else{
-      myGrid = Grid.generateGrid(gridDoc, myGridHeight, myGridWidth, mySim);
+      myGrid = CreateGridUtility.generateRandomGridFromStateNumber(gridDoc, myGridHeight,
+          myGridWidth, mySim);
+    } else if (gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
+      myGrid = CreateGridUtility.generateRandomGridFromDistribution(gridDoc, myGridHeight,
+          myGridWidth, mySim);
+    } else {
+      myGrid = CreateGridUtility.generateGrid(gridDoc, myGridHeight, myGridWidth, mySim);
     }
   }
 
@@ -156,10 +156,10 @@ public class XMLHandler {
   }
 
   private void checkAndLoadRulestring(Element paramElement) {
-    try{
+    try {
       String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
       myParameters.put("ruleString", new Parameter<>(paramString));
-    } catch (Exception e){
+    } catch (Exception e) {
       myParameters.clear();
     }
   }

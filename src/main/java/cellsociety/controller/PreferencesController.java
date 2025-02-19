@@ -23,7 +23,7 @@ public class PreferencesController {
     try {
       preferences.flush(); // Ensure the preference is written to storage
     } catch (Exception e) {
-      System.err.println("Error saving preferences: " + e.getMessage());
+      System.err.printf("Error saving preferences: %s%n", e.getMessage());
     }
   }
 

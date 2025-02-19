@@ -66,7 +66,7 @@ class ForagingAntsRulesTest {
     for (CellUpdate update : updates) {
       if (update.getRow() == 2 && update.getCol() == 3 &&
           update.getState() == ForagingAntsRules.State.ANT.getValue() &&
-          ((ForagingAntsCell)(update.getNextCell())).getHasFood() == true) {
+          ((ForagingAntsCell) (update.getNextCell())).getHasFood()) {
         antGetsFood = true;
         break;
       }

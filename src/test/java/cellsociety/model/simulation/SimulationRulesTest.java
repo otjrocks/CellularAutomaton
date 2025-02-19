@@ -30,12 +30,6 @@ class SimulationRulesTest {
     }
 
     testSimulationRules = new SimulationRules(new HashMap<>()) {
-
-      @Override
-      public int getNextState(Cell cell, Grid grid) {
-        return cell.getState();
-      }
-
       @Override
       public int getNumberStates() {
         return 0;

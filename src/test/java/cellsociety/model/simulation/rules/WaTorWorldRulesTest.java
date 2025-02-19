@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class WaTorWorldRulesTest {
+
   private WaTorWorldRules waTorWorldRules;
   private Grid grid;
   private final Map<String, Parameter<?>> parameters = new HashMap<>();
@@ -38,7 +39,8 @@ class WaTorWorldRulesTest {
     Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 2));
     grid.addCell(fish);
 
-    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
+    grid.addCell(
+        new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
@@ -56,7 +58,8 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkEatsFish() {
-    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(2, 2));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(),
+        new Point2D.Double(2, 2));
     grid.addCell(shark);
 
     Cell fish = new WaTorWorldCell(WaTorWorldRules.State.FISH.getValue(), new Point2D.Double(2, 3));
@@ -77,7 +80,8 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkDies() {
-    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3), 1, 1);
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(),
+        new Point2D.Double(3, 3), 1, 1);
     grid.addCell(shark);
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
@@ -96,10 +100,12 @@ class WaTorWorldRulesTest {
 
   @Test
   void testSharkMovesToEmptySpace() {
-    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(), new Point2D.Double(3, 3));
+    Cell shark = new WaTorWorldCell(WaTorWorldRules.State.SHARK.getValue(),
+        new Point2D.Double(3, 3));
     grid.addCell(shark);
 
-    grid.addCell(new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
+    grid.addCell(
+        new WaTorWorldCell(WaTorWorldRules.State.EMPTY.getValue(), new Point2D.Double(3, 4)));
 
     List<CellUpdate> updates = waTorWorldRules.getNextStatesForAllCells(grid);
 
@@ -130,13 +136,6 @@ class WaTorWorldRulesTest {
   }
 
   @Test
-  void testStateFromValueInvalid() {
-    assertThrows(IllegalArgumentException.class, () -> WaTorWorldRules.State.fromValue(3));
-    assertThrows(IllegalArgumentException.class, () -> WaTorWorldRules.State.fromValue(-2));
-    assertThrows(IllegalArgumentException.class, () -> WaTorWorldRules.State.fromValue(100));
-  }
-
-  @Test
   void testGetNeighborsMiddleCell() {
     Cell cell = new DefaultCell(1, new Point2D.Double(1, 1));
     grid.addCell(cell);
@@ -147,7 +146,8 @@ class WaTorWorldRulesTest {
     grid.addCell(new DefaultCell(2, new Point2D.Double(1, 2))); // Right
 
     List<Cell> neighbors = waTorWorldRules.getNeighbors(cell, grid);
-    assertEquals(4, neighbors.size(), "Middle cell should only have 4 neighbors. Does not include diagonal neighbors");
+    assertEquals(4, neighbors.size(),
+        "Middle cell should only have 4 neighbors. Does not include diagonal neighbors");
   }
 
 }

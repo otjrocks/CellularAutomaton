@@ -1,15 +1,11 @@
 package cellsociety.model.xmlhandling;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -26,91 +22,81 @@ class XMLTest {
   void setUp() {
     try {
       myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
-    } catch (Exception ex) {
+    } catch (Exception _) {
     }
   }
 
   @Test
   void getGridDimensions_validVariables_returnTrue() {
-    assertEquals(myXMLHandler.getGridHeight(), 10);
-    assertEquals(myXMLHandler.getGridWidth(), 10);
+    assertEquals(10, myXMLHandler.getGridHeight());
+    assertEquals(10, myXMLHandler.getGridWidth());
   }
 
   @Test
   void getSimData_validVariables_returnTrue() {
-    assertEquals(myXMLHandler.getSimData().type(), "GameOfLife");
-    assertEquals(myXMLHandler.getSimData().name(), "Glider");
-    assertEquals(myXMLHandler.getSimData().author(), "Richard K. Guy");
-    assertEquals(myXMLHandler.getSimData().description(),
-        "A basic configuration that produces a glider that moves diagonally across the grid");
+    assertEquals("GameOfLife", myXMLHandler.getSimData().type());
+    assertEquals("Glider", myXMLHandler.getSimData().name());
+    assertEquals("Richard K. Guy", myXMLHandler.getSimData().author());
+    assertEquals(
+        "A basic configuration that produces a glider that moves diagonally across the grid",
+        myXMLHandler.getSimData().description());
   }
 
   @Test
   void getSim_validVariables_returnTrue() {
     assertInstanceOf(GameOfLifeRules.class, myXMLHandler.getSim().rules());
-    assertEquals(myXMLHandler.getSim().data().type(), "GameOfLife");
-    assertEquals(myXMLHandler.getSim().data().name(), "Glider");
-    assertEquals(myXMLHandler.getSim().data().author(), "Richard K. Guy");
-    assertEquals(myXMLHandler.getSim().data().description(),
-        "A basic configuration that produces a glider that moves diagonally across the grid");
+    assertEquals("GameOfLife", myXMLHandler.getSim().data().type());
+    assertEquals("Glider", myXMLHandler.getSim().data().name());
+    assertEquals("Richard K. Guy", myXMLHandler.getSim().data().author());
+    assertEquals(
+        "A basic configuration that produces a glider that moves diagonally across the grid",
+        myXMLHandler.getSim().data().description());
   }
 
   @Test
   void getParams_validVariables_returnTrue() {
-    assertEquals(myXMLHandler.getParams(), new HashMap<String, Double>());
+    assertEquals(0, myXMLHandler.getParams().size());
   }
 
   @Test
-  void XMLHandler_loadInNonexistantFile_throwsIOException() {
+  void XMLHandler_loadInNonExistentFile_throwsIOException() {
     assertThrows(IOException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("reallyreallycool.xml");
-        });
+        () -> new XMLHandler("reallyreallycool.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInPoorlyFormattedFile_throwsSAXException() {
     assertThrows(SAXException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/PoorlyFormatted.xml");
-        });
+        () -> new XMLHandler("src/main/resources/TestXMLs/PoorlyFormatted.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithMissingFields_throwsNullPointerException() {
     assertThrows(NullPointerException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/MissingFields.xml");
-        });
+        () -> new XMLHandler("src/main/resources/TestXMLs/MissingFields.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithIncorrectArgumentType_throwsNumberFormatException() {
     assertThrows(NumberFormatException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/LetterGrid.xml");
-        });
+        () -> new XMLHandler("src/main/resources/TestXMLs/LetterGrid.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithGridTooTall_throwsGridException() {
     assertThrows(GridException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooTall.xml");
-        });
+        () -> new XMLHandler("src/main/resources/TestXMLs/GridTooTall.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithGridTooWide_throwsGridException() {
     assertThrows(GridException.class,
-        () -> {
-          XMLHandler handler = new XMLHandler("src/main/resources/TestXMLs/GridTooWide.xml");
-        });
+        () -> new XMLHandler("src/main/resources/TestXMLs/GridTooWide.xml"));
 
   }
 }

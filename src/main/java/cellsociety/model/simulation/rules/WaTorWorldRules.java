@@ -157,7 +157,7 @@ public class WaTorWorldRules extends SimulationRules {
         fishCells.remove(fishCell);
         health += mySharkEnergyGain;
         checkReproductionAndMoveOutSharkCell(nextStates, shark, health, shouldReproduce, fishCell,
-            updatedCells, grid);
+            updatedCells);
         return;
       }
     }
@@ -174,14 +174,14 @@ public class WaTorWorldRules extends SimulationRules {
       if (!updatedCells.contains(newLocation.getLocation())) {
         checkReproductionAndMoveOutSharkCell(nextStates, shark, health, shouldReproduce,
             newLocation,
-            updatedCells, grid);
+            updatedCells);
       }
     }
   }
 
   private void checkReproductionAndMoveOutSharkCell(List<CellUpdate> nextStates,
       WaTorWorldCell shark, int health,
-      boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells, Grid grid) {
+      boolean shouldReproduce, Cell newLocation, Set<Point2D> updatedCells) {
     if (!updatedCells.contains(newLocation.getLocation())) {
       // update grid with a shark in a new location that retains the original shark's health and
       // reproductive energy + 1 when it moves

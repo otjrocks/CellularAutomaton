@@ -16,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
