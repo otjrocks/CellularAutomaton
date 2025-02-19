@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+    <Type>GameOfLife</Type>
+    <Title>Random Game Of Life By State</Title>
+    <Author>Troy Ludwig</Author>
+    <Description>A random Game of Life pattern with 50 alive cells</Description>
+
+    <GridDimensions>
+        <Height>10</Height>
+        <Width>10</Width>
+    </GridDimensions>
+
+    <RandomInitByState>
+        <State name="ALIVE">50</State>
+    </RandomInitByState>
+
+    <Parameters>
+        <!-- No parameters are needed for Game of Life -->
+    </Parameters>
+</SimulationConfig>
