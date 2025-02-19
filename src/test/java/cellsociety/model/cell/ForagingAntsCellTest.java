@@ -42,7 +42,7 @@ class ForagingAntsCellTest {
     cellTwo = new ForagingAntsCell(0, new Double(0, 0));
     assertEquals(cellTwo.getHomePheromone(), 0);
     assertEquals(cellTwo.getFoodPheromone(), 0);
-    assertEquals(cellTwo.getHealth(), 10);
+    assertEquals(cellTwo.getHealth(), 300);
     assertEquals(cellTwo.getHasFood(), false);
   }
 
