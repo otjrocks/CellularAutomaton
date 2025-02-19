@@ -2,6 +2,7 @@ package cellsociety.utility;
 
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.cell.Cell;
@@ -42,15 +43,34 @@ public class CreateGridUtility {
         throw new GridException();
       }
       for (int j = 0; j < rowValues.length; j++) {
-        int state = Integer.parseInt(rowValues[j]);
+        double rawState = Double.parseDouble(rowValues[j]);
+        int state = (int) rawState;
+        int param = getDecimalValue(rowValues[j]);
+
+
         checkValidState(state, sim);
         Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
+
+        if (sim.data().type().equals("Sugarscape") && param != 0) {
+          ((SugarscapeCell) holdingCell).setSugar(param);
+
+        }
+
         grid.addCell(holdingCell);
       }
     }
 
     return grid;
   }
+
+  private static int getDecimalValue(String rawString) {
+    if (!rawString.contains(".")) {
+      return 0;
+    }
+    String param = rawString.split("\\.")[1];
+    return Integer.parseInt(param);
+  }
+
 
   /**
    * Method to generate random Grid from a number of defined states

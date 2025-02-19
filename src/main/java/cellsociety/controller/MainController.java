@@ -274,12 +274,18 @@ public class MainController {
   }
 
 
-  private void initializeGridWithCells() {
+  private void initializeGridWithCells(Map<String, Parameter<?>> parameters)
+      throws InvalidParameterException {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
         int initialState = 0;
         String simulationType = mySimulation.data().type();
-        myGrid.addCell(SimulationConfig.getNewCell(i, j, initialState, simulationType));
+        Cell cell = SimulationConfig.getNewCell(i, j, initialState, simulationType);
+
+        if (simulationType.equals("Sugarscape")) {
+          ((SugarscapeCell) cell).setParameters(parameters.get("agentSugar").getInteger(), parameters.get("patchSugarGrowBackRate").getInteger(), parameters.get("patchSugarGrowBackInterval").getInteger(), parameters.get("agentVision").getInteger(), parameters.get("agentMetabolism").getInteger());
+        }
+        myGrid.addCell(cell);
       }
     }
   }
