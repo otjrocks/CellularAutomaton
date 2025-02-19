@@ -38,6 +38,15 @@ class ForagingAntsCellTest {
   }
 
   @Test
+  void antCellConstructor_defaultConstructor_returnsDeafultValues(){
+    cellTwo = new ForagingAntsCell(0, new Double(0, 0));
+    assertEquals(cellTwo.getHomePheromone(), 0);
+    assertEquals(cellTwo.getFoodPheromone(), 0);
+    assertEquals(cellTwo.getHealth(), 10);
+    assertEquals(cellTwo.getHasFood(), false);
+  }
+
+  @Test
   void getHasFood_antHasFood_returnsTrue(){
     assertEquals(cellOne.getHasFood(), true);
   }
@@ -61,6 +70,12 @@ class ForagingAntsCellTest {
   void reduceHealth_reduceBy50_returnsReducedHealthValue(){
     cellOne.reduceHealth(50);
     assertEquals(cellOne.getHealth(), 450);
+  }
+
+  @Test
+  void reduceHealth_reduceToNegative_returnsReducedHealthValue(){
+    cellOne.reduceHealth(1000);
+    assertEquals(cellOne.getHealth(), 0);
   }
 
 }
