@@ -32,8 +32,29 @@ class ForagingAntsRulesTest {
   }
 
   @Test
-  void foragingAntRules_antNextToEmptyCell_antMovesToCell() {
+  void foragingAntRules_antWithoutFoodNextToEmptyCell_antMovesToCell() {
     Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2));
+    grid.addCell(ant);
+
+    grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
+
+    List<CellUpdate> updates = FARules.getNextStatesForAllCells(grid);
+
+    boolean antMoved = false;
+    for (CellUpdate update : updates) {
+      if (update.getRow() == 2 && update.getCol() == 3 &&
+          update.getState() == ForagingAntsRules.State.ANT.getValue()) {
+        antMoved = true;
+        break;
+      }
+    }
+
+    assertTrue(antMoved, "Ant should move to a nearby empty space.");
+  }
+
+  @Test
+  void foragingAntRules_antWithFoodNextToEmptyCell_antMovesToCell() {
+    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true);
     grid.addCell(ant);
 
     grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
@@ -76,7 +97,7 @@ class ForagingAntsRulesTest {
   }
 
   @Test
-  void foragingAntRules_antNextToNestCell_antDropsPheremones() {
+  void foragingAntRules_antWithoutFoodNextToNestCell_antDropsPheremones() {
     Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 3));
     grid.addCell(ant);
 
@@ -121,5 +142,27 @@ class ForagingAntsRulesTest {
     }
 
     assertTrue(antDropsFoodPheremones, "Ant should update food pheremones only");
+  }
+
+  @Test
+  void foragingAntRules_antWithFoodNextToNestCell_antDepositsFood() {
+    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true);
+    grid.addCell(ant);
+
+    grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
+    grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.NEST.getValue(), new Point2D.Double(2, 1)));
+
+    List<CellUpdate> updates = FARules.getNextStatesForAllCells(grid);
+
+    boolean antDepositsFood = false;
+    for (CellUpdate update : updates) {
+      if (update.getRow() == 2 && update.getCol() == 3 &&
+          update.getState() == ForagingAntsRules.State.ANT.getValue() &&
+          !((ForagingAntsCell)(update.getNextCell())).getHasFood()) {
+        antDepositsFood = true;
+        break;
+      }
+    }
+    assertTrue(antDepositsFood, "Ant should deposit food at nest");
   }
 }

@@ -13,7 +13,7 @@ public class ForagingAntsCell extends Cell {
         super(state, location);
         this.homePheromone = 0.0;
         this.foodPheromone = 0.0;
-        this.health = 10;
+        this.health = 300;
         this.hasFood = false;
     }
 

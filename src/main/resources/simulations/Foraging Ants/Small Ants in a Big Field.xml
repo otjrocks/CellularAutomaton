@@ -114,5 +114,6 @@
         <maxPheromoneAmount>100</maxPheromoneAmount>
         <antReproductionTime>10</antReproductionTime>
         <pheromoneDecayRate>.2</pheromoneDecayRate>
+        <newAntsNum>3</newAntsNum>
     </Parameters>
 </Simulation>
