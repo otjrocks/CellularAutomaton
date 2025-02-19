@@ -21,6 +21,12 @@ public class Parameter<T> {
     myValue = value;
   }
 
+  /**
+   * Get the string representation of a parameter if current value can be cast to String
+   *
+   * @return String representation of current parameter value
+   * @throws InvalidParameterException If the current parameter value cannot be cast to a String.
+   */
   public String getString() throws InvalidParameterException {
     try {
       return (String) myValue;
@@ -31,6 +37,13 @@ public class Parameter<T> {
     }
   }
 
+  /**
+   * The Double representation of the current parameter value
+   *
+   * @return The Double representation of the value
+   * @throws InvalidParameterException If the current parameter cannot be cast or parsed as a
+   *                                   Double.
+   */
   public Double getDouble() throws InvalidParameterException {
     try {
       if (myValue instanceof Double) {
@@ -44,6 +57,13 @@ public class Parameter<T> {
     }
   }
 
+  /**
+   * The Integer representation of parameter
+   *
+   * @return An Integer value
+   * @throws InvalidParameterException If the current parameter cannot be cast or converted to an
+   *                                   integer value.
+   */
   public Integer getInteger() throws InvalidParameterException {
     try {
       if (myValue instanceof Integer) {
@@ -57,6 +77,11 @@ public class Parameter<T> {
     }
   }
 
+  /**
+   * The parameter toString should print the .toString() of the parameters value.
+   *
+   * @return
+   */
   @Override
   public String toString() {
     return myValue.toString();
