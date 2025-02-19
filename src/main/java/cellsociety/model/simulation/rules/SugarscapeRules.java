@@ -34,7 +34,7 @@ public class SugarscapeRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("pathSugarGrowBackRate", "pathSugarGrowBackInterval", "agentVision",
+    return List.of("patchSugarGrowBackRate", "patchSugarGrowBackInterval", "agentVision",
         "agentSugar", "agentMetabolism");
   }
 
@@ -223,8 +223,8 @@ public class SugarscapeRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("pathSugarGrowBackRate", new Parameter<>(4));
-    parameters.put("pathSugarGrowBackInteral", new Parameter<>(3));
+    parameters.put("patchSugarGrowBackRate", new Parameter<>(4));
+    parameters.put("patchSugarGrowBackInteral", new Parameter<>(3));
     parameters.put("agentVision", new Parameter<>(3));
     parameters.put("agentSugar", new Parameter<>(10));
     parameters.put("agentMetabolism", new Parameter<>(2));

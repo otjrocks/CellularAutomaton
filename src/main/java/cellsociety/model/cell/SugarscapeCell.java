@@ -12,6 +12,21 @@ public class SugarscapeCell extends Cell {
   private final int vision;
   private final int metabolism;
   private int agentSugar;
+  private final int DEFAULT_VALUE = 2;
+
+
+
+  public SugarscapeCell(int state, Point2D location) {
+    super(state, location);
+    sugar = 0;
+    sugarGrowBackRate = DEFAULT_VALUE;
+    sugarGrowBackInterval = DEFAULT_VALUE;
+    intervalsSinceLastGrowBack = DEFAULT_VALUE;
+    vision = DEFAULT_VALUE;
+    metabolism = DEFAULT_VALUE;
+    agentSugar = DEFAULT_VALUE;
+
+  }
 
   /**
    * Creates a Sugarscape Cell that can act as a Patch or an Agent.

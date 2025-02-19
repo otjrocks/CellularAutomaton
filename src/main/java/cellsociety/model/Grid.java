@@ -1,13 +1,15 @@
 package cellsociety.model;
 
+import cellsociety.model.cell.SugarscapeCell;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.lang.Double;
+
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,14 +71,14 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(int row, int col) {
-    if (checkOutOfBounds(new Double(row, col))) {
+    if (checkOutOfBounds(new Point2D.Double(row, col))) {
       throw new IndexOutOfBoundsException(
           "Invalid coordinate. Point must be within bounds of grid.");
     }
-    if (!cellExists(new Double(row, col))) {
+    if (!cellExists(new Point2D.Double(row, col))) {
       return null;
     }
-    return myCells.get(new Double(row, col));
+    return myCells.get(new Point2D.Double(row, col));
   }
 
   /**
@@ -214,14 +216,32 @@ public class Grid {
           throw new GridException();
         }
       for (int j = 0; j < rowValues.length; j++) {
-        int state = Integer.parseInt(rowValues[j]);
+
+        double rawState = Double.parseDouble(rowValues[j]);
+        int state = (int) rawState;
+        int param = getDecimalValue(rowValues[j]);
+
         checkValidState(state, sim);
         Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
+
+        if (sim.data().type().equals("Sugarscape") && param != 0) {
+          ((SugarscapeCell) holdingCell).setSugar(param);
+        }
+
         grid.addCell(holdingCell);
+
       }
     }
 
     return grid;
+  }
+
+  private static int getDecimalValue(String rawString) {
+    if (!rawString.contains(".")) {
+      return 0;
+    }
+    String param = rawString.split("\\.")[1];
+    return Integer.parseInt(param);
   }
 
   /**
