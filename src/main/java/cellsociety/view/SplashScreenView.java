@@ -26,8 +26,8 @@ public class SplashScreenView extends VBox {
 
   private final AlertField myAlertField;
   private ComboBox<String> languageDropdown;
+  private CreateDefaultSimView myCreateDefaultSimView;
   private final MainController myMainController;
-  private final CreateDefaultSimView myCreateDefaultSimView;
   private final VBox myContentBox;
   private final SidebarView mySidebarView;
 
@@ -44,13 +44,11 @@ public class SplashScreenView extends VBox {
     this.myAlertField = alertField;
     this.mySidebarView = sidebar;
     this.myMainController = mainController;
-    this.myCreateDefaultSimView = new CreateDefaultSimView(mainController, myAlertField) {
-      @Override
-      public void handleAdditionalButtonActions() {
-        mainController.hideSplashScreen();
-      }
-    };
     this.myContentBox = new VBox();
+    initialize();
+  }
+
+  private void initialize() {
     initializeSplashScreen();
     handleBoxSizingAndAlignment();
   }
@@ -68,6 +66,12 @@ public class SplashScreenView extends VBox {
   }
 
   private void initializeSplashScreen() {
+    this.myCreateDefaultSimView = new CreateDefaultSimView(myMainController, myAlertField) {
+      @Override
+      public void handleAdditionalButtonActions() {
+        myMainController.hideSplashScreen();
+      }
+    };
     Text title = new Text(getMessage("SPLASH_HEADER"));
     title.getStyleClass().add("main-title");
     Text description = new Text(getMessage("SPLASH_DESCRIPTION"));
@@ -75,6 +79,8 @@ public class SplashScreenView extends VBox {
     Text instructions = new Text(getMessage("SPLASH_INSTRUCTIONS"));
     HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
     myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
+    myThemeSelectorBox.setAlignment(Pos.CENTER);
+    myContentBox.getChildren().clear();
     myContentBox.getChildren()
         .addAll(title, description, instructions, myCreateDefaultSimView, myThemeSelectorBox);
 
@@ -97,9 +103,15 @@ public class SplashScreenView extends VBox {
     String defaultLanguage = languages.contains("English") ? "English" : languages.getFirst();
     languageDropdown.setValue(
         PreferencesController.getPreference("language", defaultLanguage));
-    languageDropdown.setOnAction(event -> MainConfig.setLanguage(languageDropdown.getValue()));
+    languageDropdown.setOnAction(_ -> handleLanguageDropdownAction());
 
     myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
+  }
+
+  private void handleLanguageDropdownAction() {
+    MainConfig.setLanguage(languageDropdown.getValue());
+    this.getChildren().clear();
+    initialize();
   }
 
   private List<String> fetchLanguages() {
@@ -110,22 +122,24 @@ public class SplashScreenView extends VBox {
     Button myChooseFileButton = new Button(getMessage("CHOOSE_FILE_BUTTON"));
     Text chooseFileText = new Text(getMessage("LOAD_BUTTON_TEXT"));
 
-    myChooseFileButton.setOnAction(event -> {
-      try {
-        myMainController.handleNewSimulationFromFile();
-      } catch (IllegalArgumentException e) {
-        myAlertField.flash(e.getMessage(), true);
-        myAlertField.flash(getMessage("LOAD_ERROR"), true);
-        return;
-      } catch (Exception e) {
-        myAlertField.flash(getMessage("LOAD_ERROR"), true);
-        if (VERBOSE_ERROR_MESSAGES) {
-          myAlertField.flash(e.getMessage(), true);
-        }
-        return;
-      }
-      myMainController.hideSplashScreen();
-    });
+    myChooseFileButton.setOnAction(_ -> handleChooseFileAction());
     myContentBox.getChildren().addAll(chooseFileText, myChooseFileButton);
+  }
+
+  private void handleChooseFileAction() {
+    try {
+      myMainController.handleNewSimulationFromFile();
+    } catch (IllegalArgumentException e) {
+      myAlertField.flash(e.getMessage(), true);
+      myAlertField.flash(getMessage("LOAD_ERROR"), true);
+      return;
+    } catch (Exception e) {
+      myAlertField.flash(getMessage("LOAD_ERROR"), true);
+      if (VERBOSE_ERROR_MESSAGES) {
+        myAlertField.flash(e.getMessage(), true);
+      }
+      return;
+    }
+    myMainController.hideSplashScreen();
   }
 }
