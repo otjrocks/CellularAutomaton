@@ -5,27 +5,23 @@ import java.awt.geom.Point2D;
 
 public class SugarscapeCell extends Cell {
   private int sugar;
-  private int sugarGrowBackRate;
-  private int sugarGrowBackInterval;
+  private final int sugarGrowBackRate;
+  private final int sugarGrowBackInterval;
   private int intervalsSinceLastGrowBack;
 
-  private int vision;
-  private int metabolism;
-  private int agentSugar;
-  private final int DEFAULT_VALUE = 2;
-
+  private final int vision;
+  private final int metabolism;
 
 
   public SugarscapeCell(int state, Point2D location) {
     super(state, location);
-    sugar = DEFAULT_VALUE*3;
+    int DEFAULT_VALUE = 2;
+    sugar = DEFAULT_VALUE *3;
     sugarGrowBackRate = DEFAULT_VALUE;
     sugarGrowBackInterval = DEFAULT_VALUE;
     intervalsSinceLastGrowBack = DEFAULT_VALUE;
     vision = DEFAULT_VALUE;
     metabolism = DEFAULT_VALUE;
-    agentSugar = DEFAULT_VALUE;
-
   }
 
   /**
@@ -141,21 +137,5 @@ public class SugarscapeCell extends Cell {
     }
   }
 
-  /**
-   * sets the parameters of each cell based on the provided parmaters
-   *
-   * @param sugar - sugar value of the cell
-   * @param sugarGrowBackRate - increment that the sugar gets on a certain interval
-   * @param sugarGrowBackInterval - the interval needed to increment sugar
-   * @param vision - how far an agent cell can search in each direction
-   * @param metabolism - how much sugar is consumed per round
-   */
-  public void setParameters(int sugar, int sugarGrowBackRate, int sugarGrowBackInterval, int vision, int metabolism) {
-    this.sugar = sugar;
-    this.sugarGrowBackRate = sugarGrowBackRate;
-    this.sugarGrowBackInterval = sugarGrowBackInterval;
-    this.vision = vision;
-    this.metabolism = metabolism;
-  }
 
 }
