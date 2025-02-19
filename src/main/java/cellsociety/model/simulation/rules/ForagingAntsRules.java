@@ -18,6 +18,9 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 
+/**
+ * A class representing the rules for Foraging Ants
+ */
 public class ForagingAntsRules extends SimulationRules {
 
   private final Random random = new Random();
@@ -29,6 +32,14 @@ public class ForagingAntsRules extends SimulationRules {
   private final List<Cell> nestCells = new ArrayList<>();
   private final List<Cell> nestCellNeighbors = new ArrayList<>();
 
+  /**
+   * A default constructor for foraging ants
+   *
+   * @param parameters The required parameters. This class requires pheromoneDecayRate,
+   *                   antReproductionTime, and maxPheromoneAmount
+   * @throws InvalidParameterException An exception thrown if parameters are not provided or are
+   *                                   incorrectly formatted.
+   */
   public ForagingAntsRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
     super(parameters);
     if (parameters == null || parameters.isEmpty()) {
@@ -100,13 +111,8 @@ public class ForagingAntsRules extends SimulationRules {
     }
   }
 
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
+  private List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, false);
-  }
-
-  @Override
-  public int getNextState(Cell cell, Grid grid) {
-    return -1; // Not used
   }
 
   @Override

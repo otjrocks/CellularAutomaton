@@ -49,8 +49,6 @@ public class SegregationRules extends SimulationRules {
     return List.of("toleranceThreshold");
   }
 
-
-
   /**
    * @param cell -  individual cell from grid
    * @param grid - the list of cell objects representing the grid
@@ -60,7 +58,6 @@ public class SegregationRules extends SimulationRules {
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return super.getNeighbors(cell, grid, true);
   }
-
 
   /**
    * Schelling's Model of Segregation: There exists a probability tolerance threshold T (0.3)
@@ -75,7 +72,6 @@ public class SegregationRules extends SimulationRules {
    * @param grid - the list of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Schelling's segregation model
    */
-
   @Override
   public int getNextState(Cell cell, Grid grid) {
 
@@ -144,7 +140,6 @@ public class SegregationRules extends SimulationRules {
     }
     return nextStates;
   }
-
 
   void moveCellToEmptyLocationIfAvailable(Cell unsatisfiedCell, List<Cell> emptyCells,
       List<CellUpdate> nextStates) {
