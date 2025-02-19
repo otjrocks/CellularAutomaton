@@ -39,7 +39,7 @@ public class RockPaperScissorsRulesTest {
     initializeGrid(gridPattern);
   }
 
-  private Grid initializeGrid(int[][] states) {
+  private void initializeGrid(int[][] states) {
     int rows = states.length;
     int cols = states[0].length;
     Grid grid = new Grid(rows, cols);
@@ -49,7 +49,6 @@ public class RockPaperScissorsRulesTest {
         grid.addCell(new DefaultCell(states[row][col], new Point2D.Double(row, col)));
       }
     }
-    return grid;
   }
 
   @Test

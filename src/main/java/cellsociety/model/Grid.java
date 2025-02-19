@@ -3,19 +3,12 @@ package cellsociety.model;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import cellsociety.config.SimulationConfig;
-import cellsociety.model.XMLHandlers.GridException;
-import cellsociety.model.XMLHandlers.InvalidStateException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;

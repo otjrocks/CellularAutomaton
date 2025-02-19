@@ -80,7 +80,7 @@ public class Parameter<T> {
   /**
    * The parameter toString should print the .toString() of the parameters value.
    *
-   * @return
+   * @return The toString of the parameter's value
    */
   @Override
   public String toString() {

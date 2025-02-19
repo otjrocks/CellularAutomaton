@@ -141,15 +141,4 @@ public class SimulationConfig {
     }
   }
 
-  public static int returnMaxStateBasedOnName(String simType) {
-    String stateKey = "%s_MAXSTATE".formatted(simType);
-    try {
-      String valueStr = myValues.getString(stateKey.toUpperCase());
-      return Integer.parseInt(valueStr);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      return 0;
-    }
-  }
-
 }

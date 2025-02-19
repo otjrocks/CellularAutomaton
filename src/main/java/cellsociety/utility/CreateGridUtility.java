@@ -38,8 +38,7 @@ public class CreateGridUtility {
         throw new GridException();
       }
       String[] rowValues = rows.item(i).getTextContent().split(",");
-      if (rowValues.length <= gridWidth) {
-      } else {
+      if (rowValues.length > gridWidth) {
         throw new GridException();
       }
       for (int j = 0; j < rowValues.length; j++) {
