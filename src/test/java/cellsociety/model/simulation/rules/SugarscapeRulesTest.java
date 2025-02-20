@@ -103,7 +103,6 @@ class SugarscapeRulesTest {
     boolean consumedPatch = false;
 
     for (CellUpdate update : updates) {
-      System.out.println(update.getNextCell().getLocation());
       if (update.getNextCell().getLocation().equals(new Point2D.Double(2, 3)) && update.getNextCell().getState() == State.AGENTS.getValue()) {
         consumedPatch = true;
         break;

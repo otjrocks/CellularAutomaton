@@ -294,7 +294,7 @@ public class CreateDefaultSimView extends VBox {
 
   private void createNewSimulationButton() {
     Button createSimButton = new Button(getMessage("CREATE_NEW_GRID_HEADER"));
-
+    createSimButton.setId("createNewSimulationButton");
     createSimButton.setOnAction(_ -> handleCreateNewSimulationAction());
     this.getChildren().add(createSimButton);
   }

@@ -23,20 +23,30 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
-    <!-- provides testing for JavaFX by simulating user interactions and checking using JUnit assertions -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.testfx</groupId>
       <artifactId>testfx-junit5</artifactId>
       <version>4.0.18</version>
       <scope>test</scope>
     </dependency>
-    <!-- allows javafx testing without seeing tests run -->
     <dependency>
       <groupId>org.testfx</groupId>
       <artifactId>openjfx-monocle</artifactId>
       <version>21.0.2</version>
       <scope>test</scope>
-    </dependency>    
+    </dependency>
   </dependencies>
 
   <build>

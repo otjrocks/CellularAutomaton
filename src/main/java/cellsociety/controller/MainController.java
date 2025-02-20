@@ -83,6 +83,14 @@ public class MainController {
   }
 
   /**
+   * For testing, get the splash screen view from main controller
+   * @return The splash screen view
+   */
+  public SplashScreenView getSplashScreen() {
+    return mySplashScreenView;
+  }
+
+  /**
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
