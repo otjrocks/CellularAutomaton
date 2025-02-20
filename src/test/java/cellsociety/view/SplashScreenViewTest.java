@@ -66,7 +66,7 @@ public class SplashScreenViewTest extends ApplicationTest {
     verifyText("#splashDescription", "SPLASH_DESCRIPTION");
     verifyText("#splashInstructions", "SPLASH_INSTRUCTIONS");
     verifyButtonText("#splashChooseFileButton", "CHOOSE_FILE_BUTTON");
-    verifyButtonText("#createNewSimulationButton", "CREATE_NEW_GRID_HEADER");
+    verifyButtonText("#createSimulationButton", "CREATE_NEW_GRID_HEADER");
   }
 
   /**
