@@ -281,6 +281,21 @@ public class MainController {
     mySimulationView.setGridLines(selected);
   }
 
+  /**
+   * Get current grid number of rows
+   * @return The current grid's number of rows
+   */
+  public int getGridRows() {
+    return myGrid.getRows();
+  }
+
+  /**
+   * Get current grid number of columns
+   * @return The current grid's number of columns
+   */
+  public int getGridCols() {
+    return myGrid.getCols();
+  }
 
   private void initializeGridWithCells(Map<String, Parameter<?>> parameters)
       throws InvalidParameterException {

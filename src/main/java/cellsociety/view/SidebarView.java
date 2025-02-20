@@ -69,6 +69,7 @@ public class SidebarView extends VBox {
     ObservableList<String> options =
         FXCollections.observableArrayList(ThemeConfig.THEMES);
     ComboBox<String> myThemeSelector = new ComboBox<>(options);
+    myThemeSelector.setId("themeDropdown");
     myThemeSelector.setValue(ThemeConfig.getCurrentTheme());
     myThemeSelector.valueProperty()
         .addListener((_, _, _) -> {

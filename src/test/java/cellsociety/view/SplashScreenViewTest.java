@@ -2,6 +2,7 @@ package cellsociety.view;
 
 import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
+import cellsociety.view.config.ThemeConfig;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;

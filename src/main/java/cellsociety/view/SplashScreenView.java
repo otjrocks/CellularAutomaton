@@ -36,8 +36,8 @@ public class SplashScreenView extends VBox {
    *
    * @param mainController: the main controller of this view
    * @param alertField:     the alert field to display messages
-   * @param sidebar: an instance of the side bar view that holds a lot of simulation metadata
-
+   * @param sidebar:        an instance of the side bar view that holds a lot of simulation
+   *                        metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {
@@ -46,6 +46,15 @@ public class SplashScreenView extends VBox {
     this.myMainController = mainController;
     this.myContentBox = new VBox();
     initialize();
+  }
+
+  /**
+   * For testing, get the alert field for this field
+   *
+   * @return The alert field
+   */
+  AlertField getAlertField() {
+    return myAlertField;
   }
 
   private void initialize() {
