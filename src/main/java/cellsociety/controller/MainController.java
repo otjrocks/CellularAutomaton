@@ -83,6 +83,13 @@ public class MainController {
   }
 
   /**
+   * For testing, get the sidebar view from main controller
+   */
+  public SidebarView getSidebarView() {
+    return mySidebarView;
+  }
+
+  /**
    * For testing, get the splash screen view from main controller
    * @return The splash screen view
    */
