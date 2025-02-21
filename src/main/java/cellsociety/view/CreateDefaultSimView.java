@@ -102,6 +102,7 @@ public class CreateDefaultSimView extends VBox {
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
       TextField newParameterField = createTextField(parameter, myParametersControlBox);
+      newParameterField.setId(String.format("createSimulationParameter_%s", parameter));
       myParameterTextFields.put(parameter, newParameterField);
     }
   }

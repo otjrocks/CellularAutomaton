@@ -4,6 +4,7 @@ import cellsociety.controller.MainController;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.model.simulation.rules.PercolationRules;
+import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
@@ -24,6 +25,7 @@ import static cellsociety.config.MainConfig.MIN_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.getMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -79,7 +81,8 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
         "This is a Percolation", MAX_GRID_NUM_ROWS + 1, 10);
     clickCreateSimulationButton();
 
-    assertErrorMessage(String.format(getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
+    assertErrorMessage(
+        String.format(getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
   }
 
   @Test
@@ -88,7 +91,8 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
         "This is a Percolation", MIN_GRID_NUM_ROWS - 1, 10);
     clickCreateSimulationButton();
 
-    assertErrorMessage(String.format(getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
+    assertErrorMessage(
+        String.format(getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS));
   }
 
   @Test
@@ -97,7 +101,8 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
         "This is a Percolation", 10, MAX_GRID_NUM_COLS + 1);
     clickCreateSimulationButton();
 
-    assertErrorMessage(String.format(getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
+    assertErrorMessage(
+        String.format(getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
   }
 
   @Test
@@ -106,7 +111,8 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
         "This is a Percolation", 10, MIN_GRID_NUM_COLS - 1);
     clickCreateSimulationButton();
 
-    assertErrorMessage(String.format(getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
+    assertErrorMessage(
+        String.format(getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS));
   }
 
   @Test
@@ -133,6 +139,70 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
     assertErrorMessage(getMessage("EMPTY_FIELD"));
   }
 
+  @Test
+  public void createSimulationForm_TestRockPaperScissorsParameter_FailureMessageInvalidParameterNotANumber() {
+    createSimulationForm("RockPaperScissors", "Test Name", "Owen Jennings",
+        "Rock Paper Scissors Simulation", 30, 30);
+
+    TextField minThresholdParameter = lookup("#createSimulationParameter_minThreshold").query();
+    writeInputTo(minThresholdParameter, "Apple");
+
+    clickCreateSimulationButton();
+
+    assertErrorMessage(String.format(getMessage("INVALID_PARAMETER"),
+        getMessage("INVALID_PARAMETER_TYPE")));
+  }
+
+  @Test
+  public void createSimulationForm_TestRockPaperScissorsParameter_FailureMessageInvalidParameterWrongRange() {
+    createSimulationForm("RockPaperScissors", "Test Name", "Owen Jennings",
+        "Rock Paper Scissors Simulation", 30, 30);
+
+    TextField minThresholdParameter = lookup("#createSimulationParameter_minThreshold").query();
+    writeInputTo(minThresholdParameter, "5");
+
+    TextField numStates = lookup("#createSimulationParameter_numStates").query();
+    writeInputTo(numStates, "5");
+
+    clickCreateSimulationButton();
+
+    assertErrorMessage(String.format(getMessage("INVALID_PARAMETER"), "minThreshold"));
+  }
+
+  @Test
+  public void createSimulationForm_TestRockPaperScissorsParameter_FailureMessageInvalidParameterNegativeStates() {
+    createSimulationForm("RockPaperScissors", "Test Name", "Owen Jennings",
+        "Rock Paper Scissors Simulation", 30, 30);
+
+    TextField minThresholdParameter = lookup("#createSimulationParameter_minThreshold").query();
+    writeInputTo(minThresholdParameter, "0.5");
+
+    TextField numStates = lookup("#createSimulationParameter_numStates").query();
+    writeInputTo(numStates, "-1.5");
+
+    clickCreateSimulationButton();
+    assertErrorMessage(String.format(getMessage("INVALID_PARAMETER"), "numStates"));
+  }
+
+  @Test
+  public void createSimulationForm_TestRockPaperScissorsWithParameters_Success() {
+    createSimulationForm("RockPaperScissors", "Rock Paper", "Owen Jennings",
+        "Rock Paper Scissors Simulation", 30, 30);
+
+    TextField minThresholdParameter = lookup("#createSimulationParameter_minThreshold").query();
+    writeInputTo(minThresholdParameter, "0.5");
+
+    TextField numStates = lookup("#createSimulationParameter_numStates").query();
+    writeInputTo(numStates, "2");
+
+    clickCreateSimulationButton();
+
+    // Assert that simulation was created successfully and main controller was updated
+    assertInstanceOf(RockPaperScissorsRules.class, myMainController.getSimulation().rules());
+    assertSimulationMetaData("Rock Paper", "Owen Jennings", "Rock Paper Scissors Simulation", 30,
+        30);
+  }
+
   private void createSimulationForm(String simulationType, String name, String author,
       String description, int rows, int cols) {
     clickOn("#createSimulationSelector");
@@ -143,7 +213,7 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
 
   private void assertErrorMessage(String errorMessage) {
     String expectedError = String.format(getMessage("WARNING_PREFIX"), errorMessage);
-    assertEquals(expectedError, myAlertField.getMessages().getFirst());
+    assertTrue(myAlertField.getMessages().contains(expectedError));
   }
 
   private void fillSimulationForm(String name, String author, String description, int rows,

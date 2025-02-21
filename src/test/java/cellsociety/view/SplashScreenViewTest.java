@@ -2,7 +2,6 @@ package cellsociety.view;
 
 import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
-import cellsociety.view.config.ThemeConfig;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -11,14 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.framework.junit5.ApplicationTest;
+import util.DukeApplicationTest;
 
 import static cellsociety.config.MainConfig.getMessage;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SplashScreenViewTest extends ApplicationTest {
+public class SplashScreenViewTest extends DukeApplicationTest {
 
   // I used ChatGPT for assistance in overriding the start method to get the view to show in TestFX and in refactoring my code into helper methods
   private MainController myMainController;
