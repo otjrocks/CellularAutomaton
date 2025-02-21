@@ -74,13 +74,16 @@ public class ViewModeView extends VBox {
     Text sliderLabel = new Text(getMessage("SLIDER_LABEL"));
     Slider speedSlider = new Slider(initialSliderValue / SPEED_SLIDER_DELTA,
         initialSliderValue * SPEED_SLIDER_DELTA, currentSliderValue);
+    speedSlider.setId("viewModeSpeedSlider");
     speedSlider.valueProperty().addListener(
-        (observable, oldValue, newValue) -> {
-          myMainController.updateAnimationSpeed(
-              1 / (Double) newValue, myMainController.isPlaying());
-          PreferencesController.setPreference("animationSpeed", String.valueOf(newValue));
-        });
+        (_, _, newValue) -> handleSpeedSliderUpdate(newValue));
     mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
+  }
+
+  private void handleSpeedSliderUpdate(Number newValue) {
+    myMainController.updateAnimationSpeed(
+        1 / (Double) newValue, myMainController.isPlaying());
+    PreferencesController.setPreference("animationSpeed", String.valueOf(newValue));
   }
 
   private FlowPane createAllButtons() {
@@ -105,14 +108,18 @@ public class ViewModeView extends VBox {
     infoText.getStyleClass().add("secondary-title");
     Text name = createText(
         String.format("%s %s", getMessage("NAME_LABEL"), simulationData.name()));
+    name.setId("viewModeSimulationName");
     Text type = createText(
         String.format("%s %s", getMessage("TYPE_LABEL"), simulationData.type()));
+    type.setId("viewModeSimulationType");
     Text author = createText(
         String.format("%s %s", getMessage("AUTHOR_LABEL"), simulationData.author()));
+    author.setId("viewModeSimulationAuthor");
     Text description = createText(
         String.format("%s %s", getMessage("DESCRIPTION_LABEL"),
             simulationData.description())
     );
+    description.setId("viewModeSimulationDescription");
     VBox metaDataBox = new VBox();
     metaDataBox.setSpacing(ELEMENT_SPACING);
     metaDataBox.getChildren().addAll(infoText, name, type, author, description);
@@ -168,6 +175,7 @@ public class ViewModeView extends VBox {
 
   private void createStepButton() {
     myStepButton = new Button(getMessage("STEP_LABEL"));
+    myStepButton.setId("viewModeStepButton");
     myStepButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myStepButton.setOnAction(event -> {
       stopAnimationPlayIfRunning();
@@ -186,6 +194,7 @@ public class ViewModeView extends VBox {
 
   private void createPlayPauseButton() {
     myPlayPauseButton = new Button(getMessage("PLAY_LABEL"));
+    myPlayPauseButton.setId("viewModePlayPauseButton");
     myPlayPauseButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
     myPlayPauseButton.setOnAction(_ -> {
       handlePlayPauseButtonAction();
