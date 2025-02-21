@@ -70,6 +70,15 @@ public class SidebarView extends VBox {
   }
 
   /**
+   * For testing, get the ViewModeView for this class
+   *
+   * @return: The View Mode
+   */
+  ViewModeView getViewModeView() {
+    return myViewModeView;
+  }
+
+  /**
    * Create the theme selector element, which can be accessed across multiple views
    *
    * @return A HBox containing the theme selector and its label
