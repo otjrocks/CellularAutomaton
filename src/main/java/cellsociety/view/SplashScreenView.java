@@ -36,8 +36,8 @@ public class SplashScreenView extends VBox {
    *
    * @param mainController: the main controller of this view
    * @param alertField:     the alert field to display messages
-   * @param sidebar: an instance of the side bar view that holds a lot of simulation metadata
-
+   * @param sidebar:        an instance of the side bar view that holds a lot of simulation
+   *                        metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {
@@ -46,6 +46,15 @@ public class SplashScreenView extends VBox {
     this.myMainController = mainController;
     this.myContentBox = new VBox();
     initialize();
+  }
+
+  /**
+   * For testing, get the alert field for this field
+   *
+   * @return The alert field
+   */
+  AlertField getAlertField() {
+    return myAlertField;
   }
 
   private void initialize() {
@@ -73,10 +82,13 @@ public class SplashScreenView extends VBox {
       }
     };
     Text title = new Text(getMessage("SPLASH_HEADER"));
+    title.setId("splashScreenTitle");
     title.getStyleClass().add("main-title");
     Text description = new Text(getMessage("SPLASH_DESCRIPTION"));
+    description.setId("splashDescription");
     description.getStyleClass().add("secondary-title");
     Text instructions = new Text(getMessage("SPLASH_INSTRUCTIONS"));
+    instructions.setId("splashInstructions");
     HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
     myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
     myThemeSelectorBox.setAlignment(Pos.CENTER);
@@ -91,6 +103,7 @@ public class SplashScreenView extends VBox {
 
   private void createLanguageDropdown() {
     languageDropdown = new ComboBox<>();
+    languageDropdown.setId("languageDropdown");
     Text changeLanguageText = new Text(getMessage("CHANGE_LANGUAGE"));
 
     List<String> languages = fetchLanguages();
@@ -121,6 +134,7 @@ public class SplashScreenView extends VBox {
   private void createFileChooserButton() {
     Button myChooseFileButton = new Button(getMessage("CHOOSE_FILE_BUTTON"));
     Text chooseFileText = new Text(getMessage("LOAD_BUTTON_TEXT"));
+    myChooseFileButton.setId("splashChooseFileButton");
 
     myChooseFileButton.setOnAction(_ -> handleChooseFileAction());
     myContentBox.getChildren().addAll(chooseFileText, myChooseFileButton);

@@ -83,6 +83,21 @@ public class MainController {
   }
 
   /**
+   * For testing, get the sidebar view from main controller
+   */
+  public SidebarView getSidebarView() {
+    return mySidebarView;
+  }
+
+  /**
+   * For testing, get the splash screen view from main controller
+   * @return The splash screen view
+   */
+  public SplashScreenView getSplashScreen() {
+    return mySplashScreenView;
+  }
+
+  /**
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
@@ -273,6 +288,21 @@ public class MainController {
     mySimulationView.setGridLines(selected);
   }
 
+  /**
+   * Get current grid number of rows
+   * @return The current grid's number of rows
+   */
+  public int getGridRows() {
+    return myGrid.getRows();
+  }
+
+  /**
+   * Get current grid number of columns
+   * @return The current grid's number of columns
+   */
+  public int getGridCols() {
+    return myGrid.getCols();
+  }
 
   private void initializeGridWithCells(Map<String, Parameter<?>> parameters)
       throws InvalidParameterException {

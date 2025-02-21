@@ -5,11 +5,13 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+
 import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.TITLE;
 import static cellsociety.config.MainConfig.WIDTH;
 
 public class CreateNewSimulation {
+
   private final Stage myStage;
   private final Group myRoot;
 
@@ -18,11 +20,21 @@ public class CreateNewSimulation {
     this.myRoot = new Group();
   }
 
-  public void launchNewSimulation() {
+  /**
+   * For JavaFX testing, you must use the stage provided to you
+   *
+   * @param stage State to create a new simulation for
+   */
+  public CreateNewSimulation(Stage stage) {
+    this.myStage = stage;
+    this.myRoot = new Group();
+  }
+
+  public MainController launchNewSimulation() {
     initializeStage(myStage);
     myStage.setTitle(TITLE);
 
-    new MainController(myStage, myRoot);
+    return new MainController(myStage, myRoot);
   }
 
   private void initializeStage(Stage stage) {

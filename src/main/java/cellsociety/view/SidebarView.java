@@ -61,6 +61,15 @@ public class SidebarView extends VBox {
   }
 
   /**
+   * For testing, get the alert field for this field
+   *
+   * @return The alert field
+   */
+  AlertField getAlertField() {
+    return myAlertField;
+  }
+
+  /**
    * Create the theme selector element, which can be accessed across multiple views
    *
    * @return A HBox containing the theme selector and its label
@@ -69,6 +78,7 @@ public class SidebarView extends VBox {
     ObservableList<String> options =
         FXCollections.observableArrayList(ThemeConfig.THEMES);
     ComboBox<String> myThemeSelector = new ComboBox<>(options);
+    myThemeSelector.setId("themeDropdown");
     myThemeSelector.setValue(ThemeConfig.getCurrentTheme());
     myThemeSelector.valueProperty()
         .addListener((_, _, _) -> {
@@ -145,9 +155,8 @@ public class SidebarView extends VBox {
 
   private void createChangeModeButton() {
     myModeButton = new Button(getMessage("EDIT_MODE"));
-    myModeButton.setOnMouseClicked(_ -> {
-      handleChangeModeButtonClick();
-    });
+    myModeButton.setId("sidebarModeButton");
+    myModeButton.setOnMouseClicked(_ -> handleChangeModeButtonClick());
   }
 
   private void handleChangeModeButtonClick() {

@@ -51,7 +51,7 @@ public class CreateDefaultSimView extends VBox {
    * This constructor creates the default sim view to display in splashscreen and the sim
    *
    * @param mainController - an instance of the main controller
-   * @param alertField - the field that flashes errors
+   * @param alertField     - the field that flashes errors
    */
   public CreateDefaultSimView(MainController mainController, AlertField alertField) {
     this.myMainController = mainController;
@@ -80,6 +80,7 @@ public class CreateDefaultSimView extends VBox {
     ObservableList<String> options =
         FXCollections.observableArrayList(SimulationConfig.SIMULATIONS);
     mySimulationSelector = new ComboBox<>(options);
+    mySimulationSelector.setId("createSimulationSelector");
     mySimulationSelector.setValue(options.getFirst());
     mySimulationSelector.valueProperty()
         .addListener((_, _, _) -> addAllParameters(mySimulationSelector.getValue()));
@@ -101,6 +102,7 @@ public class CreateDefaultSimView extends VBox {
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
       TextField newParameterField = createTextField(parameter, myParametersControlBox);
+      newParameterField.setId(String.format("createSimulationParameter_%s", parameter));
       myParameterTextFields.put(parameter, newParameterField);
     }
   }
@@ -121,6 +123,7 @@ public class CreateDefaultSimView extends VBox {
    */
   private void createRowControl() {
     myRowField = new IntegerField();
+    myRowField.setId("createSimulationRowField");
     myRowField.setText(String.valueOf(DEFAULT_NUM_CELLS));
     myRowField.textProperty()
         .addListener((_, _, _) -> myNumRows = parseIntegerField(myRowField, 0));
@@ -136,6 +139,7 @@ public class CreateDefaultSimView extends VBox {
    */
   private void createColControl() {
     myColField = new IntegerField();
+    myColField.setId("createSimulationColField");
     myColField.setText(Integer.toString(DEFAULT_NUM_CELLS));
     myColField.textProperty()
         .addListener((_, _, _) -> myNumCols = parseIntegerField(myColField, 0));
@@ -160,10 +164,13 @@ public class CreateDefaultSimView extends VBox {
   private void createSimulationMetaDataTextFields() {
     myNameField = createTextField(getMessage("NAME_LABEL"),
         getMessage("DEFAULT_NAME"), this);
+    myNameField.setId("createSimulationNameTextField");
     myAuthorField = createTextField(getMessage("AUTHOR_LABEL"),
         getMessage("DEFAULT_AUTHOR"), this);
+    myAuthorField.setId("createSimulationAuthorTextField");
     myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"),
         getMessage("DEFAULT_DESCRIPTION"), this);
+    myDescriptionField.setId("createSimulationDescriptionTextField");
   }
 
   private TextField createTextField(String label, String defaultValue, VBox target) {
@@ -294,7 +301,7 @@ public class CreateDefaultSimView extends VBox {
 
   private void createNewSimulationButton() {
     Button createSimButton = new Button(getMessage("CREATE_NEW_GRID_HEADER"));
-
+    createSimButton.setId("createSimulationButton");
     createSimButton.setOnAction(_ -> handleCreateNewSimulationAction());
     this.getChildren().add(createSimButton);
   }

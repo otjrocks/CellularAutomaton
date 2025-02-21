@@ -4,6 +4,8 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.getMessage;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
@@ -37,6 +39,21 @@ public class AlertField extends VBox {
       getChildren().removeFirst(); // Remove the oldest message, regardless of if time has expired
     }
     createNewAlertMessage(message, warning);
+  }
+
+  /**
+   * Get a list of all the current alert messages for this field
+   *
+   * @return A list of all the current alert messages for this field
+   */
+  public List<String> getMessages() {
+    List<String> messages = new ArrayList<>();
+    for (int i = 0; i < getChildren().size(); i++) {
+      // ASSUME all elements are text
+      Text alertText = (Text) getChildren().get(i);
+      messages.add(alertText.getText());
+    }
+    return messages;
   }
 
   private void createNewAlertMessage(String message, boolean isWarning) {
