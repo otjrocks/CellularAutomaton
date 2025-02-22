@@ -34,8 +34,20 @@ public class GridView extends Group {
     cellHeight = height / numRows;
     myGrid = new CellView[myNumRows][myNumColumns];
     initializeGrid();
+    this.setId("gridView");
     this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()),
         this.getColumn(event.getX())));
+  }
+
+  /**
+   * For testing, get the cell view at the provided coordinate
+   *
+   * @param row The row you are querying
+   * @param col The column you are querying
+   * @return A cell view, if it exists
+   */
+  CellView getCell(int row, int col) {
+    return myGrid[row][col];
   }
 
   /**
