@@ -41,6 +41,15 @@ public class SimulationView extends Group {
   }
 
   /**
+   * For testing, get the grid view for this simulation
+   *
+   * @return A grid view object
+   */
+  GridView getGridView() {
+    return myGridView;
+  }
+
+  /**
    * Perform a single step of the animation
    *
    * @param grid:       Grid of the simulation
