@@ -128,13 +128,6 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Retrieves the adjacent non-diagonal neighbors.
-   */
-  private List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, false);
-  }
- 
-  /**
    * Retrieves number of different states involved in the simulation
    */
   @Override

@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ class ForagingAntsRulesTest {
     parameters.put("maxPheromoneAmount", new Parameter<>("100"));
     parameters.put("newAntsNum", new Parameter<>("3"));
 
-    FARules = new ForagingAntsRules(parameters);
+    FARules = new ForagingAntsRules(parameters, new VonNeumannNeighbors(1));
   }
 
   @Test

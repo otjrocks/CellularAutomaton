@@ -32,12 +32,12 @@ public abstract class GetNeighbors {
         int newRow = cell.getRow() + i * direction[0];
         int newCol = cell.getCol() + i * direction[1];
 
-        if (newRow < 0 || newRow >= grid.getRows() || newCol < 0 || newCol >= grid.getCols()) {
-          break;
+        if (newRow >= 0 && newRow < grid.getRows() && newCol >= 0 && newCol < grid.getCols()) {
+          Cell newCell = grid.getCell(newRow, newCol);
+          if (newCell != null) {
+            neighbors.add(newCell);
+          }
         }
-
-        Cell newCell = grid.getCell(newRow, newCol);
-        neighbors.add(newCell);
       }
     }
     return neighbors;
