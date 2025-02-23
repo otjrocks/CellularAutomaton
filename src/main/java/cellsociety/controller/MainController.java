@@ -1,6 +1,5 @@
 package cellsociety.controller;
 
-import cellsociety.model.cell.SugarscapeCell;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -91,10 +90,20 @@ public class MainController {
 
   /**
    * For testing, get the splash screen view from main controller
+   *
    * @return The splash screen view
    */
   public SplashScreenView getSplashScreen() {
     return mySplashScreenView;
+  }
+
+  /**
+   * For testing, get the simulation view from main controller
+   *
+   * @return: a simulation view
+   */
+  public SimulationView getSimulationView() {
+    return mySimulationView;
   }
 
   /**
@@ -290,6 +299,7 @@ public class MainController {
 
   /**
    * Get current grid number of rows
+   *
    * @return The current grid's number of rows
    */
   public int getGridRows() {
@@ -298,6 +308,7 @@ public class MainController {
 
   /**
    * Get current grid number of columns
+   *
    * @return The current grid's number of columns
    */
   public int getGridCols() {

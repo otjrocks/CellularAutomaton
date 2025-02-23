@@ -8,7 +8,6 @@ import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.ThemeConfig;
-import java.awt.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;

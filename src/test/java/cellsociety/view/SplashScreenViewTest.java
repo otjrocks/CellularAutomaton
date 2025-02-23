@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import util.DukeApplicationTest;
 import util.TestUtils;
 
+import static cellsociety.config.MainConfig.getMessage;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,9 +61,9 @@ public class SplashScreenViewTest extends DukeApplicationTest {
     clickOn(language);
 
     // Verify text elements and buttons change on language change
-    myTestUtils.verifyText("#splashScreenTitle", "SPLASH_HEADER");
-    myTestUtils.verifyText("#splashDescription", "SPLASH_DESCRIPTION");
-    myTestUtils.verifyText("#splashInstructions", "SPLASH_INSTRUCTIONS");
+    myTestUtils.verifyText("#splashScreenTitle", getMessage("SPLASH_HEADER"));
+    myTestUtils.verifyText("#splashDescription", getMessage("SPLASH_DESCRIPTION"));
+    myTestUtils.verifyText("#splashInstructions", getMessage("SPLASH_INSTRUCTIONS"));
     myTestUtils.verifyButtonText("#splashChooseFileButton", "CHOOSE_FILE_BUTTON");
     myTestUtils.verifyButtonText("#createSimulationButton", "CREATE_NEW_GRID_HEADER");
   }
