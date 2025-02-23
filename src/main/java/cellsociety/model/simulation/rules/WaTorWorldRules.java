@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
@@ -38,8 +39,8 @@ public class WaTorWorldRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public WaTorWorldRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
-    super(parameters);
+  public WaTorWorldRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+    super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }
@@ -90,13 +91,6 @@ public class WaTorWorldRules extends SimulationRules {
     public int getValue() {
       return ordinal();
     }
-  }
-
-  /**
-   * Retrieves the adjacent non-diagonal neighbors.
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, false);
   }
 
   @Override

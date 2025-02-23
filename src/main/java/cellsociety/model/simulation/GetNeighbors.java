@@ -1,8 +1,7 @@
-package cellsociety.model.simulation.rules;
+package cellsociety.model.simulation;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 

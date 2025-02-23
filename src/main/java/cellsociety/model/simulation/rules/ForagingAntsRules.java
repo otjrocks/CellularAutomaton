@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +42,8 @@ public class ForagingAntsRules extends SimulationRules {
    * @throws InvalidParameterException An exception thrown if parameters are not provided or are
    *                                   incorrectly formatted.
    */
-  public ForagingAntsRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
-    super(parameters);
+  public ForagingAntsRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+    super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }

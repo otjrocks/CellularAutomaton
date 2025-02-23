@@ -3,8 +3,6 @@ package cellsociety.model.simulation;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.rules.GetNeighbors;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

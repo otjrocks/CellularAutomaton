@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -27,9 +28,9 @@ public class SpreadingOfFireRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SpreadingOfFireRules(Map<String, Parameter<?>> parameters)
+  public SpreadingOfFireRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
-    super(parameters);
+    super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }
@@ -57,17 +58,6 @@ public class SpreadingOfFireRules extends SimulationRules {
   public static List<String> getRequiredParameters() {
     return List.of("growInEmptyCell", "ignitionWithoutNeighbors");
   }
-
-  /**
-   * @param cell - individual cell from grid
-   * @param grid - the list of cell objects representing the grid
-   * @return - a list of cell objects representing the neighbors of the cell (adjacent and not
-   * diagonals)
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, false);
-  }
-
 
   /**
    * Forest Fire: A burning cell (2) turns into an empty cell A tree (1) will burn if at least one

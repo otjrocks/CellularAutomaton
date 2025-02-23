@@ -1,6 +1,6 @@
 package cellsociety.model.simulation.getNeighborOptions;
 
-import cellsociety.model.simulation.rules.GetNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
 
 public class VonNeumannNeighbors extends GetNeighbors {
 

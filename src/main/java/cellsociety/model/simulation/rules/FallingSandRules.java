@@ -4,6 +4,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -27,9 +28,9 @@ public class FallingSandRules extends SimulationRules {
    * @param parameters: parameters for the simulation (may not be used)
    * @throws InvalidParameterException: an exception for missing or invalid parameters provided.
    */
-  public FallingSandRules(Map<String, Parameter<?>> parameters)
+  public FallingSandRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
-    super(parameters);
+    super(parameters, myGetNeighbors);
   }
 
   // An enum to store the possible states for the simulation

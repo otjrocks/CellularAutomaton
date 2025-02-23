@@ -1,6 +1,6 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +17,6 @@ public class GameOfLifeRules extends SimulationRules {
   private String myRuleString;
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
-  private GetNeighbors myGetNeighbors;
 
   public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
     super(parameters, myGetNeighbors);

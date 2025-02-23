@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -26,9 +27,9 @@ public class RockPaperScissorsRules extends SimulationRules {
    * @param myParameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters)
+  public RockPaperScissorsRules(Map<String, Parameter<?>> myParameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
-    super(myParameters);
+    super(myParameters, myGetNeighbors);
     if (myParameters == null || myParameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
@@ -55,16 +56,6 @@ public class RockPaperScissorsRules extends SimulationRules {
     if (myMinThreshold < 0 || myMinThreshold > 1) {
       throwInvalidParameterException("minThreshold");
     }
-  }
-
-  /**
-   * @param cell -  individual cell from grid
-   * @param grid - the list of cell objects representing the grid
-   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and
-   * diagonals)
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, true);
   }
 
 

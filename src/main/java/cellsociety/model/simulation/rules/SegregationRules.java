@@ -4,6 +4,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -30,8 +31,8 @@ public class SegregationRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SegregationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
-    super(parameters);
+  public SegregationRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+    super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
@@ -55,15 +56,6 @@ public class SegregationRules extends SimulationRules {
     return List.of("toleranceThreshold");
   }
 
-  /**
-   * @param cell -  individual cell from grid
-   * @param grid - the list of cell objects representing the grid
-   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and
-   * diagonals)
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, true);
-  }
 
   /**
    * Schelling's Model of Segregation: There exists a probability tolerance threshold T (0.3)

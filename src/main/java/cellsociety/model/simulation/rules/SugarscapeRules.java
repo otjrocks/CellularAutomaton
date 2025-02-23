@@ -5,6 +5,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.SugarscapeCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -29,9 +30,9 @@ public class SugarscapeRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SugarscapeRules(Map<String, Parameter<?>> parameters)
+  public SugarscapeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
-    super(parameters);
+    super(parameters, myGetNeighbors);
   }
 
   // An enum to store the possible states for the simulation
