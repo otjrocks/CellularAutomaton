@@ -8,6 +8,6 @@ package cellsociety.model.simulation;
  * @param author:      The author of the simulation
  * @param description: The description of the simulation
  */
-public record SimulationMetaData(String type, String name, String author, String description) {
+public record SimulationMetaData(String type, String name, String author, String description, String neighborType, int layers) {
 
 }
