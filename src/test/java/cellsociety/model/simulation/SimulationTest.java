@@ -2,6 +2,7 @@ package cellsociety.model.simulation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.config.StateDisplayConfig;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ class SimulationTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    testRules = new GameOfLifeRules(new HashMap<>()); // I chose an example rules class
+    testRules = new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)); // I chose an example rules class
     testData = new SimulationMetaData("GameOfLife", "Tester", "Justin", "Justin's GOL Test");
     testSimulation = new Simulation(testRules, testData);
   }

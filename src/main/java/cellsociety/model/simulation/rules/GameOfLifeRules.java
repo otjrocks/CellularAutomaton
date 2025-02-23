@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +17,10 @@ public class GameOfLifeRules extends SimulationRules {
   private String myRuleString;
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
+  private GetNeighbors myGetNeighbors;
 
-  public GameOfLifeRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
-    super(parameters);
+  public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+    super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       myRuleString = "B3/S23";
       birthValues = new ArrayList<>(List.of(3));
@@ -47,16 +49,6 @@ public class GameOfLifeRules extends SimulationRules {
    */
   public static List<String> getRequiredParameters() {
     return List.of("ruleString");
-  }
-
-
-  /**
-   * @param cell - individual cell from grid
-   * @return - a list of cell objects representing the neighbors of the cell (adjacent and
-   * diagonals)
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, true);
   }
 
 
