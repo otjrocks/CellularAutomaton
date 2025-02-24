@@ -4,6 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.view.grid.GridView;
 import cellsociety.view.grid.HexagonGridView;
 import cellsociety.view.grid.RectangleGridView;
+import cellsociety.view.grid.TriangleGridView;
 import java.util.List;
 
 import cellsociety.controller.MainController;
@@ -36,7 +37,7 @@ public class SimulationView extends Group {
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
       Simulation simulation, MainController mainController) {
-    myGridView = new RectangleGridView(width, height, numRows, numCols, mainController);
+    myGridView = new TriangleGridView(width, height, numRows, numCols, mainController);
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
     getChildren().add(myGridView);

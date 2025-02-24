@@ -2,7 +2,6 @@ package cellsociety.view.grid;
 
 import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
-import cellsociety.view.cell.RectangleCellView;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 
@@ -23,10 +22,11 @@ public abstract class GridView extends Group {
   /**
    * Create a grid view
    *
-   * @param width:      Width of the view
-   * @param height:     Height of the view
-   * @param numRows:    Number of rows in the grid
-   * @param numColumns: Number of cells per row in the grid
+   * @param width:         Width of the view
+   * @param height:        Height of the view
+   * @param numRows:       Number of rows in the grid
+   * @param numColumns:    Number of cells per row in the grid
+   * @param mainController : Main controller of the program
    */
   public GridView(int width, int height, int numRows, int numColumns,
       MainController mainController) {
@@ -37,12 +37,14 @@ public abstract class GridView extends Group {
     myGrid = initializeGrid();
     for (int row = 0; row < myNumRows; row++) {
       for (int column = 0; column < myNumColumns; column++) {
-        this.getChildren().add(myGrid[row][column]);
+        CellView cell = myGrid[row][column];
+        this.getChildren().add(cell);
+        int cellRow = row;
+        int cellColumn = column;
+        cell.setOnMouseClicked(event -> mainController.changeCellState(cellRow, cellColumn));
       }
     }
     this.setId("gridView");
-    this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()),
-        this.getColumn(event.getX())));
   }
 
   /**
@@ -117,12 +119,6 @@ public abstract class GridView extends Group {
   }
 
   protected abstract CellView[][] initializeGrid();
-
-  // Provided an x coordinate, return the row of the cell at the coordinate
-  protected abstract int getRow(double y);
-
-  // Provided a y coordinate, return the column of the cell at the coordinate
-  protected abstract int getColumn(double x);
 
   /**
    * Reset the grid line colors on theme change
