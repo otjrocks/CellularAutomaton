@@ -31,6 +31,12 @@ public class NeighborView extends VBox {
   private String neighborType;
   private ComboBox<String> neighborTypeSelector;
 
+  /**
+   * Create a new neighbor view
+   *
+   * @param mainController The main controller of the program
+   * @param isEditing      Whether the user should be able to edit parameters or not
+   */
   public NeighborView(MainController mainController, boolean isEditing) {
     this.setSpacing(ELEMENT_SPACING);
     this.mainController = mainController;
@@ -51,8 +57,10 @@ public class NeighborView extends VBox {
   private void setUpUI() {
     this.getChildren().clear();
     this.getStyleClass().add("info-box");
+
     createTitle();
     createNeighborDisplay();
+
     if (isEditing) {
       createUpdateButton();
     }
