@@ -63,6 +63,15 @@ public abstract class CellView extends Group {
   }
 
   /**
+   * Get the fill color for a cell
+   *
+   * @return: the color of the fill
+   */
+  public Color getFill() {
+    return (Color) myShape.getFill();
+  }
+
+  /**
    * Reset the stroke color of the cell on theme updates
    */
   public void resetStrokeColor() {
