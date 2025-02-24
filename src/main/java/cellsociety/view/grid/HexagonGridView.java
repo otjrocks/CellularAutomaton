@@ -4,7 +4,15 @@ import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.HexagonCellView;
 
+/**
+ * A hexagon grid implementation
+ *
+ * @author Owen Jennings
+ */
 public class HexagonGridView extends GridView {
+  // I asked ChatGPT for assistance in writing this class
+  // I modified multiple of the constants and applied math ceiling to ensure that grid fits within provided area on screen and does not overflow area
+  // getRow and getColumn translate a point into our vertical and horizontal spacing to get correct row and column for provided point
 
   /**
    * Create a grid view
@@ -22,51 +30,50 @@ public class HexagonGridView extends GridView {
 
   @Override
   protected CellView[][] initializeGrid() {
-    // I asked ChatGPT for assistance in writing this method
-    // Create the grid
     CellView[][] grid = new CellView[getNumRows()][getNumColumns()];
 
-    // Adjust hexagon width and height to better fit the grid
-    double hexWidth = (double) getWidth() / (getNumColumns());  // Use 0.5 to account for horizontal spacing
-    double hexHeight = (double) getHeight() / getNumRows();
-
-    // Adjust the horizontal offset for better spacing and alignment
+    double hexWidth = getHexagonWidth();
+    double hexHeight = getHexagonHeight();
     double horizontalSpacing = hexWidth * 0.75; // Horizontal spacing
     double verticalSpacing = hexHeight * Math.sqrt(3) / 2.0; // Vertical spacing for hexagons
 
-    // Initialize each cell in the grid as a HexagonCellView
     for (int row = 0; row < getNumRows(); row++) {
       for (int column = 0; column < getNumColumns(); column++) {
-        // Calculate the x and y position for each hexagon in a honeycomb layout
         double x = column * horizontalSpacing;
-
-        // Offset every other row to create the honeycomb pattern
         double y = row * verticalSpacing;
-
-        // Adjust for odd column (row offset for honeycomb)
         if (column % 2 == 1) {
-          y += verticalSpacing / 2; // Shift odd columns downward
+          y += verticalSpacing / 2; // Shift odd columns downward to create honeycomb effect
         }
-
-        // Create the hexagon cell and add it to the grid
-        HexagonCellView cell = new HexagonCellView(x, y, hexWidth, hexHeight);
-        grid[row][column] = cell;
+        grid[row][column] = new HexagonCellView(x, y, hexWidth, hexHeight);
       }
     }
-
     return grid;
   }
 
+  private double getHexagonHeight() {
+    return (double) getHeight() / Math.ceil(getNumColumns() * Math.sqrt(3) / 2.0);
+  }
+
+  private double getHexagonWidth() {
+    return (double) getWidth() / (Math.ceil(
+        getNumColumns() * 0.75));
+  }
 
 
   @Override
-  protected int getRow(double x) {
-    return 0; // TODO: implement
+  protected int getRow(double y) {
+    // Calculate the base row index based on the vertical spacing
+    int row = (int) (y / (getHexagonHeight() * Math.sqrt(3) / 2));
+    if (getColumn(y) % 2
+        == 1) { // odd columns are shifted downward to create honeycomb, account for this when getting a row from a coordinate
+      row = (int) ((y - (getHexagonHeight() / 2)) / (getHexagonHeight() * Math.sqrt(3) / 2));
+    }
+    return row;
   }
 
   @Override
-  protected int getColumn(double y) {
-    return 0; // TODO: implement
+  protected int getColumn(double point) {
+    return (int) (point / (getHexagonWidth() * 0.75));
   }
 
 }

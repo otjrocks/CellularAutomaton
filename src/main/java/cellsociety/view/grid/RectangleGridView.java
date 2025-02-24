@@ -39,12 +39,12 @@ public class RectangleGridView extends GridView {
   }
 
   @Override
-  protected int getRow(double x) {
-    return (int) (x / cellHeight);
+  protected int getRow(double y) {
+    return (int) (y / cellHeight);
   }
 
   @Override
-  protected int getColumn(double y) {
-    return (int) (y / cellWidth);
+  protected int getColumn(double x) {
+    return (int) (x / cellWidth);
   }
 }

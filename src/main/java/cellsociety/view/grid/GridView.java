@@ -119,10 +119,10 @@ public abstract class GridView extends Group {
   protected abstract CellView[][] initializeGrid();
 
   // Provided an x coordinate, return the row of the cell at the coordinate
-  protected abstract int getRow(double x);
+  protected abstract int getRow(double y);
 
   // Provided a y coordinate, return the column of the cell at the coordinate
-  protected abstract int getColumn(double y);
+  protected abstract int getColumn(double x);
 
   /**
    * Reset the grid line colors on theme change
