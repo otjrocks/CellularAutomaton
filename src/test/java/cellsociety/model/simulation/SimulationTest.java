@@ -18,7 +18,7 @@ class SimulationTest {
   @BeforeEach
   void setUp() throws InvalidParameterException {
     testRules = new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)); // I chose an example rules class
-    testData = new SimulationMetaData("GameOfLife", "Tester", "Justin", "Justin's GOL Test");
+    testData = new SimulationMetaData("GameOfLife", "Tester", "Justin", "Justin's GOL Test", "Moore", 1);
     testSimulation = new Simulation(testRules, testData);
   }
 

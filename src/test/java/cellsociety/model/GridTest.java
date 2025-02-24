@@ -37,7 +37,7 @@ class GridTest {
     myCell = new DefaultCell(0, new Double(1, 1));
     myGrid.addCell(myCell);
     myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)),
-        new SimulationMetaData("GameOfLife", "", "", ""));
+        new SimulationMetaData("GameOfLife", "", "", "", "Moore", 1));
   }
 
   @Test

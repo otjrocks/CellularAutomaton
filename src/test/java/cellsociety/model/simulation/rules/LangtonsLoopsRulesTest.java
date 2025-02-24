@@ -69,7 +69,7 @@ class LangtonsLoopsRulesTest {
 
   private Simulation createSimulation() throws InvalidParameterException {
     LangtonsLoopsRules rules = new LangtonsLoopsRules(parameters, new VonNeumannNeighbors(1));
-    return new Simulation(rules, new SimulationMetaData("LangtonsLoops", "", "", ""));
+    return new Simulation(rules, new SimulationMetaData("LangtonsLoops", "", "", "", "VonNeumann", 1));
   }
 
   @Test
