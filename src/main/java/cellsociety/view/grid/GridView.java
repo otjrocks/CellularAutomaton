@@ -1,8 +1,7 @@
-package cellsociety.view;
+package cellsociety.view.grid;
 
 import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
-import cellsociety.view.cell.HexagonCellView;
 import cellsociety.view.cell.RectangleCellView;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
@@ -13,12 +12,12 @@ import javafx.scene.paint.Paint;
  *
  * @author Owen Jennings
  */
-public class GridView extends Group {
+public abstract class GridView extends Group {
 
   private final int myNumRows;
   private final int myNumColumns;
-  private final int cellWidth;
-  private final int cellHeight;
+  private final int myWidth;
+  private final int myHeight;
   private final CellView[][] myGrid;
 
   /**
@@ -33,10 +32,14 @@ public class GridView extends Group {
       MainController mainController) {
     myNumRows = numRows;
     myNumColumns = numColumns;
-    cellWidth = width / numColumns;
-    cellHeight = height / numRows;
-    myGrid = new CellView[myNumRows][myNumColumns];
-    initializeGrid();
+    myWidth = width;
+    myHeight = height;
+    myGrid = initializeGrid();
+    for (int row = 0; row < myNumRows; row++) {
+      for (int column = 0; column < myNumColumns; column++) {
+        this.getChildren().add(myGrid[row][column]);
+      }
+    }
     this.setId("gridView");
     this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()),
         this.getColumn(event.getX())));
@@ -49,7 +52,7 @@ public class GridView extends Group {
    * @param col The column you are querying
    * @return A cell view, if it exists
    */
-  CellView getCell(int row, int col) {
+  public CellView getCell(int row, int col) {
     return myGrid[row][col];
   }
 
@@ -77,24 +80,49 @@ public class GridView extends Group {
     }
   }
 
-  private void initializeGrid() {
-    for (int row = 0; row < myNumRows; row++) {
-      for (int column = 0; column < myNumColumns; column++) {
-        CellView cellView = new RectangleCellView(cellWidth * column, cellHeight * row, cellWidth,
-            cellHeight);
-        this.getChildren().add(cellView);
-        myGrid[row][column] = cellView;
-      }
-    }
+  /**
+   * Get number of rows in grid
+   *
+   * @return int representing number of rows
+   */
+  public int getNumRows() {
+    return myNumRows;
   }
 
-  private int getRow(double x) {
-    return (int) (x / cellHeight);
+  /**
+   * Get number of columns in grid
+   *
+   * @return int representing number of columns
+   */
+  public int getNumColumns() {
+    return myNumColumns;
   }
 
-  private int getColumn(double y) {
-    return (int) (y / cellWidth);
+  /**
+   * Get the width of this grid
+   *
+   * @return The width of the grid
+   */
+  public int getWidth() {
+    return myWidth;
   }
+
+  /**
+   * Get the height of this grid
+   *
+   * @return The height of the grid
+   */
+  public int getHeight() {
+    return myHeight;
+  }
+
+  protected abstract CellView[][] initializeGrid();
+
+  // Provided an x coordinate, return the row of the cell at the coordinate
+  protected abstract int getRow(double x);
+
+  // Provided a y coordinate, return the column of the cell at the coordinate
+  protected abstract int getColumn(double y);
 
   /**
    * Reset the grid line colors on theme change

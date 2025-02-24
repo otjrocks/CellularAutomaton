@@ -6,6 +6,7 @@ import static org.mockito.Mockito.reset;
 import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.cell.CellView;
+import cellsociety.view.grid.GridView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
