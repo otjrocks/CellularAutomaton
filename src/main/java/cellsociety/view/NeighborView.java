@@ -23,10 +23,10 @@ public class NeighborView extends VBox {
   private String neighborType;
   private ComboBox<String> neighborTypeSelector;
 
-  public NeighborView(MainController mainController, boolean isEditing, AlertField alertField) {
+  public NeighborView(MainController mainController, boolean isEditing) {
     this.setSpacing(ELEMENT_SPACING);
     this.isEditing = isEditing;
-    this.myAlertField = alertField;
+    this.myAlertField = new AlertField();
 
     initializeView(mainController, isEditing);
   }
@@ -73,6 +73,7 @@ public class NeighborView extends VBox {
     neighborTypeSelector.setValue(neighborType);
 
     neighborLayerField = new IntegerField();
+    neighborLayerField.setText(Integer.toString(neighborLayer));
     neighborLayerField.textProperty().addListener((_, _, newValue) -> {
       try {
         neighborLayer = Integer.parseInt(newValue);
