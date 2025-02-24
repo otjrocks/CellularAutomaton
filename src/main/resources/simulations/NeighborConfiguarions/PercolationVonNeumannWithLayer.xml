@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimulationConfig>
+  <Type>Percolation</Type>
+  <Title>AdvancedLayerMaze</Title>
+  <Author>Justin Aronwald</Author>
+  <Description>A complex percolation maze testing multi-layer neighbor connections.</Description>
+
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>2</NeighborLayer>
+  </Neighbors>
+
+  <GridDimensions>
+    <Height>10</Height>
+    <Width>10</Width>
+  </GridDimensions>
+
+  <InitialConfiguration>
+    <Row>0,0,1,0,0,0,0,1,0,0</Row>
+    <Row>1,1,0,1,0,1,1,0,1,0</Row>
+    <Row>0,1,1,0,1,0,0,1,1,0</Row>
+    <Row>0,1,1,0,1,1,1,1,1,1</Row>
+    <Row>1,0,1,0,0,0,0,0,0,0</Row>
+    <Row>1,0,1,1,1,1,1,1,1,0</Row>
+    <Row>0,0,0,0,0,0,0,0,0,1</Row>
+    <Row>1,1,1,1,0,1,1,1,0,1</Row>
+    <Row>0,1,0,0,1,0,0,0,0,1</Row>
+    <Row>0,0,0,0,1,1,0,1,0,0</Row>
+  </InitialConfiguration>
+
+  <Parameters>
+    <!-- No parameters needed for Percolation -->
+  </Parameters>
+</SimulationConfig>
