@@ -9,6 +9,7 @@ import cellsociety.view.cell.CellView;
 import cellsociety.view.grid.GridView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -85,7 +86,7 @@ class GridViewTest extends DukeApplicationTest {
   }
 
   private void assertCellColorEquals(CellView cellView, Color expected) {
-    assertEquals(expected, cellView.getFill());
+    Assertions.assertEquals(expected, cellView.getFill());
   }
 
 
