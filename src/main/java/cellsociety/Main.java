@@ -15,4 +15,5 @@ public class Main extends Application {
     CreateNewSimulation simulationManager = new CreateNewSimulation();
     simulationManager.launchNewSimulation();
   }
+
 }

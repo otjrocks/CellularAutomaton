@@ -6,6 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.List;
@@ -19,7 +20,7 @@ class SpreadingOfFireRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    spreadingOfFireRules = new SpreadingOfFireRules(null);
+    spreadingOfFireRules = new SpreadingOfFireRules(null, new VonNeumannNeighbors(1));
     grid = new Grid(5, 5);
   }
 

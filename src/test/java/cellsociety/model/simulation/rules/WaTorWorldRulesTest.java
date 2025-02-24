@@ -9,6 +9,7 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorWorldCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.rules.WaTorWorldRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ class WaTorWorldRulesTest {
     parameters.put("sharkReproductionTime", new Parameter<>("4.0"));
     parameters.put("sharkEnergyGain", new Parameter<>("2.0"));
 
-    waTorWorldRules = new WaTorWorldRules(parameters);
+    waTorWorldRules = new WaTorWorldRules(parameters, new MooreNeighbors(1));
   }
 
   //needed chatGPT to help process the list of updates and check for any matching

@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A random segregation pattern with 25 members for group one and 25 members for group 2</Description>
 
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

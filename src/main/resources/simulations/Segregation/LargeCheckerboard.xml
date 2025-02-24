@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Large grid resembling a checkerboard to show that very mixed populations will inevitably separate</Description>
 
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

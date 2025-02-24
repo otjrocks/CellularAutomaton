@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -22,19 +23,8 @@ public class PercolationRules extends SimulationRules {
    * @throws InvalidParameterException - throws when a parameter is invalid
    */
   public PercolationRules(
-      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
-    super(parameters);
-  }
-
-
-  /**
-   * @param cell - an individual cell from the grid
-   * @param grid - the list of cell objects representing the grid
-   * @return -  a list of cell objects representing the neighbors of the cell (adjacent and not
-   * diagonals)
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid) {
-    return super.getNeighbors(cell, grid, false);
+      Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+    super(parameters, myGetNeighbors);
   }
 
   /**

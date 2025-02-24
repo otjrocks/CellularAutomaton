@@ -8,6 +8,8 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class RockPaperScissorsRulesTest {
     parameters.put("minThreshold", new Parameter<>(0.5));
     parameters.put("numStates", new Parameter<>(3));
 
-    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters, new MooreNeighbors(1));
 
     int[][] gridPattern = {
         {1, 2, 3, 4, 5},
@@ -129,7 +131,7 @@ public class RockPaperScissorsRulesTest {
   void getNextState_LotOfStates_ReturnWinner() throws InvalidParameterException {
     parameters.put("numStates", new Parameter<>(20));
     parameters.put("minThreshold", new Parameter<>(0.3));
-    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters, new MooreNeighbors(1));
 
     Cell cell = new DefaultCell(10, new Point2D.Double(2, 2));
     grid.addCell(cell);
@@ -147,7 +149,7 @@ public class RockPaperScissorsRulesTest {
       throws InvalidParameterException {
     parameters.put("numStates", new Parameter<>(20));
     parameters.put("minThreshold", new Parameter<>(0.25));
-    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters, new MooreNeighbors(1));
 
     Cell cell = new DefaultCell(15, new Point2D.Double(2, 2));
     grid.addCell(cell);
@@ -164,7 +166,7 @@ public class RockPaperScissorsRulesTest {
   void getNextState_TenStates_EdgeCaseWrapAroundLogic() throws InvalidParameterException {
     parameters.put("numStates", new Parameter<>(10));
     parameters.put("minThreshold", new Parameter<>(0.3));
-    rockPaperScissorsRules = new RockPaperScissorsRules(parameters);
+    rockPaperScissorsRules = new RockPaperScissorsRules(parameters, new MooreNeighbors(1));
 
     Cell cell = new DefaultCell(9, new Point2D.Double(2, 2));
     grid.addCell(cell);

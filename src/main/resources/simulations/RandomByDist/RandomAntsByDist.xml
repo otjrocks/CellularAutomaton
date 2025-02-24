@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A random ForagingAnts pattern with 5% hills, 15% ants, and 15% food</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

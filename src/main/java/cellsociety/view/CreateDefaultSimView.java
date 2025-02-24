@@ -1,7 +1,10 @@
 package cellsociety.view;
 
 import cellsociety.model.simulation.InvalidParameterException;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
@@ -19,6 +22,9 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -29,6 +35,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+
 public class CreateDefaultSimView extends VBox {
 
   private final MainController myMainController;
@@ -38,11 +45,15 @@ public class CreateDefaultSimView extends VBox {
   private TextField myNameField;
   private TextField myAuthorField;
   private TextField myDescriptionField;
+  private ComboBox<String> myNeighborTypeSelector;
+  private IntegerField myNeighborLayerField;
+  private int myNeighborLayer;
   private int myNumRows;
   private int myNumCols;
   private IntegerField myRowField;
   private IntegerField myColField;
   private final AlertField myAlertField;
+
 
 
   private static final int DEFAULT_NUM_CELLS = 25;
@@ -60,6 +71,7 @@ public class CreateDefaultSimView extends VBox {
     this.myNumRows = DEFAULT_NUM_CELLS;
     this.myNumCols = DEFAULT_NUM_CELLS;
     this.myAlertField = alertField;
+    this.myNeighborLayer = 1;
     initializeForm();
   }
 
@@ -162,15 +174,17 @@ public class CreateDefaultSimView extends VBox {
    * Handles the text metadata for the simulation
    */
   private void createSimulationMetaDataTextFields() {
-    myNameField = createTextField(getMessage("NAME_LABEL"),
-        getMessage("DEFAULT_NAME"), this);
+    myNameField = createTextField(getMessage("NAME_LABEL"), getMessage("DEFAULT_NAME"), this);
     myNameField.setId("createSimulationNameTextField");
-    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"),
-        getMessage("DEFAULT_AUTHOR"), this);
+
+    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"), getMessage("DEFAULT_AUTHOR"), this);
     myAuthorField.setId("createSimulationAuthorTextField");
-    myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"),
-        getMessage("DEFAULT_DESCRIPTION"), this);
+
+    myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"), getMessage("DEFAULT_DESCRIPTION"), this);
     myDescriptionField.setId("createSimulationDescriptionTextField");
+
+    createNeighborTypeSelector(this);
+    createNeighborLayerField(this);
   }
 
   private TextField createTextField(String label, String defaultValue, VBox target) {
@@ -183,6 +197,61 @@ public class CreateDefaultSimView extends VBox {
     box.getChildren().addAll(textFieldLabel, textField);
     target.getChildren().add(box);
     return textField;
+  }
+
+  private void createNeighborTypeSelector(VBox target) {
+    myNeighborTypeSelector = new ComboBox<>(getAvailableNeighborTypes());
+    myNeighborTypeSelector.setId("createSimulationNeighborTypeSelector");
+
+    if (myNeighborTypeSelector.getValue() != null) {
+    myNeighborTypeSelector.setValue(myNeighborTypeSelector.getItems().getFirst());
+    }
+
+    HBox box = new HBox();
+    box.setAlignment(Pos.CENTER_LEFT);
+    box.setSpacing(5);
+    Text label = new Text(getMessage("NEIGHBOR_TYPE_LABEL"));
+
+    box.getChildren().addAll(label, myNeighborTypeSelector);
+    target.getChildren().add(box);
+  }
+
+  private void createNeighborLayerField(VBox target) {
+    myNeighborLayerField = new IntegerField();
+    myNeighborLayerField.setId("createSimulationNeighborLayerTextField");
+
+    myNeighborLayerField.textProperty().addListener((_, _, _) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
+    HBox box = new HBox();
+    box.setAlignment(Pos.CENTER_LEFT);
+    box.setSpacing(5);
+    Text label = new Text(getMessage("NEIGHBOR_LAYER_LABEL"));
+
+    box.getChildren().addAll(label, myNeighborLayerField);
+    target.getChildren().add(box);
+  }
+
+  //Had a little bit of ChatGPT help with the last few lines of this
+
+  /**
+   * scans the directory to find the various different neighbor types
+   * @return - a list of the string names of the neighbor types
+   */
+  private static ObservableList<String> getAvailableNeighborTypes() {
+    File directory = new File("src/main/java/cellsociety/model/simulation/getNeighborOptions/");
+    List<String> neighborTypes = new ArrayList<>();
+
+    if (directory.exists() && directory.isDirectory()) {
+      File[] files = directory.listFiles();
+      if (files != null) {
+        for (File file : files) {
+          if (file.getName().endsWith("Neighbors.java")) {
+            String typeName = file.getName().replace("Neighbors.java", "");
+            neighborTypes.add(typeName);
+          }
+        }
+      }
+    }
+    return FXCollections.observableArrayList(neighborTypes);
   }
 
   /**
@@ -201,7 +270,10 @@ public class CreateDefaultSimView extends VBox {
         mySimulationSelector.getValue(),
         myNameField.getText(),
         myAuthorField.getText(),
-        myDescriptionField.getText());
+        myDescriptionField.getText(),
+        myNeighborTypeSelector.getValue(),
+        myNeighborLayer
+      );
   }
 
   /**
@@ -235,7 +307,29 @@ public class CreateDefaultSimView extends VBox {
     return checkInvalidText(mySimulationSelector.getValue()) ||
         checkInvalidText(myNameField.getText()) ||
         checkInvalidText(myAuthorField.getText()) ||
-        checkInvalidText(myDescriptionField.getText());
+        checkInvalidText(myDescriptionField.getText()) ||
+        checkInvalidNeighborType(myNeighborTypeSelector.getValue()) ||
+        checkInvalidLayer(myNeighborLayer);
+  }
+
+  private boolean checkInvalidLayer(int myNeighborLayer) {
+    if (myNeighborLayer < 1) {
+      myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
+      return true;
+    }
+    return false;
+  }
+
+  private boolean checkInvalidNeighborType(String myNeighborType) {
+    try {
+      String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s", myNeighborType,
+          "Neighbors");
+      Class.forName(className);
+      return false;
+    } catch (ClassNotFoundException e) {
+      myAlertField.flash(getMessage("INVALID_NEIGHBOR_TYPE"), true);
+      return true;
+    }
   }
 
 

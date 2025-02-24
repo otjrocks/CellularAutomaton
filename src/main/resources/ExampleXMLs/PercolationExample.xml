@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Block layout with path from start to finish to showcase how percolation sim operates</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

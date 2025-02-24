@@ -3,7 +3,6 @@ package cellsociety.model.simulation;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.DefaultCell;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +20,7 @@ import cellsociety.model.cell.CellUpdate;
 public abstract class SimulationRules {
 
   private Map<String, Parameter<?>> myParameters;
+  private GetNeighbors myGetNeighbors;
 
   /**
    * The default constructor of a simulation rules class
@@ -33,8 +33,13 @@ public abstract class SimulationRules {
    *                                   instance is created with invalid or missing parameter
    *                                   values.
    */
-  public SimulationRules(Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+  public SimulationRules(Map<String, Parameter<?>> parameters, GetNeighbors getNeighbors) throws InvalidParameterException {
     myParameters = parameters;
+    myGetNeighbors = getNeighbors;
+  }
+
+  public List<Cell> getNeighbors(Cell cell, Grid grid) {
+    return myGetNeighbors.getNeighbors(cell, grid);
   }
 
   /**
@@ -69,33 +74,6 @@ public abstract class SimulationRules {
     return new ArrayList<>();
   }
 
-  /**
-   * The default implementation of getNeighbors. This provides a list of cells which are neighbors
-   * of the provided cell object. This method can be overwritten by a specific simulation rules
-   * class if it has a unique way to find neighbors.
-   *
-   * @param cell              The cell you are querying for neighbors.
-   * @param grid              The grid of the simulation you are looking for neighbors in
-   * @param includesDiagonals Whether the neighbors should include diagonal neighbors or not.
-   * @return A list of cells that are neighbors of the provided cell.
-   */
-  public List<Cell> getNeighbors(Cell cell, Grid grid, boolean includesDiagonals) {
-
-    List<Cell> neighbors = new ArrayList<>();
-
-    int[][] directions = getDirectionsArray(includesDiagonals);
-
-    for (int[] dir : directions) {
-      Point2D neighborLocation = new Point2D.Double(cell.getRow() + dir[0], cell.getCol() + dir[1]);
-
-      if (grid.cellExists(neighborLocation)) {
-        Cell neighborCell = grid.getCell(neighborLocation);
-        neighbors.add(neighborCell);
-      }
-    }
-    return neighbors;
-
-  }
 
   /*
   A simulation's state is updated through the following 2 methods: getNextStates and getNextStatesForAllCells.

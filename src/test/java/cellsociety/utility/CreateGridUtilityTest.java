@@ -1,5 +1,6 @@
 package cellsociety.utility;
 
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class CreateGridUtilityTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        mockSimulation = new Simulation(new SpreadingOfFireRules(parameters), new SimulationMetaData("SpreadingOfFire", "FireSpread", "Troy Ludwig", "There is fire spreading"));
+        mockSimulation = new Simulation(new SpreadingOfFireRules(parameters, new VonNeumannNeighbors(1)), new SimulationMetaData("SpreadingOfFire", "FireSpread", "Troy Ludwig", "There is fire spreading", "VonNeumann", 1));
         String explicitXmlData = """
                 <Grid>
                     <Row>1,1,2</Row>

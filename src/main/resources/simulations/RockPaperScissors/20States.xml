@@ -5,6 +5,11 @@
   <Author>Justin Aronwald</Author>
   <Description>Rock Paper Scissors with 20 states and low threshold</Description>
 
+  <Neighbors>
+    <NeighborType>Moore</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>30</Height>
     <Width>30</Width>

@@ -4,6 +4,12 @@
     <Title>Kaleidoscope</Title>
     <Author>Troy Ludwig</Author>
     <Description>Using the "B123/S8" rulestring to make a kaleidoscope-esque oscillator</Description>
+
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

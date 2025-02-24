@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorWorldCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ class SimulationConfigTest {
 
   @BeforeEach
   void setUp() {
-    mySimMetaData = new SimulationMetaData("Segregation", "", "", "");
+    mySimMetaData = new SimulationMetaData("Segregation", "", "", "", "Moore", 1);
   }
 
   @Test
@@ -63,6 +64,20 @@ class SimulationConfigTest {
         new Parameter<>("0.7"));
     assertDoesNotThrow(
         () -> SimulationConfig.getNewSimulation(simulationName, mySimMetaData, parameters));
+  }
+
+  @Test
+  void getNewSimulation_InvalidNeighborName_ShouldThrowException() {
+    mySimMetaData = new SimulationMetaData("Segregation", "", "", "", "Invalid", 1);
+    assertThrows(IllegalArgumentException.class,
+        () -> SimulationConfig.getNewSimulation("GameOfLife", mySimMetaData, new HashMap<>()));
+  }
+
+  @Test
+  void getNewSimulation_InvalidNeighborLayer_ShouldThrowException() {
+    mySimMetaData = new SimulationMetaData("Segregation", "", "", "", "Moore", -1);
+    assertThrows(IllegalArgumentException.class,
+        () -> SimulationConfig.getNewSimulation("GameOfLife", mySimMetaData, new HashMap<>()));
   }
 
 }

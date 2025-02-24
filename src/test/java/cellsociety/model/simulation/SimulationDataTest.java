@@ -16,7 +16,7 @@ class SimulationDataTest {
     colors.add(Color.BLUE);
     colors.add(Color.GREEN);
 
-    simulationData = new SimulationMetaData("GameOfLife", "GOL Test", "Justin", "Justin's version");
+    simulationData = new SimulationMetaData("GameOfLife", "GOL Test", "Justin", "Justin's version", "Moore", 1);
   }
   @Test
   void testGetters() {

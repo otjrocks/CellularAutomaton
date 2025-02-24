@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Using the "B1357/S2468" rulestring just to see what happens</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

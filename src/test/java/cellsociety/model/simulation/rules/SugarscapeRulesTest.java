@@ -8,6 +8,7 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ class SugarscapeRulesTest {
     parameters.put("agentSugar", new Parameter<>(10));
     parameters.put("agentMetabolism", new Parameter<>(2));
 
-    sugarscapeRules = new SugarscapeRules(parameters);
+    sugarscapeRules = new SugarscapeRules(parameters, new MooreNeighbors(parameters.get("agentVision").getInteger()));
 
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {

@@ -6,6 +6,12 @@
   <Description>A demo of Falling Sand that creates a pile of sand on the bottom of the simulation
     when the sand falls.
   </Description>
+
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>50</Height>
     <Width>50</Width>

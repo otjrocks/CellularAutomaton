@@ -4,6 +4,12 @@
     <Title>Ant Hallway</Title>
     <Author>Troy Ludwig</Author>
     <Description>A hallway with an anthill on one side and food on the other</Description>
+
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>25</Height>
         <Width>7</Width>

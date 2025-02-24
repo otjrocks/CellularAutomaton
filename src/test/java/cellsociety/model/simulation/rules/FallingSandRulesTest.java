@@ -4,6 +4,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.rules.FallingSandRules.State;
 import java.awt.geom.Point2D.Double;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class FallingSandRulesTest {
     // Create a grid with dimensions 3x3 for simplicity
     grid = new Grid(3, 3);
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    fallingSandRules = new FallingSandRules(parameters);
+    fallingSandRules = new FallingSandRules(parameters, new MooreNeighbors(1));
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
         grid.addCell(new DefaultCell(0, new Double(i, j)));

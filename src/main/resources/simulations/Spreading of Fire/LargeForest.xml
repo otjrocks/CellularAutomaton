@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A larger forest with a lower chance for fire to pop up without already caught neighbors</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

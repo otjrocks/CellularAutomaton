@@ -4,6 +4,10 @@
   <Title>Glider</Title>
   <Author>Richard K. Guy</Author>
   <Description>A basic configuration that produces a "glider" that moves diagonally across the grid</Description>
+  <Neighbors>
+    <NeighborType>Moore</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
 
   <GridDimensions>
     <Height>50</Height>

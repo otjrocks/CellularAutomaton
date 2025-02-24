@@ -82,7 +82,11 @@ public class XMLHandler {
     String title = data.getElementsByTagName("Title").item(0).getTextContent();
     String author = data.getElementsByTagName("Author").item(0).getTextContent();
     String description = data.getElementsByTagName("Description").item(0).getTextContent();
-    mySimData = new SimulationMetaData(type, title, author, description);
+
+    Element neighborsElement = (Element) data.getElementsByTagName("Neighbors").item(0);
+    String neighborType = neighborsElement.getElementsByTagName("NeighborType").item(0).getTextContent();
+    int layers = Integer.parseInt(neighborsElement.getElementsByTagName("NeighborLayer").item(0).getTextContent());
+    mySimData = new SimulationMetaData(type, title, author, description, neighborType, layers);
   }
 
   /**

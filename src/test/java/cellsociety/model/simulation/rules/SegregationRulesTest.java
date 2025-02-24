@@ -8,6 +8,7 @@ import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ class SegregationRulesTest {
     grid = new Grid(5, 5);
     parameters.put("toleranceThreshold", new Parameter<>(0.3));
 
-    segregationRules = new SegregationRules(parameters);
+    segregationRules = new SegregationRules(parameters, new MooreNeighbors(1));
   }
 
   @Test

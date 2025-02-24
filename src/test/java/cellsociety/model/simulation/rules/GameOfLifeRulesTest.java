@@ -6,6 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ class GameOfLifeRulesTest {
   @BeforeEach
   void setUp() throws InvalidParameterException {
     grid = new Grid(5, 5);
-    gameOfLifeRules = new GameOfLifeRules(new HashMap<>());
+    gameOfLifeRules = new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1));
 
     int[][] gridPattern = {
         {0, 1, 0, 0, 0},

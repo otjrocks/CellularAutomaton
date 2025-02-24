@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

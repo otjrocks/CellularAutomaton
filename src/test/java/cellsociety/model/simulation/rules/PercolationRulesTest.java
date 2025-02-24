@@ -6,6 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ class PercolationRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    percolationRules = new PercolationRules(new HashMap<>());
+    percolationRules = new PercolationRules(new HashMap<>(), new VonNeumannNeighbors(1));
     int[][] gridPattern = {
         {1, 0, 1, 0, 1},
         {1, 1, 1, 0, 1},

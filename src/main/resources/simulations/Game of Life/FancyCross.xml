@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Cross design that shoudln't move upon simulation start</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

@@ -8,6 +8,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;
@@ -67,8 +68,8 @@ class LangtonsLoopsRulesTest {
   }
 
   private Simulation createSimulation() throws InvalidParameterException {
-    LangtonsLoopsRules rules = new LangtonsLoopsRules(parameters);
-    return new Simulation(rules, new SimulationMetaData("LangtonsLoops", "", "", ""));
+    LangtonsLoopsRules rules = new LangtonsLoopsRules(parameters, new VonNeumannNeighbors(1));
+    return new Simulation(rules, new SimulationMetaData("LangtonsLoops", "", "", "", "VonNeumann", 1));
   }
 
   @Test

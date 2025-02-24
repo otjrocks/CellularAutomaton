@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -59,10 +60,9 @@ public class LangtonsLoopsRules extends SimulationRules {
    *                   this will be ignored.
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public LangtonsLoopsRules(
-      Map<String, Parameter<?>> parameters)
+  public LangtonsLoopsRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
-    super(parameters);
+    super(parameters, myGetNeighbors);
     for (String rule : TRANSITION_RULES) {
       String key = rule.substring(0, 5);
       int value = Integer.parseInt(rule.substring(5, 6));
@@ -81,7 +81,7 @@ public class LangtonsLoopsRules extends SimulationRules {
   public int getNextState(Cell cell, Grid grid) {
     int[] states = new int[5]; // store your state and neighbors states
     states[0] = cell.getState();
-    List<Cell> neighbors = getNeighbors(cell, grid, false);
+    List<Cell> neighbors = getNeighbors(cell, grid);
     populateStatesList(cell, neighbors, states);
     String stateKey = getStateString(states);
     if (TRANSITIONS_MAP.containsKey(stateKey)) {

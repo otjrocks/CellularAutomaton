@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A larger maze to demonstrate the percolation simulation's ability to find a way out</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

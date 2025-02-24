@@ -3,6 +3,7 @@ package cellsociety.model;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -35,8 +36,8 @@ class GridTest {
     myGrid = new Grid(myNumRows, myNumCols);
     myCell = new DefaultCell(0, new Double(1, 1));
     myGrid.addCell(myCell);
-    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>()),
-        new SimulationMetaData("GameOfLife", "", "", ""));
+    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)),
+        new SimulationMetaData("GameOfLife", "", "", "", "Moore", 1));
   }
 
   @Test
