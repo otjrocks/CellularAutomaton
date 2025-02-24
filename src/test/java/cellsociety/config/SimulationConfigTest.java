@@ -18,7 +18,7 @@ class SimulationConfigTest {
 
   @BeforeEach
   void setUp() {
-    mySimMetaData = new SimulationMetaData("Segregation", "", "", "");
+    mySimMetaData = new SimulationMetaData("Segregation", "", "", "", "Moore", 1);
   }
 
   @Test
