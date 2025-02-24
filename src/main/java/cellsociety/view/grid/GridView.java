@@ -2,7 +2,6 @@ package cellsociety.view.grid;
 
 import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
-import cellsociety.view.cell.RectangleCellView;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 
@@ -23,10 +22,11 @@ public abstract class GridView extends Group {
   /**
    * Create a grid view
    *
-   * @param width:      Width of the view
-   * @param height:     Height of the view
-   * @param numRows:    Number of rows in the grid
-   * @param numColumns: Number of cells per row in the grid
+   * @param width:         Width of the view
+   * @param height:        Height of the view
+   * @param numRows:       Number of rows in the grid
+   * @param numColumns:    Number of cells per row in the grid
+   * @param mainController : Main controller of the program
    */
   public GridView(int width, int height, int numRows, int numColumns,
       MainController mainController) {
@@ -35,15 +35,18 @@ public abstract class GridView extends Group {
     myWidth = width;
     myHeight = height;
     myGrid = initializeGrid();
-    for (int row = 0; row < myNumRows; row++) {
-      for (int column = 0; column < myNumColumns; column++) {
-        this.getChildren().add(myGrid[row][column]);
-      }
-    }
+    addGridElementsToGroupAndSetEventHandlers(mainController);
     this.setId("gridView");
-    this.setOnMouseClicked(event -> mainController.changeCellState(this.getRow(event.getY()),
-        this.getColumn(event.getX())));
   }
+
+  /**
+   * Initialize the grid's cells array. This method should handle the placement of cell views based
+   * on their shape. For example, this method for a triangular grid should stagger isometric
+   * triangles flipping every other column's triangle by 180 degrees.
+   *
+   * @return A 2D array of cell views representing the grid.
+   */
+  protected abstract CellView[][] initializeGrid();
 
   /**
    * For testing, get the cell view at the provided coordinate
@@ -116,14 +119,6 @@ public abstract class GridView extends Group {
     return myHeight;
   }
 
-  protected abstract CellView[][] initializeGrid();
-
-  // Provided an x coordinate, return the row of the cell at the coordinate
-  protected abstract int getRow(double y);
-
-  // Provided a y coordinate, return the column of the cell at the coordinate
-  protected abstract int getColumn(double x);
-
   /**
    * Reset the grid line colors on theme change
    */
@@ -144,5 +139,17 @@ public abstract class GridView extends Group {
    */
   public void setOpacity(int row, int col, double nextOpacity) {
     myGrid[row][col].setOpacity(nextOpacity);
+  }
+
+  private void addGridElementsToGroupAndSetEventHandlers(MainController mainController) {
+    for (int row = 0; row < myNumRows; row++) {
+      for (int column = 0; column < myNumColumns; column++) {
+        CellView cell = myGrid[row][column];
+        this.getChildren().add(cell);
+        int cellRow = row; // create copy of local variables to ensure that they are passed properly to main controller
+        int cellColumn = column;
+        cell.setOnMouseClicked(_ -> mainController.changeCellState(cellRow, cellColumn));
+      }
+    }
   }
 }

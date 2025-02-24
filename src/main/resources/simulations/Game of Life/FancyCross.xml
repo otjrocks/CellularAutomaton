@@ -6,7 +6,7 @@
     <Description>Cross design that shoudln't move upon simulation start</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

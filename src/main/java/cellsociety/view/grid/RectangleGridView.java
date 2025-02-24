@@ -4,10 +4,12 @@ import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.RectangleCellView;
 
+/**
+ * A rectangle grid implementation
+ *
+ * @author Owen Jennings
+ */
 public class RectangleGridView extends GridView {
-
-  private int cellWidth;
-  private int cellHeight;
 
   /**
    * Create a grid view
@@ -25,8 +27,8 @@ public class RectangleGridView extends GridView {
 
   @Override
   protected CellView[][] initializeGrid() {
-    cellWidth = getWidth() / getNumColumns();
-    cellHeight = getHeight() / getNumRows();
+    int cellWidth = getWidth() / getNumColumns();
+    int cellHeight = getHeight() / getNumRows();
     CellView[][] grid = new CellView[getNumRows()][getNumColumns()];
     for (int row = 0; row < getNumRows(); row++) {
       for (int column = 0; column < getNumColumns(); column++) {
@@ -36,15 +38,5 @@ public class RectangleGridView extends GridView {
       }
     }
     return grid;
-  }
-
-  @Override
-  protected int getRow(double y) {
-    return (int) (y / cellHeight);
-  }
-
-  @Override
-  protected int getColumn(double x) {
-    return (int) (x / cellWidth);
   }
 }

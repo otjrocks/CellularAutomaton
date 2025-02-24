@@ -6,7 +6,7 @@
     <Description>Initial symmetrical configuration that expands outwards before all becoming inactive</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

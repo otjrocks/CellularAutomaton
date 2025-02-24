@@ -58,22 +58,4 @@ public class HexagonGridView extends GridView {
     return (double) getWidth() / (Math.ceil(
         getNumColumns() * 0.75));
   }
-
-
-  @Override
-  protected int getRow(double y) {
-    // Calculate the base row index based on the vertical spacing
-    int row = (int) (y / (getHexagonHeight() * Math.sqrt(3) / 2));
-    if (getColumn(y) % 2
-        == 1) { // odd columns are shifted downward to create honeycomb, account for this when getting a row from a coordinate
-      row = (int) ((y - (getHexagonHeight() / 2)) / (getHexagonHeight() * Math.sqrt(3) / 2));
-    }
-    return row;
-  }
-
-  @Override
-  protected int getColumn(double point) {
-    return (int) (point / (getHexagonWidth() * 0.75));
-  }
-
 }

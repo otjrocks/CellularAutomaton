@@ -6,7 +6,7 @@
     <Description>Using the "B2/S" rulestring to demonstrate many oscillators</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

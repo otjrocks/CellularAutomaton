@@ -6,7 +6,7 @@
     <Description>Using the "B1357/S2468" rulestring just to see what happens</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

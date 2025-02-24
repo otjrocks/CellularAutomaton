@@ -6,7 +6,7 @@
     <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

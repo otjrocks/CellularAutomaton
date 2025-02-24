@@ -4,6 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.view.grid.GridView;
 import cellsociety.view.grid.HexagonGridView;
 import cellsociety.view.grid.RectangleGridView;
+import cellsociety.view.grid.TriangleGridView;
 import java.util.List;
 
 import cellsociety.controller.MainController;
