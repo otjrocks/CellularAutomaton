@@ -8,19 +8,20 @@ import static cellsociety.view.config.NeighborConfig.getAvailableNeighborTypes;
 import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * This class holds the view that maintains the neighbor information. So, you can view or edit the neighbor configuration method here.
+ * @Author Justin Aronwald
+ */
 public class NeighborView extends VBox {
   private final MainController mainController;
   private boolean isEditing;
@@ -36,19 +37,19 @@ public class NeighborView extends VBox {
     this.isEditing = isEditing;
     this.myAlertField = new AlertField();
 
-    initializeView(mainController, isEditing);
+    initializeView();
   }
 
-  private void initializeView(MainController mainController, boolean isEditing) {
+  private void initializeView() {
     Simulation simulation = mainController.getSimulation();
     this.neighborLayer = simulation.data().layers();
     this.neighborType = simulation.data().neighborType();
-    this.neighborLayerField = new IntegerField();
 
-    createNeighborBox(isEditing);
+    setUpUI();
   }
 
-  private void createNeighborBox(boolean isEditing) {
+  private void setUpUI() {
+    this.getChildren().clear();
     this.getStyleClass().add("info-box");
     createTitle();
     createNeighborDisplay();
@@ -64,19 +65,13 @@ public class NeighborView extends VBox {
   }
 
   private void updateNeighborInformation() {
-    if (neighborType.equals(neighborTypeSelector.getValue()) &&
-        neighborLayer == Integer.parseInt(neighborLayerField.getText())) {
+    if (checkForSameValues()) {
       return;
     }
 
-    this.neighborType = neighborTypeSelector.getValue();
-    try {
-      this.neighborLayer = Integer.parseInt(neighborLayerField.getText());
-    } catch (NumberFormatException e) {
-      myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
+    if (setAndCheckNewNeighborValues()) {
       return;
     }
-
 
     Simulation currentSimulation = mainController.getSimulation();
     Simulation newSimulation = getNewSimulation(currentSimulation);
@@ -85,6 +80,22 @@ public class NeighborView extends VBox {
       return;
     }
     mainController.updateSimulation(newSimulation);
+  }
+
+  private boolean setAndCheckNewNeighborValues() {
+    this.neighborType = neighborTypeSelector.getValue();
+    try {
+      this.neighborLayer = Integer.parseInt(neighborLayerField.getText());
+    } catch (NumberFormatException e) {
+      myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
+      return true;
+    }
+    return false;
+  }
+
+  private boolean checkForSameValues() {
+    return neighborType.equals(neighborTypeSelector.getValue()) &&
+        neighborLayer == Integer.parseInt(neighborLayerField.getText());
   }
 
 
