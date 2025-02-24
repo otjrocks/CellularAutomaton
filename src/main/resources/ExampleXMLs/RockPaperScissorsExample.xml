@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Basic pattern of expanding, more powerful states</Description>
 
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

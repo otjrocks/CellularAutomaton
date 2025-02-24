@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Four single unit fires that will spread to the surrounding forest</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

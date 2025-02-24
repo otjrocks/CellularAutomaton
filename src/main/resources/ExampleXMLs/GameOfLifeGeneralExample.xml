@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Using the "B3/S12345" rulestring to generate a mazelike structure</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>
