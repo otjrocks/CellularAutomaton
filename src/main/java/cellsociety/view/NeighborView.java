@@ -37,10 +37,11 @@ public class NeighborView extends VBox {
     this.neighborType = simulation.data().neighborType();
     this.neighborLayerField = new IntegerField();
 
-    createNeighborBox(isEditing, simulation);
+    createNeighborBox(isEditing);
   }
 
-  private void createNeighborBox(boolean isEditing, Simulation simulation) {
+  private void createNeighborBox(boolean isEditing) {
+    this.getStyleClass().add("info-box");
     createTitle();
     createNeighborDisplay();
     if (isEditing) {
