@@ -4,6 +4,11 @@ import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.RectangleCellView;
 
+/**
+ * A rectangle grid implementation
+ *
+ * @author Owen Jennings
+ */
 public class RectangleGridView extends GridView {
 
   /**

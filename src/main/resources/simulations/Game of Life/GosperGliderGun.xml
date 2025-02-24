@@ -6,7 +6,7 @@
     <Description>A "gun" that continuously generates gliders soaring to the bottom right</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

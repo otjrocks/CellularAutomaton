@@ -4,6 +4,11 @@ import cellsociety.controller.MainController;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.TriangleCellView;
 
+/**
+ * An isometric triangle grid representation implementation
+ *
+ * @author Owen Jennings
+ */
 public class TriangleGridView extends GridView {
 
   /**

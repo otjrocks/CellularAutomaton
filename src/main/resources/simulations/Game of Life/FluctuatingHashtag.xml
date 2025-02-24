@@ -6,7 +6,7 @@
     <Description>A "hashtag" pattern that expands and retracts continuously</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

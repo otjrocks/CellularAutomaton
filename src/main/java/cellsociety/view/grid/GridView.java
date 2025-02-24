@@ -35,17 +35,18 @@ public abstract class GridView extends Group {
     myWidth = width;
     myHeight = height;
     myGrid = initializeGrid();
-    for (int row = 0; row < myNumRows; row++) {
-      for (int column = 0; column < myNumColumns; column++) {
-        CellView cell = myGrid[row][column];
-        this.getChildren().add(cell);
-        int cellRow = row;
-        int cellColumn = column;
-        cell.setOnMouseClicked(event -> mainController.changeCellState(cellRow, cellColumn));
-      }
-    }
+    addGridElementsToGroupAndSetEventHandlers(mainController);
     this.setId("gridView");
   }
+
+  /**
+   * Initialize the grid's cells array. This method should handle the placement of cell views based
+   * on their shape. For example, this method for a triangular grid should stagger isometric
+   * triangles flipping every other column's triangle by 180 degrees.
+   *
+   * @return A 2D array of cell views representing the grid.
+   */
+  protected abstract CellView[][] initializeGrid();
 
   /**
    * For testing, get the cell view at the provided coordinate
@@ -118,8 +119,6 @@ public abstract class GridView extends Group {
     return myHeight;
   }
 
-  protected abstract CellView[][] initializeGrid();
-
   /**
    * Reset the grid line colors on theme change
    */
@@ -140,5 +139,17 @@ public abstract class GridView extends Group {
    */
   public void setOpacity(int row, int col, double nextOpacity) {
     myGrid[row][col].setOpacity(nextOpacity);
+  }
+
+  private void addGridElementsToGroupAndSetEventHandlers(MainController mainController) {
+    for (int row = 0; row < myNumRows; row++) {
+      for (int column = 0; column < myNumColumns; column++) {
+        CellView cell = myGrid[row][column];
+        this.getChildren().add(cell);
+        int cellRow = row; // create copy of local variables to ensure that they are passed properly to main controller
+        int cellColumn = column;
+        cell.setOnMouseClicked(_ -> mainController.changeCellState(cellRow, cellColumn));
+      }
+    }
   }
 }

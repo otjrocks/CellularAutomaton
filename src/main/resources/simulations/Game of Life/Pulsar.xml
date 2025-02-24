@@ -6,7 +6,7 @@
     <Description>A 3-period oscillator that resembles a star</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 
