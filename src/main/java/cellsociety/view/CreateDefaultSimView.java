@@ -19,6 +19,7 @@ import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
+import static cellsociety.view.config.NeighborConfig.getAvailableNeighborTypes;
 
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
@@ -230,29 +231,6 @@ public class CreateDefaultSimView extends VBox {
     target.getChildren().add(box);
   }
 
-  //Had a little bit of ChatGPT help with the last few lines of this
-
-  /**
-   * scans the directory to find the various different neighbor types
-   * @return - a list of the string names of the neighbor types
-   */
-  private static ObservableList<String> getAvailableNeighborTypes() {
-    File directory = new File("src/main/java/cellsociety/model/simulation/getNeighborOptions/");
-    List<String> neighborTypes = new ArrayList<>();
-
-    if (directory.exists() && directory.isDirectory()) {
-      File[] files = directory.listFiles();
-      if (files != null) {
-        for (File file : files) {
-          if (file.getName().endsWith("Neighbors.java")) {
-            String typeName = file.getName().replace("Neighbors.java", "");
-            neighborTypes.add(typeName);
-          }
-        }
-      }
-    }
-    return FXCollections.observableArrayList(neighborTypes);
-  }
 
   /**
    * Handles the initialization of the different parameter inputs

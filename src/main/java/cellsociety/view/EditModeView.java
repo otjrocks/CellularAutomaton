@@ -20,6 +20,7 @@ public class EditModeView extends VBox {
   private final VBox myHeaderBox = new VBox();
   private StateInfoView myStateInfoView;
   private ParameterView myParameterView;
+  private NeighborView myNeighborView;
 
   /**
    * Create a edit mode view
@@ -51,6 +52,7 @@ public class EditModeView extends VBox {
     myHeaderBox.getChildren().remove(myParameterView);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
     myParameterView = new ParameterView(myMainController, true);
+    myNeighborView = new NeighborView(myMainController, true);
     myHeaderBox.getChildren().addFirst(myParameterView);
     myHeaderBox.getChildren().addFirst(myStateInfoView);
   }
@@ -64,6 +66,7 @@ public class EditModeView extends VBox {
     this.getChildren().add(myHeaderBox);
     myStateInfoView = new StateInfoView(myMainController.getSimulation());
     myParameterView = new ParameterView(myMainController, true);
-    myHeaderBox.getChildren().addAll(myStateInfoView, myParameterView, instructions, title);
+    myNeighborView = new NeighborView(myMainController, true);
+    myHeaderBox.getChildren().addAll(myStateInfoView, myParameterView, myNeighborView, instructions, title);
   }
 }
