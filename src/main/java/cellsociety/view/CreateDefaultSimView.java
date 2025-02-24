@@ -183,8 +183,8 @@ public class CreateDefaultSimView extends VBox {
     myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"), getMessage("DEFAULT_DESCRIPTION"), this);
     myDescriptionField.setId("createSimulationDescriptionTextField");
 
-    createNeighborTypeSelector();
-    createNeighborLayerField();
+    createNeighborTypeSelector(this);
+    createNeighborLayerField(this);
   }
 
   private TextField createTextField(String label, String defaultValue, VBox target) {
@@ -199,7 +199,7 @@ public class CreateDefaultSimView extends VBox {
     return textField;
   }
 
-  private void createNeighborTypeSelector() {
+  private void createNeighborTypeSelector(VBox target) {
     myNeighborTypeSelector = new ComboBox<>(getAvailableNeighborTypes());
     myNeighborTypeSelector.setId("createSimulationNeighborTypeSelector");
 
@@ -213,10 +213,10 @@ public class CreateDefaultSimView extends VBox {
     Text label = new Text(getMessage("NEIGHBOR_TYPE_LABEL"));
 
     box.getChildren().addAll(label, myNeighborTypeSelector);
-    this.getChildren().add(box);
+    target.getChildren().add(box);
   }
 
-  private void createNeighborLayerField() {
+  private void createNeighborLayerField(VBox target) {
     myNeighborLayerField = new IntegerField();
     myNeighborLayerField.setId("createSimulationNeighborLayerTextField");
 
@@ -226,8 +226,8 @@ public class CreateDefaultSimView extends VBox {
     box.setSpacing(5);
     Text label = new Text(getMessage("NEIGHBOR_LAYER_LABEL"));
 
-    box.getChildren().addAll(label, myNeighborTypeSelector);
-    this.getChildren().add(box);
+    box.getChildren().addAll(label, myNeighborLayerField);
+    target.getChildren().add(box);
   }
 
   //Had a little bit of ChatGPT help with the last few lines of this
@@ -237,7 +237,7 @@ public class CreateDefaultSimView extends VBox {
    * @return - a list of the string names of the neighbor types
    */
   private static ObservableList<String> getAvailableNeighborTypes() {
-    File directory = new File("src/cellsociety/model/simulation/getNeighborOptions/");
+    File directory = new File("src/main/java/cellsociety/model/simulation/getNeighborOptions/");
     List<String> neighborTypes = new ArrayList<>();
 
     if (directory.exists() && directory.isDirectory()) {
