@@ -1,11 +1,11 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.getCellColors;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.reset;
 
 import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
+import cellsociety.view.cell.CellView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;

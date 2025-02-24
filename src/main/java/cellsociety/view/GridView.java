@@ -1,6 +1,9 @@
 package cellsociety.view;
 
 import cellsociety.controller.MainController;
+import cellsociety.view.cell.CellView;
+import cellsociety.view.cell.HexagonCellView;
+import cellsociety.view.cell.RectangleCellView;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 
@@ -77,7 +80,7 @@ public class GridView extends Group {
   private void initializeGrid() {
     for (int row = 0; row < myNumRows; row++) {
       for (int column = 0; column < myNumColumns; column++) {
-        CellView cellView = new CellView(cellWidth * column, cellHeight * row, cellWidth,
+        CellView cellView = new RectangleCellView(cellWidth * column, cellHeight * row, cellWidth,
             cellHeight);
         this.getChildren().add(cellView);
         myGrid[row][column] = cellView;
