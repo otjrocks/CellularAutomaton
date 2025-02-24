@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Simulation><Type>LangtonsLoops</Type><Title>Langton's Loops</Title><Author>Owen Jennings</Author><Description>A demo showcasing the Langton's Loops Cellular Automaton</Description><GridDimensions><Height>150</Height><Width>150</Width></GridDimensions><GridData>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Simulation><Type>LangtonsLoops</Type><Title>Langton's Loops</Title><Author>Owen Jennings</Author><Description>A demo showcasing the Langton's Loops Cellular Automaton</Description>
+
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+
+  <GridDimensions><Height>150</Height><Width>150</Width></GridDimensions><GridData>
   <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
   <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
   <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>

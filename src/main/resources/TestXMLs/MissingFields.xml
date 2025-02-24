@@ -3,6 +3,12 @@
     <Title>CornerCross</Title>
     <Author>Troy Ludwig</Author>
     <Description>A half cross pattern in the corners that should result in a 2x2 square in each corner</Description>
+
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <InitialConfiguration>
         <Row>1,0,1,0,0,0,0,1,0,1</Row>
         <Row>0,1,0,0,0,0,0,0,1,0</Row>

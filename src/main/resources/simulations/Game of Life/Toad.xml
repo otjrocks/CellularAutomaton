@@ -5,6 +5,11 @@
     <Author>Simon Norton</Author>
     <Description>2-period oscillator that connect and separate with each period</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

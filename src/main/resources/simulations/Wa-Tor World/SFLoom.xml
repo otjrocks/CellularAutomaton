@@ -4,6 +4,12 @@
     <Title>SFLoom</Title>
     <Author>Troy Ludwig</Author>
     <Description>A braid of sharks, fish and water to allow for fish movement</Description>
+
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>15</Height>
         <Width>15</Width>

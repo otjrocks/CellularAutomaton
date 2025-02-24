@@ -4,6 +4,12 @@
     <Title>Small Ants in a Big Field</Title>
     <Author>Troy Ludwig</Author>
     <Description>Many ant hills in a big field with many food sources</Description>
+
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>100</Height>
         <Width>100</Width>

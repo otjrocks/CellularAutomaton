@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Separated chunks of trees and a normal ignitionWithoutNeighbors rate to show how wind can spread fire to non-connected regions. Lower tree regrowth rate to show separate regions for longer.</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

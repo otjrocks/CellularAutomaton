@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Horizontal line of trees that will catch fire from right to left. Both parameters set to zero to demonstrate basic spreading</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

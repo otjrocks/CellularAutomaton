@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A "hashtag" pattern that expands and retracts continuously</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

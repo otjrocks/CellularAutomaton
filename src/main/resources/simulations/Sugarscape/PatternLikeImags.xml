@@ -5,6 +5,11 @@
   <Author>Justin Aronwald</Author>
   <Description>25x25 Sugarscape with varying levels</Description>
 
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>4</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>25</Height>
     <Width>25</Width>

@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>Starting fires in the corners with a lower ignitionWithoutNeighbors factor and a lower regrowth rate</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

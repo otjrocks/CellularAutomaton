@@ -5,6 +5,11 @@
   <Author>Justin Aronwald</Author>
   <Description>10x10 Sugarscape with a diamond pattern</Description>
 
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>4</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>10</Height>
     <Width>10</Width>

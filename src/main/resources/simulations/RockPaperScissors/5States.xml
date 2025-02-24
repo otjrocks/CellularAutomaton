@@ -5,6 +5,11 @@
   <Author>Justin Aronwald</Author>
   <Description>Rock Paper Scissors with 5 states and low threshold to see motion</Description>
 
+  <Neighbors>
+    <NeighborType>Moore</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>25</Height>
     <Width>25</Width>

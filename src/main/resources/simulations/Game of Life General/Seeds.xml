@@ -5,6 +5,11 @@
     <Author>Brian Silverman and Mirek Wojtowicz</Author>
     <Description>Using the "B2/S" rulestring to demonstrate many oscillators</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

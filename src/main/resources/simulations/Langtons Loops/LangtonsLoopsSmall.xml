@@ -4,6 +4,12 @@
   <Title>Langtons Loops Small</Title>
   <Author>Owen Jennings</Author>
   <Description>A smaller version of the Langtons Loops</Description>
+
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+  
   <GridDimensions>
     <Height>50</Height>
     <Width>50</Width>

@@ -5,6 +5,11 @@
     <Author>Troy Ludwig</Author>
     <Description>A random FallingSand pattern with 20% walls and 40% sand</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>10</Height>
         <Width>10</Width>

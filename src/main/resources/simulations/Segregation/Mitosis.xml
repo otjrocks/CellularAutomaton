@@ -4,10 +4,17 @@
     <Title>Mitosis</Title>
     <Author>Troy Ludwig</Author>
     <Description>Several blue groups separated and surrounded by red neighbors</Description>
+
+    <Neighbors>
+        <NeighborType>Moore</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>25</Height>
         <Width>25</Width>
     </GridDimensions>
+
     <GridData>
         <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
         <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>

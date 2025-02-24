@@ -5,6 +5,11 @@
     <Author>John Conway</Author>
     <Description>A 3-period oscillator that resembles a star</Description>
 
+    <Neighbors>
+        <NeighborType>VonNeumann</NeighborType>
+        <NeighborLayer>1</NeighborLayer>
+    </Neighbors>
+
     <GridDimensions>
         <Height>40</Height>
         <Width>40</Width>

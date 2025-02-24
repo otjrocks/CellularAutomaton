@@ -6,6 +6,12 @@
   <Description>A house made of sand is formed when the sand falls into a container made from walls.
     Some sand may fall outside the walls, but the overall shape looks like a completed house.
   </Description>
+
+  <Neighbors>
+    <NeighborType>VonNeumann</NeighborType>
+    <NeighborLayer>1</NeighborLayer>
+  </Neighbors>
+
   <GridDimensions>
     <Height>25</Height>
     <Width>25</Width>
