@@ -22,35 +22,41 @@ public class HexagonGridView extends GridView {
 
   @Override
   protected CellView[][] initializeGrid() {
-    // I asked ChatGPT to help with the configuration of this grid
+    // I asked ChatGPT for assistance in writing this method
     // Create the grid
     CellView[][] grid = new CellView[getNumRows()][getNumColumns()];
 
-    // Adjust hexagon width to utilize the entire grid width
-    double hexWidth =
-        getWidth() / (getNumColumns() + 0.5); // Use 0.5 to account for horizontal spacing
+    // Adjust hexagon width and height to better fit the grid
+    double hexWidth = (double) getWidth() / (getNumColumns());  // Use 0.5 to account for horizontal spacing
     double hexHeight = (double) getHeight() / getNumRows();
+
+    // Adjust the horizontal offset for better spacing and alignment
+    double horizontalSpacing = hexWidth * 0.75; // Horizontal spacing
+    double verticalSpacing = hexHeight * Math.sqrt(3) / 2.0; // Vertical spacing for hexagons
 
     // Initialize each cell in the grid as a HexagonCellView
     for (int row = 0; row < getNumRows(); row++) {
       for (int column = 0; column < getNumColumns(); column++) {
         // Calculate the x and y position for each hexagon in a honeycomb layout
-        double x = column * hexWidth * 0.75; // Horizontal spacing (0.75x width between cells)
-        double y = row * hexHeight * Math.sqrt(3) / 2.0; // Vertical spacing based on height
+        double x = column * horizontalSpacing;
 
-        // Offset every other row to create a honeycomb pattern
+        // Offset every other row to create the honeycomb pattern
+        double y = row * verticalSpacing;
+
+        // Adjust for odd column (row offset for honeycomb)
         if (column % 2 == 1) {
-          y += Math.round(hexHeight * Math.sqrt(3) / 4.0); // Shift odd columns downward
+          y += verticalSpacing / 2; // Shift odd columns downward
         }
 
-        // Create the hexagon cell
-        HexagonCellView cell = new HexagonCellView((int) x, (int) y, (int) hexWidth,
-            (int) hexHeight);
+        // Create the hexagon cell and add it to the grid
+        HexagonCellView cell = new HexagonCellView(x, y, hexWidth, hexHeight);
         grid[row][column] = cell;
       }
     }
+
     return grid;
   }
+
 
 
   @Override

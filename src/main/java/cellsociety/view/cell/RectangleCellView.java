@@ -1,6 +1,5 @@
 package cellsociety.view.cell;
 
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
@@ -11,12 +10,12 @@ import javafx.scene.shape.Shape;
  */
 public class RectangleCellView extends CellView {
 
-  public RectangleCellView(int width, int height, int cellWidth, int cellHeight) {
+  public RectangleCellView(double width, double height, double cellWidth, double cellHeight) {
     super(width, height, cellWidth, cellHeight);
   }
 
   @Override
-  protected Shape createShape(int width, int height) {
+  protected Shape createShape(double width, double height) {
     return new Rectangle(width, height);
   }
 }

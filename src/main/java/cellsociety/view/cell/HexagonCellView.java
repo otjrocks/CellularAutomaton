@@ -13,12 +13,12 @@ public class HexagonCellView extends CellView {
    * @param width  :      width of cell
    * @param height :      height of cell
    */
-  public HexagonCellView(int x, int y, int width, int height) {
+  public HexagonCellView(double x, double y, double width, double height) {
     super(x, y, width, height);
   }
 
   @Override
-  protected Shape createShape(int width, int height) {
+  protected Shape createShape(double width, double height) {
     Polygon hexagon = new Polygon();
 
     // Calculate the radius of the hexagon based on width and height

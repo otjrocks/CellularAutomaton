@@ -28,7 +28,7 @@ public abstract class CellView extends Group {
    * @param width:  width of cell
    * @param height: height of cell
    */
-  public CellView(int x, int y, int width, int height) {
+  public CellView(double x, double y, double width, double height) {
     myShape = createShape(width, height);
     myShape.setFill(DEFAULT_COLOR);
     myShape.setStroke(BORDER_COLOR);
@@ -74,5 +74,5 @@ public abstract class CellView extends Group {
    *
    * @return The specific Shape instance for the cell
    */
-  protected abstract Shape createShape(int width, int height);
+  protected abstract Shape createShape(double width, double height);
 }
