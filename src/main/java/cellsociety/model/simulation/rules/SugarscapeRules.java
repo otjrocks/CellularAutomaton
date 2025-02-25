@@ -10,7 +10,6 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -139,63 +138,39 @@ public class SugarscapeRules extends SimulationRules {
 
 
   //loops through all 4 directions up to vision amount of times in each direction
-  // Chat GPT helped exclusively with the row/col increment logic as well as creating the MutableInt class,  everything else was me
-  private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell cell, Grid grid) {
-    int row = cell.getRow();
-    int col = cell.getCol();
-    int vision = cell.getVision();
+  // ChatGPT helped exclusively with the minDistance/max Sugar logic
+private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid grid) {
+    List<Cell> neighbors = getNeighbors(agentCell, grid);
 
     SugarscapeCell biggestPatch = null;
-    MutableInt maxSugar = new MutableInt(-1);
-    MutableInt minDistance = new MutableInt(vision + 1);
+    int maxSugar = -1;
+    int minDistance = agentCell.getVision() + 1;
 
-    // up
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, -1, 0, grid, biggestPatch, maxSugar,
-        minDistance);
-    // down
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 1, 0, grid, biggestPatch, maxSugar,
-        minDistance);
-    // left
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, -1, grid, biggestPatch, maxSugar,
-        minDistance);
-    // right
-    biggestPatch = checkAndUpdateBiggestPatch(row, col, vision, 0, 1, grid, biggestPatch, maxSugar,
-        minDistance);
+    for (Cell cell : neighbors) {
+        if (cell.getState() != State.PATCHES.getValue()) {
+            continue;
+        }
 
-    return biggestPatch;
-  }
+        int distance = calculateDistance(agentCell, cell);
+        if (distance > agentCell.getVision()) {
+            continue;
+        }
 
-  private SugarscapeCell checkAndUpdateBiggestPatch(int row, int col, int vision, int rowIncrement,
-      int colIncrement, Grid grid, SugarscapeCell biggestPatch, MutableInt maxSugar,
-      MutableInt minDistance) {
-    for (int i = 1; i <= vision; i++) {
-      int newRow = row + (i * rowIncrement);
-      int newCol = col + (i * colIncrement);
+        SugarscapeCell patch = (SugarscapeCell) cell;
 
-      if (newRow < 0 || newRow >= grid.getRows() || newCol < 0 || newCol >= grid.getCols()) {
-        break;
-      }
-      Cell currentCell = grid.getCell(newRow, newCol);
-
-      if (currentCell.getState() != State.PATCHES.getValue()) {
-        continue;
-      }
-
-      SugarscapeCell curPatch = (SugarscapeCell) currentCell;
-
-      if (curPatch.getSugar() > maxSugar.getValue()) {
-        maxSugar.setValue(curPatch.getSugar());
-        minDistance.setValue(i);
-        biggestPatch = curPatch;
-      } else if (curPatch.getSugar() == maxSugar.getValue() && i < minDistance.getValue()) {
-        minDistance.setValue(i);
-        biggestPatch = curPatch;
-      }
+        if (patch.getSugar() > maxSugar || (patch.getSugar() == maxSugar && distance < minDistance)) {
+            maxSugar = patch.getSugar();
+            minDistance = distance;
+            biggestPatch = patch;
+        }
     }
 
     return biggestPatch;
-  }
+}
 
+  private int calculateDistance(Cell a, Cell b) {
+    return Math.abs(a.getRow() - b.getRow()) + Math.abs(a.getCol() - b.getCol());
+  }
 
   /**
    * The simulation has 3 states: EMPTY, PATCH, AGENT
@@ -205,34 +180,6 @@ public class SugarscapeRules extends SimulationRules {
   @Override
   public int getNumberStates() {
     return SugarscapeRules.State.values().length;
-  }
-
-  private Map<String, Parameter<?>> setDefaultParameters() {
-    Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("patchSugarGrowBackRate", new Parameter<>(4));
-    parameters.put("patchSugarGrowBackInteral", new Parameter<>(3));
-    parameters.put("agentVision", new Parameter<>(3));
-    parameters.put("agentSugar", new Parameter<>(10));
-    parameters.put("agentMetabolism", new Parameter<>(2));
-    return parameters;
-  }
-
-  //This class was added so that I could have as close to an int value as a pass by reference, not by value
-  static class MutableInt {
-
-    private int value;
-
-    public MutableInt(int value) {
-      this.value = value;
-    }
-
-    public int getValue() {
-      return value;
-    }
-
-    public void setValue(int value) {
-      this.value = value;
-    }
   }
 
 }
