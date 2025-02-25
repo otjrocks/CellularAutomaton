@@ -84,31 +84,6 @@ public class MainController {
   }
 
   /**
-   * For testing, get the sidebar view from main controller
-   */
-  public SidebarView getSidebarView() {
-    return mySidebarView;
-  }
-
-  /**
-   * For testing, get the splash screen view from main controller
-   *
-   * @return The splash screen view
-   */
-  public SplashScreenView getSplashScreen() {
-    return mySplashScreenView;
-  }
-
-  /**
-   * For testing, get the simulation view from main controller
-   *
-   * @return: a simulation view
-   */
-  public SimulationView getSimulationView() {
-    return mySimulationView;
-  }
-
-  /**
    * Hide the splash screen view
    */
   public void hideSplashScreen() {
@@ -208,7 +183,7 @@ public class MainController {
   }
 
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
-      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+      Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
@@ -317,8 +292,7 @@ public class MainController {
     return myGrid.getCols();
   }
 
-  private void initializeGridWithCells()
-      throws InvalidParameterException {
+  private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
         int initialState = 0;

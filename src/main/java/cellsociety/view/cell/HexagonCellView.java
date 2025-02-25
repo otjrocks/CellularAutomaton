@@ -19,6 +19,7 @@ public class HexagonCellView extends CellView {
 
   @Override
   protected Shape createShape(double width, double height) {
+    // I asked ChatGPT for assistance in creating this shape
     Polygon hexagon = new Polygon();
 
     // Calculate the radius of the hexagon based on width and height

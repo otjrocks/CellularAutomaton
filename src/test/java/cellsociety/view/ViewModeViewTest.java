@@ -28,7 +28,6 @@ class ViewModeViewTest extends DukeApplicationTest {
   private MainController myMainController;
   private MainController myMainControllerSpy;
   private AlertField myAlertField;
-  private ViewModeView myViewModeView;
   private final TestUtils myTestUtils = new TestUtils();
 
   @Override
@@ -37,8 +36,7 @@ class ViewModeViewTest extends DukeApplicationTest {
     myMainController = createNewSimulation.launchNewSimulation();
     myMainController.hideSplashScreen(); // hide splash screen to jump directly to main screen
     myMainControllerSpy = Mockito.spy(myMainController);
-    myAlertField = myMainController.getSidebarView().getAlertField();
-    myViewModeView = myMainController.getSidebarView().getViewModeView();
+    myAlertField = lookup("#sidebarAlertField").query();
   }
 
   @BeforeEach

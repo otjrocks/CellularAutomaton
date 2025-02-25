@@ -42,19 +42,11 @@ public class SplashScreenView extends VBox {
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {
     this.myAlertField = alertField;
+    myAlertField.setId("splashAlertField");
     this.mySidebarView = sidebar;
     this.myMainController = mainController;
     this.myContentBox = new VBox();
     initialize();
-  }
-
-  /**
-   * For testing, get the alert field for this field
-   *
-   * @return The alert field
-   */
-  AlertField getAlertField() {
-    return myAlertField;
   }
 
   private void initialize() {
