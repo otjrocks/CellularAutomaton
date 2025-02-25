@@ -1,6 +1,5 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.ForagingAntsCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -78,7 +78,7 @@ public class ForagingAntsRules extends SimulationRules {
       throwInvalidParameterException("maxPheromoneAmount");
     }
     if (myNewAntsNum < 0) {
-      throwInvalidParameterException("maxPheromoneAmount");
+      throwInvalidParameterException("newAntsNum");
     }
   }
 
@@ -146,17 +146,21 @@ public class ForagingAntsRules extends SimulationRules {
     
     List<CellUpdate> nextStates = new ArrayList<>();
     List<Cell> antCells = new ArrayList<>();
+    List<ForagingAntsCell> emptyCells = new ArrayList<>();
     Set<Point2D> occupiedCells = new HashSet<>();
     myReproductionTimer++;
 
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
-      Cell cell = cellIterator.next();
+      ForagingAntsCell cell = (ForagingAntsCell)cellIterator.next();
       if (cell.getState() == State.ANT.getValue()) {
         antCells.add(cell);
       }
       if (cell.getState() == State.NEST.getValue()) {
         nestCells.add(cell);
+      }
+      if (cell.getState() == State.EMPTY.getValue()) {
+        emptyCells.add(cell);
       }
     }
 
@@ -165,6 +169,12 @@ public class ForagingAntsRules extends SimulationRules {
     }
 
     checkIfTimeForMoreAnts(grid, nextStates, occupiedCells);
+
+    for (ForagingAntsCell empty: emptyCells){
+      if (!occupiedCells.contains(empty.getLocation())){
+        addEmptyCell(empty, nextStates);
+      }
+    }
 
     return nextStates;
   }
@@ -332,7 +342,7 @@ public class ForagingAntsRules extends SimulationRules {
   private void addNewAnt(ForagingAntsCell newAnt, List<CellUpdate> nextStates){
     nextStates.add(new CellUpdate(newAnt.getLocation(),
             new ForagingAntsCell(State.ANT.getValue(), newAnt.getLocation(),
-            newAnt.getHomePheromone(), newAnt.getFoodPheromone(), 300, false)));
+            newAnt.getHomePheromone(), newAnt.getFoodPheromone() * (1-myPheromoneDecayRate), 300, false, myMaxPheromoneAmount)));
   }
 
   /**
@@ -347,9 +357,9 @@ public class ForagingAntsRules extends SimulationRules {
   private void addUpdatedAnt(ForagingAntsCell ant, ForagingAntsCell nextLocation, Grid grid, List<CellUpdate> nextStates, boolean hasFood){
     nextStates.add((new CellUpdate(nextLocation.getLocation(),
                 new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(),
-                    updatePheromone(nextLocation, grid, "home") * (1 - myPheromoneDecayRate),
-                    updatePheromone(nextLocation, grid, "food") * (1 - myPheromoneDecayRate),
-                    ant.getHealth(), hasFood))));
+                    updatePheromone(nextLocation, grid, "home"),
+                    updatePheromone(nextLocation, grid, "food"),
+                    ant.getHealth(), hasFood, myMaxPheromoneAmount))));
   }
 
   /**
@@ -361,8 +371,8 @@ public class ForagingAntsRules extends SimulationRules {
   private void addEmptyCell(ForagingAntsCell ant, List<CellUpdate> nextStates){
     nextStates.add(new CellUpdate(ant.getLocation(), 
                 new ForagingAntsCell(State.EMPTY.getValue(), ant.getLocation(),
-                ant.getHomePheromone() * (1 - myPheromoneDecayRate),
-                ant.getFoodPheromone() * (1 - myPheromoneDecayRate), 0, false)));
+                ant.getHomePheromone() * (1-myPheromoneDecayRate),
+                ant.getFoodPheromone() * (1-myPheromoneDecayRate), 0, false, myMaxPheromoneAmount)));
   }
 
   /**
@@ -387,6 +397,7 @@ public class ForagingAntsRules extends SimulationRules {
         nestCellNeighbors.remove(newCell);
         ForagingAntsCell newAnt = (ForagingAntsCell)newCell;
         addNewAnt(newAnt, nextStates);
+        occupiedCells.add(newAnt.getLocation());
       }
       
       myReproductionTimer = 0;

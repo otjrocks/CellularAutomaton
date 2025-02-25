@@ -68,7 +68,7 @@
     </GridData>
     <Parameters>
         <pheromoneDecayRate>0.2</pheromoneDecayRate>
-        <maxPheromoneAmount>1000</maxPheromoneAmount>
+        <maxPheromoneAmount>100</maxPheromoneAmount>
         <antReproductionTime>25</antReproductionTime>
         <newAntsNum>4</newAntsNum>
     </Parameters>
