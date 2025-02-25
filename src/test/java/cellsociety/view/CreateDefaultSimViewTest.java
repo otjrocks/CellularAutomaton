@@ -42,7 +42,7 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
     CreateNewSimulation createNewSimulation = new CreateNewSimulation();
     myMainController = createNewSimulation.launchNewSimulation();
     myMainControllerSpy = Mockito.spy(myMainController);
-    myAlertField = myMainController.getSplashScreen().getAlertField();
+    myAlertField = lookup("#splashAlertField").query();
     // use the myMainControllerSpy to allow testFX to view and write to UI elements
     // myMainController is in charge of the actual logic of the program and is updated throughout
     // The values of the spy may be stale since it is not tracking/updating on all changes made to the main controller object

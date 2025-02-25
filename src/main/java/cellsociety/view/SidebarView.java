@@ -61,24 +61,6 @@ public class SidebarView extends VBox {
   }
 
   /**
-   * For testing, get the alert field for this field
-   *
-   * @return The alert field
-   */
-  AlertField getAlertField() {
-    return myAlertField;
-  }
-
-  /**
-   * For testing, get the ViewModeView for this class
-   *
-   * @return: The View Mode
-   */
-  ViewModeView getViewModeView() {
-    return myViewModeView;
-  }
-
-  /**
    * Create the theme selector element, which can be accessed across multiple views
    *
    * @return A HBox containing the theme selector and its label
@@ -145,6 +127,7 @@ public class SidebarView extends VBox {
 
   private void initializeAlertField() {
     myAlertField = new AlertField();
+    myAlertField.setId("sidebarAlertField");
     VBox.setVgrow(myAlertField, Priority.ALWAYS);
     myAlertField.setAlignment(Pos.BOTTOM_LEFT);
   }
