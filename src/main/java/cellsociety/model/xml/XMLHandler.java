@@ -101,7 +101,6 @@ public class XMLHandler {
       myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
     } catch (
         Exception e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
-      System.out.println(e.getMessage());
       myCellShapeType = DEFAULT_CELL_SHAPE;
     }
   }

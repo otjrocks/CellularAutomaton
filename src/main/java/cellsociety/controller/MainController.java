@@ -263,7 +263,7 @@ public class MainController {
    * XMLWriter
    */
   public void handleSavingToFile() {
-    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
+    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myCellShapeType, myStage);
   }
 
   /**
