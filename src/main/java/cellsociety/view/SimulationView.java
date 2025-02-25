@@ -36,7 +36,7 @@ public class SimulationView extends Group {
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
       Simulation simulation, MainController mainController) {
-    myGridView = GridViewFactory.createCellView(CellShapeType.RECTANGLE, width,
+    myGridView = GridViewFactory.createCellView(CellShapeType.HEXAGON, width,
         height, numRows, numCols, mainController);
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GetNeighbors {
-  public abstract int[][] getDirections();
+
+  public abstract int[][] getDirections(int row, int column);
+
   private final int layers;
 
   public GetNeighbors(int layers) {
@@ -15,17 +17,18 @@ public abstract class GetNeighbors {
 
   /**
    * The default implementation of getNeighbors. This provides a list of cells which are neighbors
-   * of the provided cell object. This method takes in the directions from the abstracted neighbor classes and then iterates through the number of layers if needed.
+   * of the provided cell object. This method takes in the directions from the abstracted neighbor
+   * classes and then iterates through the number of layers if needed.
    *
-   * @param cell              The cell you are querying for neighbors.
-   * @param grid              The grid of the simulation you are looking for neighbors in
+   * @param cell The cell you are querying for neighbors.
+   * @param grid The grid of the simulation you are looking for neighbors in
    * @return A list of cells that are neighbors of the provided cell.
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
 
     List<Cell> neighbors = new ArrayList<>();
 
-    int[][] directions = getDirections();
+    int[][] directions = getDirections(cell.getRow(), cell.getCol());
 
     for (int i = 1; i <= layers; i++) {
       for (int[] direction : directions) {
