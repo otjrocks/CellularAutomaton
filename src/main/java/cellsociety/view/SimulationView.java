@@ -29,14 +29,15 @@ public class SimulationView extends Group {
   /**
    * Create a simulation view
    *
-   * @param width:      width of simulation view
-   * @param height:     height of simulation view
-   * @param grid:       initial grid of the simulation view
-   * @param simulation: initial simulation of the simulation view
+   * @param width:         width of simulation view
+   * @param height:        height of simulation view
+   * @param grid:          initial grid of the simulation view
+   * @param cellShapeType: the type of the cell shape to create a grid with
+   * @param simulation:    initial simulation of the simulation view
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
-      Simulation simulation, MainController mainController) {
-    myGridView = GridViewFactory.createCellView(CellShapeType.HEXAGON, width,
+      CellShapeType cellShapeType, Simulation simulation, MainController mainController) {
+    myGridView = GridViewFactory.createCellView(cellShapeType, width,
         height, numRows, numCols, mainController);
     mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
