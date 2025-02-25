@@ -12,11 +12,10 @@ import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
+import cellsociety.view.components.SelectorField;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -25,7 +24,7 @@ public class SplashScreenView extends VBox {
   private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   private final AlertField myAlertField;
-  private ComboBox<String> languageDropdown;
+  private SelectorField myLanguageField;
   private CreateDefaultSimView myCreateDefaultSimView;
   private final MainController myMainController;
   private final VBox myContentBox;
@@ -36,7 +35,7 @@ public class SplashScreenView extends VBox {
    *
    * @param mainController: the main controller of this view
    * @param alertField:     the alert field to display messages
-   * @param sidebar:        an instance of the side bar view that holds a lot of simulation
+   * @param sidebar:        an instance of the sidebar view that holds a lot of simulation
    *                        metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
@@ -81,12 +80,12 @@ public class SplashScreenView extends VBox {
     description.getStyleClass().add("secondary-title");
     Text instructions = new Text(getMessage("SPLASH_INSTRUCTIONS"));
     instructions.setId("splashInstructions");
-    HBox myThemeSelectorBox = mySidebarView.createThemeSelector();
-    myThemeSelectorBox.setMaxWidth((double) WIDTH / 2);
-    myThemeSelectorBox.setAlignment(Pos.CENTER);
+    SelectorField myThemeSelector = mySidebarView.createThemeSelector();
+    myThemeSelector.setMaxWidth((double) WIDTH / 2);
+    myThemeSelector.setAlignment(Pos.CENTER);
     myContentBox.getChildren().clear();
     myContentBox.getChildren()
-        .addAll(title, description, instructions, myCreateDefaultSimView, myThemeSelectorBox);
+        .addAll(title, description, instructions, myCreateDefaultSimView, myThemeSelector);
 
     createLanguageDropdown();
     createFileChooserButton();
@@ -94,27 +93,22 @@ public class SplashScreenView extends VBox {
   }
 
   private void createLanguageDropdown() {
-    languageDropdown = new ComboBox<>();
-    languageDropdown.setId("languageDropdown");
-    Text changeLanguageText = new Text(getMessage("CHANGE_LANGUAGE"));
-
     List<String> languages = fetchLanguages();
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
     }
 
-    languageDropdown.getItems().addAll(languages);
     String defaultLanguage = languages.contains("English") ? "English" : languages.getFirst();
-    languageDropdown.setValue(
-        PreferencesController.getPreference("language", defaultLanguage));
-    languageDropdown.setOnAction(_ -> handleLanguageDropdownAction());
-
-    myContentBox.getChildren().addAll(changeLanguageText, languageDropdown);
+    myLanguageField = new SelectorField(languages,
+        PreferencesController.getPreference("language", defaultLanguage),
+        "languageDropdown", getMessage("CHANGE_LANGUAGE"), _ -> handleLanguageDropdownAction());
+    myLanguageField.setAlignment(Pos.CENTER);
+    myContentBox.getChildren().addAll(myLanguageField);
   }
 
   private void handleLanguageDropdownAction() {
-    MainConfig.setLanguage(languageDropdown.getValue());
+    MainConfig.setLanguage(myLanguageField.getValue());
     this.getChildren().clear();
     initialize();
   }

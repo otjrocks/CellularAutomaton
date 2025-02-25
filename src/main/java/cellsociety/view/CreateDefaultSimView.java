@@ -1,8 +1,7 @@
 package cellsociety.view;
 
 import cellsociety.model.simulation.InvalidParameterException;
-import java.io.File;
-import java.util.ArrayList;
+import cellsociety.view.components.SelectorField;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +22,6 @@ import static cellsociety.view.config.NeighborConfig.getAvailableNeighborTypes;
 
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -40,13 +34,13 @@ import javafx.scene.text.Text;
 public class CreateDefaultSimView extends VBox {
 
   private final MainController myMainController;
-  private ComboBox<String> mySimulationSelector;
+  private SelectorField mySimulationSelector;
   private final Map<String, TextField> myParameterTextFields = new HashMap<>();
   private final VBox myParametersControlBox = new VBox();
   private TextField myNameField;
   private TextField myAuthorField;
   private TextField myDescriptionField;
-  private ComboBox<String> myNeighborTypeSelector;
+  private SelectorField myNeighborTypeSelector;
   private IntegerField myNeighborLayerField;
   private int myNeighborLayer;
   private int myNumRows;
@@ -54,7 +48,6 @@ public class CreateDefaultSimView extends VBox {
   private IntegerField myRowField;
   private IntegerField myColField;
   private final AlertField myAlertField;
-
 
 
   private static final int DEFAULT_NUM_CELLS = 25;
@@ -89,20 +82,12 @@ public class CreateDefaultSimView extends VBox {
    * Handles the simulation selection process
    */
   private void createSimulationTypeControl() {
-    Text createSimButtonText = new Text(getMessage("NEW_SIM_BUTTON_TEXT"));
-    ObservableList<String> options =
-        FXCollections.observableArrayList(SimulationConfig.SIMULATIONS);
-    mySimulationSelector = new ComboBox<>(options);
-    mySimulationSelector.setId("createSimulationSelector");
-    mySimulationSelector.setValue(options.getFirst());
-    mySimulationSelector.valueProperty()
-        .addListener((_, _, _) -> addAllParameters(mySimulationSelector.getValue()));
-    HBox container = new HBox();
-    container.setAlignment(Pos.CENTER_LEFT);
-    container.setSpacing(5);
-    Text simulationTypeLabel = new Text(getMessage("SIMULATION_TYPE_LABEL"));
-    container.getChildren().addAll(simulationTypeLabel, mySimulationSelector);
-    this.getChildren().addAll(createSimButtonText, container);
+    mySimulationSelector = new SelectorField(List.of(SimulationConfig.SIMULATIONS),
+        SimulationConfig.SIMULATIONS[0], "createSimulationSelector",
+        getMessage("SIMULATION_TYPE_LABEL"),
+        _ -> addAllParameters(mySimulationSelector.getValue()));
+    mySimulationSelector.setAlignment(Pos.CENTER_LEFT);
+    this.getChildren().add(mySimulationSelector);
   }
 
   private void addAllParameters(String simulationName) {
@@ -175,20 +160,21 @@ public class CreateDefaultSimView extends VBox {
    * Handles the text metadata for the simulation
    */
   private void createSimulationMetaDataTextFields() {
-    myNameField = createTextField(getMessage("NAME_LABEL"), getMessage("DEFAULT_NAME"), this);
+    myNameField = createTextField(getMessage("NAME_LABEL"), getMessage("DEFAULT_NAME"));
     myNameField.setId("createSimulationNameTextField");
 
-    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"), getMessage("DEFAULT_AUTHOR"), this);
+    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"), getMessage("DEFAULT_AUTHOR"));
     myAuthorField.setId("createSimulationAuthorTextField");
 
-    myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"), getMessage("DEFAULT_DESCRIPTION"), this);
+    myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"),
+        getMessage("DEFAULT_DESCRIPTION"));
     myDescriptionField.setId("createSimulationDescriptionTextField");
 
-    createNeighborTypeSelector(this);
-    createNeighborLayerField(this);
+    createNeighborTypeSelector();
+    createNeighborLayerField();
   }
 
-  private TextField createTextField(String label, String defaultValue, VBox target) {
+  private TextField createTextField(String label, String defaultValue) {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
@@ -196,39 +182,31 @@ public class CreateDefaultSimView extends VBox {
     textField.setPromptText(defaultValue);
     Text textFieldLabel = new Text(label);
     box.getChildren().addAll(textFieldLabel, textField);
-    target.getChildren().add(box);
+    this.getChildren().add(box);
     return textField;
   }
 
-  private void createNeighborTypeSelector(VBox target) {
-    myNeighborTypeSelector = new ComboBox<>(getAvailableNeighborTypes());
-    myNeighborTypeSelector.setId("createSimulationNeighborTypeSelector");
-
-    if (myNeighborTypeSelector.getValue() != null) {
-    myNeighborTypeSelector.setValue(myNeighborTypeSelector.getItems().getFirst());
-    }
-
-    HBox box = new HBox();
-    box.setAlignment(Pos.CENTER_LEFT);
-    box.setSpacing(5);
-    Text label = new Text(getMessage("NEIGHBOR_TYPE_LABEL"));
-
-    box.getChildren().addAll(label, myNeighborTypeSelector);
-    target.getChildren().add(box);
+  private void createNeighborTypeSelector() {
+    myNeighborTypeSelector = new SelectorField(getAvailableNeighborTypes(),
+        getAvailableNeighborTypes().getFirst(), "createSimulationNeighborTypeSelector",
+        getMessage("NEIGHBOR_TYPE_LABEL"), _ -> {
+    });
+    this.getChildren().add(myNeighborTypeSelector);
   }
 
-  private void createNeighborLayerField(VBox target) {
+  private void createNeighborLayerField() {
     myNeighborLayerField = new IntegerField();
     myNeighborLayerField.setId("createSimulationNeighborLayerTextField");
 
-    myNeighborLayerField.textProperty().addListener((_, _, _) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
+    myNeighborLayerField.textProperty()
+        .addListener((_, _, _) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
     Text label = new Text(getMessage("NEIGHBOR_LAYER_LABEL"));
 
     box.getChildren().addAll(label, myNeighborLayerField);
-    target.getChildren().add(box);
+    this.getChildren().add(box);
   }
 
 
@@ -251,7 +229,7 @@ public class CreateDefaultSimView extends VBox {
         myDescriptionField.getText(),
         myNeighborTypeSelector.getValue(),
         myNeighborLayer
-      );
+    );
   }
 
   /**
@@ -300,7 +278,8 @@ public class CreateDefaultSimView extends VBox {
 
   private boolean checkInvalidNeighborType(String myNeighborType) {
     try {
-      String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s", myNeighborType,
+      String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
+          myNeighborType,
           "Neighbors");
       Class.forName(className);
       return false;
@@ -359,7 +338,7 @@ public class CreateDefaultSimView extends VBox {
    * @param parameters - the parameters of the Simulation
    */
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
-      Map<String, Parameter<?>> parameters) throws InvalidParameterException {
+      Map<String, Parameter<?>> parameters) {
     try {
       myMainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
