@@ -56,7 +56,7 @@ public class ForagingAntsCell extends Cell {
     @Override
     public double getOpacity() {
         if (getState() != State.EMPTY.getValue()) {
-        return 1.0;
+            return 1.0;
         }
         return (myHomePheromone + myFoodPheromone)/(2*myMaxPher);
     }

@@ -25,9 +25,9 @@ import cellsociety.model.simulation.SimulationRules;
 public class ForagingAntsRules extends SimulationRules {
 
   private final Random random = new Random();
-  private final int myPheromoneDecayRate;
+  private final double myPheromoneDecayRate;
   private final int myAntReproductionTime;
-  private final int myMaxPheromoneAmount;
+  private final double myMaxPheromoneAmount;
   private final int myNewAntsNum;
 
   private int myReproductionTimer = 0;
@@ -51,9 +51,9 @@ public class ForagingAntsRules extends SimulationRules {
     checkMissingParameterAndThrowException("antReproductionTime");
     checkMissingParameterAndThrowException("maxPheromoneAmount");
     checkMissingParameterAndThrowException("newAntsNum");
-    myPheromoneDecayRate = getParameters().get("pheromoneDecayRate").getInteger();
+    myPheromoneDecayRate = getParameters().get("pheromoneDecayRate").getDouble();
     myAntReproductionTime = getParameters().get("antReproductionTime").getInteger();
-    myMaxPheromoneAmount = getParameters().get("maxPheromoneAmount").getInteger();
+    myMaxPheromoneAmount = getParameters().get("maxPheromoneAmount").getDouble();
     myNewAntsNum = getParameters().get("newAntsNum").getInteger();
     validateParameterRange();
   }
