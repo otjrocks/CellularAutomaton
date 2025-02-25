@@ -1,5 +1,6 @@
 package cellsociety.controller;
 
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -57,6 +58,7 @@ public class MainController {
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
+  private CellShapeType myCellShapeType = CellShapeType.RECTANGLE;
   private final VBox myMainViewContainer = new VBox();
   private final Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
@@ -175,7 +177,7 @@ public class MainController {
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(speed), e -> {
+        .add(new KeyFrame(Duration.seconds(speed), _ -> {
           try {
             step();
           } catch (Exception ex) {
@@ -218,7 +220,7 @@ public class MainController {
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
       throw new RuntimeException(e);
     }
-    initializeGridWithCells(parameters);
+    initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
   }
 
@@ -261,7 +263,7 @@ public class MainController {
    * XMLWriter
    */
   public void handleSavingToFile() {
-    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myStage);
+    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myCellShapeType, myStage);
   }
 
   /**
@@ -315,7 +317,7 @@ public class MainController {
     return myGrid.getCols();
   }
 
-  private void initializeGridWithCells(Map<String, Parameter<?>> parameters)
+  private void initializeGridWithCells()
       throws InvalidParameterException {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
@@ -344,6 +346,7 @@ public class MainController {
     try {
       XMLHandler xmlHandler = new XMLHandler(filePath);
       myGrid = xmlHandler.getGrid();
+      myCellShapeType = xmlHandler.getCellShapeType();
       updateSimulation(xmlHandler.getSim());
     } catch (SAXException e) {
       mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
@@ -387,7 +390,7 @@ public class MainController {
     myMainViewContainer.getChildren().clear();
     mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
         myGrid.getCols(),
-        myGrid, mySimulation, this);
+        myGrid, myCellShapeType, mySimulation, this);
     mySimulationView.setGridLines(gridLinesEnabled);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
@@ -395,7 +398,7 @@ public class MainController {
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(STEP_SPEED), e -> {
+        .add(new KeyFrame(Duration.seconds(STEP_SPEED), _ -> {
           try {
             step();  // step function
           } catch (Exception ex) {

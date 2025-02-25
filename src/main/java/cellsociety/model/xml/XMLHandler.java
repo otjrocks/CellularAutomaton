@@ -1,6 +1,9 @@
 package cellsociety.model.xml;
 
+import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
+
 import cellsociety.utility.CreateGridUtility;
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -37,6 +40,7 @@ public class XMLHandler {
   private static Simulation mySim;
   private static SimulationMetaData mySimData;
   private static Map<String, Parameter<?>> myParameters;
+  private static CellShapeType myCellShapeType;
 
   /**
    * XMLHandler constructor for referencing data
@@ -82,11 +86,23 @@ public class XMLHandler {
     String title = data.getElementsByTagName("Title").item(0).getTextContent();
     String author = data.getElementsByTagName("Author").item(0).getTextContent();
     String description = data.getElementsByTagName("Description").item(0).getTextContent();
-
+    parseCellTypeIfPresent(data);
     Element neighborsElement = (Element) data.getElementsByTagName("Neighbors").item(0);
-    String neighborType = neighborsElement.getElementsByTagName("NeighborType").item(0).getTextContent();
-    int layers = Integer.parseInt(neighborsElement.getElementsByTagName("NeighborLayer").item(0).getTextContent());
+    String neighborType = neighborsElement.getElementsByTagName("NeighborType").item(0)
+        .getTextContent();
+    int layers = Integer.parseInt(
+        neighborsElement.getElementsByTagName("NeighborLayer").item(0).getTextContent());
     mySimData = new SimulationMetaData(type, title, author, description, neighborType, layers);
+  }
+
+  private static void parseCellTypeIfPresent(Document data) {
+    try {
+      String cellType = data.getElementsByTagName("CellType").item(0).getTextContent();
+      myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
+    } catch (
+        Exception e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
+      myCellShapeType = DEFAULT_CELL_SHAPE;
+    }
   }
 
   /**
@@ -220,5 +236,14 @@ public class XMLHandler {
    */
   public Map<String, Parameter<?>> getParams() {
     return myParameters;
+  }
+
+  /**
+   * Returns the current simulation's cell shape type
+   *
+   * @return CellShapeType from the file or the default cell shape if not found
+   */
+  public CellShapeType getCellShapeType() {
+    return myCellShapeType;
   }
 }
