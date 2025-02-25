@@ -1,6 +1,7 @@
 package cellsociety.model.cell;
 
 import cellsociety.model.simulation.rules.SugarscapeRules;
+import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 
 public class SugarscapeCell extends Cell {
@@ -13,7 +14,7 @@ public class SugarscapeCell extends Cell {
   private int vision;
   private int metabolism;
   private final int DEFAULT_VALUE = 2;
-  private final int MAX_SUGAR_AMOUNT = 5;
+  private final int MAX_SUGAR_AMOUNT = 15;
 
 
   public SugarscapeCell(int state, Point2D location) {
@@ -119,7 +120,10 @@ public class SugarscapeCell extends Cell {
 
   @Override
   public double getOpacity() {
-    return Math.max(0.1, Math.min(1.0, (double) sugar / MAX_SUGAR_AMOUNT));
+    if (getState() != State.PATCHES.getValue()) {
+      return 1.0;
+    }
+    return 0.1 + (0.85 * (1.0 - ((double) sugar / MAX_SUGAR_AMOUNT)));
   }
 
   /**
@@ -152,6 +156,7 @@ public class SugarscapeCell extends Cell {
     intervalsSinceLastGrowBack++;
     if (intervalsSinceLastGrowBack >= sugarGrowBackInterval) {
       sugar += sugarGrowBackRate;
+      sugar = Math.min(sugar, MAX_SUGAR_AMOUNT);
       intervalsSinceLastGrowBack = 0;
     }
   }
