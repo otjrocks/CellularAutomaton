@@ -72,6 +72,15 @@ public abstract class CellView extends Group {
   }
 
   /**
+   * Get the shape representation of a cell
+   *
+   * @return: the shape of the cell
+   */
+  public Shape getShape() {
+    return myShape;
+  }
+
+  /**
    * Reset the stroke color of the cell on theme updates
    */
   public void resetStrokeColor() {

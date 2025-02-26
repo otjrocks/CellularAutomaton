@@ -1,9 +1,14 @@
 package cellsociety.view.grid;
 
+import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
 import cellsociety.view.cell.CellView;
 import javafx.scene.Group;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 
 /**
  * A view with all the cells in the grid and ability to update individual cells based on their
@@ -151,5 +156,18 @@ public abstract class GridView extends Group {
         cell.setOnMouseClicked(_ -> mainController.changeCellState(cellRow, cellColumn));
       }
     }
+  }
+
+  public void addCellTooltip(int row, int col, Grid grid, String simType) {
+    Shape cellShape = myGrid[row][col].getShape();
+    
+    Tooltip tooltip = new Tooltip();
+    Tooltip.install(cellShape, tooltip);
+    
+    // Update tooltip dynamically when the user hovers
+    cellShape.setOnMouseEntered(event ->  {
+      Cell cell = grid.getCell(row, col);
+      tooltip.setText("State: " + getMessage((simType + "_NAME_" + cell.getState()).toUpperCase()));
+    });
   }
 }

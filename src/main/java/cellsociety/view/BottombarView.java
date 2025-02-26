@@ -17,7 +17,7 @@ public class BottombarView extends VBox {
     public static final double ELEMENT_SPACING = 10;
 
     private final MainController myMainController;
-    private static Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
+    private Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
     
     /**
    * Create a bottombar view with a preferred size of width x height
@@ -40,14 +40,14 @@ public class BottombarView extends VBox {
     updateIterationCounter(0);
    }
 
-  private static Text createText(String message) {
+  private Text createText(String message) {
     Text text = new Text(message);
     text.setTextAlignment(TextAlignment.LEFT);
     text.setWrappingWidth(GRID_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
 
-  public static void updateIterationCounter(int count) {
+  public void updateIterationCounter(int count) {
     myIterationText.setText(getMessage("ITERATOR_TEXT") + count);
   }
 
