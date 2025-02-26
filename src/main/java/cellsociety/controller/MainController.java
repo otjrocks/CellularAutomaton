@@ -446,7 +446,8 @@ public class MainController {
 
   private void step() {
     myIterationCount++;
-    mySimulationView.step(myGrid, mySimulation, myIterationCount);
+    myBottombarView.updateIterationCounter(myIterationCount);
+    mySimulationView.step(myGrid, mySimulation);
   }
 
   private void createMainContainerAndView() {

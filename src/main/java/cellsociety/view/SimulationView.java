@@ -60,8 +60,7 @@ public class SimulationView extends Group {
    * @param grid:       Grid of the simulation
    * @param simulation: Simulation that contains rules for updating
    */
-  public void step(Grid grid, Simulation simulation, int iteration) {
-    BottombarView.updateIterationCounter(iteration);
+  public void step(Grid grid, Simulation simulation) {
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
     for (CellUpdate stateUpdate : stateUpdates) {
       int nextState = stateUpdate.getState();
