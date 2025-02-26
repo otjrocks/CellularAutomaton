@@ -29,7 +29,7 @@ class SidebarViewTest extends DukeApplicationTest {
     myMainController = createNewSimulation.launchNewSimulation();
     myMainController.hideSplashScreen(); // hide splash screen to jump directly to main screen
     myMainControllerSpy = Mockito.spy(myMainController);
-    myAlertField = myMainController.getSidebarView().getAlertField();
+    myAlertField = lookup("#sidebarAlertField").query();
   }
 
   @BeforeEach

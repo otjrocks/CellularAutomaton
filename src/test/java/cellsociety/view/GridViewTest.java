@@ -30,7 +30,7 @@ class GridViewTest extends DukeApplicationTest {
     myMainController = createNewSimulation.launchNewSimulation();
     myMainController.hideSplashScreen(); // hide splash screen to jump directly to main screen
     myMainControllerSpy = Mockito.spy(myMainController);
-    myGridView = myMainController.getSimulationView().getGridView();
+    myGridView = lookup("#gridView").query();
   }
 
   @BeforeEach

@@ -5,13 +5,11 @@ import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.view.components.AlertField;
+import cellsociety.view.components.SelectorField;
 import cellsociety.view.config.ThemeConfig;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -30,7 +28,7 @@ public class SidebarView extends VBox {
   private final MainController myMainController;
   private boolean isEditing = false;
   private Button myModeButton;
-  private HBox myThemeSelectorBox;
+  private SelectorField myThemeSelector;
   private final HBox myGridLinesCheckboxField = new HBox();
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
@@ -61,45 +59,15 @@ public class SidebarView extends VBox {
   }
 
   /**
-   * For testing, get the alert field for this field
-   *
-   * @return The alert field
-   */
-  AlertField getAlertField() {
-    return myAlertField;
-  }
-
-  /**
-   * For testing, get the ViewModeView for this class
-   *
-   * @return: The View Mode
-   */
-  ViewModeView getViewModeView() {
-    return myViewModeView;
-  }
-
-  /**
    * Create the theme selector element, which can be accessed across multiple views
    *
-   * @return A HBox containing the theme selector and its label
+   * @return A SelectorField containing the theme selector and its label
    */
-  public HBox createThemeSelector() {
-    ObservableList<String> options =
-        FXCollections.observableArrayList(ThemeConfig.THEMES);
-    ComboBox<String> myThemeSelector = new ComboBox<>(options);
-    myThemeSelector.setId("themeDropdown");
-    myThemeSelector.setValue(ThemeConfig.getCurrentTheme());
-    myThemeSelector.valueProperty()
-        .addListener((_, _, _) -> {
-          myMainController.setTheme(myThemeSelector.getValue());
-          myThemeSelector.setValue(myThemeSelector.getValue());
-        });
-    myThemeSelectorBox = new HBox();
-    myThemeSelectorBox.setAlignment(Pos.CENTER_LEFT);
-    myThemeSelectorBox.setSpacing(5);
-    Text simulationTypeLabel = new Text(getMessage("CHANGE_THEME"));
-    myThemeSelectorBox.getChildren().addAll(simulationTypeLabel, myThemeSelector);
-    return myThemeSelectorBox;
+  public SelectorField createThemeSelector() {
+    myThemeSelector = new SelectorField(ThemeConfig.THEMES, ThemeConfig.getCurrentTheme(), "themeDropdown", getMessage("CHANGE_THEME"), _ -> myMainController.setTheme(myThemeSelector.getValue()));
+    myThemeSelector.setAlignment(Pos.CENTER_LEFT);
+    this.getChildren().add(myThemeSelector);
+    return myThemeSelector;
   }
 
   /**
@@ -122,7 +90,7 @@ public class SidebarView extends VBox {
     myControlsBox.setAlignment(Pos.CENTER_LEFT);
     myControlsBox.setHgap(ELEMENT_SPACING);
     myControlsBox.setVgap(ELEMENT_SPACING);
-    myControlsBox.getChildren().addAll(myModeButton, myThemeSelectorBox, myGridLinesCheckboxField);
+    myControlsBox.getChildren().addAll(myModeButton, myThemeSelector, myGridLinesCheckboxField);
   }
 
   private void addAllEditModeComponents() {
@@ -145,6 +113,7 @@ public class SidebarView extends VBox {
 
   private void initializeAlertField() {
     myAlertField = new AlertField();
+    myAlertField.setId("sidebarAlertField");
     VBox.setVgrow(myAlertField, Priority.ALWAYS);
     myAlertField.setAlignment(Pos.BOTTOM_LEFT);
   }
