@@ -1,9 +1,11 @@
 package cellsociety.utility;
 
 import cellsociety.controller.MainController;
+import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import static cellsociety.config.MainConfig.HEIGHT;
@@ -48,8 +50,10 @@ public class CreateNewSimulation {
 
   private ScrollPane createMainScrollPane() {
     ScrollPane scrollPane = new ScrollPane();
-    scrollPane.setFitToHeight(true);
     scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPannable(true);
+//    scrollPane.addEventFilter(MouseEvent.ANY, Event::consume);
     scrollPane.setContent(myRoot);
     return scrollPane;
   }
