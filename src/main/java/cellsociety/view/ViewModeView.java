@@ -237,11 +237,11 @@ public class ViewModeView extends VBox {
     }
   }
 
-  private Text createText(String message) {
+  private static Text createText(String message) {
     Text text = new Text(message);
     text.setTextAlignment(TextAlignment.LEFT);
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
-
+  
 }

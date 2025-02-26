@@ -1,8 +1,9 @@
 package cellsociety.config;
 
+import java.util.ResourceBundle;
+
 import cellsociety.controller.PreferencesController;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
-import java.util.ResourceBundle;
 
 public class MainConfig {
 
@@ -60,6 +61,7 @@ public class MainConfig {
   public static final int MIN_GRID_NUM_ROWS = 5;
   public static final int MIN_GRID_NUM_COLS = 5;
   public static final int SIDEBAR_WIDTH = WIDTH - GRID_WIDTH - (3 * MARGIN);
+  public static final int BOTTOMBAR_WIDTH = WIDTH - (2 * MARGIN);
   public static final CellShapeType DEFAULT_CELL_SHAPE = CellShapeType.RECTANGLE;
 
   public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user

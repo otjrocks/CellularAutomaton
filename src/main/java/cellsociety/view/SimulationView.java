@@ -1,17 +1,17 @@
 package cellsociety.view;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.view.grid.GridView;
-import cellsociety.view.grid.GridViewFactory;
-import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.util.List;
 
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
+import cellsociety.view.grid.GridView;
+import cellsociety.view.grid.GridViewFactory;
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -60,7 +60,8 @@ public class SimulationView extends Group {
    * @param grid:       Grid of the simulation
    * @param simulation: Simulation that contains rules for updating
    */
-  public void step(Grid grid, Simulation simulation) {
+  public void step(Grid grid, Simulation simulation, int iteration) {
+    BottombarView.updateIterationCounter(iteration);
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
     for (CellUpdate stateUpdate : stateUpdates) {
       int nextState = stateUpdate.getState();
