@@ -61,9 +61,8 @@ public class SimulationView extends Group {
    * @param grid:       Grid of the simulation
    * @param simulation: Simulation that contains rules for updating
    */
-  public void step(Grid grid, Simulation simulation) {
-    myIterationCount++;
-    ViewModeView.updateIterationCounter(myIterationCount);
+  public void step(Grid grid, Simulation simulation, int iteration) {
+    ViewModeView.updateIterationCounter(iteration);
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
     for (CellUpdate stateUpdate : stateUpdates) {
       int nextState = stateUpdate.getState();

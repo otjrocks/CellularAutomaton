@@ -66,6 +66,7 @@ public class MainController {
       PreferencesController.getPreference("gridLines", "true"));
 
   private final ThemeController myThemeController;
+  private int myIterationCount;
 
   /**
    * Initialize the MainController
@@ -344,6 +345,7 @@ public class MainController {
   private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
+      myIterationCount = 0;
       XMLHandler xmlHandler = new XMLHandler(filePath);
       myGrid = xmlHandler.getGrid();
       myCellShapeType = xmlHandler.getCellShapeType();
@@ -408,7 +410,8 @@ public class MainController {
   }
 
   private void step() {
-    mySimulationView.step(myGrid, mySimulation);
+    myIterationCount++;
+    mySimulationView.step(myGrid, mySimulation, myIterationCount);
   }
 
   private void createMainContainerAndView() {
