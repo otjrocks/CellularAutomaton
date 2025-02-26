@@ -1,6 +1,7 @@
 package cellsociety.controller;
 
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import static cellsociety.config.MainConfig.BOTTOMBAR_WIDTH;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
@@ -29,6 +31,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.view.BottombarView;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
@@ -55,6 +58,7 @@ public class MainController {
   private final Stage myStage;
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
+  private BottombarView myBottombarView;
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
@@ -82,6 +86,7 @@ public class MainController {
     mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
     root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
+    myRoot.getChildren().remove(myBottombarView);
   }
 
   /**
@@ -89,6 +94,13 @@ public class MainController {
    */
   public SidebarView getSidebarView() {
     return mySidebarView;
+  }
+
+  /**
+   * For testing, get the bottombar view from main controller
+   */
+  public BottombarView getBottombarView() {
+    return myBottombarView;
   }
 
   /**
@@ -114,8 +126,11 @@ public class MainController {
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySidebarView);
+    myRoot.getChildren().remove(myBottombarView);
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
+    myBottombarView = null;
     createOrUpdateSidebar();
+    createOrUpdateBottombar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
   }
@@ -276,6 +291,7 @@ public class MainController {
     mySimulation = simulation;
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
+    createOrUpdateBottombar();
   }
 
   /**
@@ -287,6 +303,17 @@ public class MainController {
     mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);
+  }
+
+  /**
+   * Initialize the bottombar of the program
+   */
+  public void initializeBottombar() {
+    myBottombarView = new BottombarView(BOTTOMBAR_WIDTH,
+        GRID_HEIGHT/2, this);
+    myBottombarView.setLayoutX(MARGIN);
+    myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myRoot.getChildren().add(myBottombarView);
   }
 
   /**
@@ -385,6 +412,14 @@ public class MainController {
       initializeSidebar();
     } else {
       mySidebarView.update();
+    }
+  }
+
+  private void createOrUpdateBottombar() {
+    if (myBottombarView == null) {
+      initializeBottombar();
+    } else {
+      myBottombarView.update();
     }
   }
 

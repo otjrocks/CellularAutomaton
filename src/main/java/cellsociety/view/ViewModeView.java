@@ -35,7 +35,6 @@ public class ViewModeView extends VBox {
   private Button mySaveButton;
   private Button myStepButton;
   private Button newSimulationButton;
-  private static Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
   private final VBox mySpeedSliderBox = new VBox();
   private FlowPane myControlButtons = new FlowPane();
 
@@ -64,8 +63,6 @@ public class ViewModeView extends VBox {
     NeighborView myNeighborView = new NeighborView(myMainController, false);
     setPlayPauseButtonText();
     this.getChildren().addAll(myControlButtons, mySpeedSliderBox);
-    this.getChildren().add(myIterationText);
-    updateIterationCounter(0);
     createSimulationMetaDataDisplay();
     this.getChildren().addAll(myStateInfoView, myParameterView, myNeighborView);
   }
@@ -246,9 +243,5 @@ public class ViewModeView extends VBox {
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
-
-  public static void updateIterationCounter(int count) {
-    myIterationText.setText(getMessage("ITERATOR_TEXT") + count);
-  }
-
+  
 }
