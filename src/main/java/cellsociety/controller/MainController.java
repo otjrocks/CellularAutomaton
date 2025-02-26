@@ -436,6 +436,7 @@ public class MainController {
     myIterationCount++;
     myBottombarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
+    myBottombarView.updateHistogram(computeStateCounts(), mySimulation.data().type());
   }
 
   private void createMainContainerAndView() {
@@ -446,5 +447,16 @@ public class MainController {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
     } catch (Exception _) {
     } // can ignore thrown exception since we already handled them earlier in the chain
+  }
+
+  public Map<String, Integer> computeStateCounts() {
+    Map<String, Integer> stateCounts = new HashMap<>();
+    for (int row = 0; row < myGrid.getRows(); row++) {
+        for (int col = 0; col < myGrid.getCols(); col++) {
+            int state = myGrid.getCell(row, col).getState();
+            stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), stateCounts.getOrDefault(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
+        }
+    }
+    return stateCounts;
   }
 }
