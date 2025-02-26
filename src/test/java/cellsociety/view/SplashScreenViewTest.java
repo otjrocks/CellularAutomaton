@@ -13,6 +13,7 @@ import util.TestUtils;
 
 import static cellsociety.config.MainConfig.getMessage;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class SplashScreenViewTest extends DukeApplicationTest {
@@ -26,9 +27,6 @@ public class SplashScreenViewTest extends DukeApplicationTest {
     myTestUtils = new TestUtils();
     CreateNewSimulation createNewSimulation = new CreateNewSimulation(stage);
     myMainController = Mockito.spy(createNewSimulation.launchNewSimulation());
-    SplashScreenView mySplashScreenView = myMainController.getSplashScreen();
-    stage.setScene(mySplashScreenView.getScene());
-    stage.show();
   }
 
   @BeforeEach
@@ -59,6 +57,7 @@ public class SplashScreenViewTest extends DukeApplicationTest {
   private void verifyLanguageChange(String language) {
     clickOn("#languageDropdown");
     clickOn(language);
+    waitForFxEvents();  // Ensure that all UI events and updates are processed before assertions
 
     // Verify text elements and buttons change on language change
     myTestUtils.verifyText("#splashScreenTitle", getMessage("SPLASH_HEADER"));
