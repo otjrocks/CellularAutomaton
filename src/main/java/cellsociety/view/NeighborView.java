@@ -15,7 +15,6 @@ import cellsociety.view.components.IntegerField;
 import cellsociety.view.components.SelectorField;
 import java.lang.reflect.InvocationTargetException;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 

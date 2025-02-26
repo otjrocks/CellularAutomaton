@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 /**
@@ -39,7 +38,7 @@ public class SelectorField extends HBox {
     myComboBox.setId(id);
     myComboBox.getStyleClass().add("combo-box");
     this.getChildren().addAll(myLabel, myComboBox);
-    this.setSpacing(ELEMENT_SPACING);
+    this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
   }
 

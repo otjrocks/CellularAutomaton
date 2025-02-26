@@ -57,7 +57,7 @@ public class BottombarView extends VBox {
   private Text createText(String message) {
     Text text = new Text(message);
     text.setTextAlignment(TextAlignment.LEFT);
-    text.setWrappingWidth(BOTTOMBAR_WIDTH - (ELEMENT_SPACING * 6));
+    text.setWrappingWidth(GRID_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
 

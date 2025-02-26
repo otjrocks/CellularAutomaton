@@ -1,18 +1,20 @@
 package cellsociety.controller;
 
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import static cellsociety.config.MainConfig.BOTTOMBAR_WIDTH;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
@@ -278,10 +280,11 @@ public class MainController {
    * Initialize the bottombar of the program
    */
   public void initializeBottombar() {
-    myBottombarView = new BottombarView(BOTTOMBAR_WIDTH,
-        GRID_HEIGHT, this);
+    myBottombarView = new BottombarView(GRID_WIDTH,
+        GRID_HEIGHT / 2, this);
     myBottombarView.setLayoutX(MARGIN);
     myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
     myRoot.getChildren().add(myBottombarView);
   }
 
@@ -312,6 +315,23 @@ public class MainController {
    */
   public int getGridCols() {
     return myGrid.getCols();
+  }
+
+  /**
+   * Update the grid to use the new shape specified by the new value Calls updateGridShape from
+   * simulation view class providing the current cell states in the grid along with the cell shape
+   * type to transition to
+   *
+   * @param value The CellShapeType to update to
+   */
+  public void updateGridShape(CellShapeType value) {
+    List<CellUpdate> currentStates = new ArrayList<>();
+    for (Iterator<Cell> it = myGrid.getCellIterator(); it.hasNext(); ) {
+      Cell cell = it.next();
+      currentStates.add(new CellUpdate(cell.getLocation(), cell));
+    }
+    mySimulationView.updateGridShape(currentStates, value);
+    myCellShapeType = value;
   }
 
   private void initializeGridWithCells() {
