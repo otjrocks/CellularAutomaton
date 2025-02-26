@@ -318,15 +318,6 @@ public class MainController {
   }
 
   /**
-   * Get the cell shape type of the current simulation
-   *
-   * @return A CellShapeType value
-   */
-  public CellShapeType getCellShapeType() {
-    return myCellShapeType;
-  }
-
-  /**
    * Update the grid to use the new shape specified by the new value Calls updateGridShape from
    * simulation view class providing the current cell states in the grid along with the cell shape
    * type to transition to
@@ -340,6 +331,7 @@ public class MainController {
       currentStates.add(new CellUpdate(cell.getLocation(), cell));
     }
     mySimulationView.updateGridShape(currentStates, value);
+    myCellShapeType = value;
   }
 
   private void initializeGridWithCells() {
