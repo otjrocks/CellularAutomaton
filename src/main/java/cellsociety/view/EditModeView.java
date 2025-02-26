@@ -38,10 +38,19 @@ public class EditModeView extends VBox {
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {
-    this.myMainController = mainController;
-    this.myAlertField = alertField;
+    myMainController = mainController;
+    myAlertField = alertField;
+    this.setSpacing(ELEMENT_SPACING);
+    initializeView();
+  }
+
+  private void initializeView() {
     createHeader();
-    CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(mainController,
+    initializeCreateDefaultSimView();
+  }
+
+  private void initializeCreateDefaultSimView() {
+    CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(myMainController,
         myAlertField) {
       @Override
       protected void handleAdditionalButtonActions() throws IllegalArgumentException {
@@ -49,7 +58,7 @@ public class EditModeView extends VBox {
         updateDisplay(); // update state info when new simulation is created.
       }
     };
-    this.getChildren().addAll(createDefaultSimView);
+    this.getChildren().add(createDefaultSimView);
   }
 
   /**
@@ -57,8 +66,8 @@ public class EditModeView extends VBox {
    */
   public void updateDisplay() {
     myHeaderBox.getChildren().clear();
-    this.getChildren().remove(myHeaderBox);
-    createHeader();
+    this.getChildren().clear();
+    initializeView();
   }
 
   private void createHeader() {
@@ -71,7 +80,7 @@ public class EditModeView extends VBox {
     myHeaderBox.getChildren()
         .addAll(myStateInfoView, myParameterView, myNeighborView, myShapeSelector, instructions,
             title);
-    this.getChildren().addFirst(myHeaderBox);
+    this.getChildren().add(myHeaderBox);
   }
 
   private void createHeaderElements() {

@@ -15,7 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import static cellsociety.config.MainConfig.BOTTOMBAR_WIDTH;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
@@ -281,10 +280,11 @@ public class MainController {
    * Initialize the bottombar of the program
    */
   public void initializeBottombar() {
-    myBottombarView = new BottombarView(BOTTOMBAR_WIDTH,
+    myBottombarView = new BottombarView(GRID_WIDTH,
         GRID_HEIGHT / 2, this);
     myBottombarView.setLayoutX(MARGIN);
     myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
     myRoot.getChildren().add(myBottombarView);
   }
 

@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.BOTTOMBAR_WIDTH;
+import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
 import javafx.geometry.Pos;
@@ -43,7 +43,7 @@ public class BottombarView extends VBox {
   private static Text createText(String message) {
     Text text = new Text(message);
     text.setTextAlignment(TextAlignment.LEFT);
-    text.setWrappingWidth(BOTTOMBAR_WIDTH - (ELEMENT_SPACING * 6));
+    text.setWrappingWidth(GRID_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
 

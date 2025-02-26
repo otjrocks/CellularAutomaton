@@ -38,7 +38,7 @@ public class SelectorField extends HBox {
     myComboBox.setId(id);
     myComboBox.getStyleClass().add("combo-box");
     this.getChildren().addAll(myLabel, myComboBox);
-    this.setSpacing(ELEMENT_SPACING);
+    this.setSpacing(ELEMENT_SPACING * 2);
     this.setAlignment(Pos.CENTER_LEFT);
   }
 
