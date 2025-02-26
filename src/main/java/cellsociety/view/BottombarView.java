@@ -2,8 +2,8 @@ package cellsociety.view;
 
 import java.util.Map;
 
-import static cellsociety.config.MainConfig.BOTTOMBAR_WIDTH;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
+import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
@@ -74,8 +74,8 @@ public class BottombarView extends VBox {
 
     stateHistogram = new BarChart<>(xAxis, yAxis);
     stateHistogram.setTitle("Cell State Distribution");
-    stateHistogram.setMinWidth(BOTTOMBAR_WIDTH);
-    stateHistogram.setMaxWidth(BOTTOMBAR_WIDTH);
+    stateHistogram.setMinWidth(GRID_WIDTH);
+    stateHistogram.setMaxWidth(GRID_WIDTH);
     stateHistogram.setMaxHeight(GRID_HEIGHT/2);
     
     XYChart.Series<String, Number> histogramSeries = new XYChart.Series<>();
