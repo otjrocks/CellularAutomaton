@@ -14,7 +14,7 @@ class ForagingAntsCellTest {
 
   @BeforeEach
   void setUp() {
-    cellOne = new ForagingAntsCell(5, new Double(0, 1), 10.0, 25.0, 500, true) {
+    cellOne = new ForagingAntsCell(5, new Double(0, 1), 10.0, 25.0, 500, true, 10) {
     };
   }
 
@@ -29,11 +29,11 @@ class ForagingAntsCellTest {
         });
 
     assertThrows(IllegalArgumentException.class, () ->
-        cellTwo = new ForagingAntsCell(0, new Double(0, -1), 1.0, 1.0, 10, false) {
+        cellTwo = new ForagingAntsCell(0, new Double(0, -1), 1.0, 1.0, 10, false, 10) {
         });
 
     assertThrows(IllegalArgumentException.class, () ->
-        cellTwo = new ForagingAntsCell(0, new Double(5.5, 0) ,1.0, 1.0, 10, false) {
+        cellTwo = new ForagingAntsCell(0, new Double(5.5, 0) ,1.0, 1.0, 10, false, 10) {
         });
   }
 
