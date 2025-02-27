@@ -1,5 +1,6 @@
 package cellsociety.view.grid;
 
+import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
@@ -168,6 +169,8 @@ public abstract class GridView extends Group {
     cellShape.setOnMouseEntered(event ->  {
       Cell cell = grid.getCell(row, col);
       tooltip.setText("State: " + getMessage((simType + "_NAME_" + cell.getState()).toUpperCase()));
+      String colorString = getCellColors().getString(((simType + "_COLOR_" + cell.getState())).toUpperCase()).toLowerCase();
+      tooltip.setStyle("-fx-background-color: white; -fx-text-fill: " + colorString + ";");
     });
   }
 }
