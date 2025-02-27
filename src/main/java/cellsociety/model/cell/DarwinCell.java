@@ -98,4 +98,28 @@ public class DarwinCell extends Cell{
     }
   }
 
+  //had help from ChatGPT to generate the radian logic
+
+  /**
+   * Determines the direction that the cell faces
+   *
+   * @return - a unit vector in the direction the cell faces
+   */
+  public Point2D getFrontDirection() {
+    double radians = Math.toRadians(orientation);
+    double deltaX = Math.cos(radians);
+    double deltaY = -Math.sin(radians);
+
+    return new Point2D.Double(deltaX, deltaY);
+  }
+
+  /**
+   * Sets the current instruction index to a new index
+   *
+   * @param instructionIndex - the new index to be set to
+   */
+  public void setCurInstructionIndex(int instructionIndex) {
+    this.curInstructionIndex = instructionIndex;
+  }
+
 }
