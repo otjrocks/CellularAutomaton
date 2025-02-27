@@ -31,7 +31,6 @@ public abstract class CellView extends Group {
   public CellView(double x, double y, double width, double height) {
     myShape = createShape(width, height);
     myShape.setFill(DEFAULT_COLOR);
-    myShape.setStroke(BORDER_COLOR);
     myShape.setStrokeType(StrokeType.INSIDE);
     myShape.setStrokeWidth(BORDER_WIDTH);
     this.getChildren().add(myShape);
@@ -84,7 +83,7 @@ public abstract class CellView extends Group {
    * Reset the stroke color of the cell on theme updates
    */
   public void resetStrokeColor() {
-    this.setStyle("-fx-stroke: -fx-primary;");
+    myShape.setStyle("-fx-stroke: -fx-primary;");
   }
 
   /**
