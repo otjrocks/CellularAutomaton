@@ -103,7 +103,7 @@ public class BottombarView extends VBox {
         for (XYChart.Data<String, Number> data : newSeries.getData()) {
             Node barNode = data.getNode();
             if (barNode != null) {
-                String colorString = getCellColors().getString((simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType, data.getXValue())).toUpperCase()).toLowerCase();
+                String colorString = getCellColors().getString((simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType, data.getXValue().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
                 barNode.setStyle("-fx-bar-fill: " + colorString + ";");
             }
         }
