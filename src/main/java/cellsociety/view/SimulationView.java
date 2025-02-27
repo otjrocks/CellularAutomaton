@@ -1,17 +1,17 @@
 package cellsociety.view;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.view.grid.GridView;
-import cellsociety.view.grid.GridViewFactory;
-import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.util.List;
 
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
+import cellsociety.view.grid.GridView;
+import cellsociety.view.grid.GridViewFactory;
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -23,8 +23,14 @@ import javafx.scene.paint.Paint;
  */
 public class SimulationView extends Group {
 
-  private final GridView myGridView;
+  private GridView myGridView;
   private final Simulation mySimulation;
+  private final int myWidth;
+  private final int myHeight;
+  private final int myNumRows;
+  private final int myNumColumns;
+  private final MainController myMainController;
+  private boolean myGridLinesEnabled = true;
 
   /**
    * Create a simulation view
@@ -37,21 +43,22 @@ public class SimulationView extends Group {
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
       CellShapeType cellShapeType, Simulation simulation, MainController mainController) {
+    myWidth = width;
+    myHeight = height;
+    myNumRows = numRows;
+    myNumColumns = numCols;
+    myMainController = mainController;
+    mySimulation = simulation;
+    initializeGrid(width, height, numRows, numCols, grid, cellShapeType, mainController);
+  }
+
+  private void initializeGrid(int width, int height, int numRows, int numCols, Grid grid,
+      CellShapeType cellShapeType, MainController mainController) {
     myGridView = GridViewFactory.createCellView(cellShapeType, width,
         height, numRows, numCols, mainController);
-    mySimulation = simulation;
     initializeInitialGridStates(numRows, numCols, grid);
     getChildren().add(myGridView);
     myGridView.updateGridLinesColor(); // ensure grid lines are proper color on simulation view initialization
-  }
-
-  /**
-   * For testing, get the grid view for this simulation
-   *
-   * @return A grid view object
-   */
-  GridView getGridView() {
-    return myGridView;
   }
 
   /**
@@ -62,14 +69,7 @@ public class SimulationView extends Group {
    */
   public void step(Grid grid, Simulation simulation) {
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
-    for (CellUpdate stateUpdate : stateUpdates) {
-      int nextState = stateUpdate.getState();
-      StateInfo nextStateInfo = StateDisplayConfig.getStateInfo(mySimulation, nextState);
-      Paint nextColor = nextStateInfo.color();
-      double nextOpacity = stateUpdate.getNextCell().getOpacity();
-      myGridView.setColor(stateUpdate.getRow(), stateUpdate.getCol(), nextColor);
-      myGridView.setOpacity(stateUpdate.getRow(), stateUpdate.getCol(), nextOpacity);
-    }
+    updateGridViewFromCellUpdateList(stateUpdates);
   }
 
   /**
@@ -89,6 +89,7 @@ public class SimulationView extends Group {
    * @param selected: Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
+    myGridLinesEnabled = selected;
     myGridView.setGridLines(selected);
   }
 
@@ -97,6 +98,22 @@ public class SimulationView extends Group {
    */
   public void updateGridLinesColor() {
     myGridView.updateGridLinesColor();
+  }
+
+  /**
+   * Update the grid to use a new CellShapeType shape
+   *
+   * @param currentGridState A list of cell updates representing the current grid state.
+   * @param value            The new CellShapeType value.
+   */
+  public void updateGridShape(List<CellUpdate> currentGridState, CellShapeType value) {
+    this.getChildren().remove(myGridView);
+    myGridView = GridViewFactory.createCellView(value, myWidth,
+        myHeight, myNumRows, myNumColumns, myMainController);
+    updateGridViewFromCellUpdateList(currentGridState);
+    myGridView.updateGridLinesColor();
+    myGridView.setGridLines(myGridLinesEnabled);
+    this.getChildren().add(myGridView);
   }
 
   private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
@@ -109,6 +126,19 @@ public class SimulationView extends Group {
         myGridView.setColor(row, col, nextColor);
         myGridView.setOpacity(row, col, nextOpacity);
       }
+    }
+  }
+
+
+
+  private void updateGridViewFromCellUpdateList(List<CellUpdate> stateUpdates) {
+    for (CellUpdate stateUpdate : stateUpdates) {
+      int nextState = stateUpdate.getState();
+      StateInfo nextStateInfo = StateDisplayConfig.getStateInfo(mySimulation, nextState);
+      Paint nextColor = nextStateInfo.color();
+      double nextOpacity = stateUpdate.getNextCell().getOpacity();
+      myGridView.setColor(stateUpdate.getRow(), stateUpdate.getCol(), nextColor);
+      myGridView.setOpacity(stateUpdate.getRow(), stateUpdate.getCol(), nextOpacity);
     }
   }
 }

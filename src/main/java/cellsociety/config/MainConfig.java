@@ -1,8 +1,9 @@
 package cellsociety.config;
 
+import java.util.ResourceBundle;
+
 import cellsociety.controller.PreferencesController;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
-import java.util.ResourceBundle;
 
 public class MainConfig {
 

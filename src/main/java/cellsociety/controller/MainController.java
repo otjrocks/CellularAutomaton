@@ -1,9 +1,15 @@
 package cellsociety.controller;
 
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +35,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.view.BottombarView;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
@@ -55,6 +62,7 @@ public class MainController {
   private final Stage myStage;
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
+  private BottombarView myBottombarView;
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
@@ -66,6 +74,7 @@ public class MainController {
       PreferencesController.getPreference("gridLines", "true"));
 
   private final ThemeController myThemeController;
+  private int myIterationCount;
 
   /**
    * Initialize the MainController
@@ -81,6 +90,7 @@ public class MainController {
     mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
     root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
+    myRoot.getChildren().remove(myBottombarView);
   }
 
   /**
@@ -88,8 +98,11 @@ public class MainController {
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySidebarView);
+    myRoot.getChildren().remove(myBottombarView);
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
+    myBottombarView = null;
     createOrUpdateSidebar();
+    createOrUpdateBottombar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
   }
@@ -250,6 +263,7 @@ public class MainController {
     mySimulation = simulation;
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
+    createOrUpdateBottombar();
   }
 
   /**
@@ -261,6 +275,18 @@ public class MainController {
     mySidebarView.setLayoutX(GRID_WIDTH + 1.5 * MARGIN);
     mySidebarView.setLayoutY(MARGIN);
     myRoot.getChildren().add(mySidebarView);
+  }
+
+  /**
+   * Initialize the bottombar of the program
+   */
+  public void initializeBottombar() {
+    myBottombarView = new BottombarView(GRID_WIDTH,
+        GRID_HEIGHT / 2, this);
+    myBottombarView.setLayoutX(MARGIN);
+    myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
+    myRoot.getChildren().add(myBottombarView);
   }
 
   /**
@@ -292,6 +318,23 @@ public class MainController {
     return myGrid.getCols();
   }
 
+  /**
+   * Update the grid to use the new shape specified by the new value Calls updateGridShape from
+   * simulation view class providing the current cell states in the grid along with the cell shape
+   * type to transition to
+   *
+   * @param value The CellShapeType to update to
+   */
+  public void updateGridShape(CellShapeType value) {
+    List<CellUpdate> currentStates = new ArrayList<>();
+    for (Iterator<Cell> it = myGrid.getCellIterator(); it.hasNext(); ) {
+      Cell cell = it.next();
+      currentStates.add(new CellUpdate(cell.getLocation(), cell));
+    }
+    mySimulationView.updateGridShape(currentStates, value);
+    myCellShapeType = value;
+  }
+
   private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
@@ -318,6 +361,7 @@ public class MainController {
   private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
+      myIterationCount = 0;
       XMLHandler xmlHandler = new XMLHandler(filePath);
       myGrid = xmlHandler.getGrid();
       myCellShapeType = xmlHandler.getCellShapeType();
@@ -360,6 +404,14 @@ public class MainController {
     }
   }
 
+  private void createOrUpdateBottombar() {
+    if (myBottombarView == null) {
+      initializeBottombar();
+    } else {
+      myBottombarView.update();
+    }
+  }
+
   private void createNewMainViewAndUpdateViewContainer() {
     myMainViewContainer.getChildren().clear();
     mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
@@ -382,7 +434,10 @@ public class MainController {
   }
 
   private void step() {
+    myIterationCount++;
+    myBottombarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
+    myBottombarView.updateHistogram(computeStateCounts(), mySimulation.data().type());
   }
 
   private void createMainContainerAndView() {
@@ -393,5 +448,16 @@ public class MainController {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
     } catch (Exception _) {
     } // can ignore thrown exception since we already handled them earlier in the chain
+  }
+
+  public Map<String, Integer> computeStateCounts() {
+    Map<String, Integer> stateCounts = new HashMap<>();
+    for (int row = 0; row < myGrid.getRows(); row++) {
+        for (int col = 0; col < myGrid.getCols(); col++) {
+            int state = myGrid.getCell(row, col).getState();
+            stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), stateCounts.getOrDefault(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
+        }
+    }
+    return stateCounts;
   }
 }

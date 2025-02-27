@@ -35,6 +35,7 @@ Label, Text {
   -fx-font-size: 20px;
   -fx-font-family: Lato;
   -fx-fill: -fx-secondary;
+  -fx-padding: 10 0 10 0;
 }
 
 .button {
