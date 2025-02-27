@@ -2,4 +2,4 @@ Hello gentlemen, now we practice git.
 
 REVERTED COMMIT done
 
-change commit message
+change commit message - post stash
