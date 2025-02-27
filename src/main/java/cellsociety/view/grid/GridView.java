@@ -153,7 +153,7 @@ public abstract class GridView extends Group {
         this.getChildren().add(cell);
         int cellRow = row; // create copy of local variables to ensure that they are passed properly to main controller
         int cellColumn = column;
-        cell.setOnMouseClicked(_ -> mainController.changeCellState(cellRow, cellColumn));
+        cell.setOnMouseClicked(e -> mainController.changeCellState(cellRow, cellColumn));
       }
     }
   }

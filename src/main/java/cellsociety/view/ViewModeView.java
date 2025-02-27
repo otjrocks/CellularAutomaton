@@ -77,7 +77,7 @@ public class ViewModeView extends VBox {
         initialSliderValue * SPEED_SLIDER_DELTA, currentSliderValue);
     speedSlider.setId("viewModeSpeedSlider");
     speedSlider.valueProperty().addListener(
-        (_, _, newValue) -> handleSpeedSliderUpdate(newValue));
+        (observable, oldVal, newValue) -> handleSpeedSliderUpdate(newValue));
     mySpeedSliderBox.getChildren().addAll(sliderLabel, speedSlider);
   }
 
@@ -156,7 +156,7 @@ public class ViewModeView extends VBox {
   private void createSaveFileButton() {
     mySaveButton = new Button(getMessage("SAVE_TO_XML"));
     mySaveButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-    mySaveButton.setOnMouseClicked(_ -> {
+    mySaveButton.setOnMouseClicked(e -> {
       handleFileSaveAction();
     });
   }
@@ -197,7 +197,7 @@ public class ViewModeView extends VBox {
     myPlayPauseButton = new Button(getMessage("PLAY_LABEL"));
     myPlayPauseButton.setId("viewModePlayPauseButton");
     myPlayPauseButton.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-    myPlayPauseButton.setOnAction(_ -> {
+    myPlayPauseButton.setOnAction(e -> {
       handlePlayPauseButtonAction();
     });
     this.getChildren().addAll(myPlayPauseButton);

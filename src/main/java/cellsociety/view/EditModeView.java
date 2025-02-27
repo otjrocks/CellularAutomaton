@@ -98,7 +98,7 @@ public class EditModeView extends VBox {
     }
     return new SelectorField(displayNames, displayNames.getFirst(),
         "editModeShapeSelector",
-        getMessage("SHAPE_SELECTOR"), _ -> updateGridShape());
+        getMessage("SHAPE_SELECTOR"), e -> updateGridShape());
   }
 
   private void updateGridShape() {

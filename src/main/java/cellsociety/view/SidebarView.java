@@ -64,7 +64,7 @@ public class SidebarView extends VBox {
    * @return A SelectorField containing the theme selector and its label
    */
   public SelectorField createThemeSelector() {
-    myThemeSelector = new SelectorField(ThemeConfig.THEMES, ThemeConfig.getCurrentTheme(), "themeDropdown", getMessage("CHANGE_THEME"), _ -> myMainController.setTheme(myThemeSelector.getValue()));
+    myThemeSelector = new SelectorField(ThemeConfig.THEMES, ThemeConfig.getCurrentTheme(), "themeDropdown", getMessage("CHANGE_THEME"), e -> myMainController.setTheme(myThemeSelector.getValue()));
     myThemeSelector.setAlignment(Pos.CENTER_LEFT);
     this.getChildren().add(myThemeSelector);
     return myThemeSelector;
@@ -134,7 +134,7 @@ public class SidebarView extends VBox {
   private void createChangeModeButton() {
     myModeButton = new Button(getMessage("EDIT_MODE"));
     myModeButton.setId("sidebarModeButton");
-    myModeButton.setOnMouseClicked(_ -> handleChangeModeButtonClick());
+    myModeButton.setOnMouseClicked(e -> handleChangeModeButtonClick());
   }
 
   private void handleChangeModeButtonClick() {
@@ -174,7 +174,7 @@ public class SidebarView extends VBox {
     gridLinesCheckbox.setSelected(
         Boolean.parseBoolean(PreferencesController.getPreference("gridLines", "true")));
     gridLinesCheckbox.setOnAction(
-        _ -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
+        e -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
     return gridLinesCheckbox;
   }
 

@@ -84,7 +84,7 @@ public class CreateDefaultSimView extends VBox {
     mySimulationSelector = new SelectorField(List.of(SimulationConfig.SIMULATIONS),
         SimulationConfig.SIMULATIONS[0], "createSimulationSelector",
         getMessage("SIMULATION_TYPE_LABEL"),
-        _ -> addAllParameters(mySimulationSelector.getValue()));
+        e -> addAllParameters(mySimulationSelector.getValue()));
     mySimulationSelector.setAlignment(Pos.CENTER_LEFT);
     this.getChildren().add(mySimulationSelector);
   }
@@ -123,7 +123,7 @@ public class CreateDefaultSimView extends VBox {
     myRowField.setId("createSimulationRowField");
     myRowField.setText(String.valueOf(DEFAULT_NUM_CELLS));
     myRowField.textProperty()
-        .addListener((_, _, _) -> myNumRows = parseIntegerField(myRowField, 0));
+        .addListener((observableValue, oldVal, newVal) -> myNumRows = parseIntegerField(myRowField, 0));
 
     HBox rowBox = new HBox(new Text(getMessage("NUMBER_ROWS")), myRowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
@@ -139,7 +139,7 @@ public class CreateDefaultSimView extends VBox {
     myColField.setId("createSimulationColField");
     myColField.setText(Integer.toString(DEFAULT_NUM_CELLS));
     myColField.textProperty()
-        .addListener((_, _, _) -> myNumCols = parseIntegerField(myColField, 0));
+        .addListener((observable, oldVal, newVal) -> myNumCols = parseIntegerField(myColField, 0));
 
     HBox colBox = new HBox(new Text(getMessage("NUMBER_COLUMNS")), myColField);
     colBox.setAlignment(Pos.CENTER_LEFT);
@@ -188,7 +188,7 @@ public class CreateDefaultSimView extends VBox {
   private void createNeighborTypeSelector() {
     myNeighborTypeSelector = new SelectorField(getAvailableNeighborTypes(),
         getAvailableNeighborTypes().getFirst(), "createSimulationNeighborTypeSelector",
-        getMessage("NEIGHBOR_TYPE_LABEL"), _ -> {
+        getMessage("NEIGHBOR_TYPE_LABEL"), e -> {
     });
     this.getChildren().add(myNeighborTypeSelector);
   }
@@ -198,7 +198,7 @@ public class CreateDefaultSimView extends VBox {
     myNeighborLayerField.setId("createSimulationNeighborLayerTextField");
 
     myNeighborLayerField.textProperty()
-        .addListener((_, _, _) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
+        .addListener((observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
@@ -352,7 +352,7 @@ public class CreateDefaultSimView extends VBox {
   private void createNewSimulationButton() {
     Button createSimButton = new Button(getMessage("CREATE_NEW_GRID_HEADER"));
     createSimButton.setId("createSimulationButton");
-    createSimButton.setOnAction(_ -> handleCreateNewSimulationAction());
+    createSimButton.setOnAction(e -> handleCreateNewSimulationAction());
     this.getChildren().add(createSimButton);
   }
 

@@ -150,9 +150,9 @@ public class SimulationConfig {
       getNeighbors = (GetNeighbors) neighborClass.getConstructor(int.class).newInstance(layers);
       return getNeighbors;
     } catch (ClassNotFoundException e) {
-      throw new IllegalArgumentException(STR."Invalid neighbor configuration: \{neighborType}");
+      throw new IllegalArgumentException(
+          String.format("Invalid neighbor configuration: %s", neighborType));
     }
-
   }
 
   public static int returnStateValueBasedOnName(String simType, String name) {

@@ -59,7 +59,7 @@ public class XMLWriter {
 
       transformXML(doc, file);
 
-    } catch (ParserConfigurationException | javax.xml.transform.TransformerException _) {
+    } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
     }
   }
 

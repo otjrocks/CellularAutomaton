@@ -23,7 +23,7 @@ public class FileUtility {
   public static List<String> getFileNamesInDirectory(String directoryPath, String ending) {
     List<String> fileNames = new ArrayList<>();
     File directory = new File(directoryPath);
-    File[] files = directory.listFiles((_, name) -> name.endsWith(ending));
+    File[] files = directory.listFiles((file, name) -> name.endsWith(ending));
 
     if (files != null) {
       for (File file : files) {
