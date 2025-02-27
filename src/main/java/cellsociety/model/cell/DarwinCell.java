@@ -46,4 +46,56 @@ public class DarwinCell extends Cell{
     this.prevSpecies = -1;
     this.infectionCountdown = infectionCountdown;
   }
+
+  /**
+   * Get the current instruction of the Species
+   *
+   * @return - the current instruction that the species will execute
+   */
+  public String getInstruction() {
+    if (curInstructionIndex < 0 || curInstructionIndex >= instructions.size() || instructions.isEmpty()) {
+      return "";
+    }
+    return instructions.get(curInstructionIndex);
+  }
+
+  /**
+   * Handles incrementing of instructions
+   *
+   */
+  // had help from ChatGPT to get the logic of looping instructions
+  public void nextInstruction() {
+    if (!instructions.isEmpty()) {
+      curInstructionIndex = (curInstructionIndex + 1) % instructions.size();
+    }
+  }
+
+  /**
+   * Rotates the current orientation to the left
+   *
+   * @param degrees - the degree that the current orientation will rotate by
+   */
+  public void turnLeft(int degrees) {
+    orientation = (orientation - degrees) % 360;
+  }
+
+  /**
+   * Rotates the current orientation to the right
+   *
+   * @param degrees - the degree that the current orientation will rotate by
+   */
+  public void turnRight(int degrees) {
+    orientation = (orientation + degrees) % 360;
+  }
+
+  /**
+   * Decreases the Infection Countdown
+   *
+   */
+  public void handleInfectionDecrease() {
+    if (infectionCountdown > 0) {
+      infectionCountdown--;
+    }
+  }
+
 }
