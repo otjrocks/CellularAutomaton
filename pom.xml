@@ -75,8 +75,8 @@
                 <version>3.13.0</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <source>22</source>
-                    <target>22</target>
+                    <source>${project.build.java.version}</source>
+                    <target>${project.build.java.version}</target>
                 </configuration>
             </plugin>
             <!-- used to execute the unit tests of an application and generate a report -->
