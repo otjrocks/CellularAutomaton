@@ -438,8 +438,7 @@ public class MainController {
     myBottombarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
     Map<String, Integer> stateCounts = computeStateCounts();
-    myBottombarView.updateHistogram(stateCounts, mySimulation.data().type());
-    myBottombarView.updateStateChangeChart(stateCounts);
+    myBottombarView.updateStateChangeChart(stateCounts, mySimulation.data().type());
   }
 
   private void createMainContainerAndView() {
