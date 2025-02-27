@@ -282,7 +282,7 @@ public class MainController {
    */
   public void initializeBottombar() {
     myBottombarView = new BottombarView(GRID_WIDTH,
-        GRID_HEIGHT / 2, this);
+        GRID_HEIGHT * 2, this);
     myBottombarView.setLayoutX(MARGIN);
     myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
     myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
@@ -437,7 +437,9 @@ public class MainController {
     myIterationCount++;
     myBottombarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
-    myBottombarView.updateHistogram(computeStateCounts(), mySimulation.data().type());
+    Map<String, Integer> stateCounts = computeStateCounts();
+    myBottombarView.updateHistogram(stateCounts, mySimulation.data().type());
+    myBottombarView.updateStateChangeChart(stateCounts);
   }
 
   private void createMainContainerAndView() {
