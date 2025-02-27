@@ -165,7 +165,7 @@ public class MainController {
     mySimulationAnimation.stop();
     mySimulationAnimation.getKeyFrames().clear();
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(speed), _ -> {
+        .add(new KeyFrame(Duration.seconds(speed), e -> {
           try {
             step();
           } catch (Exception ex) {
@@ -424,7 +424,7 @@ public class MainController {
   private void initializeSimulationAnimation() {
     mySimulationAnimation.setCycleCount(Timeline.INDEFINITE);
     mySimulationAnimation.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(STEP_SPEED), _ -> {
+        .add(new KeyFrame(Duration.seconds(STEP_SPEED), e -> {
           try {
             step();  // step function
           } catch (Exception ex) {
@@ -446,7 +446,7 @@ public class MainController {
     myMainViewContainer.setAlignment(Pos.CENTER);
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    } catch (Exception _) {
+    } catch (Exception e) {
     } // can ignore thrown exception since we already handled them earlier in the chain
   }
 

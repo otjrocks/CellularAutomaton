@@ -22,7 +22,7 @@ class XMLTest {
   void setUp() {
     try {
       myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
-    } catch (Exception _) {
+    } catch (Exception e) {
     }
   }
 

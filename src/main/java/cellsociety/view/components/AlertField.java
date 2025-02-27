@@ -66,7 +66,7 @@ public class AlertField extends VBox {
   private void handleAlertDismissalTimeline(Text newMessage) {
     // Remove message after a predetermined amount of time
     Timeline timeline = new Timeline(
-        new KeyFrame(Duration.seconds(ALERT_DURATION_SECONDS), _ -> getChildren().remove(
+        new KeyFrame(Duration.seconds(ALERT_DURATION_SECONDS), e -> getChildren().remove(
             newMessage)));
     timeline.setCycleCount(1);
     timeline.play();

@@ -18,39 +18,46 @@
     <dependencies>
         <!-- framework for writing repeatable tests by using assertions about your code's values -->
         <dependency>
-  	    <groupId>junit</groupId>
-	    <artifactId>junit</artifactId>
-	    <version>RELEASE</version>
-	    <scope>test</scope>
-	</dependency>
+            <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
+      </dependency>
         <!-- framework for writing repeatable tests by using assertions about your code's values -->
-	<dependency>
-  	    <groupId>org.junit.jupiter</groupId>
-	    <artifactId>junit-jupiter</artifactId>
-	    <version>RELEASE</version>
-	    <scope>test</scope>
-	</dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
+      </dependency>
         <!-- provide mocking framework to simplify writing tests -->
-	<dependency>
-	    <groupId>org.mockito</groupId>
-	    <artifactId>mockito-core</artifactId>
-	    <version>5.11.0</version>
-	    <scope>test</scope>
-	</dependency>
-	<!-- provides testing for JavaFX by simulating user interactions and checking using JUnit assertions -->
-	<dependency>
- 	    <groupId>org.testfx</groupId>
-	    <artifactId>testfx-junit5</artifactId>
-	    <version>4.0.18</version>
-	    <scope>test</scope>
-	</dependency>
+      <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>5.11.0</version>
+          <scope>test</scope>
+      </dependency>
+
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>5.11.0</version> <!-- Match this to your Mockito core version -->
+        <scope>test</scope>
+    </dependency>
+	  <!-- provides testing for JavaFX by simulating user interactions and checking using JUnit assertions -->
+      <dependency>
+          <groupId>org.testfx</groupId>
+          <artifactId>testfx-junit5</artifactId>
+          <version>4.0.18</version>
+          <scope>test</scope>
+      </dependency>
         <!-- allows javafx testing without seeing tests run -->
-	<dependency>
-            <groupId>org.testfx</groupId>
-	    <artifactId>openjfx-monocle</artifactId>
-	    <version>21.0.2</version>
-	    <scope>test</scope>
-	</dependency>
+      <dependency>
+          <groupId>org.testfx</groupId>
+          <artifactId>openjfx-monocle</artifactId>
+          <version>21.0.2</version>
+          <scope>test</scope>
+      </dependency>
         <!-- use logging instead of println to report important information -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -68,8 +75,8 @@
                 <version>3.13.0</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <source>${project.build.java.version}</source>
-                    <target>${project.build.java.version}</target>
+                    <source>22</source>
+                    <target>22</target>
                 </configuration>
             </plugin>
             <!-- used to execute the unit tests of an application and generate a report -->

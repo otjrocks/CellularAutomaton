@@ -102,7 +102,7 @@ public class SplashScreenView extends VBox {
     String defaultLanguage = languages.contains("English") ? "English" : languages.getFirst();
     myLanguageField = new SelectorField(languages,
         PreferencesController.getPreference("language", defaultLanguage),
-        "languageDropdown", getMessage("CHANGE_LANGUAGE"), _ -> handleLanguageDropdownAction());
+        "languageDropdown", getMessage("CHANGE_LANGUAGE"), e -> handleLanguageDropdownAction());
     myLanguageField.setAlignment(Pos.CENTER);
     myContentBox.getChildren().addAll(myLanguageField);
   }
@@ -122,7 +122,7 @@ public class SplashScreenView extends VBox {
     Text chooseFileText = new Text(getMessage("LOAD_BUTTON_TEXT"));
     myChooseFileButton.setId("splashChooseFileButton");
 
-    myChooseFileButton.setOnAction(_ -> handleChooseFileAction());
+    myChooseFileButton.setOnAction(e -> handleChooseFileAction());
     myContentBox.getChildren().addAll(chooseFileText, myChooseFileButton);
   }
 

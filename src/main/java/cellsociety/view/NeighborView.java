@@ -147,12 +147,12 @@ public class NeighborView extends VBox {
 
   private void createEditableFields() {
     neighborTypeSelector = new SelectorField(getAvailableNeighborTypes(), neighborType,
-        "neighborTypeEditSelector", getMessage("NEIGHBOR_TYPE_LABEL"), _ -> {
+        "neighborTypeEditSelector", getMessage("NEIGHBOR_TYPE_LABEL"), e -> {
     });
 
     neighborLayerField = new IntegerField();
     neighborLayerField.setText(Integer.toString(neighborLayer));
-    neighborLayerField.textProperty().addListener((_, _, newValue) -> {
+    neighborLayerField.textProperty().addListener((observable, oldVal, newValue) -> {
       try {
         neighborLayer = Integer.parseInt(newValue);
       } catch (NumberFormatException e) {
