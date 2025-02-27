@@ -196,6 +196,8 @@ public class CreateDefaultSimView extends VBox {
   private void createNeighborLayerField() {
     myNeighborLayerField = new IntegerField();
     myNeighborLayerField.setId("createSimulationNeighborLayerTextField");
+    myNeighborLayerField.setText("1");
+    myNeighborLayer = 1;
 
     myNeighborLayerField.textProperty()
         .addListener((observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
