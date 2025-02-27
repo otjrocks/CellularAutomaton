@@ -1,5 +1,3 @@
 Hello gentlemen, now we practice git.
 
-REVERTED COMMIT done
-
-change commit message
+More changes 1, 2, 3, 4 ...
