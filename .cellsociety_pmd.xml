@@ -44,12 +44,12 @@
     <properties>
       <property name="xpath">
         <value>
-              <![CDATA[
+          <![CDATA[
                     //FieldDeclaration[not(Annotation) and not(
                         @Private='true'
-                        or (@Static='true' and @Final='true')
+                        or (@Static='true' and @Final='true' and (@Public='true' or @Protected='true' or @PackagePrivate='true'))
                     )]
-               ]]>
+          ]]>
         </value>
       </property>
     </properties>
