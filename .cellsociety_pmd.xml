@@ -45,7 +45,7 @@
       <property name="xpath">
         <value>
           <![CDATA[
-                    //FieldDeclaration[not(Annotation) and not(
+                    //FieldDeclaration[not(Annotation) and (
                         @Private='true'
                         or (@Static='true' and @Final='true' and (@Public='true' or @Protected='true' or @PackagePrivate='true'))
                     )]
