@@ -56,7 +56,7 @@ class ForagingAntsRulesTest {
 
   @Test
   void foragingAntRules_antWithFoodNextToEmptyCell_antMovesToCell() {
-    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true);
+    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true, 10);
     grid.addCell(ant);
 
     grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));
@@ -148,7 +148,7 @@ class ForagingAntsRulesTest {
 
   @Test
   void foragingAntRules_antWithFoodNextToNestCell_antDepositsFood() {
-    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true);
+    Cell ant = new ForagingAntsCell(ForagingAntsRules.State.ANT.getValue(), new Point2D.Double(2, 2), 0, 0, 10, true, 10);
     grid.addCell(ant);
 
     grid.addCell(new ForagingAntsCell(ForagingAntsRules.State.EMPTY.getValue(), new Point2D.Double(2, 3)));

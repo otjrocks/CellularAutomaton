@@ -8,7 +8,9 @@ import cellsociety.model.simulation.rules.RockPaperScissorsRules;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
+import cellsociety.view.components.SelectorField;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +59,20 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
   public void createSimulationForm_CreateGameOfLife_Success() {
     createSimulationForm("GameOfLife", "Game Of Life Example", "John Doe",
         "This is a test description for creating a simulation from UI.", 12, 10);
+
+
+    clickOn("#createSimulationNeighborTypeSelector");
+    clickOn("Moore");
+    clickOn("#createSimulationNeighborTypeSelector");
+    clickOn("VonNeumann");
+
+
+
+    TextField neighborLayerField = lookup("#createSimulationNeighborLayerTextField").query();
+    writeInputTo(neighborLayerField, "3");
+
     clickCreateSimulationButton();
+
 
     assertInstanceOf(GameOfLifeRules.class, myMainController.getSimulation().rules());
     assertSimulationMetaData("Game Of Life Example", "John Doe",
@@ -68,7 +83,19 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
   public void createSimulationForm_CreatePercolation_Success() {
     createSimulationForm("Percolation", "Percolation Example", "Owen Jennings",
         "This is a Percolation", 30, 30);
+
+    clickOn("#createSimulationNeighborTypeSelector");
+    clickOn("Moore");
+    clickOn("#createSimulationNeighborTypeSelector");
+    clickOn("VonNeumann");
+
+
+    TextField neighborLayerField = lookup("#createSimulationNeighborLayerTextField").query();
+    writeInputTo(neighborLayerField, "2");
+
     clickCreateSimulationButton();
+
+
 
     assertInstanceOf(PercolationRules.class, myMainController.getSimulation().rules());
     assertSimulationMetaData("Percolation Example", "Owen Jennings", "This is a Percolation", 30,
@@ -151,6 +178,19 @@ public class CreateDefaultSimViewTest extends DukeApplicationTest {
 
     assertErrorMessage(String.format(getMessage("INVALID_PARAMETER"),
         getMessage("INVALID_PARAMETER_TYPE")));
+  }
+
+  @Test
+  public void createSimulationForm_TestRockPaperScissorsNeighborSearchRadius_FailureMessageInvalidNeighborLayer() {
+    createSimulationForm("RockPaperScissors", "Test Name", "Justin Aronwald",
+        "Rock Paper Scissors Simulation", 30, 30);
+
+    TextField neighborLayerField = lookup("#createSimulationNeighborLayerTextField").query();
+    writeInputTo(neighborLayerField, "0");
+
+    clickCreateSimulationButton();
+
+    assertErrorMessage(String.format(getMessage("INVALID_NEIGHBOR_LAYER")));
   }
 
   @Test
