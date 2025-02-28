@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
@@ -158,7 +159,7 @@ public class ParameterView extends VBox {
         String newValue = field.getText();
         newParameters.put(key, new Parameter<>(newValue));
       } catch (NumberFormatException ignored) {
-        System.out.printf("Unable to add parameter: %s%n", key);
+        LOGGER.warn("Unable to add parameter: {}\n", key);
       }
     }
   }

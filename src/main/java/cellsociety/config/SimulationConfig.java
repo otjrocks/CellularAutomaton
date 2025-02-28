@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.Cell;
@@ -161,7 +162,7 @@ public class SimulationConfig {
       String valueStr = myValues.getString(stateKey.toUpperCase());
       return Integer.parseInt(valueStr);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      LOGGER.warn(e.getMessage());
       return 0;
     }
   }

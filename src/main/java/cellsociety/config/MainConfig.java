@@ -4,6 +4,8 @@ import java.util.ResourceBundle;
 
 import cellsociety.controller.PreferencesController;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MainConfig {
 
@@ -64,5 +66,7 @@ public class MainConfig {
   public static final CellShapeType DEFAULT_CELL_SHAPE = CellShapeType.RECTANGLE;
 
   public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user
+  // The logger for this program
+  public static final Logger LOGGER = LogManager.getLogger();
 
 }
