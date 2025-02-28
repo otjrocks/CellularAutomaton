@@ -103,7 +103,7 @@ public class ParameterView extends VBox {
 
   private void createParameterBulletPoint(String key, Parameter<?> param) {
     try {
-      createText(String.format("? %s: %s", key, param.getString()), false);
+      createText(String.format("• %s: %s", key, param.getString()), false);
     } catch (InvalidParameterException e) {
       throw new RuntimeException(e);
     }
