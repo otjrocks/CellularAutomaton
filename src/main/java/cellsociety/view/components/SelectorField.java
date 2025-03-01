@@ -30,6 +30,7 @@ public class SelectorField extends HBox {
    */
   public SelectorField(List<String> options, String defaultValue, String id, String labelText,
       EventHandler<ActionEvent> action) {
+    super();
     Text myLabel = new Text(labelText);
     myComboBox = new ComboBox<>();
     myComboBox.getItems().addAll(options);

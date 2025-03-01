@@ -4,6 +4,11 @@ import cellsociety.controller.PreferencesController;
 import cellsociety.utility.FileUtility;
 import java.util.List;
 
+/**
+ * A class to handle to initialization and changing of the program's theme
+ *
+ * @author Owen Jennings
+ */
 public class ThemeConfig {
 
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";

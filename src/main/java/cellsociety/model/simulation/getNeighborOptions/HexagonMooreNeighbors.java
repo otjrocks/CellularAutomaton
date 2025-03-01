@@ -2,8 +2,18 @@ package cellsociety.model.simulation.getNeighborOptions;
 
 import cellsociety.model.simulation.GetNeighbors;
 
+/**
+ * The neighbor rules for a hexagon grid using Moore Technique
+ *
+ * @author Owen Jennings
+ */
 public class HexagonMooreNeighbors extends GetNeighbors {
 
+  /**
+   * Create a HexagonMooreNeighbors with provided layers
+   *
+   * @param layers The number of layers to use
+   */
   public HexagonMooreNeighbors(int layers) {
     super(layers);
   }

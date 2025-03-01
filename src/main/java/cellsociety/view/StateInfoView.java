@@ -28,6 +28,7 @@ public class StateInfoView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     this.getStyleClass().add("info-box");
     createTitle();

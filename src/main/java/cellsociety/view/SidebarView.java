@@ -43,6 +43,7 @@ public class SidebarView extends VBox {
    * @param height: preferred height of sidebar box
    */
   public SidebarView(int width, int height, MainController controller) {
+    super();
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);

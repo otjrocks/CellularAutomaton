@@ -45,6 +45,7 @@ public class ViewModeView extends VBox {
    * @param alertField:     the alert field to display alerts to the user
    */
   public ViewModeView(MainController mainController, AlertField alertField) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     myMainController = mainController;
     myAlertField = alertField;

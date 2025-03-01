@@ -1,6 +1,7 @@
 package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
+import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
@@ -170,7 +171,7 @@ public class XMLHandler {
       String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
     } catch (NumberFormatException e) {
-      System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
+      LOGGER.warn("Warning: Invalid parameter value. Defaulting to 1.0.");
       myParameters.put(paramName, new Parameter<Object>(1.0));
     }
   }

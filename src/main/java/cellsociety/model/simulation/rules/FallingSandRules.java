@@ -33,10 +33,17 @@ public class FallingSandRules extends SimulationRules {
     super(parameters, myGetNeighbors);
   }
 
-  // An enum to store the possible states for the simulation
+  /**
+   * An enum to store the possible states for this simulation
+   */
   public enum State {
     EMPTY, WALL, SAND;
 
+    /**
+     * Get the ordinal value of this enum entry
+     *
+     * @return An int representing the state
+     */
     public int getValue() {
       return ordinal();
     }

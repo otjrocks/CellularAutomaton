@@ -20,7 +20,7 @@ import cellsociety.model.cell.CellUpdate;
 public abstract class SimulationRules {
 
   private Map<String, Parameter<?>> myParameters;
-  private GetNeighbors myGetNeighbors;
+  private final GetNeighbors myGetNeighbors;
 
   /**
    * The default constructor of a simulation rules class
@@ -33,11 +33,19 @@ public abstract class SimulationRules {
    *                                   instance is created with invalid or missing parameter
    *                                   values.
    */
-  public SimulationRules(Map<String, Parameter<?>> parameters, GetNeighbors getNeighbors) throws InvalidParameterException {
+  public SimulationRules(Map<String, Parameter<?>> parameters, GetNeighbors getNeighbors)
+      throws InvalidParameterException {
     myParameters = parameters;
     myGetNeighbors = getNeighbors;
   }
 
+  /**
+   * Get the neighbors for a provided cell and grid
+   *
+   * @param cell The cell you are querying for
+   * @param grid The grid you are querying in
+   * @return A list of cell's representing the provided cell's neighbors
+   */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
     return myGetNeighbors.getNeighbors(cell, grid);
   }
@@ -159,22 +167,6 @@ public abstract class SimulationRules {
       throws InvalidParameterException {
     throw new InvalidParameterException(
         String.format(getMessage("INVALID_PARAMETER"), exceptionMessage));
-  }
-
-  private static int[][] getDirectionsArray(boolean includesDiagonals) {
-    int[][] directions;
-
-    if (includesDiagonals) {
-      directions = new int[][]{
-          {0, -1}, {0, 1},   // left, right
-          {-1, 0}, {1, 0},   // up, down
-          {-1, -1}, {-1, 1}, // top diagonals (left, right)
-          {1, -1}, {1, 1}    // bottom diagonals (left, right)
-      };
-    } else {
-      directions = new int[][]{{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-    }
-    return directions;
   }
 
   private void createCellUpdateIfCellStateChanged(Grid grid, Cell cell,

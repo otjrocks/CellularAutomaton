@@ -39,7 +39,8 @@ public class WaTorWorldRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public WaTorWorldRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  public WaTorWorldRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
@@ -84,10 +85,18 @@ public class WaTorWorldRules extends SimulationRules {
     return parameters;
   }
 
-  // I asked ChatGPT for help with implementing this enum
+  /**
+   * An enum to store the state of the simulation I asked ChatGPT for help with implementing this
+   * enum
+   */
   public enum State {
     EMPTY, FISH, SHARK;
 
+    /**
+     * Get the ordinal value of the state
+     *
+     * @return An int representing the state
+     */
     public int getValue() {
       return ordinal();
     }

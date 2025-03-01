@@ -2,14 +2,25 @@ package cellsociety.model.simulation.getNeighborOptions;
 
 import cellsociety.model.simulation.GetNeighbors;
 
+/**
+ * The default implementation of VonNeumann Neighbor policy (for a rectangle/square grid setup)
+ *
+ * @author Owen Jennings
+ */
 public class VonNeumannNeighbors extends GetNeighbors {
 
+  /**
+   * The default constructor of this neighbor policy
+   *
+   * @param layers The number of layers to include
+   */
   public VonNeumannNeighbors(int layers) {
     super(layers);
   }
 
   /**
-   * @return - the coordinate system for the directions to obtain the neighbors (4 adjacent neighbors, no diagonals)
+   * @return - the coordinate system for the directions to obtain the neighbors (4 adjacent
+   * neighbors, no diagonals)
    */
   @Override
   public int[][] getDirections(int row, int column) {

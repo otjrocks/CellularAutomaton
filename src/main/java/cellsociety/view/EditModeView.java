@@ -38,6 +38,7 @@ public class EditModeView extends VBox {
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {
+    super();
     myMainController = mainController;
     myAlertField = alertField;
     this.setSpacing(ELEMENT_SPACING);

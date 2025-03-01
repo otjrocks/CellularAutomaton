@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
@@ -38,6 +39,7 @@ public class ParameterView extends VBox {
    * @param isEditing      Whether the user should be able to edit parameters or not
    */
   public ParameterView(MainController mainController, boolean isEditing) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     myMainController = mainController;
     this.isEditing = isEditing;
@@ -103,7 +105,7 @@ public class ParameterView extends VBox {
 
   private void createParameterBulletPoint(String key, Parameter<?> param) {
     try {
-      createText(String.format("? %s: %s", key, param.getString()), false);
+      createText(String.format("• %s: %s", key, param.getString()), false);
     } catch (InvalidParameterException e) {
       throw new RuntimeException(e);
     }
@@ -158,7 +160,7 @@ public class ParameterView extends VBox {
         String newValue = field.getText();
         newParameters.put(key, new Parameter<>(newValue));
       } catch (NumberFormatException ignored) {
-        System.out.printf("Unable to add parameter: %s%n", key);
+        LOGGER.warn("Unable to add parameter: {}\n", key);
       }
     }
   }

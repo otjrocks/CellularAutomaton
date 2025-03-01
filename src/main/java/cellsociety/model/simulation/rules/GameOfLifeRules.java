@@ -12,13 +12,29 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 
+/**
+ * The implementation of Game of Life
+ *
+ * @author Justin Aronwald
+ * @author Owen Jennings
+ * @author Troy Ludwig
+ */
 public class GameOfLifeRules extends SimulationRules {
 
   private String myRuleString;
   private ArrayList<Integer> birthValues;
   private ArrayList<Integer> surviveValues;
 
-  public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  /**
+   * A default constructor for Game Of Life
+   *
+   * @param parameters     The parameters provided to initialize this simulation
+   * @param myGetNeighbors The neighbor policy to use
+   * @throws InvalidParameterException An exception if invalid parameters are provided or parameters
+   *                                   are missing
+   */
+  public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       myRuleString = "B3/S23";
@@ -33,7 +49,7 @@ public class GameOfLifeRules extends SimulationRules {
   }
 
   private void validateParameterRange() throws InvalidParameterException {
-    if (myRuleString.equals("")) {
+    if (myRuleString.isEmpty()) {
       myRuleString = "B3/S23";
     }
     if (!myRuleString.contains("/") || !myRuleString.contains("B") || !myRuleString.contains("S")) {
@@ -74,7 +90,7 @@ public class GameOfLifeRules extends SimulationRules {
         aliveNeighbors++;
       }
     }
-    if (birthValues.contains(aliveNeighbors) && cell.getState()==0) {
+    if (birthValues.contains(aliveNeighbors) && cell.getState() == 0) {
       return 1;
     } else if (!surviveValues.contains(aliveNeighbors)) {
       return 0;
@@ -82,8 +98,7 @@ public class GameOfLifeRules extends SimulationRules {
     return cell.getState();
   }
 
-  private void initializeBSValues()
-      throws InvalidParameterException {
+  private void initializeBSValues() {
 
     String[] bStrings = myRuleString.split("/")[0].substring(1).split("");
     String[] sStrings = myRuleString.split("/")[1].substring(1).split("");
@@ -96,11 +111,11 @@ public class GameOfLifeRules extends SimulationRules {
   }
 
   private Integer[] convertStringArray(String[] strings) {
-    Integer[] ints = new Integer[strings.length];
+    Integer[] values = new Integer[strings.length];
     for (int i = 0; i < strings.length; i++) {
-      ints[i] = Integer.valueOf(strings[i]);
+      values[i] = Integer.valueOf(strings[i]);
     }
-    return ints;
+    return values;
   }
 
   @Override
