@@ -29,6 +29,7 @@ public abstract class CellView extends Group {
    * @param height: height of cell
    */
   public CellView(double x, double y, double width, double height) {
+    super();
     myShape = createShape(width, height);
     myShape.setFill(DEFAULT_COLOR);
     myShape.setStrokeType(StrokeType.INSIDE);

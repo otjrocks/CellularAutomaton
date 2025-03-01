@@ -10,8 +10,16 @@ import javafx.scene.shape.Shape;
  */
 public class RectangleCellView extends CellView {
 
-  public RectangleCellView(double width, double height, double cellWidth, double cellHeight) {
-    super(width, height, cellWidth, cellHeight);
+  /**
+   * Create a rectangle cell view
+   *
+   * @param x      :      x location of cell
+   * @param y      :      y location of cell
+   * @param width  :      width of cell
+   * @param height :      height of cell
+   */
+  public RectangleCellView(double x, double y, double width, double height) {
+    super(width, height, width, height);
   }
 
   @Override

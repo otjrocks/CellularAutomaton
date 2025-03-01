@@ -36,7 +36,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.view.BottombarView;
+import cellsociety.view.BottomBarView;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
@@ -63,7 +63,7 @@ public class MainController {
   private final Stage myStage;
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
-  private BottombarView myBottombarView;
+  private BottomBarView myBottomBarView;
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
@@ -91,7 +91,7 @@ public class MainController {
     mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
     root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
-    myRoot.getChildren().remove(myBottombarView);
+    myRoot.getChildren().remove(myBottomBarView);
   }
 
   /**
@@ -99,9 +99,9 @@ public class MainController {
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySidebarView);
-    myRoot.getChildren().remove(myBottombarView);
+    myRoot.getChildren().remove(myBottomBarView);
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
-    myBottombarView = null;
+    myBottomBarView = null;
     createOrUpdateSidebar();
     createOrUpdateBottombar();
     myRoot.getChildren().remove(mySplashScreenView);
@@ -282,12 +282,12 @@ public class MainController {
    * Initialize the bottombar of the program
    */
   public void initializeBottombar() {
-    myBottombarView = new BottombarView(GRID_WIDTH,
-        GRID_HEIGHT * 2, this);
-    myBottombarView.setLayoutX(MARGIN);
-    myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
-    myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
-    myRoot.getChildren().add(myBottombarView);
+    myBottomBarView = new BottomBarView(GRID_WIDTH,
+        GRID_HEIGHT * 2);
+    myBottomBarView.setLayoutX(MARGIN);
+    myBottomBarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myBottomBarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
+    myRoot.getChildren().add(myBottomBarView);
   }
 
   /**
@@ -424,10 +424,10 @@ public class MainController {
   }
 
   private void createOrUpdateBottombar() {
-    if (myBottombarView == null) {
+    if (myBottomBarView == null) {
       initializeBottombar();
     } else {
-      myBottombarView.update();
+      myBottomBarView.update();
     }
   }
 
@@ -454,10 +454,10 @@ public class MainController {
 
   private void step() {
     myIterationCount++;
-    myBottombarView.updateIterationCounter(myIterationCount);
+    myBottomBarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
     Map<String, Integer> stateCounts = computeStateCounts();
-    myBottombarView.updateStateChangeChart(stateCounts, mySimulation.data().type());
+    myBottomBarView.updateStateChangeChart(stateCounts, mySimulation.data().type());
   }
 
   private void createMainContainerAndView() {

@@ -43,6 +43,7 @@ public class SimulationView extends Group {
    */
   public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
       CellShapeType cellShapeType, Simulation simulation, MainController mainController) {
+    super();
     myWidth = width;
     myHeight = height;
     myNumRows = numRows;

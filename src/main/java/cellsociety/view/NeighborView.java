@@ -22,12 +22,12 @@ import javafx.scene.text.Text;
  * This class holds the view that maintains the neighbor information. So, you can view or edit the
  * neighbor configuration method here.
  *
- * @Author Justin Aronwald
+ * @author Justin Aronwald
  */
 public class NeighborView extends VBox {
 
   private final MainController mainController;
-  private boolean isEditing;
+  private final boolean isEditing;
   private final AlertField myAlertField;
   private IntegerField neighborLayerField;
   private int neighborLayer;
@@ -41,6 +41,7 @@ public class NeighborView extends VBox {
    * @param isEditing      Whether the user should be able to edit parameters or not
    */
   public NeighborView(MainController mainController, boolean isEditing) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     this.mainController = mainController;
     this.isEditing = isEditing;

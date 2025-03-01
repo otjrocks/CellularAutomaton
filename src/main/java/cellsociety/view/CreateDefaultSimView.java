@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_COLS;
 import static cellsociety.config.MainConfig.MAX_GRID_NUM_ROWS;
 import static cellsociety.config.MainConfig.MIN_GRID_NUM_COLS;
@@ -30,6 +31,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 
+/**
+ * A class handling the creation of the "create a new default" simulation form
+ *
+ * @author Owen Jennings
+ * @author Justin Aronwald
+ */
 public class CreateDefaultSimView extends VBox {
 
   private final MainController myMainController;
@@ -58,6 +65,7 @@ public class CreateDefaultSimView extends VBox {
    * @param alertField     - the field that flashes errors
    */
   public CreateDefaultSimView(MainController mainController, AlertField alertField) {
+    super();
     this.myMainController = mainController;
     this.setSpacing(ELEMENT_SPACING);
     this.setAlignment(Pos.CENTER_LEFT);
@@ -123,7 +131,8 @@ public class CreateDefaultSimView extends VBox {
     myRowField.setId("createSimulationRowField");
     myRowField.setText(String.valueOf(DEFAULT_NUM_CELLS));
     myRowField.textProperty()
-        .addListener((observableValue, oldVal, newVal) -> myNumRows = parseIntegerField(myRowField, 0));
+        .addListener(
+            (observableValue, oldVal, newVal) -> myNumRows = parseIntegerField(myRowField, 0));
 
     HBox rowBox = new HBox(new Text(getMessage("NUMBER_ROWS")), myRowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
@@ -200,7 +209,8 @@ public class CreateDefaultSimView extends VBox {
     myNeighborLayer = 1;
 
     myNeighborLayerField.textProperty()
-        .addListener((observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(myNeighborLayerField, 1));
+        .addListener((observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(
+            myNeighborLayerField, 1));
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
@@ -233,30 +243,18 @@ public class CreateDefaultSimView extends VBox {
     );
   }
 
-  /**
-   * @return - the number of grid rows from the input
-   */
   private int getRowCount() {
     return parseIntegerField(myRowField, DEFAULT_NUM_CELLS);
   }
 
-  /**
-   * @return - the number of grid cols from the input
-   */
   private int getColCount() {
     return parseIntegerField(myColField, DEFAULT_NUM_CELLS);
   }
 
-  /**
-   * @return - the simulation selected
-   */
   private String getSelectedSimulation() {
     return mySimulationSelector.getValue();
   }
 
-  /**
-   * @return - whether the input fields were valid inputs
-   */
   private boolean checkHasInvalidInput() {
     if (!validateRows(myNumRows) || !validateCols(myNumCols)) {
       return true;
@@ -289,7 +287,6 @@ public class CreateDefaultSimView extends VBox {
       return true;
     }
   }
-
 
   private boolean checkInvalidText(String text) {
     if (text.isEmpty()) {
@@ -334,10 +331,6 @@ public class CreateDefaultSimView extends VBox {
     attemptCreatingNewSimulation(metaData, parameters);
   }
 
-  /**
-   * @param metaData   - the metadata of the Simulation attempting to be created
-   * @param parameters - the parameters of the Simulation
-   */
   private void attemptCreatingNewSimulation(SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
     try {
@@ -370,12 +363,12 @@ public class CreateDefaultSimView extends VBox {
     handleAdditionalButtonActions();
   }
 
-
   /**
    * Handle any addition button actions that you want to occur when the button is clicked and the
    * simulation is created successfully
    */
   protected void handleAdditionalButtonActions() throws IllegalArgumentException {
+    LOGGER.info("New simulation created from form!");
   }
 
 }

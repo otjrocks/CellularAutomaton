@@ -39,6 +39,7 @@ public class ParameterView extends VBox {
    * @param isEditing      Whether the user should be able to edit parameters or not
    */
   public ParameterView(MainController mainController, boolean isEditing) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     myMainController = mainController;
     this.isEditing = isEditing;
