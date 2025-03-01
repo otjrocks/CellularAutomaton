@@ -73,6 +73,7 @@ public class DarwinRules  extends SimulationRules {
     switch (command) {
       case "MOVE":
         handleMove(darwinCell, grid, Integer.parseInt(splitInstructions[1]), updates);
+        break;
       case "LEFT":
         darwinCell.turnLeft(Integer.parseInt(splitInstructions[1]), getStepSize());
         break;
@@ -81,20 +82,26 @@ public class DarwinRules  extends SimulationRules {
         break;
       case "INFECT":
         handleInfection(darwinCell, grid, Integer.parseInt(splitInstructions[1]), updates);
+        break;
       case "IFEMPTY":
       case "EMP?":
         handleConditional(darwinCell, grid, splitInstructions[1], 0);
+        break;
       case "IFWALL":
       case "WL?":
         handleConditional(darwinCell, grid, splitInstructions[1], 1);
+        break;
       case "IFSAME":
       case "SM?":
         handleConditional(darwinCell, grid, splitInstructions[1], 2);
+        break;
       case "IFENEMY":
       case "EMY?":
         handleConditional(darwinCell, grid, splitInstructions[1], 3);
+        break;
       case "GO":
         handleGo(darwinCell, Integer.parseInt(splitInstructions[1]));
+        break;
       default:
         LOGGER.warn("Unknown instruction: {}", instruction);
     }
@@ -153,7 +160,7 @@ public class DarwinRules  extends SimulationRules {
       }
 
       if (checkIfConditionIsMet(darwinCell, curCell, grid, conditionInt)) {
-        darwinCell.setCurInstructionIndex(conditionInt);
+        darwinCell.setCurInstructionIndex(Integer.parseInt(nextInstruction));
       }
     }
   }

@@ -140,7 +140,11 @@ public class Grid {
    * @return - a boolean representation on whether it is a wall.
    */
   public boolean isWall(int row, int col) {
-    return row < 0 || row >= myNumRows || col < 0 || col >= myNumCols;
+    if (checkOutOfBounds(new Point2D.Double(row, col))) {
+      return false;
+    }
+
+    return row == 0 || row == myNumRows - 1 || col == 0 || col == myNumCols - 1;
   }
 
   /**
