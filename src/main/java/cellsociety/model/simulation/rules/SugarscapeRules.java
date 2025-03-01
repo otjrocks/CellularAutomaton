@@ -148,11 +148,17 @@ public class SugarscapeRules extends SimulationRules {
   // ChatGPT helped exclusively with the minDistance/max Sugar logic
   private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid grid) {
     List<Cell> neighbors = getNeighbors(agentCell, grid);
-
     SugarscapeCell biggestPatch = null;
     int maxSugar = -1;
     int minDistance = agentCell.getVision() + 1;
+    biggestPatch = getBiggestPathOfAllNeighbors(agentCell, neighbors, maxSugar, minDistance,
+        biggestPatch);
+    return biggestPatch;
+  }
 
+  private SugarscapeCell getBiggestPathOfAllNeighbors(SugarscapeCell agentCell,
+      List<Cell> neighbors,
+      int maxSugar, int minDistance, SugarscapeCell biggestPatch) {
     for (Cell cell : neighbors) {
       if (cell.getState() != State.PATCHES.getValue()) {
         continue;
@@ -171,7 +177,6 @@ public class SugarscapeRules extends SimulationRules {
         biggestPatch = patch;
       }
     }
-
     return biggestPatch;
   }
 

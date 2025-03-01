@@ -78,41 +78,45 @@ public class SpreadingOfFireRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
-
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
-    }
-
     int currentState = cell.getState();
+    return getNextStateFromCurrentState(cell, grid, currentState);
+  }
 
-    // burning -> empty
-    if (currentState == 2) {
+  private int getNextStateFromCurrentState(Cell cell, Grid grid, int currentState) {
+    if (currentState == 2) { // burning to empty
       return 0;
     }
-
-    //empty to tree
-    if (currentState == 0) {
-      if (random.nextDouble() < myGrowthInEmptyCell) {
-        return 1;
-      }
-      return 0;
+    if (currentState == 0) { // grow tree randomly
+      return growTreeRandomly();
     }
+    if (treeNeighborIsBurning(cell, grid)) { // burn if neighbor is burning
+      return 2;
+    }
+    return randomIgnitionOfTreeCell(currentState); // randomly ignite if tree
+  }
 
-    // neighbor burning -> you burn
+  private boolean treeNeighborIsBurning(Cell cell, Grid grid) {
     List<Cell> neighbors = getNeighbors(cell, grid);
     for (Cell neighbor : neighbors) {
-      if (neighbor.getState() == 2 && cell.getState() == 1) { // you must be a tree to burn
-        return 2;
+      if (cell.getState() == 1 && neighbor.getState() == 2) { // Neighbor is burning
+        return true;
       }
     }
+    return false;
+  }
 
-    //random ignition of a tree cell
+  private int randomIgnitionOfTreeCell(int currentState) {
     if (currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors)) {
       return 2;
     }
-
     return currentState;
+  }
+
+  private int growTreeRandomly() {
+    if (random.nextDouble() < myGrowthInEmptyCell) {
+      return 1;
+    }
+    return 0;
   }
 
   /**

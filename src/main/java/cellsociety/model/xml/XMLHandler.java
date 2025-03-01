@@ -145,17 +145,25 @@ public class XMLHandler {
   private void parseParameters(Document doc) {
     myParameters = new HashMap<>();
     NodeList params = doc.getElementsByTagName("Parameters");
+    getParametersIfTheyExist(params);
+  }
+
+  private void getParametersIfTheyExist(NodeList params) {
     if (params.getLength() > 0) {
       Node param = params.item(0);
       if (param.getNodeType() == Node.ELEMENT_NODE) {
         Element paramElement = (Element) param;
-        for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-          if (paramString.equals("ruleString")) {
-            checkAndLoadRulestring(paramElement);
-          } else {
-            checkAndLoadParameter(paramElement, paramString);
-          }
-        }
+        handleParameterElement(paramElement);
+      }
+    }
+  }
+
+  private void handleParameterElement(Element paramElement) {
+    for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
+      if (paramString.equals("ruleString")) {
+        checkAndLoadRulestring(paramElement);
+      } else {
+        checkAndLoadParameter(paramElement, paramString);
       }
     }
   }

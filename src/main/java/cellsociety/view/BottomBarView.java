@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -100,35 +101,47 @@ public class BottomBarView extends VBox {
     for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
       String stateName = entry.getKey();
       int newValue = entry.getValue();
-
-      if (!stateChangeSeriesMap.containsKey(stateName)) {
-        XYChart.Series<Number, Number> newSeries = new XYChart.Series<>();
-        newSeries.setName(stateName);
-        stateChangeSeriesMap.put(stateName, newSeries);
-        stateChangeChart.getData().add(newSeries);
-      }
-
+      addStateNameToStateChangeMap(stateName);
       stateChangeSeriesMap.get(stateName).getData().add(new XYChart.Data<>(stepCount, newValue));
     }
 
-    Platform.runLater(() -> {
-      for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
-        String colorString = getCellColors().getString(
-            (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType,
-                series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
-
-        series.getNode().setStyle("-fx-stroke: " + colorString + ";");
-
-        for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
-          if (legendNode instanceof Node && series.getName()
-              .equals(legendNode.getAccessibleText())) {
-            legendNode.setStyle("-fx-background-color: " + colorString + ", white;");
-          }
-        }
-      }
-    });
+    updateXYChart(simType);
 
     stepCount++;
+  }
+
+  private void updateXYChart(String simType) {
+    Platform.runLater(() -> {
+      for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
+        String colorString = getColorStringForState(simType, series);
+        series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+        updateLegendNodeColor(series, colorString);
+      }
+    });
+  }
+
+  private static String getColorStringForState(String simType, Series<Number, Number> series) {
+    return getCellColors().getString(
+        (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType,
+            series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
+  }
+
+  private void updateLegendNodeColor(Series<Number, Number> series, String colorString) {
+    for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
+      if (legendNode instanceof Node && series.getName()
+          .equals(legendNode.getAccessibleText())) {
+        legendNode.setStyle("-fx-background-color: " + colorString + ", white;");
+      }
+    }
+  }
+
+  private void addStateNameToStateChangeMap(String stateName) {
+    if (!stateChangeSeriesMap.containsKey(stateName)) {
+      XYChart.Series<Number, Number> newSeries = new XYChart.Series<>();
+      newSeries.setName(stateName);
+      stateChangeSeriesMap.put(stateName, newSeries);
+      stateChangeChart.getData().add(newSeries);
+    }
   }
 
 }
