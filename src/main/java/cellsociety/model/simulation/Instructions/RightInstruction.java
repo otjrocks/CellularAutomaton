@@ -2,7 +2,18 @@ package cellsociety.model.simulation.Instructions;
 
 import cellsociety.model.cell.DarwinCell;
 
+/**
+ * Subclass to handle the turning of a cell right
+ */
 public class RightInstruction extends TurnInstruction {
+
+  /**
+   * The method that calls the cell method to turn the cell
+   *
+   * @param darwinCell - the cell being executed on
+   * @param degrees - the degrees being shifted right
+   * @param stepSize - the number of directions used to determine neighbors
+   */
   @Override
   protected void turn(DarwinCell darwinCell, int degrees, int stepSize) {
     darwinCell.turnRight(degrees, stepSize);
