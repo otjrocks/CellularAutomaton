@@ -11,7 +11,6 @@ import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -52,8 +51,9 @@ public class BottombarView extends VBox {
     }
 
    public void update() {
-    updateIterationCounter(0);
     stateChangeChart.getData().clear();
+    stepCount = 0;
+    updateIterationCounter(0);
    }
 
     private Text createText(String message) {
@@ -99,20 +99,29 @@ public class BottombarView extends VBox {
       }
 
       Platform.runLater(() -> {
-        for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
-          String colorString = getCellColors().getString((simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType, series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
+          for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
+              String colorString = getCellColors().getString(
+                  (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType, series.getName().replaceAll("\\s+", "")))
+                  .toUpperCase()
+              ).toLowerCase();
 
-          series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+              // Apply color to the line
+              if (series.getNode() != null) {
+                  series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+              }
 
-          for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
-              if (legendNode instanceof Node && series.getName().equals(legendNode.getAccessibleText())) {
-                  legendNode.setStyle("-fx-background-color: " + colorString + ", white;"); 
+              // Ensure data points are initialized before setting colors
+              for (XYChart.Data<Number, Number> data : series.getData()) {
+                  Platform.runLater(() -> {
+                      if (data.getNode() != null) {
+                          data.getNode().setStyle("-fx-background-color: " + colorString + ", white;");
+                      }
+                  });
               }
           }
-        }
       });
 
-      stepCount++;
-    }
+      stepCount++; // Ensure step count increments properly
+  }
 
 }
