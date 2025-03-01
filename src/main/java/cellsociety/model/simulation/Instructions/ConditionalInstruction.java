@@ -109,6 +109,14 @@ public class ConditionalInstruction implements Instruction {
       this.conditionChecker = checker;
     }
 
+    /**
+     * Calls the checker to validate the condition
+     *
+     * @param darwinCell - the cell that the instruction is executed on
+     * @param curCell - the current cell that is being compared to the darwinCell
+     * @param grid - the collection of cell objects
+     * @return - a boolean on whether the condition passed
+     */
     public boolean check(DarwinCell darwinCell, Cell curCell, Grid grid) {
       return conditionChecker.check(darwinCell, curCell, grid);
     }
