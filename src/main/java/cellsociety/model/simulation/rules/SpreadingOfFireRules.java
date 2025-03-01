@@ -11,11 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-//For a Forest Fire cell, there can be 3 states
-// A cell with state 0 indicates it's empty
-// A cell with state 1 indicates it's occupied by a tree
-// A cell with state 2 indicates it's burning
-
+/**
+ * The implementation of Spreading of Fire Simulation
+ * <p>
+ * For a Forest Fire cell, there can be 3 states
+ * <p>
+ * A cell with state 0 indicates it's empty
+ * <p>
+ * A cell with state 1 indicates it's occupied by a tree
+ * <p>
+ * A cell with state 2 indicates it's burning
+ *
+ * @author Justin Aronwald
+ */
 public class SpreadingOfFireRules extends SimulationRules {
 
   private final Random random = new Random();

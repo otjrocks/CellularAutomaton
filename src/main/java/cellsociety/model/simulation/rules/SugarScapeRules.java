@@ -17,27 +17,34 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A rules class to to implement the sugarscape simulation
+ * A rules class to implement the Sugar Scape simulation
  *
  * @author Justin Aronwald
  */
-public class SugarscapeRules extends SimulationRules {
+public class SugarScapeRules extends SimulationRules {
 
   /**
-   * The default constructor of a Sugerscape rules.
+   * The default constructor of a SugerScape rules.
    *
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SugarscapeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+  public SugarScapeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
     super(parameters, myGetNeighbors);
   }
 
-  // An enum to store the possible states for the simulation
+  /**
+   * An enum to store the possible states for the simulation
+   */
   public enum State {
     EMPTY, PATCHES, AGENTS;
 
+    /**
+     * Return the ordinal value of the state
+     *
+     * @return an int representing the state
+     */
     public int getValue() {
       return ordinal();
     }
@@ -139,7 +146,7 @@ public class SugarscapeRules extends SimulationRules {
 
   //loops through all 4 directions up to vision amount of times in each direction
   // ChatGPT helped exclusively with the minDistance/max Sugar logic
-private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid grid) {
+  private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid grid) {
     List<Cell> neighbors = getNeighbors(agentCell, grid);
 
     SugarscapeCell biggestPatch = null;
@@ -147,26 +154,26 @@ private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid gr
     int minDistance = agentCell.getVision() + 1;
 
     for (Cell cell : neighbors) {
-        if (cell.getState() != State.PATCHES.getValue()) {
-            continue;
-        }
+      if (cell.getState() != State.PATCHES.getValue()) {
+        continue;
+      }
 
-        int distance = calculateDistance(agentCell, cell);
-        if (distance > agentCell.getVision()) {
-            continue;
-        }
+      int distance = calculateDistance(agentCell, cell);
+      if (distance > agentCell.getVision()) {
+        continue;
+      }
 
-        SugarscapeCell patch = (SugarscapeCell) cell;
+      SugarscapeCell patch = (SugarscapeCell) cell;
 
-        if (patch.getSugar() > maxSugar || (patch.getSugar() == maxSugar && distance < minDistance)) {
-            maxSugar = patch.getSugar();
-            minDistance = distance;
-            biggestPatch = patch;
-        }
+      if (patch.getSugar() > maxSugar || (patch.getSugar() == maxSugar && distance < minDistance)) {
+        maxSugar = patch.getSugar();
+        minDistance = distance;
+        biggestPatch = patch;
+      }
     }
 
     return biggestPatch;
-}
+  }
 
   private int calculateDistance(Cell a, Cell b) {
     return Math.abs(a.getRow() - b.getRow()) + Math.abs(a.getCol() - b.getCol());
@@ -179,7 +186,7 @@ private SugarscapeCell getBiggestPatchForAgent(SugarscapeCell agentCell, Grid gr
    */
   @Override
   public int getNumberStates() {
-    return SugarscapeRules.State.values().length;
+    return SugarScapeRules.State.values().length;
   }
 
 }

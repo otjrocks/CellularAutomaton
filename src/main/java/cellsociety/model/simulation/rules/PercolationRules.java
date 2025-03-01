@@ -9,11 +9,18 @@ import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
 
-//For a Percolation cell, there can be 3 states
-// A cell with state 0 indicates it's blocked
-// A cell with state 1 indicates it's open and water can pass through
-// A cell with state 2 indicates it's filled and water has passed through this cell
 
+/**
+ * The implementation of percolation simulation rules For a Percolation cell, there can be 3 states
+ * <p>
+ * - A cell with state 0 indicates it's blocked
+ * <p>
+ * - A cell with state 1 indicates it's open and water can pass through
+ * <p>
+ * - A cell with state 2 indicates it's filled and water has passed through this cell
+ *
+ * @author Justin Aronwald
+ */
 public class PercolationRules extends SimulationRules {
 
   /**
@@ -23,7 +30,8 @@ public class PercolationRules extends SimulationRules {
    * @throws InvalidParameterException - throws when a parameter is invalid
    */
   public PercolationRules(
-      Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+      Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
   }
 

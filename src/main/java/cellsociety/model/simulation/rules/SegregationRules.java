@@ -15,11 +15,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-//For a SegregationModel cell, there can be 3 states
-// A cell with state 0 indicates it's empty
-// A cell with state 1 indicates it's a part of Group 1
-// A cell with state 2 indicates it's a part of Group 2
-
+/**
+ * The implementation of Schelling's Model of Segregation simulation
+ * <p>
+ * For a SegregationModel cell, there can be 3 states
+ * <p>
+ * A cell with state 0 indicates it's empty
+ * <p>
+ * A cell with state 1 indicates it's a part of Group 1
+ * <p>
+ * A cell with state 2 indicates it's a part of Group 2
+ *
+ * @author Justin Aronwald
+ */
 public class SegregationRules extends SimulationRules {
 
   private final Random RANDOM = new Random();
@@ -31,7 +39,8 @@ public class SegregationRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SegregationRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  public SegregationRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
