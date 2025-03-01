@@ -133,6 +133,21 @@ public class Grid {
   }
 
   /**
+   * Checks if the current locations is a boundary/wall for a simulation
+   *
+   * @param row - the row of the cell you are checking
+   * @param col - the col of the cell you are checking
+   * @return - a boolean representation on whether it is a wall.
+   */
+  public boolean isWall(int row, int col) {
+    if (checkOutOfBounds(new Point2D.Double(row, col))) {
+      return false;
+    }
+
+    return row == 0 || row == myNumRows - 1 || col == 0 || col == myNumCols - 1;
+  }
+
+  /**
    * Attempt to update a cell in the grid
    *
    * @param cell the cell you which to update. This will update the grid with the cell provided
