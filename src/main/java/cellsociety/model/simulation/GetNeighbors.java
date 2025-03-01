@@ -26,6 +26,26 @@ public abstract class GetNeighbors {
    */
   public abstract int[][] getDirections(int row, int column);
 
+
+  /**
+   * A method that obtains the total number of directions it must search in to find nieghbors
+   *
+   * @return - the total number of directions it looks for
+   */
+  public int getStepSize() {
+    int[][] directions = getDirections(0, 0);
+    return (directions.length == 8) ? 45 : 90;
+  }
+
+  /**
+   * Getter for the layers
+   *
+   * @return the number of layers to look for in a direction
+   */
+  public int getLayers() {
+    return layers;
+  }
+
   /**
    * The default constructor of GetNeighbors
    *
