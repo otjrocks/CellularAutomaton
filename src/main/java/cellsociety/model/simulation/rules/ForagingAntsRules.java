@@ -334,11 +334,9 @@ public class ForagingAntsRules extends SimulationRules {
 
   private static double updateMaxNeighborPheromone(String type, ForagingAntsCell neighbor,
       double maxNeighborPheromone) {
-    ForagingAntsCell antNeighbor = neighbor;
-    double currentNeighborPheremoneValue =
-        (type.equals("home")) ? antNeighbor.getHomePheromone() : antNeighbor.getFoodPheromone();
-
-    maxNeighborPheromone = Math.max(maxNeighborPheromone, currentNeighborPheremoneValue);
+    double currentNeighborPheromoneValue =
+        (type.equals("home")) ? neighbor.getHomePheromone() : neighbor.getFoodPheromone();
+    maxNeighborPheromone = Math.max(maxNeighborPheromone, currentNeighborPheromoneValue);
     return maxNeighborPheromone;
   }
 
