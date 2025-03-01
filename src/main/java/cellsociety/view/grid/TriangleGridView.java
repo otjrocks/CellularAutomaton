@@ -28,19 +28,27 @@ public class TriangleGridView extends GridView {
   @Override
   protected CellView[][] initializeGrid() {
     // I asked ChatGPT for assistance in arranging the isometric triangles into a grid pattern
-    CellView[][] grid = new CellView[getNumRows()][getNumColumns()];
+    CellView[][] grid = new TriangleCellView[getNumRows()][getNumColumns()];
+    initializeAllCellViews(grid);
+    return grid;
+  }
+
+  private void initializeAllCellViews(CellView[][] grid) {
     for (int row = 0; row < getNumRows(); row++) {
       for (int col = 0; col < getNumColumns(); col++) {
-        double x = col * (getCellWidth() / 2);  // Half width to stagger triangles
-        double y = row * getCellHeight();
-        TriangleCellView triangle = new TriangleCellView(x, y, getCellWidth(), getCellHeight());
-        if ((row + col) % 2 == 1) { // rotate triangle upside down every other column
-          triangle.setRotate(180);
-        }
-        grid[row][col] = triangle;
+        createTriangleCell(col, row, grid);
       }
     }
-    return grid;
+  }
+
+  private void createTriangleCell(int col, int row, CellView[][] grid) {
+    double x = col * (getCellWidth() / 2);  // Half width to stagger triangles
+    double y = row * getCellHeight();
+    TriangleCellView triangle = new TriangleCellView(x, y, getCellWidth(), getCellHeight());
+    if ((row + col) % 2 == 1) { // rotate triangle upside down every other column
+      triangle.setRotate(180);
+    }
+    grid[row][col] = triangle;
   }
 
   private double getCellWidth() {
