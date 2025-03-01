@@ -7,6 +7,9 @@ import cellsociety.controller.MainController;
  */
 public class GridViewFactory {
 
+  /**
+   * This enum stores all the supported Cell/Grid Shape types
+   */
   public enum CellShapeType {
     RECTANGLE("Rectangle"),
     HEXAGON("Hexagon"),

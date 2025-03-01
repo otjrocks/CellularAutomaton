@@ -22,8 +22,10 @@ public abstract class Cell {
    * @param location: The location in the simulation grid represented by a Point2D, where the (x:
    *                  row, y: col) value is the relative location of the cell compared to other
    *                  cells in the grid.
+   * @throws IllegalArgumentException illegal argument exception for when the state value provided
+   *                                  is invalid
    */
-  public Cell(int state, Point2D location) throws IllegalArgumentException {
+  public Cell(int state, Point2D location) {
     if (state < 0) {
       throw new IllegalArgumentException("Invalid state, state must be a positive integer or zero");
     }

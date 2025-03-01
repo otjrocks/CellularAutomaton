@@ -195,6 +195,15 @@ public class MainController {
     return mySimulationAnimation.getStatus() == Status.RUNNING;
   }
 
+  /**
+   * Create a new simulation with the provided information
+   *
+   * @param rows       The number of rows for the grid
+   * @param cols       the number of columns for the grid
+   * @param type       the type of the simulation as a string
+   * @param metaData   The metadata for your simulation
+   * @param parameters The parameters map for your simulation
+   */
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
@@ -395,6 +404,7 @@ public class MainController {
 
   // I used ChatGPT to help in refactoring the getErrorMessageKey method to improve cyclomatic complexity
   private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = new HashMap<>();
+
   static {
     ERROR_MESSAGE_MAP.put(SAXException.class, "ERROR_FORMAT");
     ERROR_MESSAGE_MAP.put(ParserConfigurationException.class, "ERROR_PARSER");

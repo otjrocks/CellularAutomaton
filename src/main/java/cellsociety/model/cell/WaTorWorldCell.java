@@ -34,8 +34,7 @@ public class WaTorWorldCell extends Cell {
    * @param health:             initial health of the cell
    * @param reproductionEnergy: initial reproduction energy of cell
    */
-  public WaTorWorldCell(int state, Point2D location, int health, double reproductionEnergy)
-      throws IllegalArgumentException {
+  public WaTorWorldCell(int state, Point2D location, int health, double reproductionEnergy) {
     super(state, location);
     this.health = health;
     this.reproductionEnergy = reproductionEnergy;
