@@ -27,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 public class ViewModeView extends VBox {
 
   public static final double SPEED_SLIDER_DELTA = 10;
+  public static final String COMBINE_TWO_STRINGS = "%s %s";
 
   private final MainController myMainController;
   private final AlertField myAlertField;
@@ -45,6 +46,7 @@ public class ViewModeView extends VBox {
    * @param alertField:     the alert field to display alerts to the user
    */
   public ViewModeView(MainController mainController, AlertField alertField) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     myMainController = mainController;
     myAlertField = alertField;
@@ -108,16 +110,16 @@ public class ViewModeView extends VBox {
     Text infoText = new Text(getMessage("INFO_DISPLAY_TITLE"));
     infoText.getStyleClass().add("secondary-title");
     Text name = createText(
-        String.format("%s %s", getMessage("NAME_LABEL"), simulationData.name()));
+        String.format(COMBINE_TWO_STRINGS, getMessage("NAME_LABEL"), simulationData.name()));
     name.setId("viewModeSimulationName");
     Text type = createText(
-        String.format("%s %s", getMessage("TYPE_LABEL"), simulationData.type()));
+        String.format(COMBINE_TWO_STRINGS, getMessage("TYPE_LABEL"), simulationData.type()));
     type.setId("viewModeSimulationType");
     Text author = createText(
-        String.format("%s %s", getMessage("AUTHOR_LABEL"), simulationData.author()));
+        String.format(COMBINE_TWO_STRINGS, getMessage("AUTHOR_LABEL"), simulationData.author()));
     author.setId("viewModeSimulationAuthor");
     Text description = createText(
-        String.format("%s %s", getMessage("DESCRIPTION_LABEL"),
+        String.format(COMBINE_TWO_STRINGS, getMessage("DESCRIPTION_LABEL"),
             simulationData.description())
     );
     description.setId("viewModeSimulationDescription");
@@ -243,5 +245,5 @@ public class ViewModeView extends VBox {
     text.setWrappingWidth(SIDEBAR_WIDTH - (ELEMENT_SPACING * 6));
     return text;
   }
-  
+
 }

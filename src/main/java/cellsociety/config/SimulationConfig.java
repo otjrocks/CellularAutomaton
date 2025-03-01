@@ -7,8 +7,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.Cell;
@@ -56,22 +58,11 @@ public class SimulationConfig {
     } catch (NoSuchMethodException e) {
       // if class does not have getRequiredParameters method, just return empty list (no required parameters)
       return new ArrayList<>();
-    } catch (Exception e) {
+    } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+      LOGGER.warn(e.getMessage());
       throw new RuntimeException(e);
     }
   }
-
-  private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
-      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    // Get class name for simulation queried
-    String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
-    Class<?> ruleClass = Class.forName(className);
-    Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
-    @SuppressWarnings("unchecked") // call static method to get parameters
-    List<String> parameters = (List<String>) method.invoke(null);
-    return parameters;
-  }
-
 
   /**
    * Get the appropriate cell type for a simulation type
@@ -114,8 +105,38 @@ public class SimulationConfig {
       Map<String, Parameter<?>> parameters)
       throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidParameterException {
     validateSimulation(simulationName);
-    GetNeighbors myGetNeighbors = createGetNeighborInstance(simulationMetaData.neighborType(), simulationMetaData.layers());
+    GetNeighbors myGetNeighbors = createGetNeighborInstance(simulationMetaData.neighborType(),
+        simulationMetaData.layers());
     return new Simulation(getRules(simulationName, parameters, myGetNeighbors), simulationMetaData);
+  }
+
+  /**
+   * Return the int representing a state value from its name
+   *
+   * @param simType The simulation type you are querying for
+   * @param name    The name of the state you are querying for
+   * @return The int representing the state if it exists, or 0 if it does not
+   */
+  public static int returnStateValueBasedOnName(String simType, String name) {
+    String stateKey = "%s_VALUE_%s".formatted(simType, name);
+    try {
+      String valueStr = myValues.getString(stateKey.toUpperCase());
+      return Integer.parseInt(valueStr);
+    } catch (MissingResourceException | NumberFormatException e) {
+      LOGGER.warn(e.getMessage());
+      return 0;
+    }
+  }
+
+  private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
+      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    // Get class name for simulation queried
+    String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
+    Class<?> ruleClass = Class.forName(className);
+    Method method = ruleClass.getDeclaredMethod("getRequiredParameters");
+    @SuppressWarnings("unchecked") // call static method to get parameters
+    List<String> parameters = (List<String>) method.invoke(null);
+    return parameters;
   }
 
   private static SimulationRules getRules(String simulationName,
@@ -125,7 +146,8 @@ public class SimulationConfig {
     String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
         "Rules");
     SimulationRules simulationRules;
-    simulationRules = (SimulationRules) Class.forName(className).getConstructor(Map.class, GetNeighbors.class)
+    simulationRules = (SimulationRules) Class.forName(className)
+        .getConstructor(Map.class, GetNeighbors.class)
         .newInstance(parameters, myGetNeighbors);
     return simulationRules;
   }
@@ -142,7 +164,8 @@ public class SimulationConfig {
     if (neighborType == null || layers <= 0) {
       throw new IllegalArgumentException("Invalid neighbor configuration.");
     }
-    String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s", neighborType,
+    String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
+        neighborType,
         "Neighbors");
     GetNeighbors getNeighbors;
     try {
@@ -150,19 +173,9 @@ public class SimulationConfig {
       getNeighbors = (GetNeighbors) neighborClass.getConstructor(int.class).newInstance(layers);
       return getNeighbors;
     } catch (ClassNotFoundException e) {
+      LOGGER.warn(e.getMessage());
       throw new IllegalArgumentException(
-          String.format("Invalid neighbor configuration: %s", neighborType));
-    }
-  }
-
-  public static int returnStateValueBasedOnName(String simType, String name) {
-    String stateKey = "%s_VALUE_%s".formatted(simType, name);
-    try {
-      String valueStr = myValues.getString(stateKey.toUpperCase());
-      return Integer.parseInt(valueStr);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      return 0;
+          String.format("Invalid neighbor configuration: %s", e));
     }
   }
 

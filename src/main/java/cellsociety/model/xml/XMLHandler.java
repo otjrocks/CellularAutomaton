@@ -1,6 +1,7 @@
 package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
+import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
@@ -34,6 +35,7 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
+  public static final String RULE_STRING = "ruleString";
   private static int myGridHeight;
   private static int myGridWidth;
   private static Grid myGrid;
@@ -144,17 +146,25 @@ public class XMLHandler {
   private void parseParameters(Document doc) {
     myParameters = new HashMap<>();
     NodeList params = doc.getElementsByTagName("Parameters");
+    getParametersIfTheyExist(params);
+  }
+
+  private void getParametersIfTheyExist(NodeList params) {
     if (params.getLength() > 0) {
       Node param = params.item(0);
       if (param.getNodeType() == Node.ELEMENT_NODE) {
         Element paramElement = (Element) param;
-        for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-          if (paramString.equals("ruleString")) {
-            checkAndLoadRulestring(paramElement);
-          } else {
-            checkAndLoadParameter(paramElement, paramString);
-          }
-        }
+        handleParameterElement(paramElement);
+      }
+    }
+  }
+
+  private void handleParameterElement(Element paramElement) {
+    for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
+      if (paramString.equals(RULE_STRING)) {
+        checkAndLoadRuleString(paramElement);
+      } else {
+        checkAndLoadParameter(paramElement, paramString);
       }
     }
   }
@@ -170,15 +180,15 @@ public class XMLHandler {
       String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
     } catch (NumberFormatException e) {
-      System.err.println("Warning: Invalid parameter value. Defaulting to 1.0.");
+      LOGGER.warn("Warning: Invalid parameter value. Defaulting to 1.0.");
       myParameters.put(paramName, new Parameter<Object>(1.0));
     }
   }
 
-  private void checkAndLoadRulestring(Element paramElement) {
+  private void checkAndLoadRuleString(Element paramElement) {
     try {
-      String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-      myParameters.put("ruleString", new Parameter<>(paramString));
+      String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0).getTextContent();
+      myParameters.put(RULE_STRING, new Parameter<>(paramString));
     } catch (Exception e) {
       myParameters.clear();
     }

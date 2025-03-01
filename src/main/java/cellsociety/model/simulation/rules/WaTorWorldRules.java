@@ -28,6 +28,9 @@ import java.util.Set;
  */
 public class WaTorWorldRules extends SimulationRules {
 
+  public static final String SHARK_ENERGY_GAIN = "sharkEnergyGain";
+  public static final String SHARK_REPRODUCTION_TIME = "sharkReproductionTime";
+  public static final String FISH_REPRODUCTION_TIME = "fishReproductionTime";
   private final Random random = new Random();
   private final int mySharkEnergyGain;
   private final int mySharkReproductionTime;
@@ -39,29 +42,30 @@ public class WaTorWorldRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public WaTorWorldRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  public WaTorWorldRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("sharkEnergyGain");
-    checkMissingParameterAndThrowException("sharkReproductionTime");
-    checkMissingParameterAndThrowException("fishReproductionTime");
-    mySharkEnergyGain = getParameters().get("sharkEnergyGain").getInteger();
-    mySharkReproductionTime = getParameters().get("sharkReproductionTime").getInteger();
-    myFishReproductionTime = getParameters().get("fishReproductionTime").getInteger();
+    checkMissingParameterAndThrowException(SHARK_ENERGY_GAIN);
+    checkMissingParameterAndThrowException(SHARK_REPRODUCTION_TIME);
+    checkMissingParameterAndThrowException(FISH_REPRODUCTION_TIME);
+    mySharkEnergyGain = getParameters().get(SHARK_ENERGY_GAIN).getInteger();
+    mySharkReproductionTime = getParameters().get(SHARK_REPRODUCTION_TIME).getInteger();
+    myFishReproductionTime = getParameters().get(FISH_REPRODUCTION_TIME).getInteger();
     validateParameterRange();
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (mySharkEnergyGain < 0) {
-      throwInvalidParameterException("sharkEnergyGain");
+      throwInvalidParameterException(SHARK_ENERGY_GAIN);
     }
     if (mySharkReproductionTime < 0) {
-      throwInvalidParameterException("sharkReproductionTime");
+      throwInvalidParameterException(SHARK_REPRODUCTION_TIME);
     }
     if (myFishReproductionTime < 0) {
-      throwInvalidParameterException("fishReproductionTime");
+      throwInvalidParameterException(FISH_REPRODUCTION_TIME);
     }
   }
 
@@ -71,23 +75,31 @@ public class WaTorWorldRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("sharkReproductionTime", "sharkEnergyGain", "fishReproductionTime");
+    return List.of(SHARK_REPRODUCTION_TIME, SHARK_ENERGY_GAIN, FISH_REPRODUCTION_TIME);
   }
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
 
-    parameters.put("fishReproductionTime", new Parameter<>(3));
-    parameters.put("sharkReproductionTime", new Parameter<>(4));
-    parameters.put("sharkEnergyGain", new Parameter<>(1));
+    parameters.put(FISH_REPRODUCTION_TIME, new Parameter<>(3));
+    parameters.put(SHARK_REPRODUCTION_TIME, new Parameter<>(4));
+    parameters.put(SHARK_ENERGY_GAIN, new Parameter<>(1));
 
     return parameters;
   }
 
-  // I asked ChatGPT for help with implementing this enum
+  /**
+   * An enum to store the state of the simulation I asked ChatGPT for help with implementing this
+   * enum
+   */
   public enum State {
     EMPTY, FISH, SHARK;
 
+    /**
+     * Get the ordinal value of the state
+     *
+     * @return An int representing the state
+     */
     public int getValue() {
       return ordinal();
     }

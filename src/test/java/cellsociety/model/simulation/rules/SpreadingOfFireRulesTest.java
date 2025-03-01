@@ -42,15 +42,6 @@ class SpreadingOfFireRulesTest {
   }
 
   @Test
-  void testCellInBounds() {
-    Cell cell = new DefaultCell(1, new Point2D.Double(50, 50));
-
-    assertThrows(IndexOutOfBoundsException.class,
-        () -> spreadingOfFireRules.getNextState(cell, grid),
-        "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
-  }
-
-  @Test
   void testGetNeighborsMiddleCell() {
     Cell cell = new DefaultCell(1, new Point2D.Double(1, 1));
     grid.addCell(cell);

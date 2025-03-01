@@ -1,9 +1,9 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.getMessage;
-import cellsociety.model.simulation.Simulation;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
+import cellsociety.model.simulation.Simulation;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.RectangleCellView;
 import cellsociety.view.config.StateDisplayConfig;
@@ -12,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.w3c.dom.css.Rect;
 
 /**
  * A view to handle the current simulation's state information panel, which is displayed on the
@@ -28,6 +27,7 @@ public class StateInfoView extends VBox {
    * @param simulation: The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     this.getStyleClass().add("info-box");
     createTitle();

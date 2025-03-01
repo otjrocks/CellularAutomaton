@@ -30,24 +30,34 @@ public class HexagonGridView extends GridView {
 
   @Override
   protected CellView[][] initializeGrid() {
-    CellView[][] grid = new CellView[getNumRows()][getNumColumns()];
-
     double hexWidth = getHexagonWidth();
     double hexHeight = getHexagonHeight();
     double horizontalSpacing = hexWidth * 0.75; // Horizontal spacing
     double verticalSpacing = hexHeight * Math.sqrt(3) / 2.0; // Vertical spacing for hexagons
+    CellView[][] grid = new HexagonCellView[getNumRows()][getNumColumns()];
+    initializeAllCellViews(horizontalSpacing, verticalSpacing, grid, hexWidth, hexHeight);
+    return grid;
+  }
 
+  private void initializeAllCellViews(double horizontalSpacing, double verticalSpacing,
+      CellView[][] grid,
+      double hexWidth, double hexHeight) {
     for (int row = 0; row < getNumRows(); row++) {
       for (int column = 0; column < getNumColumns(); column++) {
-        double x = column * horizontalSpacing;
-        double y = row * verticalSpacing;
-        if (column % 2 == 1) {
-          y += verticalSpacing / 2; // Shift odd columns downward to create honeycomb effect
-        }
-        grid[row][column] = new HexagonCellView(x, y, hexWidth, hexHeight);
+        createHexagonCell(column, horizontalSpacing, row, verticalSpacing, grid, hexWidth,
+            hexHeight);
       }
     }
-    return grid;
+  }
+
+  private static void createHexagonCell(int column, double horizontalSpacing, int row,
+      double verticalSpacing, CellView[][] grid, double hexWidth, double hexHeight) {
+    double x = column * horizontalSpacing;
+    double y = row * verticalSpacing;
+    if (column % 2 == 1) {
+      y += verticalSpacing / 2; // Shift odd columns downward to create honeycomb effect
+    }
+    grid[row][column] = new HexagonCellView(x, y, hexWidth, hexHeight);
   }
 
   private double getHexagonHeight() {

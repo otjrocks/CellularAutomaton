@@ -2,8 +2,18 @@ package cellsociety.model.simulation.getNeighborOptions;
 
 import cellsociety.model.simulation.GetNeighbors;
 
+/**
+ * The neighbor rules for a hexagon grid using Von Neumann Technique
+ *
+ * @author Owen Jennings
+ */
 public class HexagonVonNeumannNeighbors extends GetNeighbors {
 
+  /**
+   * Create a Hexagon VonNeumann with provided layers
+   *
+   * @param layers The number of layers to use
+   */
   public HexagonVonNeumannNeighbors(int layers) {
     super(layers);
   }

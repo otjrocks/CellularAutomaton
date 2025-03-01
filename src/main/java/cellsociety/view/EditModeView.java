@@ -38,6 +38,7 @@ public class EditModeView extends VBox {
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {
+    super();
     myMainController = mainController;
     myAlertField = alertField;
     this.setSpacing(ELEMENT_SPACING);
@@ -53,7 +54,7 @@ public class EditModeView extends VBox {
     CreateDefaultSimView createDefaultSimView = new CreateDefaultSimView(myMainController,
         myAlertField) {
       @Override
-      protected void handleAdditionalButtonActions() throws IllegalArgumentException {
+      protected void handleAdditionalButtonActions() {
         super.handleAdditionalButtonActions();
         updateDisplay(); // update state info when new simulation is created.
       }

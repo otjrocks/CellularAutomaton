@@ -12,32 +12,49 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 
+/**
+ * The implementation of Game of Life
+ *
+ * @author Justin Aronwald
+ * @author Owen Jennings
+ * @author Troy Ludwig
+ */
 public class GameOfLifeRules extends SimulationRules {
 
+  public static final String RULE_STRING = "ruleString";
   private String myRuleString;
-  private ArrayList<Integer> birthValues;
-  private ArrayList<Integer> surviveValues;
+  private List<Integer> birthValues;
+  private List<Integer> surviveValues;
 
-  public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  /**
+   * A default constructor for Game Of Life
+   *
+   * @param parameters     The parameters provided to initialize this simulation
+   * @param myGetNeighbors The neighbor policy to use
+   * @throws InvalidParameterException An exception if invalid parameters are provided or parameters
+   *                                   are missing
+   */
+  public GameOfLifeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       myRuleString = "B3/S23";
       birthValues = new ArrayList<>(List.of(3));
       surviveValues = new ArrayList<>(Arrays.asList(2, 3));
     } else {
-      checkMissingParameterAndThrowException("ruleString");
-      myRuleString = getParameters().get("ruleString").getString();
+      checkMissingParameterAndThrowException(RULE_STRING);
+      myRuleString = getParameters().get(RULE_STRING).getString();
       validateParameterRange();
       initializeBSValues();
     }
   }
 
   private void validateParameterRange() throws InvalidParameterException {
-    if (myRuleString.equals("")) {
+    if (myRuleString.isEmpty()) {
       myRuleString = "B3/S23";
     }
     if (!myRuleString.contains("/") || !myRuleString.contains("B") || !myRuleString.contains("S")) {
-      throwInvalidParameterException("ruleString");
+      throwInvalidParameterException(RULE_STRING);
     }
   }
 
@@ -47,7 +64,7 @@ public class GameOfLifeRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("ruleString");
+    return List.of(RULE_STRING);
   }
 
 
@@ -61,20 +78,12 @@ public class GameOfLifeRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+    int aliveNeighbors = calculateAliveNeighbors(cell, grid);
+    return getNextStateBasedOnAliveNeighbors(cell, aliveNeighbors);
+  }
 
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
-    }
-
-    List<Cell> neighbors = getNeighbors(cell, grid);
-    int aliveNeighbors = 0;
-    for (Cell neighbor : neighbors) {
-      if (neighbor.getState() == 1) {
-        aliveNeighbors++;
-      }
-    }
-    if (birthValues.contains(aliveNeighbors) && cell.getState()==0) {
+  private int getNextStateBasedOnAliveNeighbors(Cell cell, int aliveNeighbors) {
+    if (birthValues.contains(aliveNeighbors) && cell.getState() == 0) {
       return 1;
     } else if (!surviveValues.contains(aliveNeighbors)) {
       return 0;
@@ -82,8 +91,18 @@ public class GameOfLifeRules extends SimulationRules {
     return cell.getState();
   }
 
-  private void initializeBSValues()
-      throws InvalidParameterException {
+  private int calculateAliveNeighbors(Cell cell, Grid grid) {
+    List<Cell> neighbors = getNeighbors(cell, grid);
+    int aliveNeighbors = 0;
+    for (Cell neighbor : neighbors) {
+      if (neighbor.getState() == 1) {
+        aliveNeighbors++;
+      }
+    }
+    return aliveNeighbors;
+  }
+
+  private void initializeBSValues() {
 
     String[] bStrings = myRuleString.split("/")[0].substring(1).split("");
     String[] sStrings = myRuleString.split("/")[1].substring(1).split("");
@@ -96,11 +115,11 @@ public class GameOfLifeRules extends SimulationRules {
   }
 
   private Integer[] convertStringArray(String[] strings) {
-    Integer[] ints = new Integer[strings.length];
+    Integer[] values = new Integer[strings.length];
     for (int i = 0; i < strings.length; i++) {
-      ints[i] = Integer.valueOf(strings[i]);
+      values[i] = Integer.valueOf(strings[i]);
     }
-    return ints;
+    return values;
   }
 
   @Override

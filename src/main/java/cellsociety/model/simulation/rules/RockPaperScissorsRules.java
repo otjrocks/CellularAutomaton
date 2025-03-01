@@ -10,14 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//For RockPaperScissors there can be any number of states up to 20
-// Winning depends on the next one in the circle (i.e with 3 states: 1 beats 2, 2 beats 3, 3 beats 1)
-//The number of states the current state beats as well as loses to is N/2 (rounded down)
-// This is determined by (current state - opponent state + numStates) % numStates
 
-
+/**
+ * The implementation of the Rock Paper Scissors simulation rules For RockPaperScissors there can be
+ * any number of states up to 20
+ * <p>
+ * Winning depends on the next one in the circle (i.e with 3 states: 1 beats 2, 2 beats 3, 3 beats
+ * 1)
+ * <p>
+ * The number of states the current state beats as well as loses to is N/2 (rounded down)
+ * <p>
+ * This is determined by (current state - opponent state + numStates) % numStates
+ *
+ * @author Justin Aronwald
+ */
 public class RockPaperScissorsRules extends SimulationRules {
 
+  public static final String NUM_STATES = "numStates";
+  public static final String MIN_THRESHOLD = "minThreshold";
   private final int myNumStates;
   private final double myMinThreshold;
 
@@ -33,10 +43,10 @@ public class RockPaperScissorsRules extends SimulationRules {
     if (myParameters == null || myParameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("numStates");
-    checkMissingParameterAndThrowException("minThreshold");
-    myNumStates = getParameters().get("numStates").getInteger();
-    myMinThreshold = getParameters().get("minThreshold").getDouble();
+    checkMissingParameterAndThrowException(NUM_STATES);
+    checkMissingParameterAndThrowException(MIN_THRESHOLD);
+    myNumStates = getParameters().get(NUM_STATES).getInteger();
+    myMinThreshold = getParameters().get(MIN_THRESHOLD).getDouble();
     validateParameterRange();
   }
 
@@ -46,15 +56,15 @@ public class RockPaperScissorsRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("minThreshold", "numStates");
+    return List.of(MIN_THRESHOLD, NUM_STATES);
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myNumStates < 1) {
-      throwInvalidParameterException("numStates");
+      throwInvalidParameterException(NUM_STATES);
     }
     if (myMinThreshold < 0 || myMinThreshold > 1) {
-      throwInvalidParameterException("minThreshold");
+      throwInvalidParameterException(MIN_THRESHOLD);
     }
   }
 
@@ -64,7 +74,6 @@ public class RockPaperScissorsRules extends SimulationRules {
    * @param grid - the collection of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Rock Paper Scissors Model
    */
-
   @Override
   public int getNextState(Cell cell, Grid grid) {
     if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
@@ -138,8 +147,8 @@ public class RockPaperScissorsRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("minThreshold", new Parameter<>(0.5));
-    parameters.put("numStates", new Parameter<>(3));
+    parameters.put(MIN_THRESHOLD, new Parameter<>(0.5));
+    parameters.put(NUM_STATES, new Parameter<>(3));
     return parameters;
   }
 

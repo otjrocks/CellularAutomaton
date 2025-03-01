@@ -2,8 +2,18 @@ package cellsociety.model.simulation.getNeighborOptions;
 
 import cellsociety.model.simulation.GetNeighbors;
 
+/**
+ * The implementation of Von Neumann neighbors for Triangle grid
+ *
+ * @author Owen Jennings
+ */
 public class TriangleVonNeumannNeighbors extends GetNeighbors {
 
+  /**
+   * The default constructor for Von Neumann Neighbors for Triangle Grid
+   *
+   * @param layers The number of layers required.
+   */
   public TriangleVonNeumannNeighbors(int layers) {
     super(layers);
   }

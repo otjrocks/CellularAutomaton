@@ -33,33 +33,48 @@ public class CreateGridUtility {
       throws GridException, InvalidStateException {
     Grid grid = new Grid(gridHeight, gridWidth);
     NodeList rows = gridDoc.getElementsByTagName("Row");
+    addAllCellsToGrid(gridHeight, gridWidth, sim, rows, grid);
+    return grid;
+  }
 
+  private static void addAllCellsToGrid(int gridHeight, int gridWidth, Simulation sim,
+      NodeList rows,
+      Grid grid) throws GridException, InvalidStateException {
     for (int i = 0; i < rows.getLength(); i++) {
-      if (rows.getLength() > gridHeight) {
-        throw new GridException();
-      }
-      String[] rowValues = rows.item(i).getTextContent().split(",");
-      if (rowValues.length > gridWidth) {
-        throw new GridException();
-      }
+      String[] rowValues = getRowValuesAndHandleExceptions(gridHeight, gridWidth, rows, i);
       for (int j = 0; j < rowValues.length; j++) {
-        double rawState = Double.parseDouble(rowValues[j]);
-        int state = (int) rawState;
-        int param = getDecimalValue(rowValues[j]);
-
-
-        checkValidState(state, sim);
-        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
-
-        if (sim.data().type().equals("Sugarscape") && param != 0) {
-          ((SugarscapeCell) holdingCell).setSugar(param);
-        }
-
-        grid.addCell(holdingCell);
+        addCurrentCellToGrid(sim, rowValues, j, i, grid);
       }
     }
+  }
 
-    return grid;
+  private static void addCurrentCellToGrid(Simulation sim, String[] rowValues, int j, int i,
+      Grid grid)
+      throws InvalidStateException {
+    double rawState = Double.parseDouble(rowValues[j]);
+    int state = (int) rawState;
+    int param = getDecimalValue(rowValues[j]);
+    checkValidState(state, sim);
+    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
+
+    if (sim.data().type().equals("Sugarscape") && param != 0) {
+      ((SugarscapeCell) holdingCell).setSugar(param);
+    }
+
+    grid.addCell(holdingCell);
+  }
+
+  private static String[] getRowValuesAndHandleExceptions(int gridHeight, int gridWidth,
+      NodeList rows, int i)
+      throws GridException {
+    if (rows.getLength() > gridHeight) {
+      throw new GridException();
+    }
+    String[] rowValues = rows.item(i).getTextContent().split(",");
+    if (rowValues.length > gridWidth) {
+      throw new GridException();
+    }
+    return rowValues;
   }
 
   private static int getDecimalValue(String rawString) {
@@ -81,24 +96,8 @@ public class CreateGridUtility {
    */
   public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight,
       int gridWidth, Simulation sim) {
-    Grid grid = new Grid(gridHeight, gridWidth);
-    int totalCells = gridHeight * gridWidth;
-
-    Map<Integer, Integer> stateCounts = new HashMap<>();
-    int assignedCells = 0;
-
-    NodeList randomParams = gridDoc.getElementsByTagName("State");
-    for (int i = 0; i < randomParams.getLength(); i++) {
-      Element stateElement = (Element) randomParams.item(i);
-      String stateName = stateElement.getAttribute("name");
-      int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
-      int count = Integer.parseInt(stateElement.getTextContent());
-
-      stateCounts.put(stateValue, count);
-      assignedCells += count;
-    }
-
-    return initializeGrid(gridHeight, gridWidth, sim, grid, totalCells, stateCounts, assignedCells);
+    // generate a grid with fromDistribution equal to false
+    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, false);
   }
 
   /**
@@ -111,6 +110,12 @@ public class CreateGridUtility {
    */
   public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight,
       int gridWidth, Simulation sim) {
+    // generate a grid with fromDistribution equal to true
+    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, true);
+  }
+
+  private static Grid generateRandomGrid(Document gridDoc, int gridHeight, int gridWidth,
+      Simulation sim, boolean fromDistribution) {
     Grid grid = new Grid(gridHeight, gridWidth);
     int totalCells = gridHeight * gridWidth;
 
@@ -122,8 +127,7 @@ public class CreateGridUtility {
       Element stateElement = (Element) randomParams.item(i);
       String stateName = stateElement.getAttribute("name");
       int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
-      int prob = Integer.parseInt(stateElement.getTextContent());
-      int count = Math.round((float) (prob * totalCells) / 100);
+      int count = getRandomGridCount(fromDistribution, stateElement, totalCells);
 
       stateCounts.put(stateValue, count);
       assignedCells += count;
@@ -131,6 +135,17 @@ public class CreateGridUtility {
 
     return initializeGrid(gridHeight, gridWidth, sim, grid, totalCells, stateCounts, assignedCells);
   }
+
+  private static int getRandomGridCount(boolean fromDistribution, Element stateElement,
+      int totalCells) {
+    if (fromDistribution) {
+      int prob = Integer.parseInt(stateElement.getTextContent());
+      return Math.round((float) (prob * totalCells) / 100);
+    } else {
+      return Integer.parseInt(stateElement.getTextContent());
+    }
+  }
+
 
   private static Grid initializeGrid(int gridHeight, int gridWidth, Simulation sim, Grid grid,
       int totalCells, Map<Integer, Integer> stateCounts, int assignedCells) {

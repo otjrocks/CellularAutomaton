@@ -9,11 +9,18 @@ import cellsociety.model.simulation.SimulationRules;
 import java.util.List;
 import java.util.Map;
 
-//For a Percolation cell, there can be 3 states
-// A cell with state 0 indicates it's blocked
-// A cell with state 1 indicates it's open and water can pass through
-// A cell with state 2 indicates it's filled and water has passed through this cell
 
+/**
+ * The implementation of percolation simulation rules For a Percolation cell, there can be 3 states
+ * <p>
+ * - A cell with state 0 indicates it's blocked
+ * <p>
+ * - A cell with state 1 indicates it's open and water can pass through
+ * <p>
+ * - A cell with state 2 indicates it's filled and water has passed through this cell
+ *
+ * @author Justin Aronwald
+ */
 public class PercolationRules extends SimulationRules {
 
   /**
@@ -23,7 +30,8 @@ public class PercolationRules extends SimulationRules {
    * @throws InvalidParameterException - throws when a parameter is invalid
    */
   public PercolationRules(
-      Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+      Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
   }
 
@@ -39,30 +47,23 @@ public class PercolationRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
-
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
-    }
-
     int currentState = cell.getState();
-    if (currentState == 0) {
-      return 0;
-    }
-    if (currentState == 2) {
-      return 2;
+    return getNextStatesGivenCurrentState(cell, grid, currentState);
+  }
+
+  private int getNextStatesGivenCurrentState(Cell cell, Grid grid, int currentState) {
+    if (currentState == 0 || currentState == 2) {
+      return currentState;
     }
     if (cell.getRow() == 0 && currentState == 1) {
       return 2;
     }
-
     List<Cell> neighbors = getNeighbors(cell, grid);
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() == 2) {
         return 2;
       }
     }
-
     return 1;
   }
 

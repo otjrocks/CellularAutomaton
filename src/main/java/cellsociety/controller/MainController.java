@@ -18,10 +18,10 @@ import org.xml.sax.SAXException;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.config.SimulationConfig;
@@ -35,7 +35,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.view.BottombarView;
+import cellsociety.view.BottomBarView;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
 import cellsociety.view.SplashScreenView;
@@ -62,7 +62,7 @@ public class MainController {
   private final Stage myStage;
   private SimulationView mySimulationView;
   private SidebarView mySidebarView;
-  private BottombarView myBottombarView;
+  private BottomBarView myBottomBarView;
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
@@ -90,7 +90,7 @@ public class MainController {
     mySplashScreenView = new SplashScreenView(new AlertField(), mySidebarView, this);
     root.getChildren().add(mySplashScreenView);
     myRoot.getChildren().remove(mySidebarView);
-    myRoot.getChildren().remove(myBottombarView);
+    myRoot.getChildren().remove(myBottomBarView);
   }
 
   /**
@@ -98,11 +98,11 @@ public class MainController {
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySidebarView);
-    myRoot.getChildren().remove(myBottombarView);
+    myRoot.getChildren().remove(myBottomBarView);
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
-    myBottombarView = null;
+    myBottomBarView = null;
     createOrUpdateSidebar();
-    createOrUpdateBottombar();
+    createOrUpdateBottomBar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
   }
@@ -195,6 +195,15 @@ public class MainController {
     return mySimulationAnimation.getStatus() == Status.RUNNING;
   }
 
+  /**
+   * Create a new simulation with the provided information
+   *
+   * @param rows       The number of rows for the grid
+   * @param cols       the number of columns for the grid
+   * @param type       the type of the simulation as a string
+   * @param metaData   The metadata for your simulation
+   * @param parameters The parameters map for your simulation
+   */
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
     myGrid = new Grid(rows, cols);
@@ -263,7 +272,7 @@ public class MainController {
     mySimulation = simulation;
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
-    createOrUpdateBottombar();
+    createOrUpdateBottomBar();
   }
 
   /**
@@ -281,12 +290,12 @@ public class MainController {
    * Initialize the bottombar of the program
    */
   public void initializeBottombar() {
-    myBottombarView = new BottombarView(GRID_WIDTH,
-        GRID_HEIGHT / 2, this);
-    myBottombarView.setLayoutX(MARGIN);
-    myBottombarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
-    myBottombarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
-    myRoot.getChildren().add(myBottombarView);
+    myBottomBarView = new BottomBarView(GRID_WIDTH,
+        GRID_HEIGHT * 2);
+    myBottomBarView.setLayoutX(MARGIN);
+    myBottomBarView.setLayoutY(GRID_HEIGHT + 1.5 * MARGIN);
+    myBottomBarView.setMaxWidth(GRID_WIDTH - 2 * MARGIN);
+    myRoot.getChildren().add(myBottomBarView);
   }
 
   /**
@@ -335,6 +344,24 @@ public class MainController {
     myCellShapeType = value;
   }
 
+  /**
+   * Compute the count of each state present in the current simulation grid
+   *
+   * @return A map where the string represents the state's name and a int value for the count
+   */
+  public Map<String, Integer> computeStateCounts() {
+    Map<String, Integer> stateCounts = new HashMap<>();
+    for (int row = 0; row < myGrid.getRows(); row++) {
+      for (int col = 0; col < myGrid.getCols(); col++) {
+        int state = myGrid.getCell(row, col).getState();
+        stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()),
+            stateCounts.getOrDefault(
+                getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
+      }
+    }
+    return stateCounts;
+  }
+
   private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
@@ -358,42 +385,48 @@ public class MainController {
     attemptGettingGridAndSimulationFromXMLHandler(filePath);
   }
 
+  // I used ChatGPT to assist in refactoring this method
   private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
-      myIterationCount = 0;
-      XMLHandler xmlHandler = new XMLHandler(filePath);
-      myGrid = xmlHandler.getGrid();
-      myCellShapeType = xmlHandler.getCellShapeType();
-      updateSimulation(xmlHandler.getSim());
-    } catch (SAXException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
-      throw e;
-    } catch (ParserConfigurationException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
-      throw e;
-    } catch (IOException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_IO"));
-      throw e;
-    } catch (NumberFormatException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
-      throw e;
-    } catch (NullPointerException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
-      throw e;
-    } catch (GridException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_GRID"));
-      throw e;
-    } catch (InvalidStateException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_STATE"));
-      throw e;
+      attemptUpdateFromFilePath(filePath);
     } catch (Exception e) {
-      mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
-      if (VERBOSE_ERROR_MESSAGES) {
-        mySidebarView.flashWarning(e.getMessage());
-      }
+      handleGridAndSimulationCreationExceptions(e);
       throw e;
     }
+  }
+
+  private void handleGridAndSimulationCreationExceptions(Exception e) {
+    String errorMessageKey = getErrorMessageKey(e);
+    mySidebarView.flashWarning(getMessage(errorMessageKey));
+    LOGGER.warn(getMessage(errorMessageKey), e);
+  }
+
+  // I used ChatGPT to help in refactoring the getErrorMessageKey method to improve cyclomatic complexity
+  private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = new HashMap<>();
+
+  static {
+    ERROR_MESSAGE_MAP.put(SAXException.class, "ERROR_FORMAT");
+    ERROR_MESSAGE_MAP.put(ParserConfigurationException.class, "ERROR_PARSER");
+    ERROR_MESSAGE_MAP.put(IOException.class, "ERROR_IO");
+    ERROR_MESSAGE_MAP.put(NumberFormatException.class, "ERROR_NUMBER");
+    ERROR_MESSAGE_MAP.put(NullPointerException.class, "ERROR_MISSING");
+    ERROR_MESSAGE_MAP.put(GridException.class, "ERROR_GRID");
+    ERROR_MESSAGE_MAP.put(InvalidStateException.class, "ERROR_STATE");
+  }
+
+  private static String getErrorMessageKey(Exception e) {
+    return ERROR_MESSAGE_MAP.getOrDefault(e.getClass(), "ERROR_GENERAL");
+  }
+
+
+  private void attemptUpdateFromFilePath(String filePath)
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+    myIterationCount = 0;
+    XMLHandler xmlHandler = new XMLHandler(filePath);
+    myGrid = xmlHandler.getGrid();
+    myCellShapeType = xmlHandler.getCellShapeType();
+    updateSimulation(xmlHandler.getSim());
   }
 
   private void createOrUpdateSidebar() {
@@ -404,19 +437,18 @@ public class MainController {
     }
   }
 
-  private void createOrUpdateBottombar() {
-    if (myBottombarView == null) {
+  private void createOrUpdateBottomBar() {
+    if (myBottomBarView == null) {
       initializeBottombar();
     } else {
-      myBottombarView.update();
+      myBottomBarView.update();
     }
   }
 
   private void createNewMainViewAndUpdateViewContainer() {
     myMainViewContainer.getChildren().clear();
-    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
-        myGrid.getCols(),
-        myGrid, myCellShapeType, mySimulation, this);
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT,
+        myGrid, myCellShapeType, this);
     mySimulationView.setGridLines(gridLinesEnabled);
     myMainViewContainer.getChildren().add(mySimulationView);
   }
@@ -435,9 +467,10 @@ public class MainController {
 
   private void step() {
     myIterationCount++;
-    myBottombarView.updateIterationCounter(myIterationCount);
+    myBottomBarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
-    myBottombarView.updateHistogram(computeStateCounts(), mySimulation.data().type());
+    Map<String, Integer> stateCounts = computeStateCounts();
+    myBottomBarView.updateStateChangeChart(stateCounts, mySimulation.data().type());
   }
 
   private void createMainContainerAndView() {
@@ -447,17 +480,7 @@ public class MainController {
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
     } catch (Exception e) {
+      LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
-  }
-
-  public Map<String, Integer> computeStateCounts() {
-    Map<String, Integer> stateCounts = new HashMap<>();
-    for (int row = 0; row < myGrid.getRows(); row++) {
-        for (int col = 0; col < myGrid.getCols(); col++) {
-            int state = myGrid.getCell(row, col).getState();
-            stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), stateCounts.getOrDefault(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
-        }
-    }
-    return stateCounts;
   }
 }

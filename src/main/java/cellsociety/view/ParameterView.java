@@ -1,7 +1,9 @@
 package cellsociety.view;
 
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.utility.SimulationUtility.updateSimulation;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
@@ -38,6 +40,7 @@ public class ParameterView extends VBox {
    * @param isEditing      Whether the user should be able to edit parameters or not
    */
   public ParameterView(MainController mainController, boolean isEditing) {
+    super();
     this.setSpacing(ELEMENT_SPACING);
     myMainController = mainController;
     this.isEditing = isEditing;
@@ -103,7 +106,7 @@ public class ParameterView extends VBox {
 
   private void createParameterBulletPoint(String key, Parameter<?> param) {
     try {
-      createText(String.format("? %s: %s", key, param.getString()), false);
+      createText(String.format("• %s: %s", key, param.getString()), false);
     } catch (InvalidParameterException e) {
       throw new RuntimeException(e);
     }
@@ -133,21 +136,8 @@ public class ParameterView extends VBox {
 
   private Simulation getNewSimulation(Map<String, Parameter<?>> newParameters,
       Simulation currentSimulation) {
-    Simulation newSimulation;
-    try {
-      newSimulation = SimulationConfig.getNewSimulation(currentSimulation.data().type(),
-          currentSimulation.data(), newParameters);
-    } catch (InvocationTargetException e) {
-      myAlertField.flash(e.getCause().getMessage(), true);
-      return null;
-    } catch (ClassNotFoundException | NoSuchMethodException |
-             InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
-      throw new RuntimeException(e);
-    }
-    return newSimulation;
+    return updateSimulation(currentSimulation, currentSimulation.data(), newParameters,
+        myAlertField);
   }
 
   private void setNewParametersMap(Map<String, Parameter<?>> newParameters) {
@@ -158,7 +148,7 @@ public class ParameterView extends VBox {
         String newValue = field.getText();
         newParameters.put(key, new Parameter<>(newValue));
       } catch (NumberFormatException ignored) {
-        System.out.printf("Unable to add parameter: %s%n", key);
+        LOGGER.warn("Unable to add parameter: {}\n", key);
       }
     }
   }

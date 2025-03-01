@@ -33,10 +33,17 @@ public class FallingSandRules extends SimulationRules {
     super(parameters, myGetNeighbors);
   }
 
-  // An enum to store the possible states for the simulation
+  /**
+   * An enum to store the possible states for this simulation
+   */
   public enum State {
     EMPTY, WALL, SAND;
 
+    /**
+     * Get the ordinal value of this enum entry
+     *
+     * @return An int representing the state
+     */
     public int getValue() {
       return ordinal();
     }
@@ -52,18 +59,26 @@ public class FallingSandRules extends SimulationRules {
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> updates = new ArrayList<>();
+    handleEntireGrid(grid, updates);
+    return updates;
+  }
+
+  private void handleEntireGrid(Grid grid, List<CellUpdate> updates) {
     for (int row = grid.getRows() - 1; row >= 0; row--) { // check from bottom of grid to top
       for (int col = 0; col < grid.getCols(); col++) {
-        Cell cell = getCellIfInBounds(grid, row, col);
-        if (cell == null) {
-          continue;
-        }
-        if (cell.getState() == State.SAND.getValue()) {
-          handleSandMovement(grid, cell, updates);
-        }
+        handleCurrentCell(grid, row, col, updates);
       }
     }
-    return updates;
+  }
+
+  private void handleCurrentCell(Grid grid, int row, int col, List<CellUpdate> updates) {
+    Cell cell = getCellIfInBounds(grid, row, col);
+    if (cell == null) {
+      return;
+    }
+    if (cell.getState() == State.SAND.getValue()) {
+      handleSandMovement(grid, cell, updates);
+    }
   }
 
   /**
