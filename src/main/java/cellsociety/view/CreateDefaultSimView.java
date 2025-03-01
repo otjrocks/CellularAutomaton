@@ -1,6 +1,5 @@
 package cellsociety.view;
 
-import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.view.components.SelectorField;
 import java.util.HashMap;
 import java.util.List;
@@ -320,7 +319,7 @@ public class CreateDefaultSimView extends VBox {
    * Begin the process for creating a simulation by making and validating the parameters then
    * creating solution
    */
-  private void createNewSimulation() throws IllegalArgumentException, InvalidParameterException {
+  private void createNewSimulation() {
     SimulationMetaData metaData = createMetaData();
 
     Map<String, Parameter<?>> parameters = new HashMap<>();
@@ -367,7 +366,7 @@ public class CreateDefaultSimView extends VBox {
    * Handle any addition button actions that you want to occur when the button is clicked and the
    * simulation is created successfully
    */
-  protected void handleAdditionalButtonActions() throws IllegalArgumentException {
+  protected void handleAdditionalButtonActions() {
     LOGGER.info("New simulation created from form!");
   }
 

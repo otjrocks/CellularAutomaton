@@ -41,6 +41,7 @@ public class BottomBarView extends VBox {
    * @param height: preferred height of bottom bar box
    */
   public BottomBarView(int width, int height) {
+    super();
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
@@ -128,7 +129,7 @@ public class BottomBarView extends VBox {
 
   private void updateLegendNodeColor(Series<Number, Number> series, String colorString) {
     for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
-      if (legendNode instanceof Node && series.getName()
+      if (legendNode != null && series.getName()
           .equals(legendNode.getAccessibleText())) {
         legendNode.setStyle("-fx-background-color: " + colorString + ", white;");
       }

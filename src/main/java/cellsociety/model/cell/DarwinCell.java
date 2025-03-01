@@ -26,7 +26,7 @@ public class DarwinCell extends Cell {
    *                 row, y: col) value is the relative location of the cell compared to other cells
    *                 in the grid.
    */
-  public DarwinCell(int state, Point2D location) throws IllegalArgumentException {
+  public DarwinCell(int state, Point2D location) {
     super(state, location);
     this.orientation = 0;
     this.curInstructionIndex = 0;
@@ -47,7 +47,7 @@ public class DarwinCell extends Cell {
    * @param instructions       - the list of movement or infection commands
    */
   public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown,
-      List<String> instructions) throws IllegalArgumentException {
+      List<String> instructions) {
     super(state, location);
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
