@@ -43,6 +43,7 @@ public class SidebarView extends VBox {
    * @param height: preferred height of sidebar box
    */
   public SidebarView(int width, int height, MainController controller) {
+    super();
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
@@ -64,7 +65,9 @@ public class SidebarView extends VBox {
    * @return A SelectorField containing the theme selector and its label
    */
   public SelectorField createThemeSelector() {
-    myThemeSelector = new SelectorField(ThemeConfig.THEMES, ThemeConfig.getCurrentTheme(), "themeDropdown", getMessage("CHANGE_THEME"), e -> myMainController.setTheme(myThemeSelector.getValue()));
+    myThemeSelector = new SelectorField(ThemeConfig.THEMES, ThemeConfig.getCurrentTheme(),
+        "themeDropdown", getMessage("CHANGE_THEME"),
+        e -> myMainController.setTheme(myThemeSelector.getValue()));
     myThemeSelector.setAlignment(Pos.CENTER_LEFT);
     this.getChildren().add(myThemeSelector);
     return myThemeSelector;
@@ -106,6 +109,9 @@ public class SidebarView extends VBox {
     this.getChildren().add(title);
   }
 
+  /**
+   * Update both the edit mode view and the view mode view that are part of this sidebar
+   */
   public void update() {
     myViewModeView.update();
     myEditModeView.updateDisplay();

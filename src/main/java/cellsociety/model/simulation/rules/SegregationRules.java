@@ -15,13 +15,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-//For a SegregationModel cell, there can be 3 states
-// A cell with state 0 indicates it's empty
-// A cell with state 1 indicates it's a part of Group 1
-// A cell with state 2 indicates it's a part of Group 2
-
+/**
+ * The implementation of Schelling's Model of Segregation simulation
+ * <p>
+ * For a SegregationModel cell, there can be 3 states
+ * <p>
+ * A cell with state 0 indicates it's empty
+ * <p>
+ * A cell with state 1 indicates it's a part of Group 1
+ * <p>
+ * A cell with state 2 indicates it's a part of Group 2
+ *
+ * @author Justin Aronwald
+ */
 public class SegregationRules extends SimulationRules {
 
+  public static final String TOLERANCE_THRESHOLD = "toleranceThreshold";
   private final Random RANDOM = new Random();
   private final double myToleranceThreshold;
 
@@ -31,19 +40,20 @@ public class SegregationRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SegregationRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors) throws InvalidParameterException {
+  public SegregationRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+      throws InvalidParameterException {
     super(parameters, myGetNeighbors);
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("toleranceThreshold");
-    myToleranceThreshold = getParameters().get("toleranceThreshold").getDouble();
+    checkMissingParameterAndThrowException(TOLERANCE_THRESHOLD);
+    myToleranceThreshold = getParameters().get(TOLERANCE_THRESHOLD).getDouble();
     validateParameterRange();
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myToleranceThreshold < 0 || myToleranceThreshold > 1) {
-      throwInvalidParameterException("toleranceThreshold");
+      throwInvalidParameterException(TOLERANCE_THRESHOLD);
     }
   }
 
@@ -53,7 +63,7 @@ public class SegregationRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("toleranceThreshold");
+    return List.of(TOLERANCE_THRESHOLD);
   }
 
 
@@ -70,42 +80,51 @@ public class SegregationRules extends SimulationRules {
    * @param grid - the list of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Schelling's segregation model
    */
+  // ChatGPT assisted in refactoring this method
   @Override
   public int getNextState(Cell cell, Grid grid) {
-
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
-    }
-
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
-
     if (currentState == 0) {
       return 0;
     }
+    int sameType = countSameTypeNeighbors(neighbors, currentState);
+    int totalNeighbors = countOccupiedNeighbors(neighbors);
+    double typePercentage = calculateTypePercentage(sameType, totalNeighbors);
+    return determineNextState(totalNeighbors, typePercentage, currentState);
+  }
 
+  private int countSameTypeNeighbors(List<Cell> neighbors, int currentState) {
     int sameType = 0;
-    int totalNeighbors = 0;
+    for (Cell neighbor : neighbors) {
+      if (neighbor.getState() != 0 && neighbor.getState() == currentState) {
+        sameType++;
+      }
+    }
+    return sameType;
+  }
 
+  private int countOccupiedNeighbors(List<Cell> neighbors) {
+    int totalNeighbors = 0;
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() != 0) {
         totalNeighbors++;
-        if (neighbor.getState() == currentState) {
-          sameType++;
-        }
       }
     }
-    double typePercentage = (double) sameType / totalNeighbors;
+    return totalNeighbors;
+  }
 
-    // No occupied neighbors or satisfied-> stay
+  private double calculateTypePercentage(int sameType, int totalNeighbors) {
+    return totalNeighbors == 0 ? 0 : (double) sameType / totalNeighbors;
+  }
+
+  private int determineNextState(int totalNeighbors, double typePercentage, int currentState) {
     if (totalNeighbors == 0 || typePercentage >= myToleranceThreshold) {
       return currentState;
     }
-
-    //mark as -1 to be moved
-    return -1;
+    return -1; // mark as -1 to be moved
   }
+
 
   @Override
   public int getNumberStates() {
@@ -165,7 +184,7 @@ public class SegregationRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("toleranceThreshold", new Parameter<>(0.3));
+    parameters.put(TOLERANCE_THRESHOLD, new Parameter<>(0.3));
     return parameters;
   }
 

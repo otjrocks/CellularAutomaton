@@ -3,6 +3,11 @@ package cellsociety.view.cell;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
+/**
+ * A cell view used in the triangle grid view
+ *
+ * @author Owen Jennings
+ */
 public class TriangleCellView extends CellView {
 
   /**

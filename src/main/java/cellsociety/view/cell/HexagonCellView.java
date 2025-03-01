@@ -3,6 +3,11 @@ package cellsociety.view.cell;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
+/**
+ * The cell used in a hexagon grid view
+ *
+ * @author Owen Jennings
+ */
 public class HexagonCellView extends CellView {
 
   /**

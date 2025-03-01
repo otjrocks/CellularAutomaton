@@ -4,6 +4,11 @@ import cellsociety.controller.PreferencesController;
 import cellsociety.utility.FileUtility;
 import java.util.List;
 
+/**
+ * A class to handle to initialization and changing of the program's theme
+ *
+ * @author Owen Jennings
+ */
 public class ThemeConfig {
 
   public static final String DEFAULT_RESOURCE_PACKAGE = "cellsociety.";
@@ -21,10 +26,11 @@ public class ThemeConfig {
 
   public static final String DEFAULT_THEME = "Light";
 
+  public static final String THEME_KEY = "theme";
   private static String myThemePath =
       "%s%s.css".formatted(THEMES_RESOURCES_FOLDER,
-          PreferencesController.getPreference("theme", DEFAULT_THEME));
-  private static String myCurrentTheme = PreferencesController.getPreference("theme",
+          PreferencesController.getPreference(THEME_KEY, DEFAULT_THEME));
+  private static String myCurrentTheme = PreferencesController.getPreference(THEME_KEY,
       DEFAULT_THEME);
 
   /**
@@ -53,7 +59,7 @@ public class ThemeConfig {
    */
   public static void setTheme(String themeName) {
     myThemePath = "%s%s.css".formatted(THEMES_RESOURCES_FOLDER, themeName);
-    PreferencesController.setPreference("theme", themeName);
+    PreferencesController.setPreference(THEME_KEY, themeName);
     myCurrentTheme = themeName;
   }
 }

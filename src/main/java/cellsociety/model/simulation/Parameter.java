@@ -31,10 +31,9 @@ public class Parameter<T> {
     try {
       return (String) myValue;
     } catch (Exception e) {
-      throw new InvalidParameterException(
-          String.format(getMessage("INVALID_PARAMETER"),
-              getMessage("INVALID_PARAMETER_TYPE")));
+      throwInvalidParameterException();
     }
+    return null;
   }
 
   /**
@@ -51,10 +50,9 @@ public class Parameter<T> {
       }
       return Double.parseDouble((String) myValue);
     } catch (Exception e) {
-      throw new InvalidParameterException(
-          String.format(getMessage("INVALID_PARAMETER"),
-              getMessage("INVALID_PARAMETER_TYPE")));
+      throwInvalidParameterException();
     }
+    return null;
   }
 
   /**
@@ -71,10 +69,9 @@ public class Parameter<T> {
       }
       return getDouble().intValue();
     } catch (Exception e) {
-      throw new InvalidParameterException(
-          String.format(getMessage("INVALID_PARAMETER"),
-              getMessage("INVALID_PARAMETER_TYPE")));
+      throwInvalidParameterException();
     }
+    return null;
   }
 
   /**
@@ -85,5 +82,11 @@ public class Parameter<T> {
   @Override
   public String toString() {
     return myValue.toString();
+  }
+
+  private static void throwInvalidParameterException() throws InvalidParameterException {
+    throw new InvalidParameterException(
+        String.format(getMessage("INVALID_PARAMETER"),
+            getMessage("INVALID_PARAMETER_TYPE")));
   }
 }

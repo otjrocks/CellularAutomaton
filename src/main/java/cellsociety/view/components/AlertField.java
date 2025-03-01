@@ -3,6 +3,7 @@ package cellsociety.view.components;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ public class AlertField extends VBox {
    * Initialize the alert field
    */
   public AlertField() {
-    setSpacing(5); // Adds spacing between messages
+    super();
+    setSpacing(ELEMENT_SPACING / 2); // Adds spacing between messages
   }
 
   /**

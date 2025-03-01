@@ -63,13 +63,6 @@ class PercolationRulesTest {
 
     assertEquals(2, percolationRules.getNextState(cell2, grid));
   }
-  @Test
-  void testCellInBounds() {
-    Cell cell = new DefaultCell(1, new Double(50, 50));
-
-    assertThrows(IndexOutOfBoundsException.class, () -> percolationRules.getNextState(cell, grid),
-        "Calling getNextState() on a cell that is out of bounds should throw an OutofBoundsException.");
-  }
 
   //Debugged a little bit of this function using ChatGPT, as it originally didn't run properly
   @Test

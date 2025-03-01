@@ -19,6 +19,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * A view that handles the splash screen that is shown when the program first loads
+ *
+ * @author Owen Jennings
+ * @author Justin Aronwald
+ */
 public class SplashScreenView extends VBox {
 
   private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
@@ -35,11 +41,11 @@ public class SplashScreenView extends VBox {
    *
    * @param mainController: the main controller of this view
    * @param alertField:     the alert field to display messages
-   * @param sidebar:        an instance of the sidebar view that holds a lot of simulation
-   *                        metadata
+   * @param sidebar:        an instance of the sidebar view that holds a lot of simulation metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {
+    super();
     this.myAlertField = alertField;
     myAlertField.setId("splashAlertField");
     this.mySidebarView = sidebar;

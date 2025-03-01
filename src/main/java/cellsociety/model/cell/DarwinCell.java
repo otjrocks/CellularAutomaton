@@ -4,7 +4,13 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DarwinCell extends Cell{
+/**
+ * The cell type used for Darwin simulation
+ *
+ * @author Justin Aronwald
+ */
+public class DarwinCell extends Cell {
+
   private int prevSpecies;
   private int orientation;
   private int curInstructionIndex;
@@ -14,12 +20,13 @@ public class DarwinCell extends Cell{
   /**
    * The default constructor for a Cell
    *
-   * @param state    :    The initial state of a cell, represented as an int. In this case, it represents a species
+   * @param state    :    The initial state of a cell, represented as an int. In this case, it
+   *                 represents a species
    * @param location : The location in the simulation grid represented by a Point2D, where the (x:
    *                 row, y: col) value is the relative location of the cell compared to other cells
    *                 in the grid.
    */
-  public DarwinCell(int state, Point2D location) throws IllegalArgumentException {
+  public DarwinCell(int state, Point2D location) {
     super(state, location);
     this.orientation = 0;
     this.curInstructionIndex = 0;
@@ -30,15 +37,17 @@ public class DarwinCell extends Cell{
   /**
    * Create a Darwin Cell
    *
-   * @param state - The initial state of a cell, represented as an int. In this case, it represents a species
-   * @param location - The location in the simulation grid represented by a Point2D, where the (x:
-   *                 row, y: col) value is the relative location of the cell compared to other cells
-   *                 in the grid.
-   * @param orientation - the initial direction that the cell faces
+   * @param state              - The initial state of a cell, represented as an int. In this case,
+   *                           it represents a species
+   * @param location           - The location in the simulation grid represented by a Point2D, where
+   *                           the (x: row, y: col) value is the relative location of the cell
+   *                           compared to other cells in the grid.
+   * @param orientation        - the initial direction that the cell faces
    * @param infectionCountdown - the number of steps left before a potential infection revers
-   * @param instructions - the list of movement or infection commands
+   * @param instructions       - the list of movement or infection commands
    */
-  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown, List<String> instructions) throws IllegalArgumentException {
+  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown,
+      List<String> instructions) {
     super(state, location);
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
@@ -53,7 +62,8 @@ public class DarwinCell extends Cell{
    * @return - the current instruction that the species will execute
    */
   public String getInstruction() {
-    if (curInstructionIndex < 0 || curInstructionIndex >= instructions.size() || instructions.isEmpty()) {
+    if (curInstructionIndex < 0 || curInstructionIndex >= instructions.size()
+        || instructions.isEmpty()) {
       return "";
     }
     return instructions.get(curInstructionIndex);
@@ -61,7 +71,6 @@ public class DarwinCell extends Cell{
 
   /**
    * Handles incrementing of instructions
-   *
    */
   // had help from ChatGPT to get the logic of looping instructions
   public void nextInstruction() {
@@ -90,7 +99,6 @@ public class DarwinCell extends Cell{
 
   /**
    * Decreases the Infection Countdown
-   *
    */
   public void handleInfectionDecrease() {
     if (infectionCountdown > 0) {
