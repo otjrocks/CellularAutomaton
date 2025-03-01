@@ -26,6 +26,12 @@ public abstract class GetNeighbors {
    */
   public abstract int[][] getDirections(int row, int column);
 
+
+  public int getStepSize() {
+    int[][] directions = getDirections(0, 0);
+    return (directions.length == 8) ? 45 : 90;
+  }
+  
   /**
    * The default constructor of GetNeighbors
    *

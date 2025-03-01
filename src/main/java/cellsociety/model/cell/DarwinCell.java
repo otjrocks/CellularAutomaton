@@ -1,5 +1,6 @@
 package cellsociety.model.cell;
 
+import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,24 +80,53 @@ public class DarwinCell extends Cell {
     }
   }
 
+
   /**
-   * Rotates the current orientation to the left
+   * Rotates the current orientation to the left by a rounded degrees
    *
-   * @param degrees - the degree that the current orientation will rotate by
+   * @param degrees - the degrees to which the orientation will rotate
+   * @param stepSize - the number of directions to look in -- tells the neighbor configuration
    */
-  public void turnLeft(int degrees) {
+  public void turnLeft(int degrees, int stepSize) {
     orientation = (orientation - degrees) % 360;
+    if (orientation < 0) {
+      orientation += 360;
+    }
+    orientation = roundOrientation(orientation, stepSize);
   }
 
   /**
-   * Rotates the current orientation to the right
+   * Rotates the current orientation to the right by a rounded degrees
    *
-   * @param degrees - the degree that the current orientation will rotate by
+   * @param degrees - the degrees to which the orientation will rotate
+   * @param stepSize - the number of directions to look in -- tells the neighbor configuration
    */
-  public void turnRight(int degrees) {
+
+  public void turnRight(int degrees, int stepSize) {
     orientation = (orientation + degrees) % 360;
+    orientation = roundOrientation(orientation, stepSize);
   }
 
+  //Had ChatGPT help with math logic
+  private int roundOrientation(int orientation, int stepSize) {
+    int[] mooreAngles = {0, 45, 90, 135, 180, 225, 270, 315};
+    int[] vonNeumannAngles = {0, 90, 180, 270};
+
+    int[] angles = (stepSize == 8) ? mooreAngles : vonNeumannAngles;
+
+    int closestAngle = angles[0];
+    int minDiff = Math.abs(orientation - closestAngle);
+
+    for (int angle : angles) {
+      int diff = Math.abs(orientation - angle);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestAngle = angle;
+      }
+    }
+
+    return closestAngle;
+  }
   /**
    * Decreases the Infection Countdown
    */
@@ -128,6 +158,33 @@ public class DarwinCell extends Cell {
    */
   public void setCurInstructionIndex(int instructionIndex) {
     this.curInstructionIndex = instructionIndex;
+  }
+
+  /**
+   * Gets the instruction list
+   *
+   * @return - the list of instructions for the species
+   */
+  public List<String> getAllInstructions() {
+    return instructions;
+  }
+
+  /**
+   * Getter for the orientation
+   *
+   * @return - the angle which the species is turned
+   */
+  public int getOrientation() {
+    return orientation;
+  }
+
+  /**
+   * Getter for the infection countdown
+   *
+   * @return - the number of steps left before a potential infection reverse
+   */
+  public int getInfectionCountdown() {
+    return infectionCountdown;
   }
 
 }

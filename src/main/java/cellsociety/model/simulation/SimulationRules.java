@@ -51,6 +51,15 @@ public abstract class SimulationRules {
   }
 
   /**
+   * Get the total amount of directions to look in - the step size
+   *
+   * @return - the number of directions to look towards for each configuration
+   */
+  public int getStepSize() {
+    return myGetNeighbors.getStepSize();
+  }
+
+  /**
    * Set the parameters for the current simulation rules.
    *
    * @param parameters A map where the key is the parameter name and the value is a parameter value
