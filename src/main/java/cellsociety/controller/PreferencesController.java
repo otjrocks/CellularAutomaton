@@ -3,7 +3,6 @@ package cellsociety.controller;
 import static cellsociety.config.MainConfig.LOGGER;
 
 import java.util.prefs.Preferences;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A controller to handle the saving and accessing of the user's preferences file.

@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import cellsociety.controller.PreferencesController;
@@ -58,13 +59,13 @@ public class MainConfig {
         logMissingMessage(key);
         return "ERROR: MISSING KEY";
       }
-    } catch (Exception e) {
+    } catch (MissingResourceException e) {
       // queries key does not exist in language file or trouble finding messages file
       // return a default string
       try {
         // try displaying to user that key is missing in their preferred language, fallback to english
         return myMessages.getString("MISSING_KEY");
-      } catch (Exception e1) {
+      } catch (MissingResourceException e1) {
         logMissingMessage(e.getMessage());
         return "ERROR: MISSING KEY";
       }
@@ -81,7 +82,8 @@ public class MainConfig {
     try {
       myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
     } catch (Exception e) {
-      throw new IllegalArgumentException("Language file not found");
+      LOGGER.error("Could not load language: {}", language);
+      throw new IllegalArgumentException("Language file not found" + e);
     }
     PreferencesController.setPreference("language", language);
   }

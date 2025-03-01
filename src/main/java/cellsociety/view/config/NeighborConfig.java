@@ -1,9 +1,6 @@
 package cellsociety.view.config;
 
 import cellsociety.utility.FileUtility;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

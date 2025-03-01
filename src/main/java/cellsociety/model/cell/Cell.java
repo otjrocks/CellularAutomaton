@@ -84,11 +84,15 @@ public abstract class Cell {
     if (location == null ||
         location.getX() < 0 ||
         location.getY() < 0 ||
-        location.getX() % 1 != 0 ||
-        location.getY() % 1 != 0) { // Throw exception if
+        validateIsInteger(location)) { // Throw exception if
       throw new IllegalArgumentException(
           "Invalid cell location, location must be represented as a positive integer");
     }
+  }
+
+  private static boolean validateIsInteger(Point2D location) {
+    return location.getX() % 1 != 0 ||
+        location.getY() % 1 != 0;
   }
 
 }
