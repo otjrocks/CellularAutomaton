@@ -447,9 +447,8 @@ public class MainController {
 
   private void createNewMainViewAndUpdateViewContainer() {
     myMainViewContainer.getChildren().clear();
-    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT, myGrid.getRows(),
-        myGrid.getCols(),
-        myGrid, myCellShapeType, mySimulation, this);
+    mySimulationView = new SimulationView(GRID_WIDTH, GRID_HEIGHT,
+        myGrid, myCellShapeType, this);
     mySimulationView.setGridLines(gridLinesEnabled);
     myMainViewContainer.getChildren().add(mySimulationView);
   }

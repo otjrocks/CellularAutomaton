@@ -52,6 +52,7 @@ public class LangtonsLoopsRules extends SimulationRules {
       "702321", "702525", "702720"
   };
   private static final Map<String, Integer> TRANSITIONS_MAP = new HashMap<>();
+  public static final String FORMAT_FIVE_STRINGS_COMBINED = "%s%s%s%s%s";
 
   /**
    * The default constructor of a LangtonsLoop rules.
@@ -104,13 +105,16 @@ public class LangtonsLoopsRules extends SimulationRules {
         // Original
         key,
         // 90 degree rotation
-        "%s%s%s%s%s".formatted(key.charAt(0), key.charAt(2), key.charAt(3), key.charAt(4),
+        FORMAT_FIVE_STRINGS_COMBINED.formatted(key.charAt(0), key.charAt(2), key.charAt(3),
+            key.charAt(4),
             key.charAt(1)),
         // 180 degree rotation
-        "%s%s%s%s%s".formatted(key.charAt(0), key.charAt(3), key.charAt(4), key.charAt(1),
+        FORMAT_FIVE_STRINGS_COMBINED.formatted(key.charAt(0), key.charAt(3), key.charAt(4),
+            key.charAt(1),
             key.charAt(2)),
         // 270 degree rotation
-        "%s%s%s%s%s".formatted(key.charAt(0), key.charAt(4), key.charAt(1), key.charAt(2),
+        FORMAT_FIVE_STRINGS_COMBINED.formatted(key.charAt(0), key.charAt(4), key.charAt(1),
+            key.charAt(2),
             key.charAt(3))
     };
   }

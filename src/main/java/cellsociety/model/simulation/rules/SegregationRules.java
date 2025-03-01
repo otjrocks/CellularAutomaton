@@ -30,6 +30,7 @@ import java.util.Random;
  */
 public class SegregationRules extends SimulationRules {
 
+  public static final String TOLERANCE_THRESHOLD = "toleranceThreshold";
   private final Random RANDOM = new Random();
   private final double myToleranceThreshold;
 
@@ -45,14 +46,14 @@ public class SegregationRules extends SimulationRules {
     if (parameters == null || parameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("toleranceThreshold");
-    myToleranceThreshold = getParameters().get("toleranceThreshold").getDouble();
+    checkMissingParameterAndThrowException(TOLERANCE_THRESHOLD);
+    myToleranceThreshold = getParameters().get(TOLERANCE_THRESHOLD).getDouble();
     validateParameterRange();
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myToleranceThreshold < 0 || myToleranceThreshold > 1) {
-      throwInvalidParameterException("toleranceThreshold");
+      throwInvalidParameterException(TOLERANCE_THRESHOLD);
     }
   }
 
@@ -62,7 +63,7 @@ public class SegregationRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("toleranceThreshold");
+    return List.of(TOLERANCE_THRESHOLD);
   }
 
 
@@ -183,7 +184,7 @@ public class SegregationRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("toleranceThreshold", new Parameter<>(0.3));
+    parameters.put(TOLERANCE_THRESHOLD, new Parameter<>(0.3));
     return parameters;
   }
 
