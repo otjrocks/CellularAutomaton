@@ -55,8 +55,7 @@ public class SugarscapeCell extends Cell {
       int sugarGrowBackRate, int vision, int metabolism) {
     super(state, location);
 
-    if (sugar < 0 || sugarGrowBackRate < 0 || sugarGrowBackInterval < 1 || vision < 0
-        || metabolism < 0) {
+    if (checkParametersArePositive(sugar, sugarGrowBackInterval, sugarGrowBackRate, vision, metabolism)) {
       throw new IllegalArgumentException("All integers must be non-negative.");
     }
 
@@ -67,6 +66,12 @@ public class SugarscapeCell extends Cell {
 
     this.vision = vision;
     this.metabolism = metabolism;
+  }
+
+  private static boolean checkParametersArePositive(int sugar, int sugarGrowBackInterval, int sugarGrowBackRate,
+      int vision, int metabolism) {
+    return sugar < 0 || sugarGrowBackRate < 0 || sugarGrowBackInterval < 1 || vision < 0
+        || metabolism < 0;
   }
 
 

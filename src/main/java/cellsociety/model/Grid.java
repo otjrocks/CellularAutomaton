@@ -1,15 +1,11 @@
 package cellsociety.model;
 
-import cellsociety.model.cell.SugarscapeCell;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.lang.Double;
-
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;

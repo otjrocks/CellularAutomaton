@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.LOGGER;
@@ -57,7 +58,8 @@ public class SimulationConfig {
     } catch (NoSuchMethodException e) {
       // if class does not have getRequiredParameters method, just return empty list (no required parameters)
       return new ArrayList<>();
-    } catch (Exception e) {
+    } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+      LOGGER.warn(e.getMessage());
       throw new RuntimeException(e);
     }
   }
@@ -120,7 +122,7 @@ public class SimulationConfig {
     try {
       String valueStr = myValues.getString(stateKey.toUpperCase());
       return Integer.parseInt(valueStr);
-    } catch (Exception e) {
+    } catch (MissingResourceException | NumberFormatException e) {
       LOGGER.warn(e.getMessage());
       return 0;
     }
@@ -171,8 +173,9 @@ public class SimulationConfig {
       getNeighbors = (GetNeighbors) neighborClass.getConstructor(int.class).newInstance(layers);
       return getNeighbors;
     } catch (ClassNotFoundException e) {
+      LOGGER.warn(e.getMessage());
       throw new IllegalArgumentException(
-          String.format("Invalid neighbor configuration: %s", neighborType));
+          String.format("Invalid neighbor configuration: %s", e));
     }
   }
 
