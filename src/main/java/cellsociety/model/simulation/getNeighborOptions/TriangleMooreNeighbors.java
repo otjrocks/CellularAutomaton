@@ -2,8 +2,18 @@ package cellsociety.model.simulation.getNeighborOptions;
 
 import cellsociety.model.simulation.GetNeighbors;
 
+/**
+ * Implementation of Moore Neighbors for a Triangle grid
+ *
+ * @author Owen Jennings
+ */
 public class TriangleMooreNeighbors extends GetNeighbors {
 
+  /**
+   * The default constructor for a moore neighbors for triangle grid
+   *
+   * @param layers The number of layers of neighbors to include
+   */
   public TriangleMooreNeighbors(int layers) {
     super(layers);
   }
