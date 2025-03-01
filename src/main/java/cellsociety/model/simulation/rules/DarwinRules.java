@@ -26,9 +26,19 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Rules class for the Darwin Simulation
+ * @Author Justin Aronwald
+ */
 public class DarwinRules  extends SimulationRules {
   public static final Logger LOGGER = LogManager.getLogger();
   private Map<String, Instruction> instructionHandlers;
+  private final String IFEMPTY = "IFEMPTY";
+  private final String IFWALL = "IFWALL";
+  private final String IFSAME = "IFSAME";
+  private final String IFENEMY = "IFENEMY";
+  private final String IFRANDOM = "IFRANDOM";
+
   /**
    * The default constructor of a simulation rules class
    *
@@ -56,16 +66,16 @@ public class DarwinRules  extends SimulationRules {
     instructionHandlers.put("RT", new RightInstruction());
     instructionHandlers.put("INFECT", new InfectInstruction());
     instructionHandlers.put("INF", new InfectInstruction());
-    instructionHandlers.put("IFEMPTY", new ConditionalInstruction("IFEMPTY"));
-    instructionHandlers.put("EMP?", new ConditionalInstruction("IFEMPTY"));
-    instructionHandlers.put("IFWALL", new ConditionalInstruction("IFWALL"));
-    instructionHandlers.put("WL?", new ConditionalInstruction("IFWALL"));
-    instructionHandlers.put("IFSAME", new ConditionalInstruction("IFSAME"));
-    instructionHandlers.put("SM?", new ConditionalInstruction("IFSAME"));
-    instructionHandlers.put("IFENEMY", new ConditionalInstruction("IFENEMY"));
-    instructionHandlers.put("EMY?", new ConditionalInstruction("IFENEMY"));
-    instructionHandlers.put("IFRANDOM", new ConditionalInstruction("IFRANDOM"));
-    instructionHandlers.put("RND?", new ConditionalInstruction("IFRANDOM"));
+    instructionHandlers.put(IFEMPTY, new ConditionalInstruction(IFEMPTY));
+    instructionHandlers.put("EMP?", new ConditionalInstruction(IFEMPTY));
+    instructionHandlers.put("IFWALL", new ConditionalInstruction(IFWALL));
+    instructionHandlers.put("WL?", new ConditionalInstruction(IFWALL));
+    instructionHandlers.put(IFSAME, new ConditionalInstruction(IFSAME));
+    instructionHandlers.put("SM?", new ConditionalInstruction(IFSAME));
+    instructionHandlers.put(IFENEMY, new ConditionalInstruction(IFENEMY));
+    instructionHandlers.put("EMY?", new ConditionalInstruction(IFENEMY));
+    instructionHandlers.put(IFRANDOM, new ConditionalInstruction(IFRANDOM));
+    instructionHandlers.put("RND?", new ConditionalInstruction(IFRANDOM));
     instructionHandlers.put("GO", new GoInstruction());
   }
 

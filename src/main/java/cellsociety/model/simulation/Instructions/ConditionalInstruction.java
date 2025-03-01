@@ -87,6 +87,10 @@ public class ConditionalInstruction implements Instruction {
   }
 
   //ChatGPT took my existing logic and made it more simple due to the code being too Complex on the pipeline checker
+
+  /**
+   * Enum that handles the various types of conditional statements
+   */
   private enum ConditionType {
     IFEMPTY((darwinCell, curCell, grid) -> curCell.getState() == State.EMPTY.getValue()),
     IFWALL((darwinCell, curCell, grid) -> grid.isWall(curCell.getRow(), curCell.getCol())),
@@ -96,6 +100,11 @@ public class ConditionalInstruction implements Instruction {
 
     private final ConditionChecker conditionChecker;
 
+    /**
+     * Creates an instance of the enum for the current type of the condition
+     *
+     * @param checker - instance of the functional interface that checks the condition
+     */
     ConditionType(ConditionChecker checker) {
       this.conditionChecker = checker;
     }
@@ -105,8 +114,20 @@ public class ConditionalInstruction implements Instruction {
     }
   }
 
+  /**
+   * A functional interface that checks and validates the condition
+   */
   @FunctionalInterface
   private interface ConditionChecker {
+
+    /**
+     * Method to check whether or not the condition is validated
+     *
+     * @param darwinCell - the cell that the instruction is executed on
+     * @param curCell - the current cell that is being compared to the darwinCell
+     * @param grid - the collection of cell objects
+     * @return - a boolean on whether the condition passed
+     */
     boolean check(DarwinCell darwinCell, Cell curCell, Grid grid);
   }
 
