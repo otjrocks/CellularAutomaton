@@ -24,6 +24,12 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class ForagingAntsRules extends SimulationRules {
 
+  public static final String PHEROMONE_DECAY_RATE = "pheromoneDecayRate";
+  public static final String ANT_REPRODUCTION_TIME = "antReproductionTime";
+  public static final String MAX_PHEROMONE_AMOUNT = "maxPheromoneAmount";
+  public static final String NEW_ANTS_NUM = "newAntsNum";
+  public static final String HOME = "home";
+  public static final String FOOD = "food";
   private final Random random = new Random();
   private final double myPheromoneDecayRate;
   private final int myAntReproductionTime;
@@ -48,14 +54,14 @@ public class ForagingAntsRules extends SimulationRules {
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("pheromoneDecayRate");
-    checkMissingParameterAndThrowException("antReproductionTime");
-    checkMissingParameterAndThrowException("maxPheromoneAmount");
-    checkMissingParameterAndThrowException("newAntsNum");
-    myPheromoneDecayRate = getParameters().get("pheromoneDecayRate").getDouble();
-    myAntReproductionTime = getParameters().get("antReproductionTime").getInteger();
-    myMaxPheromoneAmount = getParameters().get("maxPheromoneAmount").getDouble();
-    myNewAntsNum = getParameters().get("newAntsNum").getInteger();
+    checkMissingParameterAndThrowException(PHEROMONE_DECAY_RATE);
+    checkMissingParameterAndThrowException(ANT_REPRODUCTION_TIME);
+    checkMissingParameterAndThrowException(MAX_PHEROMONE_AMOUNT);
+    checkMissingParameterAndThrowException(NEW_ANTS_NUM);
+    myPheromoneDecayRate = getParameters().get(PHEROMONE_DECAY_RATE).getDouble();
+    myAntReproductionTime = getParameters().get(ANT_REPRODUCTION_TIME).getInteger();
+    myMaxPheromoneAmount = getParameters().get(MAX_PHEROMONE_AMOUNT).getDouble();
+    myNewAntsNum = getParameters().get(NEW_ANTS_NUM).getInteger();
     validateParameterRange();
   }
 
@@ -65,21 +71,21 @@ public class ForagingAntsRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("pheromoneDecayRate", "maxPheromoneAmount", "antReproductionTime", "newAntsNum");
+    return List.of(PHEROMONE_DECAY_RATE, MAX_PHEROMONE_AMOUNT, ANT_REPRODUCTION_TIME, NEW_ANTS_NUM);
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myPheromoneDecayRate < 0) {
-      throwInvalidParameterException("pheromoneDecayRate");
+      throwInvalidParameterException(PHEROMONE_DECAY_RATE);
     }
     if (myAntReproductionTime < 0) {
-      throwInvalidParameterException("antReproductionTime");
+      throwInvalidParameterException(ANT_REPRODUCTION_TIME);
     }
     if (myMaxPheromoneAmount < 0) {
-      throwInvalidParameterException("maxPheromoneAmount");
+      throwInvalidParameterException(MAX_PHEROMONE_AMOUNT);
     }
     if (myNewAntsNum < 0) {
-      throwInvalidParameterException("newAntsNum");
+      throwInvalidParameterException(NEW_ANTS_NUM);
     }
   }
 
@@ -91,9 +97,9 @@ public class ForagingAntsRules extends SimulationRules {
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
 
-    parameters.put("pheromoneDecayRate", new Parameter<>(0.2));
-    parameters.put("antReproductionTime", new Parameter<>(10));
-    parameters.put("maxPheromoneAmount", new Parameter<>(3));
+    parameters.put(PHEROMONE_DECAY_RATE, new Parameter<>(0.2));
+    parameters.put(ANT_REPRODUCTION_TIME, new Parameter<>(10));
+    parameters.put(MAX_PHEROMONE_AMOUNT, new Parameter<>(3));
 
     return parameters;
   }
@@ -248,7 +254,7 @@ public class ForagingAntsRules extends SimulationRules {
       Set<Point2D> occupiedCells,
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
-        emptyNeighbors, "home");
+        emptyNeighbors, HOME);
     addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
     occupiedCells.add(nextLocation.getLocation());
 
@@ -261,7 +267,7 @@ public class ForagingAntsRules extends SimulationRules {
       Set<Point2D> occupiedCells,
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
-        emptyNeighbors, "food");
+        emptyNeighbors, FOOD);
     addUpdatedAnt(ant, nextLocation, grid, nextStates, false);
     occupiedCells.add(nextLocation.getLocation());
 
@@ -284,7 +290,7 @@ public class ForagingAntsRules extends SimulationRules {
       Set<Point2D> occupiedCells,
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
-        emptyNeighbors, "food");
+        emptyNeighbors, FOOD);
     addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
     occupiedCells.add(nextLocation.getLocation());
 
@@ -297,7 +303,7 @@ public class ForagingAntsRules extends SimulationRules {
       Set<Point2D> occupiedCells,
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
-        emptyNeighbors, "home");
+        emptyNeighbors, HOME);
     addUpdatedAnt(ant, nextLocation, grid, nextStates, true);
     occupiedCells.add(nextLocation.getLocation());
 
@@ -317,7 +323,7 @@ public class ForagingAntsRules extends SimulationRules {
 
     List<Cell> neighbors = getNeighbors(antCell, grid);
     double maxNeighborPheromone = 0;
-    int state = (type.equals("home")) ? State.NEST.value : State.FOOD.value;
+    int state = (type.equals(HOME)) ? State.NEST.value : State.FOOD.value;
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() == state) {
         return myMaxPheromoneAmount;
@@ -335,7 +341,7 @@ public class ForagingAntsRules extends SimulationRules {
   private static double updateMaxNeighborPheromone(String type, ForagingAntsCell neighbor,
       double maxNeighborPheromone) {
     double currentNeighborPheromoneValue =
-        (type.equals("home")) ? neighbor.getHomePheromone() : neighbor.getFoodPheromone();
+        (type.equals(HOME)) ? neighbor.getHomePheromone() : neighbor.getFoodPheromone();
     maxNeighborPheromone = Math.max(maxNeighborPheromone, currentNeighborPheromoneValue);
     return maxNeighborPheromone;
   }
@@ -344,7 +350,7 @@ public class ForagingAntsRules extends SimulationRules {
       double maxNeighborPheromone) {
     double desiredPheromone = maxNeighborPheromone - 2;
     double currentPheromoneValue =
-        (type.equals("home")) ? antCell.getHomePheromone() : antCell.getFoodPheromone();
+        (type.equals(HOME)) ? antCell.getHomePheromone() : antCell.getFoodPheromone();
     double pheromoneDifference = desiredPheromone - currentPheromoneValue;
 
     return currentPheromoneValue + pheromoneDifference;
@@ -397,7 +403,7 @@ public class ForagingAntsRules extends SimulationRules {
     for (Cell neighbor : emptyNeighbors) {
       ForagingAntsCell antNeighbor = (ForagingAntsCell) neighbor;
       double pheromoneLevel =
-          (type.equals("home")) ? antNeighbor.getHomePheromone() : antNeighbor.getFoodPheromone();
+          (type.equals(HOME)) ? antNeighbor.getHomePheromone() : antNeighbor.getFoodPheromone();
 
       if (pheromoneLevel > maxPheromone) {
         maxPheromone = pheromoneLevel;
@@ -436,8 +442,8 @@ public class ForagingAntsRules extends SimulationRules {
       List<CellUpdate> nextStates, boolean hasFood) {
     nextStates.add((new CellUpdate(nextLocation.getLocation(),
         new ForagingAntsCell(State.ANT.getValue(), nextLocation.getLocation(),
-            updatePheromone(nextLocation, grid, "home"),
-            updatePheromone(nextLocation, grid, "food"),
+            updatePheromone(nextLocation, grid, HOME),
+            updatePheromone(nextLocation, grid, FOOD),
             ant.getHealth(), hasFood, myMaxPheromoneAmount))));
   }
 

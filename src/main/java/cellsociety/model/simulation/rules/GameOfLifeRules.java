@@ -21,9 +21,10 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class GameOfLifeRules extends SimulationRules {
 
+  public static final String RULE_STRING = "ruleString";
   private String myRuleString;
-  private ArrayList<Integer> birthValues;
-  private ArrayList<Integer> surviveValues;
+  private List<Integer> birthValues;
+  private List<Integer> surviveValues;
 
   /**
    * A default constructor for Game Of Life
@@ -41,8 +42,8 @@ public class GameOfLifeRules extends SimulationRules {
       birthValues = new ArrayList<>(List.of(3));
       surviveValues = new ArrayList<>(Arrays.asList(2, 3));
     } else {
-      checkMissingParameterAndThrowException("ruleString");
-      myRuleString = getParameters().get("ruleString").getString();
+      checkMissingParameterAndThrowException(RULE_STRING);
+      myRuleString = getParameters().get(RULE_STRING).getString();
       validateParameterRange();
       initializeBSValues();
     }
@@ -53,7 +54,7 @@ public class GameOfLifeRules extends SimulationRules {
       myRuleString = "B3/S23";
     }
     if (!myRuleString.contains("/") || !myRuleString.contains("B") || !myRuleString.contains("S")) {
-      throwInvalidParameterException("ruleString");
+      throwInvalidParameterException(RULE_STRING);
     }
   }
 
@@ -63,7 +64,7 @@ public class GameOfLifeRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("ruleString");
+    return List.of(RULE_STRING);
   }
 
 

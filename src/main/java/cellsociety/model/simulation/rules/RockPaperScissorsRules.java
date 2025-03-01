@@ -26,6 +26,8 @@ import java.util.Map;
  */
 public class RockPaperScissorsRules extends SimulationRules {
 
+  public static final String NUM_STATES = "numStates";
+  public static final String MIN_THRESHOLD = "minThreshold";
   private final int myNumStates;
   private final double myMinThreshold;
 
@@ -41,10 +43,10 @@ public class RockPaperScissorsRules extends SimulationRules {
     if (myParameters == null || myParameters.isEmpty()) {
       this.setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("numStates");
-    checkMissingParameterAndThrowException("minThreshold");
-    myNumStates = getParameters().get("numStates").getInteger();
-    myMinThreshold = getParameters().get("minThreshold").getDouble();
+    checkMissingParameterAndThrowException(NUM_STATES);
+    checkMissingParameterAndThrowException(MIN_THRESHOLD);
+    myNumStates = getParameters().get(NUM_STATES).getInteger();
+    myMinThreshold = getParameters().get(MIN_THRESHOLD).getDouble();
     validateParameterRange();
   }
 
@@ -54,15 +56,15 @@ public class RockPaperScissorsRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("minThreshold", "numStates");
+    return List.of(MIN_THRESHOLD, NUM_STATES);
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myNumStates < 1) {
-      throwInvalidParameterException("numStates");
+      throwInvalidParameterException(NUM_STATES);
     }
     if (myMinThreshold < 0 || myMinThreshold > 1) {
-      throwInvalidParameterException("minThreshold");
+      throwInvalidParameterException(MIN_THRESHOLD);
     }
   }
 
@@ -145,8 +147,8 @@ public class RockPaperScissorsRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("minThreshold", new Parameter<>(0.5));
-    parameters.put("numStates", new Parameter<>(3));
+    parameters.put(MIN_THRESHOLD, new Parameter<>(0.5));
+    parameters.put(NUM_STATES, new Parameter<>(3));
     return parameters;
   }
 

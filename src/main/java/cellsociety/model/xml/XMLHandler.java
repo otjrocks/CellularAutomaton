@@ -35,6 +35,7 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
+  public static final String RULE_STRING = "ruleString";
   private static int myGridHeight;
   private static int myGridWidth;
   private static Grid myGrid;
@@ -160,8 +161,8 @@ public class XMLHandler {
 
   private void handleParameterElement(Element paramElement) {
     for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-      if (paramString.equals("ruleString")) {
-        checkAndLoadRulestring(paramElement);
+      if (paramString.equals(RULE_STRING)) {
+        checkAndLoadRuleString(paramElement);
       } else {
         checkAndLoadParameter(paramElement, paramString);
       }
@@ -184,10 +185,10 @@ public class XMLHandler {
     }
   }
 
-  private void checkAndLoadRulestring(Element paramElement) {
+  private void checkAndLoadRuleString(Element paramElement) {
     try {
-      String paramString = paramElement.getElementsByTagName("ruleString").item(0).getTextContent();
-      myParameters.put("ruleString", new Parameter<>(paramString));
+      String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0).getTextContent();
+      myParameters.put(RULE_STRING, new Parameter<>(paramString));
     } catch (Exception e) {
       myParameters.clear();
     }

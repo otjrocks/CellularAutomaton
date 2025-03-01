@@ -39,18 +39,17 @@ public class SimulationView extends Group {
    * @param height:        height of simulation view
    * @param grid:          initial grid of the simulation view
    * @param cellShapeType: the type of the cell shape to create a grid with
-   * @param simulation:    initial simulation of the simulation view
    */
-  public SimulationView(int width, int height, int numRows, int numCols, Grid grid,
-      CellShapeType cellShapeType, Simulation simulation, MainController mainController) {
+  public SimulationView(int width, int height, Grid grid, CellShapeType cellShapeType,
+      MainController mainController) {
     super();
     myWidth = width;
     myHeight = height;
-    myNumRows = numRows;
-    myNumColumns = numCols;
+    myNumRows = mainController.getGridRows();
+    myNumColumns = mainController.getGridCols();
     myMainController = mainController;
-    mySimulation = simulation;
-    initializeGrid(width, height, numRows, numCols, grid, cellShapeType, mainController);
+    mySimulation = mainController.getSimulation();
+    initializeGrid(width, height, myNumRows, myNumColumns, grid, cellShapeType, mainController);
   }
 
   private void initializeGrid(int width, int height, int numRows, int numCols, Grid grid,

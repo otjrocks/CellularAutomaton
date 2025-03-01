@@ -26,6 +26,8 @@ import java.util.Random;
  */
 public class SpreadingOfFireRules extends SimulationRules {
 
+  public static final String GROW_IN_EMPTY_CELL = "growInEmptyCell";
+  public static final String IGNITION_WITHOUT_NEIGHBORS = "ignitionWithoutNeighbors";
   private final Random random = new Random();
   private final double myGrowthInEmptyCell;
   private final double myIgnitionWithoutNeighbors;
@@ -42,19 +44,19 @@ public class SpreadingOfFireRules extends SimulationRules {
     if (parameters == null || parameters.isEmpty()) {
       setParameters(setDefaultParameters());
     }
-    checkMissingParameterAndThrowException("growInEmptyCell");
-    checkMissingParameterAndThrowException("ignitionWithoutNeighbors");
-    myGrowthInEmptyCell = getParameters().get("growInEmptyCell").getDouble();
-    myIgnitionWithoutNeighbors = getParameters().get("ignitionWithoutNeighbors").getDouble();
+    checkMissingParameterAndThrowException(GROW_IN_EMPTY_CELL);
+    checkMissingParameterAndThrowException(IGNITION_WITHOUT_NEIGHBORS);
+    myGrowthInEmptyCell = getParameters().get(GROW_IN_EMPTY_CELL).getDouble();
+    myIgnitionWithoutNeighbors = getParameters().get(IGNITION_WITHOUT_NEIGHBORS).getDouble();
     validateParameterRange();
   }
 
   private void validateParameterRange() throws InvalidParameterException {
     if (myGrowthInEmptyCell < 0 || myGrowthInEmptyCell > 1) {
-      throwInvalidParameterException("growInEmptyCell");
+      throwInvalidParameterException(GROW_IN_EMPTY_CELL);
     }
     if (myIgnitionWithoutNeighbors < 0 || myIgnitionWithoutNeighbors > 1) {
-      throwInvalidParameterException("ignitionWithoutNeighbors");
+      throwInvalidParameterException(IGNITION_WITHOUT_NEIGHBORS);
     }
   }
 
@@ -64,7 +66,7 @@ public class SpreadingOfFireRules extends SimulationRules {
    * @return A list of strings representing the required parameter keys for this simulation
    */
   public static List<String> getRequiredParameters() {
-    return List.of("growInEmptyCell", "ignitionWithoutNeighbors");
+    return List.of(GROW_IN_EMPTY_CELL, IGNITION_WITHOUT_NEIGHBORS);
   }
 
   /**
@@ -131,8 +133,8 @@ public class SpreadingOfFireRules extends SimulationRules {
 
   private Map<String, Parameter<?>> setDefaultParameters() {
     Map<String, Parameter<?>> parameters = new HashMap<>();
-    parameters.put("ignitionWithoutNeighbors", new Parameter<>("0.15"));
-    parameters.put("growInEmptyCell", new Parameter<>("0.1"));
+    parameters.put(IGNITION_WITHOUT_NEIGHBORS, new Parameter<>("0.15"));
+    parameters.put(GROW_IN_EMPTY_CELL, new Parameter<>("0.1"));
     return parameters;
   }
 }
