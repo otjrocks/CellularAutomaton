@@ -22,7 +22,6 @@ import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.config.SimulationConfig;
@@ -377,37 +376,43 @@ public class MainController {
     attemptGettingGridAndSimulationFromXMLHandler(filePath);
   }
 
+  // I used ChatGPT to assist in refactoring this method
   private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       attemptUpdateFromFilePath(filePath);
-    } catch (SAXException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
-      throw e;
-    } catch (ParserConfigurationException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_PARSER"));
-      throw e;
-    } catch (IOException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_IO"));
-      throw e;
-    } catch (NumberFormatException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_NUMBER"));
-      throw e;
-    } catch (NullPointerException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_MISSING"));
-      throw e;
-    } catch (GridException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_GRID"));
-      throw e;
-    } catch (InvalidStateException e) {
-      mySidebarView.flashWarning(getMessage("ERROR_STATE"));
-      throw e;
     } catch (Exception e) {
-      mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
-      LOGGER.warn(getMessage("ERROR_GENERAL"), e);
+      handleGridAndSimulationCreationExceptions(e);
       throw e;
     }
   }
+
+  private void handleGridAndSimulationCreationExceptions(Exception e) {
+    String errorMessageKey = getErrorMessageKey(e);
+    mySidebarView.flashWarning(getMessage(errorMessageKey));
+    LOGGER.warn(getMessage(errorMessageKey), e);
+  }
+
+  private static String getErrorMessageKey(Exception e) {
+    String errorMessageKey = "ERROR_GENERAL";
+    if (e instanceof SAXException) {
+      errorMessageKey = "ERROR_FORMAT";
+    } else if (e instanceof ParserConfigurationException) {
+      errorMessageKey = "ERROR_PARSER";
+    } else if (e instanceof IOException) {
+      errorMessageKey = "ERROR_IO";
+    } else if (e instanceof NumberFormatException) {
+      errorMessageKey = "ERROR_NUMBER";
+    } else if (e instanceof NullPointerException) {
+      errorMessageKey = "ERROR_MISSING";
+    } else if (e instanceof GridException) {
+      errorMessageKey = "ERROR_GRID";
+    } else if (e instanceof InvalidStateException) {
+      errorMessageKey = "ERROR_STATE";
+    }
+    return errorMessageKey;
+  }
+
 
   private void attemptUpdateFromFilePath(String filePath)
       throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
