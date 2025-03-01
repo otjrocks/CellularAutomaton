@@ -133,6 +133,17 @@ public class Grid {
   }
 
   /**
+   * Checks if the current locations is a boundary/wall for a simulation
+   *
+   * @param row - the row of the cell you are checking
+   * @param col - the col of the cell you are checking
+   * @return - a boolean representation on whether it is a wall.
+   */
+  public boolean isWall(int row, int col) {
+    return row < 0 || row >= myNumRows || col < 0 || col >= myNumCols;
+  }
+
+  /**
    * Attempt to update a cell in the grid
    *
    * @param cell the cell you which to update. This will update the grid with the cell provided

@@ -80,11 +80,19 @@ public class DarwinRules  extends SimulationRules {
       case "INFECT":
         handleInfection(darwinCell, grid, Integer.parseInt(splitInstructions[1]), updates);
       case "IFEMPTY":
-        handleConditional(darwinCell, grid, splitInstructions[1], grid.isEmpty(darwinCell.getFrontLocation()), updates);
+      case "EMP?":
+        handleConditional(darwinCell, grid, splitInstructions[1], 0);
+      case "IFWALL":
+      case "WL?":
+        handleConditional(darwinCell, grid, splitInstructions[1], 1);
+      case "IFSAME":
+      case "SM?":
+        handleConditional(darwinCell, grid, splitInstructions[1], 2);
       case "IFENEMY":
-        handleConditional(darwinCell, grid, splitInstructions[1], grid.isEnemy(darwinCell.getFrontLocation(), darwinCell), updates);
+      case "EMY?"
+        handleConditional(darwinCell, grid, splitInstructions[1], 3);
       case "GO":
-        handleGo(darwinCell, Integer.parseInt(splitInstructions[1]), updates);
+        handleGo(darwinCell, Integer.parseInt(splitInstructions[1]));
       default:
         System.out.println("Unknown instruction: " + instruction);
     }
@@ -108,30 +116,82 @@ public class DarwinRules  extends SimulationRules {
       curLocation = new Point2D.Double(newRow, newCol);
     }
 
+    updateGridForMovement(darwinCell, updates, curLocation, newRow, newCol);
+  }
+
+  private static void updateGridForMovement(DarwinCell darwinCell, List<CellUpdate> updates,
+      Point2D curLocation, int newRow, int newCol) {
     if (!curLocation.equals(darwinCell.getLocation())) {
       Cell newEmpty = new DarwinCell(State.EMPTY.getValue(), darwinCell.getLocation());
       Cell newCell = new DarwinCell(darwinCell.getState(), new Double(newRow, newCol),
           darwinCell.getOrientation(), darwinCell.getInfectionCountdown(), darwinCell.getAllInstructions());
 
       updates.add(new CellUpdate(darwinCell.getLocation(),  newEmpty));
-      updates.add(new CellUpdate(new Point2D.Double(newRow, newCol), newCell));
-
+      updates.add(new CellUpdate(new Double(newRow, newCol), newCell));
     }
   }
 
-  private int handleGo(DarwinCell darwinCell, int instructionIndex) {
+  private void handleGo(DarwinCell darwinCell, int instructionIndex) {
     darwinCell.setCurInstructionIndex(instructionIndex);
-    return darwinCell.getState();
   }
 
-  private int handleConditional(DarwinCell darwinCell, Grid grid, String instruction, boolean condition) {
-    if (condition) {
-      return handleGo(darwinCell, Integer.parseInt(instruction));
+  private void handleConditional(DarwinCell darwinCell, Grid grid, String nextInstruction, int conditionInt) {
+    Point2D direction = darwinCell.getFrontDirection();
+    int newRow = darwinCell.getRow();
+    int newCol = darwinCell.getCol();
+    int layers = getLayers();
+
+    for (int i = 0; i < layers; i++) {
+      newRow += (int) direction.getX();
+      newCol += (int) direction.getY();
+
+      Cell curCell = grid.getCell(newRow, newCol);
+      if (curCell == null) {
+        continue;
+      }
+
+      if (checkIfConditionIsMet(darwinCell, curCell, grid, conditionInt)) {
+        darwinCell.setCurInstructionIndex(conditionInt);
+      }
     }
-    return darwinCell.getState();
   }
 
+  private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid, int conditionInt) {
+    switch (conditionInt) {
+      case 0:
+        return curCell.getState() == State.EMPTY.getValue();
+      case 1:
+        return grid.isWall(curCell.getRow(), curCell.getCol());
+      case 2:
+        return curCell.getState() == darwinCell.getState();
+      case 3:
+          return curCell.getState() != State.EMPTY.getValue() && curCell.getState() != darwinCell.getState();
 
+    }
+  }
+
+  private void handleInfection(DarwinCell darwinCell, Grid grid, int newInfectionCountdown, List<CellUpdate> updates) {
+    Point2D direction =  darwinCell.getFrontDirection();
+
+    int newRow = darwinCell.getRow();
+    int newCol = darwinCell.getCol();
+    int layers = getLayers();
+
+    for (int i = 0; i < layers; i++) {
+      newRow += (int) direction.getX();
+      newCol += (int) direction.getY();
+
+      Cell curCell = grid.getCell(newRow, newCol);
+      if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState()) {
+        continue;
+      }
+
+      DarwinCell speciesCell = (DarwinCell) curCell;
+
+      Cell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
+      updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
+    }
+  }
 
   /**
    * @return

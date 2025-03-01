@@ -51,6 +51,15 @@ public abstract class SimulationRules {
   }
 
   /**
+   * Getter for the layers of the neighbor configuration
+   *
+   * @return the number of layers to look for in a direction
+   */
+  public int getLayers() {
+    return myGetNeighbors.getLayers();
+  }
+
+  /**
    * Get the total amount of directions to look in - the step size
    *
    * @return - the number of directions to look towards for each configuration
