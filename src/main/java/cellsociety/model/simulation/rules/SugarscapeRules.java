@@ -160,17 +160,12 @@ public class SugarscapeRules extends SimulationRules {
       List<Cell> neighbors,
       int maxSugar, int minDistance, SugarscapeCell biggestPatch) {
     for (Cell cell : neighbors) {
-      if (cell.getState() != State.PATCHES.getValue()) {
-        continue;
-      }
-
-      int distance = calculateDistance(agentCell, cell);
-      if (distance > agentCell.getVision()) {
+      Integer distance = calculateDistanceFromAgentToPath(agentCell, cell);
+      if (distance == null) { // if cell is a path cell or distance is further than cell vision
         continue;
       }
 
       SugarscapeCell patch = (SugarscapeCell) cell;
-
       if (patch.getSugar() > maxSugar || (patch.getSugar() == maxSugar && distance < minDistance)) {
         maxSugar = patch.getSugar();
         minDistance = distance;
@@ -178,6 +173,18 @@ public class SugarscapeRules extends SimulationRules {
       }
     }
     return biggestPatch;
+  }
+
+  private Integer calculateDistanceFromAgentToPath(SugarscapeCell agentCell, Cell cell) {
+    if (cell.getState() != State.PATCHES.getValue()) {
+      return null;
+    }
+
+    int distance = calculateDistance(agentCell, cell);
+    if (distance > agentCell.getVision()) {
+      return null;
+    }
+    return distance;
   }
 
   private int calculateDistance(Cell a, Cell b) {
