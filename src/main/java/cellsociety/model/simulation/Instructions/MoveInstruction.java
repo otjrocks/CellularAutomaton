@@ -11,6 +11,10 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Move Instruction class to handle movement of a cell in Darwin Simulation
+ */
+
 public class MoveInstruction implements Instruction {
 
   /**

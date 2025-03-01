@@ -7,6 +7,9 @@ import cellsociety.model.simulation.Instruction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Left Instruction class to handle turning left in Darwin Simulation
+ */
 public class LeftInstruction implements Instruction {
   private int stepSize; // Store step size to avoid passing it every time
 

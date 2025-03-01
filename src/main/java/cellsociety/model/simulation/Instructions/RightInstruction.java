@@ -7,6 +7,10 @@ import cellsociety.model.simulation.Instruction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Right Instruction class to handle turning right in Darwin Simulation
+ */
+
 public class RightInstruction implements Instruction {
   private int stepSize; // Store step size to avoid passing it every time
 

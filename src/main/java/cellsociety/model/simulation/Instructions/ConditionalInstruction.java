@@ -11,11 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Conditional Instruction class to handle the various conditionals in Darwin Simulation
+ */
 public class ConditionalInstruction implements Instruction {
   private int layers;
   private final String conditionType;
   private final Random random = new Random();
 
+  /**
+   * Creates one instance of a Conditional Instruction
+   *
+   * @param conditionType - the string name of the condition
+   */
   public ConditionalInstruction(String conditionType) {
     this.conditionType = conditionType;
   }
@@ -75,14 +83,31 @@ public class ConditionalInstruction implements Instruction {
   }
 
   private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid) {
-    return switch (conditionType) {
-      case "IFEMPTY", "EMP?" -> curCell.getState() == State.EMPTY.getValue();
-      case "IFWALL", "WL?" -> grid.isWall(curCell.getRow(), curCell.getCol());
-      case "IFSAME", "SM?" -> curCell.getState() == darwinCell.getState();
-      case "IFENEMY", "EMY?" -> curCell.getState() != State.EMPTY.getValue()
-          && curCell.getState() != darwinCell.getState();
-      default -> false;
-    };
+    return ConditionType.valueOf(conditionType).check(darwinCell, curCell, grid);
+  }
+
+  //ChatGPT took my existing logic and made it more simple due to the code being too Complex on the pipeline checker
+  private enum ConditionType {
+    IFEMPTY((darwinCell, curCell, grid) -> curCell.getState() == State.EMPTY.getValue()),
+    IFWALL((darwinCell, curCell, grid) -> grid.isWall(curCell.getRow(), curCell.getCol())),
+    IFSAME((darwinCell, curCell, grid) -> curCell.getState() == darwinCell.getState()),
+    IFENEMY((darwinCell, curCell, grid) -> curCell.getState() != State.EMPTY.getValue()
+        && curCell.getState() != darwinCell.getState());
+
+    private final ConditionChecker conditionChecker;
+
+    ConditionType(ConditionChecker checker) {
+      this.conditionChecker = checker;
+    }
+
+    public boolean check(DarwinCell darwinCell, Cell curCell, Grid grid) {
+      return conditionChecker.check(darwinCell, curCell, grid);
+    }
+  }
+
+  @FunctionalInterface
+  private interface ConditionChecker {
+    boolean check(DarwinCell darwinCell, Cell curCell, Grid grid);
   }
 
   /**
@@ -90,7 +115,7 @@ public class ConditionalInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-
+  //unneeded here
   }
 
   /**

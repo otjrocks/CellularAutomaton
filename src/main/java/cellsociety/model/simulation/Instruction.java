@@ -5,6 +5,10 @@ import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import java.util.List;
 
+/**
+ * Interface defined to create an Instruction instance.
+ * Handles all of the different Instructions needed for a Darwin Simulation
+ */
 public interface Instruction {
 
   /**

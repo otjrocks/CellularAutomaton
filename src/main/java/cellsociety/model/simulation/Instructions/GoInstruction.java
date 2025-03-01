@@ -7,6 +7,9 @@ import cellsociety.model.simulation.Instruction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Go Instruction class to handle setting a new instruction index
+ */
 public class GoInstruction implements Instruction {
 
   /**

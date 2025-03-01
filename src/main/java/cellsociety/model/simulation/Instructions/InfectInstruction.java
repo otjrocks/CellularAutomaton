@@ -10,6 +10,10 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Infect Instruction class to handle infections in Darwin Simulation
+ */
+
 public class InfectInstruction implements Instruction {
   private int layers;
   /**
