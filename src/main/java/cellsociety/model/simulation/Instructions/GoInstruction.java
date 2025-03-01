@@ -1,8 +1,10 @@
 package cellsociety.model.simulation.Instructions;
 
 import cellsociety.model.Grid;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoInstruction implements Instruction {
@@ -13,9 +15,14 @@ public class GoInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public void executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
     int instructionIndex = Integer.parseInt(arguments.get(1));
     darwinCell.setCurInstructionIndex(instructionIndex);
+
+    List<CellUpdate> updates = new ArrayList<>();
+    updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
+    return updates;
+
   }
 
   /**

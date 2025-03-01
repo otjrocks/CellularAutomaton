@@ -2,10 +2,12 @@ package cellsociety.model.simulation.Instructions;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InfectInstruction implements Instruction {
@@ -16,11 +18,12 @@ public class InfectInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public void executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
     Point2D direction =  darwinCell.getFrontDirection();
     int newInfectionCountdown = Integer.parseInt(arguments.get(1));
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
+    List<CellUpdate> updates = new ArrayList<>();
 
     for (int i = 0; i < layers; i++) {
       newRow += (int) direction.getX();
@@ -34,8 +37,9 @@ public class InfectInstruction implements Instruction {
       DarwinCell speciesCell = (DarwinCell) curCell;
 
       Cell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
-      grid.updateCell(infectedCell);
+      updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
+    return updates;
   }
 
 

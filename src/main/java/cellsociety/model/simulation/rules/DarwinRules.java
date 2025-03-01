@@ -5,12 +5,21 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.Instruction;
+import cellsociety.model.simulation.Instructions.ConditionalInstruction;
+import cellsociety.model.simulation.Instructions.GoInstruction;
+import cellsociety.model.simulation.Instructions.InfectInstruction;
+import cellsociety.model.simulation.Instructions.LeftInstruction;
+import cellsociety.model.simulation.Instructions.MoveInstruction;
+import cellsociety.model.simulation.Instructions.RightInstruction;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DarwinRules  extends SimulationRules {
   public static final Logger LOGGER = LogManager.getLogger();
+  private Map<String, Instruction> instructionHandlers;
   /**
    * The default constructor of a simulation rules class
    *
@@ -33,6 +43,30 @@ public class DarwinRules  extends SimulationRules {
   public DarwinRules(Map<String, Parameter<?>> parameters,
       GetNeighbors getNeighbors) throws InvalidParameterException {
     super(parameters, getNeighbors);
+    initializeInstructionHandler();
+  }
+
+  private void initializeInstructionHandler() {
+    instructionHandlers = new HashMap<>();
+    instructionHandlers.put("MOVE", new MoveInstruction());
+    instructionHandlers.put("MV", new MoveInstruction());
+    instructionHandlers.put("LEFT", new LeftInstruction());
+    instructionHandlers.put("LT", new LeftInstruction());
+    instructionHandlers.put("RIGHT", new RightInstruction());
+    instructionHandlers.put("RT", new RightInstruction());
+    instructionHandlers.put("INFECT", new InfectInstruction());
+    instructionHandlers.put("INF", new InfectInstruction());
+    instructionHandlers.put("IFEMPTY", new ConditionalInstruction("IFEMPTY"));
+    instructionHandlers.put("EMP?", new ConditionalInstruction("IFEMPTY"));
+    instructionHandlers.put("IFWALL", new ConditionalInstruction("IFWALL"));
+    instructionHandlers.put("WL?", new ConditionalInstruction("IFWALL"));
+    instructionHandlers.put("IFSAME", new ConditionalInstruction("IFSAME"));
+    instructionHandlers.put("SM?", new ConditionalInstruction("IFSAME"));
+    instructionHandlers.put("IFENEMY", new ConditionalInstruction("IFENEMY"));
+    instructionHandlers.put("EMY?", new ConditionalInstruction("IFENEMY"));
+    instructionHandlers.put("IFRANDOM", new ConditionalInstruction("IFRANDOM"));
+    instructionHandlers.put("RND?", new ConditionalInstruction("IFRANDOM"));
+    instructionHandlers.put("GO", new GoInstruction());
   }
 
   @Override
@@ -43,8 +77,20 @@ public class DarwinRules  extends SimulationRules {
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
       DarwinCell darwinCell = (DarwinCell) cell;
-      String curInstruction = darwinCell.getInstruction();
-      handleInstruction(darwinCell, curInstruction, grid, updates);
+      List<String> arguments = new ArrayList<>(Arrays.asList(darwinCell.getInstruction().split(" ")));
+
+      if (arguments.isEmpty()) {
+        LOGGER.warn("Empty instruction for cell at {}", darwinCell.getLocation());
+        continue;
+      }
+
+      Instruction instruction = instructionHandlers.get(arguments.getFirst());
+      if (instruction != null) {
+        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid);
+        updates.addAll(instructionUpdates);
+      } else {
+        LOGGER.warn("No instruction handler found for {}", arguments.getFirst());
+      }
     }
 
     return updates;
@@ -63,139 +109,6 @@ public class DarwinRules  extends SimulationRules {
      */
     public int getValue() {
       return ordinal();
-    }
-  }
-
-  private void handleInstruction(DarwinCell darwinCell, String instruction, Grid grid, List<CellUpdate> updates) {
-    String[] splitInstructions = instruction.split(" ");
-    String command = splitInstructions[0];
-
-    switch (command) {
-      case "MOVE":
-        handleMove(darwinCell, grid, Integer.parseInt(splitInstructions[1]), updates);
-        break;
-      case "LEFT":
-        darwinCell.turnLeft(Integer.parseInt(splitInstructions[1]), getStepSize());
-        break;
-      case "RIGHT":
-        darwinCell.turnRight(Integer.parseInt(splitInstructions[1]), getStepSize());
-        break;
-      case "INFECT":
-        handleInfection(darwinCell, grid, Integer.parseInt(splitInstructions[1]), updates);
-        break;
-      case "IFEMPTY":
-      case "EMP?":
-        handleConditional(darwinCell, grid, splitInstructions[1], 0);
-        break;
-      case "IFWALL":
-      case "WL?":
-        handleConditional(darwinCell, grid, splitInstructions[1], 1);
-        break;
-      case "IFSAME":
-      case "SM?":
-        handleConditional(darwinCell, grid, splitInstructions[1], 2);
-        break;
-      case "IFENEMY":
-      case "EMY?":
-        handleConditional(darwinCell, grid, splitInstructions[1], 3);
-        break;
-      case "GO":
-        handleGo(darwinCell, Integer.parseInt(splitInstructions[1]));
-        break;
-      default:
-        LOGGER.warn("Unknown instruction: {}", instruction);
-    }
-  }
-
-  private void handleMove(DarwinCell darwinCell, Grid grid, int numMovements, List<CellUpdate> updates) {
-    Point2D direction =  darwinCell.getFrontDirection();
-    Point2D curLocation = darwinCell.getLocation();
-    int newRow = darwinCell.getRow();
-    int newCol = darwinCell.getCol();
-
-    for (int i = 0; i < numMovements; i++) {
-      newRow += (int) direction.getX();
-      newCol += (int) direction.getY();
-
-      Cell curCell = grid.getCell(newRow, newCol);
-      if (curCell == null || curCell.getState() != State.EMPTY.getValue()) {
-        break;
-      }
-
-      curLocation = new Point2D.Double(newRow, newCol);
-    }
-
-    updateGridForMovement(darwinCell, updates, curLocation, newRow, newCol);
-  }
-
-  private static void updateGridForMovement(DarwinCell darwinCell, List<CellUpdate> updates,
-      Point2D curLocation, int newRow, int newCol) {
-    if (!curLocation.equals(darwinCell.getLocation())) {
-      Cell newEmpty = new DarwinCell(State.EMPTY.getValue(), darwinCell.getLocation());
-      Cell newCell = new DarwinCell(darwinCell.getState(), new Double(newRow, newCol),
-          darwinCell.getOrientation(), darwinCell.getInfectionCountdown(), darwinCell.getAllInstructions());
-
-      updates.add(new CellUpdate(darwinCell.getLocation(),  newEmpty));
-      updates.add(new CellUpdate(new Double(newRow, newCol), newCell));
-    }
-  }
-
-  private void handleGo(DarwinCell darwinCell, int instructionIndex) {
-    darwinCell.setCurInstructionIndex(instructionIndex);
-  }
-
-  private void handleConditional(DarwinCell darwinCell, Grid grid, String nextInstruction, int conditionInt) {
-    Point2D direction = darwinCell.getFrontDirection();
-    int newRow = darwinCell.getRow();
-    int newCol = darwinCell.getCol();
-    int layers = getLayers();
-
-    for (int i = 0; i < layers; i++) {
-      newRow += (int) direction.getX();
-      newCol += (int) direction.getY();
-
-      Cell curCell = grid.getCell(newRow, newCol);
-      if (curCell == null) {
-        continue;
-      }
-
-      if (checkIfConditionIsMet(darwinCell, curCell, grid, conditionInt)) {
-        darwinCell.setCurInstructionIndex(Integer.parseInt(nextInstruction));
-      }
-    }
-  }
-
-  private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid, int conditionInt) {
-    return switch (conditionInt) {
-      case 0 -> curCell.getState() == State.EMPTY.getValue();
-      case 1 -> grid.isWall(curCell.getRow(), curCell.getCol());
-      case 2 -> curCell.getState() == darwinCell.getState();
-      case 3 -> curCell.getState() != State.EMPTY.getValue()
-          && curCell.getState() != darwinCell.getState();
-      default -> false;
-    };
-  }
-
-  private void handleInfection(DarwinCell darwinCell, Grid grid, int newInfectionCountdown, List<CellUpdate> updates) {
-    Point2D direction =  darwinCell.getFrontDirection();
-
-    int newRow = darwinCell.getRow();
-    int newCol = darwinCell.getCol();
-    int layers = getLayers();
-
-    for (int i = 0; i < layers; i++) {
-      newRow += (int) direction.getX();
-      newCol += (int) direction.getY();
-
-      Cell curCell = grid.getCell(newRow, newCol);
-      if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState()) {
-        continue;
-      }
-
-      DarwinCell speciesCell = (DarwinCell) curCell;
-
-      Cell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
-      updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
   }
 

@@ -1,6 +1,7 @@
 package cellsociety.model.simulation;
 
 import cellsociety.model.Grid;
+import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface Instruction {
    * @param arguments - the list of instructions for the given cell
    * @param grid - the collection of cell objects
    */
-  void executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid);
+  List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid);
 
   /**
    * Sets the step size for neighbor configuration

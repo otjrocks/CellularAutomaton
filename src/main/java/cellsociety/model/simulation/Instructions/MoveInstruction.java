@@ -8,6 +8,7 @@ import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoveInstruction implements Instruction {
@@ -20,7 +21,7 @@ public class MoveInstruction implements Instruction {
    * @param grid - the collection of cell objects
    */
   @Override
-  public void executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
       Point2D direction =  darwinCell.getFrontDirection();
       Point2D curLocation = darwinCell.getLocation();
       int numMovements;
@@ -45,7 +46,7 @@ public class MoveInstruction implements Instruction {
         curLocation = new Point2D.Double(newRow, newCol);
       }
 
-      updateGridForMovement(darwinCell, grid, curLocation, newRow, newCol);
+      return updateGridForMovement(darwinCell, grid, curLocation, newRow, newCol);
     }
 
   /**
@@ -64,16 +65,18 @@ public class MoveInstruction implements Instruction {
     //unneeded here
   }
 
-  private static void updateGridForMovement(DarwinCell darwinCell, Grid grid,
+  private static List<CellUpdate> updateGridForMovement(DarwinCell darwinCell, Grid grid,
       Point2D curLocation, int newRow, int newCol) {
+    List<CellUpdate> updates = new ArrayList<>();
     if (!curLocation.equals(darwinCell.getLocation())) {
       Cell newEmpty = new DarwinCell(State.EMPTY.getValue(), darwinCell.getLocation());
       Cell newCell = new DarwinCell(darwinCell.getState(), new Double(newRow, newCol),
           darwinCell.getOrientation(), darwinCell.getInfectionCountdown(), darwinCell.getAllInstructions());
 
-      grid.updateCell(newEmpty);
-      grid.updateCell(newCell);
+      updates.add(new CellUpdate(darwinCell.getLocation(),  newEmpty));
+      updates.add(new CellUpdate(new Double(newRow, newCol), newCell));
     }
+    return updates;
   }
 
 }
