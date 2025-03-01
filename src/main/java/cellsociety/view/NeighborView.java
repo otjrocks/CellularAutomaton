@@ -1,19 +1,16 @@
 package cellsociety.view;
 
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.utility.SimulationUtility.updateSimulation;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import static cellsociety.view.config.NeighborConfig.getAvailableNeighborTypes;
 
-import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
-import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.IntegerField;
 import cellsociety.view.components.SelectorField;
-import java.lang.reflect.InvocationTargetException;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -112,7 +109,6 @@ public class NeighborView extends VBox {
 
 
   private Simulation getNewSimulation(Simulation currentSimulation) {
-    Simulation newSimulation;
     SimulationMetaData newMetaData = new SimulationMetaData(
         currentSimulation.data().type(),
         currentSimulation.data().name(),
@@ -121,20 +117,8 @@ public class NeighborView extends VBox {
         neighborType,
         neighborLayer);
 
-    try {
-      newSimulation = SimulationConfig.getNewSimulation(currentSimulation.data().type(),
-          newMetaData, currentSimulation.rules().getParameters());
-    } catch (InvocationTargetException e) {
-      myAlertField.flash(e.getCause().getMessage(), true);
-      return null;
-    } catch (ClassNotFoundException | NoSuchMethodException |
-             InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
-      throw new RuntimeException(e);
-    }
-    return newSimulation;
+    return updateSimulation(currentSimulation, newMetaData, currentSimulation.rules()
+        .getParameters(), myAlertField);
   }
 
 

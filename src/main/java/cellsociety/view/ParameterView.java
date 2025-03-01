@@ -3,6 +3,7 @@ package cellsociety.view;
 import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.utility.SimulationUtility.updateSimulation;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
@@ -135,21 +136,8 @@ public class ParameterView extends VBox {
 
   private Simulation getNewSimulation(Map<String, Parameter<?>> newParameters,
       Simulation currentSimulation) {
-    Simulation newSimulation;
-    try {
-      newSimulation = SimulationConfig.getNewSimulation(currentSimulation.data().type(),
-          currentSimulation.data(), newParameters);
-    } catch (InvocationTargetException e) {
-      myAlertField.flash(e.getCause().getMessage(), true);
-      return null;
-    } catch (ClassNotFoundException | NoSuchMethodException |
-             InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
-      throw new RuntimeException(e);
-    }
-    return newSimulation;
+    return updateSimulation(currentSimulation, currentSimulation.data(), newParameters,
+        myAlertField);
   }
 
   private void setNewParametersMap(Map<String, Parameter<?>> newParameters) {
