@@ -9,7 +9,7 @@ import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
-import cellsociety.model.simulation.rules.SugarScapeRules.State;
+import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SugarScapeRulesTest {
+class SugarscapeRulesTest {
   private Grid grid;
-  private SugarScapeRules sugarscapeRules;
+  private SugarscapeRules sugarscapeRules;
   private final Map<String, Parameter<?>> parameters = new HashMap<>();
 
   @BeforeEach
@@ -32,7 +32,7 @@ class SugarScapeRulesTest {
     parameters.put("agentSugar", new Parameter<>(10));
     parameters.put("agentMetabolism", new Parameter<>(2));
 
-    sugarscapeRules = new SugarScapeRules(parameters, new MooreNeighbors(parameters.get("agentVision").getInteger()));
+    sugarscapeRules = new SugarscapeRules(parameters, new MooreNeighbors(parameters.get("agentVision").getInteger()));
 
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
@@ -45,7 +45,7 @@ class SugarScapeRulesTest {
   @Test
   void getNextStatesForAllCells_PatchSugarRegeneration_UpdatedSugar() {
     SugarscapeCell patch = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 2),3, 5, 10,0,0);
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 2),3, 5, 10,0,0);
 
     patch.regenerateSugar();
     patch.regenerateSugar();
@@ -59,12 +59,12 @@ class SugarScapeRulesTest {
   @Test
   void getNextStatesForAllCells_AgentMovesToRichestPatch_UpdatedAgentCellAndSugar() {
     SugarscapeCell agent = new SugarscapeCell(
-        SugarScapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0,2, 1);
+        SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0,2, 1);
     SugarscapeCell lowSugarPatch = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 2, 3, 1, 0, 0);
-    SugarscapeCell anotherLowSugarPatch = new SugarscapeCell(SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 2, 3, 1, 0,0 );
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 2, 3, 1, 0, 0);
+    SugarscapeCell anotherLowSugarPatch = new SugarscapeCell(SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 2, 3, 1, 0,0 );
     SugarscapeCell highSugarPatch = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(3, 2), 8, 3, 1, 0,0);
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(3, 2), 8, 3, 1, 0,0);
 
     grid.updateCell(agent);
     grid.updateCell(lowSugarPatch);
@@ -95,13 +95,13 @@ class SugarScapeRulesTest {
   @Test
   void getNextStatesForAllCells_AgentChoosesMinDistanceInTie_UpdatedAgentCell() {
     SugarscapeCell agent = new SugarscapeCell(
-        SugarScapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0, 1, 1);
+        SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 10, 1,0, 1, 1);
     SugarscapeCell patch1 = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 5, 3, 1, 0, 0);
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 3), 5, 3, 1, 0, 0);
     SugarscapeCell patch2 = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 5, 3, 1, 0,0);
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(2, 4), 5, 3, 1, 0,0);
     SugarscapeCell patch3 = new SugarscapeCell(
-        SugarScapeRules.State.PATCHES.getValue(), new Point2D.Double(4, 2), 5, 3, 1, 0, 0);
+        SugarscapeRules.State.PATCHES.getValue(), new Point2D.Double(4, 2), 5, 3, 1, 0, 0);
 
     grid.updateCell(agent);
     grid.updateCell(patch1);
@@ -123,7 +123,7 @@ class SugarScapeRulesTest {
   @Test
   void getNextStatesForAllCells_SugarReachesZero_AgentDies() {
     SugarscapeCell agent = new SugarscapeCell(
-        SugarScapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 2, 1, 0, 5, 2);
+        SugarscapeRules.State.AGENTS.getValue(), new Point2D.Double(2, 2), 2, 1, 0, 5, 2);
 
     grid.updateCell(agent);
 

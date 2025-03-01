@@ -19,7 +19,7 @@ public class RectangleCellView extends CellView {
    * @param height :      height of cell
    */
   public RectangleCellView(double x, double y, double width, double height) {
-    super(width, height, width, height);
+    super(x, y, width, height);
   }
 
   @Override

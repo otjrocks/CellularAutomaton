@@ -103,7 +103,7 @@ public class MainController {
     mySidebarView = null; // ensure fresh initialization of sidebar in case of language change
     myBottomBarView = null;
     createOrUpdateSidebar();
-    createOrUpdateBottombar();
+    createOrUpdateBottomBar();
     myRoot.getChildren().remove(mySplashScreenView);
     myRoot.getChildren().add(myMainViewContainer);
   }
@@ -264,7 +264,7 @@ public class MainController {
     mySimulation = simulation;
     createNewMainViewAndUpdateViewContainer();
     createOrUpdateSidebar();
-    createOrUpdateBottombar();
+    createOrUpdateBottomBar();
   }
 
   /**
@@ -423,7 +423,7 @@ public class MainController {
     }
   }
 
-  private void createOrUpdateBottombar() {
+  private void createOrUpdateBottomBar() {
     if (myBottomBarView == null) {
       initializeBottombar();
     } else {

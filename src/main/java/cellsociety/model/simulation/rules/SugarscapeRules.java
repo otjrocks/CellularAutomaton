@@ -21,7 +21,7 @@ import java.util.Set;
  *
  * @author Justin Aronwald
  */
-public class SugarScapeRules extends SimulationRules {
+public class SugarscapeRules extends SimulationRules {
 
   /**
    * The default constructor of a SugerScape rules.
@@ -29,7 +29,7 @@ public class SugarScapeRules extends SimulationRules {
    * @param parameters The required parameters map
    * @throws InvalidParameterException This is thrown for invalid parameters provided.
    */
-  public SugarScapeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
+  public SugarscapeRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
     super(parameters, myGetNeighbors);
   }
@@ -186,7 +186,7 @@ public class SugarScapeRules extends SimulationRules {
    */
   @Override
   public int getNumberStates() {
-    return SugarScapeRules.State.values().length;
+    return SugarscapeRules.State.values().length;
   }
 
 }

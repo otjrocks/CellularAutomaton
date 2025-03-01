@@ -15,8 +15,14 @@ import org.apache.logging.log4j.Logger;
  * @author Justin Aronwald
  */
 public class MainConfig {
-
-  // PUBLIC CONSTANTS
+  // CONSTANTS
+  public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
+  public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
+  private static final String DEFAULT_LANGUAGE = "English";
+  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference("language",
+      DEFAULT_LANGUAGE);
+  private static ResourceBundle myMessages = ResourceBundle.getBundle(
+      LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
   public static final String TITLE = getMessage("TITLE");
   public static final int WIDTH = 1500;
   public static final int HEIGHT = 800;
@@ -35,16 +41,7 @@ public class MainConfig {
   public static final CellShapeType DEFAULT_CELL_SHAPE = CellShapeType.RECTANGLE;
   public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user
   public static final Logger LOGGER = LogManager.getLogger(); // The logger for this program
-  public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
-  public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
-
-  // PRIVATE CONSTANTS
-  private static final String DEFAULT_LANGUAGE = "English";
-  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference("language",
-      DEFAULT_LANGUAGE);
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
-  private static ResourceBundle myMessages = ResourceBundle.getBundle(
-      LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
 
   /**
    * Get the message string from the config file for the provided key

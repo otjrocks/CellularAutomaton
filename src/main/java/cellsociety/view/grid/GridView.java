@@ -2,6 +2,7 @@ package cellsociety.view.grid;
 
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -36,6 +37,7 @@ public abstract class GridView extends Group {
    */
   public GridView(int width, int height, int numRows, int numColumns,
       MainController mainController) {
+    super();
     myNumRows = numRows;
     myNumColumns = numColumns;
     myWidth = width;
@@ -159,17 +161,26 @@ public abstract class GridView extends Group {
     }
   }
 
+  /**
+   * Add the cell tool tip for a provided row, col in the grid
+   *
+   * @param row     The row of the cell
+   * @param col     The col of the cell
+   * @param grid    The grid of the simulation
+   * @param simType The name of the simulation type as a string
+   */
   public void addCellTooltip(int row, int col, Grid grid, String simType) {
     Shape cellShape = myGrid[row][col].getShape();
-    
+
     Tooltip tooltip = new Tooltip();
     Tooltip.install(cellShape, tooltip);
-    
+
     // Update tooltip dynamically when the user hovers
-    cellShape.setOnMouseEntered(event ->  {
+    cellShape.setOnMouseEntered(event -> {
       Cell cell = grid.getCell(row, col);
       tooltip.setText("State: " + getMessage((simType + "_NAME_" + cell.getState()).toUpperCase()));
-      String colorString = getCellColors().getString(((simType + "_COLOR_" + cell.getState())).toUpperCase()).toLowerCase();
+      String colorString = getCellColors().getString(
+          ((simType + "_COLOR_" + cell.getState())).toUpperCase()).toLowerCase();
       tooltip.setStyle("-fx-background-color: white; -fx-text-fill: " + colorString + ";");
     });
   }

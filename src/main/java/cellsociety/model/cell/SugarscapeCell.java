@@ -1,7 +1,7 @@
 package cellsociety.model.cell;
 
-import cellsociety.model.simulation.rules.SugarScapeRules;
-import cellsociety.model.simulation.rules.SugarScapeRules.State;
+import cellsociety.model.simulation.rules.SugarscapeRules;
+import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 
 /**
@@ -76,7 +76,7 @@ public class SugarscapeCell extends Cell {
    * @return - boolean on if the cell is an agent
    */
   public boolean isAgent() {
-    return getState() == SugarScapeRules.State.AGENTS.getValue();
+    return getState() == SugarscapeRules.State.AGENTS.getValue();
   }
 
   /**
@@ -85,7 +85,7 @@ public class SugarscapeCell extends Cell {
    * @return - boolean on if the cell is a patch cell
    */
   public boolean isPatch() {
-    return getState() == SugarScapeRules.State.PATCHES.getValue();
+    return getState() == SugarscapeRules.State.PATCHES.getValue();
   }
 
 
