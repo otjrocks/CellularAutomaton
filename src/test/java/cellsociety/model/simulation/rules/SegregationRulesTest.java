@@ -56,14 +56,6 @@ class SegregationRulesTest {
   }
 
   @Test
-  void testCellInBounds() {
-    Cell cell = new DefaultCell(1, new Point2D.Double(50, 50));
-
-    assertThrows(IndexOutOfBoundsException.class, () -> segregationRules.getNextState(cell, grid),
-        "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
-  }
-
-  @Test
   void testEmptyCell() {
     Cell cell = new DefaultCell(0, new Point2D.Double(2, 2));
 

@@ -145,7 +145,36 @@ public class ForagingAntsRules extends SimulationRules {
     List<ForagingAntsCell> emptyCells = new ArrayList<>();
     Set<Point2D> occupiedCells = new HashSet<>();
     myReproductionTimer++;
+    handleCellStateUpdates(grid, antCells, emptyCells, nextStates, occupiedCells);
+    return nextStates;
+  }
 
+  private void handleCellStateUpdates(Grid grid, List<Cell> antCells,
+      List<ForagingAntsCell> emptyCells,
+      List<CellUpdate> nextStates, Set<Point2D> occupiedCells) {
+    getCellsByType(grid, antCells, emptyCells);
+    processAllAntsMovement(grid, antCells, nextStates, occupiedCells);
+    checkIfTimeForMoreAnts(grid, nextStates, occupiedCells);
+    handleAllEmptyCells(emptyCells, occupiedCells, nextStates);
+  }
+
+  private void handleAllEmptyCells(List<ForagingAntsCell> emptyCells, Set<Point2D> occupiedCells,
+      List<CellUpdate> nextStates) {
+    for (ForagingAntsCell empty : emptyCells) {
+      if (!occupiedCells.contains(empty.getLocation())) {
+        addEmptyCell(empty, nextStates);
+      }
+    }
+  }
+
+  private void processAllAntsMovement(Grid grid, List<Cell> antCells, List<CellUpdate> nextStates,
+      Set<Point2D> occupiedCells) {
+    for (Cell ant : antCells) {
+      processAntMovement(ant, grid, nextStates, occupiedCells);
+    }
+  }
+
+  private void getCellsByType(Grid grid, List<Cell> antCells, List<ForagingAntsCell> emptyCells) {
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
       ForagingAntsCell cell = (ForagingAntsCell) cellIterator.next();
@@ -159,20 +188,6 @@ public class ForagingAntsRules extends SimulationRules {
         emptyCells.add(cell);
       }
     }
-
-    for (Cell ant : antCells) {
-      processAntMovement(ant, grid, nextStates, occupiedCells);
-    }
-
-    checkIfTimeForMoreAnts(grid, nextStates, occupiedCells);
-
-    for (ForagingAntsCell empty : emptyCells) {
-      if (!occupiedCells.contains(empty.getLocation())) {
-        addEmptyCell(empty, nextStates);
-      }
-    }
-
-    return nextStates;
   }
 
   /**
@@ -190,7 +205,6 @@ public class ForagingAntsRules extends SimulationRules {
     if (ant.getHealth() <= 0) {
       addEmptyCell(ant, nextStates);
     } else {
-
       List<Cell> emptyNeighbors = getNeighborsByState(ant, grid, State.EMPTY.getValue(),
           occupiedCells);
       List<Cell> foodNeighbors = getNeighborsByState(ant, grid, State.FOOD.getValue(),
