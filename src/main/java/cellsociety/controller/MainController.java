@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
+import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
@@ -335,6 +336,24 @@ public class MainController {
     myCellShapeType = value;
   }
 
+  /**
+   * Compute the count of each state present in the current simulation grid
+   *
+   * @return A map where the string represents the state's name and a int value for the count
+   */
+  public Map<String, Integer> computeStateCounts() {
+    Map<String, Integer> stateCounts = new HashMap<>();
+    for (int row = 0; row < myGrid.getRows(); row++) {
+      for (int col = 0; col < myGrid.getCols(); col++) {
+        int state = myGrid.getCell(row, col).getState();
+        stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()),
+            stateCounts.getOrDefault(
+                getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
+      }
+    }
+    return stateCounts;
+  }
+
   private void initializeGridWithCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getCols(); j++) {
@@ -448,17 +467,7 @@ public class MainController {
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
     } catch (Exception e) {
+      LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
-  }
-
-  public Map<String, Integer> computeStateCounts() {
-    Map<String, Integer> stateCounts = new HashMap<>();
-    for (int row = 0; row < myGrid.getRows(); row++) {
-        for (int col = 0; col < myGrid.getCols(); col++) {
-            int state = myGrid.getCell(row, col).getState();
-            stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), stateCounts.getOrDefault(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
-        }
-    }
-    return stateCounts;
   }
 }

@@ -4,6 +4,11 @@ import cellsociety.model.simulation.rules.SugarscapeRules;
 import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 
+/**
+ * The cell used for SugarScape simulation
+ *
+ * @author Justin Aronwald
+ */
 public class SugarscapeCell extends Cell {
 
   private int sugar;
@@ -17,6 +22,12 @@ public class SugarscapeCell extends Cell {
   private final int MAX_SUGAR_AMOUNT = 15;
 
 
+  /**
+   * The default constructor of a sugar scape cell
+   *
+   * @param state    The initial state
+   * @param location The initial location
+   */
   public SugarscapeCell(int state, Point2D location) {
     super(state, location);
     sugar = DEFAULT_VALUE * 3;
@@ -29,7 +40,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * Creates a Sugarscape Cell that can act as a Patch or an Agent.
+   * Creates a SugarScape Cell that can act as a Patch or an Agent.
    *
    * @param state                 - The type of cell (EMPTY, PATCH, or AGENT)
    * @param location              - The cell's location in the grid
@@ -46,7 +57,7 @@ public class SugarscapeCell extends Cell {
 
     if (sugar < 0 || sugarGrowBackRate < 0 || sugarGrowBackInterval < 1 || vision < 0
         || metabolism < 0) {
-      throw new IllegalArgumentException("All ints must be non-negative.");
+      throw new IllegalArgumentException("All integers must be non-negative.");
     }
 
     this.sugar = sugar;

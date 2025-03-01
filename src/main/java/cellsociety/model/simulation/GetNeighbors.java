@@ -5,12 +5,33 @@ import cellsociety.model.cell.Cell;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An abstract class representing a way to get a cell's neighbors in a grid
+ *
+ * @author Justin Aronwald
+ * @author Owen Jennings
+ */
 public abstract class GetNeighbors {
-
-  public abstract int[][] getDirections(int row, int column);
 
   private final int layers;
 
+  /**
+   * An abstract method to return the directions to use for getting neighbors
+   *
+   * @param row    The row of the current cell
+   * @param column The column of the current cell
+   * @return A 2D int array which represents a collection of coordinates (x, y), where x is the
+   * amount to add/subtract from the current row and y is the amount to add/subtract from the
+   * current column to get one of the neighbors in the collection.
+   */
+  public abstract int[][] getDirections(int row, int column);
+
+  /**
+   * The default constructor of GetNeighbors
+   *
+   * @param layers The number of layers to include in the get neighbors calculation, if supported by
+   *               a specific neighbor policy
+   */
   public GetNeighbors(int layers) {
     this.layers = layers;
   }

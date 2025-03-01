@@ -1,5 +1,7 @@
 package cellsociety.model.xml;
 
+import static cellsociety.config.MainConfig.LOGGER;
+
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
 import java.util.Map;
@@ -60,6 +62,7 @@ public class XMLWriter {
       transformXML(doc, file);
 
     } catch (ParserConfigurationException | javax.xml.transform.TransformerException e) {
+      LOGGER.warn("Error saving the simulation file: {}", e.getMessage());
     }
   }
 
