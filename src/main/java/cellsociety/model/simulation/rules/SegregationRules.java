@@ -79,36 +79,51 @@ public class SegregationRules extends SimulationRules {
    * @param grid - the list of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Schelling's segregation model
    */
+  // ChatGPT assisted in refactoring this method
   @Override
   public int getNextState(Cell cell, Grid grid) {
     List<Cell> neighbors = getNeighbors(cell, grid);
     int currentState = cell.getState();
-
     if (currentState == 0) {
       return 0;
     }
+    int sameType = countSameTypeNeighbors(neighbors, currentState);
+    int totalNeighbors = countOccupiedNeighbors(neighbors);
+    double typePercentage = calculateTypePercentage(sameType, totalNeighbors);
+    return determineNextState(totalNeighbors, typePercentage, currentState);
+  }
 
+  private int countSameTypeNeighbors(List<Cell> neighbors, int currentState) {
     int sameType = 0;
-    int totalNeighbors = 0;
+    for (Cell neighbor : neighbors) {
+      if (neighbor.getState() != 0 && neighbor.getState() == currentState) {
+        sameType++;
+      }
+    }
+    return sameType;
+  }
 
+  private int countOccupiedNeighbors(List<Cell> neighbors) {
+    int totalNeighbors = 0;
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() != 0) {
         totalNeighbors++;
-        if (neighbor.getState() == currentState) {
-          sameType++;
-        }
       }
     }
-    double typePercentage = (double) sameType / totalNeighbors;
+    return totalNeighbors;
+  }
 
-    // No occupied neighbors or satisfied-> stay
+  private double calculateTypePercentage(int sameType, int totalNeighbors) {
+    return totalNeighbors == 0 ? 0 : (double) sameType / totalNeighbors;
+  }
+
+  private int determineNextState(int totalNeighbors, double typePercentage, int currentState) {
     if (totalNeighbors == 0 || typePercentage >= myToleranceThreshold) {
       return currentState;
     }
-
-    //mark as -1 to be moved
-    return -1;
+    return -1; // mark as -1 to be moved
   }
+
 
   @Override
   public int getNumberStates() {

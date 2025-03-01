@@ -33,33 +33,48 @@ public class CreateGridUtility {
       throws GridException, InvalidStateException {
     Grid grid = new Grid(gridHeight, gridWidth);
     NodeList rows = gridDoc.getElementsByTagName("Row");
+    addAllCellsToGrid(gridHeight, gridWidth, sim, rows, grid);
+    return grid;
+  }
 
+  private static void addAllCellsToGrid(int gridHeight, int gridWidth, Simulation sim,
+      NodeList rows,
+      Grid grid) throws GridException, InvalidStateException {
     for (int i = 0; i < rows.getLength(); i++) {
-      if (rows.getLength() > gridHeight) {
-        throw new GridException();
-      }
-      String[] rowValues = rows.item(i).getTextContent().split(",");
-      if (rowValues.length > gridWidth) {
-        throw new GridException();
-      }
+      String[] rowValues = getRowValuesAndHandleExceptions(gridHeight, gridWidth, rows, i);
       for (int j = 0; j < rowValues.length; j++) {
-        double rawState = Double.parseDouble(rowValues[j]);
-        int state = (int) rawState;
-        int param = getDecimalValue(rowValues[j]);
-
-
-        checkValidState(state, sim);
-        Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
-
-        if (sim.data().type().equals("Sugarscape") && param != 0) {
-          ((SugarscapeCell) holdingCell).setSugar(param);
-        }
-
-        grid.addCell(holdingCell);
+        addCurrentCellToGrid(sim, rowValues, j, i, grid);
       }
     }
+  }
 
-    return grid;
+  private static void addCurrentCellToGrid(Simulation sim, String[] rowValues, int j, int i,
+      Grid grid)
+      throws InvalidStateException {
+    double rawState = Double.parseDouble(rowValues[j]);
+    int state = (int) rawState;
+    int param = getDecimalValue(rowValues[j]);
+    checkValidState(state, sim);
+    Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
+
+    if (sim.data().type().equals("Sugarscape") && param != 0) {
+      ((SugarscapeCell) holdingCell).setSugar(param);
+    }
+
+    grid.addCell(holdingCell);
+  }
+
+  private static String[] getRowValuesAndHandleExceptions(int gridHeight, int gridWidth,
+      NodeList rows, int i)
+      throws GridException {
+    if (rows.getLength() > gridHeight) {
+      throw new GridException();
+    }
+    String[] rowValues = rows.item(i).getTextContent().split(",");
+    if (rowValues.length > gridWidth) {
+      throw new GridException();
+    }
+    return rowValues;
   }
 
   private static int getDecimalValue(String rawString) {

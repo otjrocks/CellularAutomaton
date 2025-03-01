@@ -99,7 +99,7 @@ public abstract class SimulationRules {
    * through interaction with the entire grid. This method should be overwritten if the default
    * implementation of getNextStatesForAllCells is used. If a given simulation rules class decides
    * to overwrite the getNextStatesForAllCells method and finds the next states in that, then this
-   * does not need to be overwritten.
+   * does not need to be overwritten. This method requires that a cell be in bounds of the grid.
    *
    * @param cell The cell you are trying to find the next state for.
    * @param grid The grid that the cell is a part of
