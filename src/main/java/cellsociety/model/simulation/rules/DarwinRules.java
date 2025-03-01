@@ -8,15 +8,17 @@ import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DarwinRules  extends SimulationRules {
+  public static final Logger LOGGER = LogManager.getLogger();
   /**
    * The default constructor of a simulation rules class
    *
@@ -89,12 +91,12 @@ public class DarwinRules  extends SimulationRules {
       case "SM?":
         handleConditional(darwinCell, grid, splitInstructions[1], 2);
       case "IFENEMY":
-      case "EMY?"
+      case "EMY?":
         handleConditional(darwinCell, grid, splitInstructions[1], 3);
       case "GO":
         handleGo(darwinCell, Integer.parseInt(splitInstructions[1]));
       default:
-        System.out.println("Unknown instruction: " + instruction);
+        LOGGER.warn("Unknown instruction: {}", instruction);
     }
   }
 
@@ -157,17 +159,14 @@ public class DarwinRules  extends SimulationRules {
   }
 
   private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid, int conditionInt) {
-    switch (conditionInt) {
-      case 0:
-        return curCell.getState() == State.EMPTY.getValue();
-      case 1:
-        return grid.isWall(curCell.getRow(), curCell.getCol());
-      case 2:
-        return curCell.getState() == darwinCell.getState();
-      case 3:
-          return curCell.getState() != State.EMPTY.getValue() && curCell.getState() != darwinCell.getState();
-
-    }
+    return switch (conditionInt) {
+      case 0 -> curCell.getState() == State.EMPTY.getValue();
+      case 1 -> grid.isWall(curCell.getRow(), curCell.getCol());
+      case 2 -> curCell.getState() == darwinCell.getState();
+      case 3 -> curCell.getState() != State.EMPTY.getValue()
+          && curCell.getState() != darwinCell.getState();
+      default -> false;
+    };
   }
 
   private void handleInfection(DarwinCell darwinCell, Grid grid, int newInfectionCountdown, List<CellUpdate> updates) {
@@ -194,10 +193,10 @@ public class DarwinRules  extends SimulationRules {
   }
 
   /**
-   * @return
+   * @return - the number of potential states for any given cell
    */
   @Override
   public int getNumberStates() {
-    return 0;
+    return State.values().length;
   }
 }
