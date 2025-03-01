@@ -380,11 +380,7 @@ public class MainController {
   private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
-      myIterationCount = 0;
-      XMLHandler xmlHandler = new XMLHandler(filePath);
-      myGrid = xmlHandler.getGrid();
-      myCellShapeType = xmlHandler.getCellShapeType();
-      updateSimulation(xmlHandler.getSim());
+      attemptUpdateFromFilePath(filePath);
     } catch (SAXException e) {
       mySidebarView.flashWarning(getMessage("ERROR_FORMAT"));
       throw e;
@@ -408,11 +404,18 @@ public class MainController {
       throw e;
     } catch (Exception e) {
       mySidebarView.flashWarning(getMessage("ERROR_GENERAL"));
-      if (VERBOSE_ERROR_MESSAGES) {
-        mySidebarView.flashWarning(e.getMessage());
-      }
+      LOGGER.warn(getMessage("ERROR_GENERAL"), e);
       throw e;
     }
+  }
+
+  private void attemptUpdateFromFilePath(String filePath)
+      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+    myIterationCount = 0;
+    XMLHandler xmlHandler = new XMLHandler(filePath);
+    myGrid = xmlHandler.getGrid();
+    myCellShapeType = xmlHandler.getCellShapeType();
+    updateSimulation(xmlHandler.getSim());
   }
 
   private void createOrUpdateSidebar() {
