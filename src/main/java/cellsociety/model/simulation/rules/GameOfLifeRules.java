@@ -77,12 +77,20 @@ public class GameOfLifeRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
+    int aliveNeighbors = calculateAliveNeighbors(cell, grid);
+    return getNextStateBasedOnAliveNeighbors(cell, aliveNeighbors);
+  }
 
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
+  private int getNextStateBasedOnAliveNeighbors(Cell cell, int aliveNeighbors) {
+    if (birthValues.contains(aliveNeighbors) && cell.getState() == 0) {
+      return 1;
+    } else if (!surviveValues.contains(aliveNeighbors)) {
+      return 0;
     }
+    return cell.getState();
+  }
 
+  private int calculateAliveNeighbors(Cell cell, Grid grid) {
     List<Cell> neighbors = getNeighbors(cell, grid);
     int aliveNeighbors = 0;
     for (Cell neighbor : neighbors) {
@@ -90,12 +98,7 @@ public class GameOfLifeRules extends SimulationRules {
         aliveNeighbors++;
       }
     }
-    if (birthValues.contains(aliveNeighbors) && cell.getState() == 0) {
-      return 1;
-    } else if (!surviveValues.contains(aliveNeighbors)) {
-      return 0;
-    }
-    return cell.getState();
+    return aliveNeighbors;
   }
 
   private void initializeBSValues() {

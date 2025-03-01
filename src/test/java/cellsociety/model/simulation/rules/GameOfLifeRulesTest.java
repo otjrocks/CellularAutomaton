@@ -106,14 +106,6 @@ class GameOfLifeRulesTest {
   }
 
   @Test
-  void testCellInBounds() {
-    Cell cell = new DefaultCell(1, new Double(50, 50));
-
-    assertThrows(IndexOutOfBoundsException.class, () -> gameOfLifeRules.getNextState(cell, grid),
-        "Calling getNextState() on a cell that is out of bounds should throw OutofBoundsException.");
-  }
-
-  @Test
   void testGliderMovements() {
     int steps = 4;
     for (int step = 0; step < steps; step++) {

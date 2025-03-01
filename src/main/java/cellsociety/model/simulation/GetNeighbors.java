@@ -46,24 +46,33 @@ public abstract class GetNeighbors {
    * @return A list of cells that are neighbors of the provided cell.
    */
   public List<Cell> getNeighbors(Cell cell, Grid grid) {
-
     List<Cell> neighbors = new ArrayList<>();
-
     int[][] directions = getDirections(cell.getRow(), cell.getCol());
+    addAllNeighborCells(cell, grid, directions, neighbors);
+    return neighbors;
+  }
 
+  private void addAllNeighborCells(Cell cell, Grid grid, int[][] directions, List<Cell> neighbors) {
     for (int i = 1; i <= layers; i++) {
-      for (int[] direction : directions) {
-        int newRow = cell.getRow() + i * direction[0];
-        int newCol = cell.getCol() + i * direction[1];
+      addNeighborCellsForLayer(cell, grid, directions, i, neighbors);
+    }
+  }
 
-        if (newRow >= 0 && newRow < grid.getRows() && newCol >= 0 && newCol < grid.getCols()) {
-          Cell newCell = grid.getCell(newRow, newCol);
-          if (newCell != null) {
-            neighbors.add(newCell);
-          }
-        }
+  private static void addNeighborCellsForLayer(Cell cell, Grid grid, int[][] directions, int i,
+      List<Cell> neighbors) {
+    for (int[] direction : directions) {
+      int newRow = cell.getRow() + i * direction[0];
+      int newCol = cell.getCol() + i * direction[1];
+      addNeighborCell(grid, newRow, newCol, neighbors);
+    }
+  }
+
+  private static void addNeighborCell(Grid grid, int newRow, int newCol, List<Cell> neighbors) {
+    if (newRow >= 0 && newRow < grid.getRows() && newCol >= 0 && newCol < grid.getCols()) {
+      Cell newCell = grid.getCell(newRow, newCol);
+      if (newCell != null) {
+        neighbors.add(newCell);
       }
     }
-    return neighbors;
   }
 }

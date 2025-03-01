@@ -59,18 +59,26 @@ public class FallingSandRules extends SimulationRules {
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> updates = new ArrayList<>();
+    handleEntireGrid(grid, updates);
+    return updates;
+  }
+
+  private void handleEntireGrid(Grid grid, List<CellUpdate> updates) {
     for (int row = grid.getRows() - 1; row >= 0; row--) { // check from bottom of grid to top
       for (int col = 0; col < grid.getCols(); col++) {
-        Cell cell = getCellIfInBounds(grid, row, col);
-        if (cell == null) {
-          continue;
-        }
-        if (cell.getState() == State.SAND.getValue()) {
-          handleSandMovement(grid, cell, updates);
-        }
+        handleCurrentCell(grid, row, col, updates);
       }
     }
-    return updates;
+  }
+
+  private void handleCurrentCell(Grid grid, int row, int col, List<CellUpdate> updates) {
+    Cell cell = getCellIfInBounds(grid, row, col);
+    if (cell == null) {
+      return;
+    }
+    if (cell.getState() == State.SAND.getValue()) {
+      handleSandMovement(grid, cell, updates);
+    }
   }
 
   /**

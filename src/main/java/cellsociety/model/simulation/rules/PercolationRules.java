@@ -47,30 +47,23 @@ public class PercolationRules extends SimulationRules {
    */
   @Override
   public int getNextState(Cell cell, Grid grid) {
-
-    if (cell.getRow() >= grid.getRows() || cell.getRow() < 0 || cell.getCol() >= grid.getCols()
-        || cell.getCol() < 0) {
-      throw new IndexOutOfBoundsException("Cell position out of bounds");
-    }
-
     int currentState = cell.getState();
-    if (currentState == 0) {
-      return 0;
-    }
-    if (currentState == 2) {
-      return 2;
+    return getNextStatesGivenCurrentState(cell, grid, currentState);
+  }
+
+  private int getNextStatesGivenCurrentState(Cell cell, Grid grid, int currentState) {
+    if (currentState == 0 || currentState == 2) {
+      return currentState;
     }
     if (cell.getRow() == 0 && currentState == 1) {
       return 2;
     }
-
     List<Cell> neighbors = getNeighbors(cell, grid);
     for (Cell neighbor : neighbors) {
       if (neighbor.getState() == 2) {
         return 2;
       }
     }
-
     return 1;
   }
 
