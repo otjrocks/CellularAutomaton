@@ -228,3 +228,17 @@ Label, Text {
   -fx-background-color: -fx-light;
   -fx-background-radius: 10px;
 }
+
+.state-change .chart-line-symbol {
+  -fx-background-color: null;
+  -fx-padding: 0;
+}
+
+.state-change .chart-plot-background {
+  -fx-background-color: grey;
+}
+
+.state-change .chart-horizontal-grid-lines, 
+.state-change .chart-vertical-grid-lines {
+  -fx-stroke: transparent;
+}

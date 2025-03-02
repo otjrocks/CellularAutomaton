@@ -7,11 +7,9 @@ import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.config.SimulationConfig;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -32,6 +30,8 @@ public class BottomBarView extends VBox {
   private final Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
   private LineChart<Number, Number> stateChangeChart;
   private final Map<String, XYChart.Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final NumberAxis xAxis = new NumberAxis();
+  private final NumberAxis yAxis = new NumberAxis();
   private int stepCount = 0;
 
   /**
@@ -45,7 +45,6 @@ public class BottomBarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
-    this.getStyleClass().add("bottombar");
     this.getChildren().add(myIterationText);
     setupStateChangeChart();
     update();
@@ -56,8 +55,10 @@ public class BottomBarView extends VBox {
    * chart
    */
   public void update() {
-    updateIterationCounter(0);
     stateChangeChart.getData().clear();
+    stateChangeSeriesMap.clear();
+    updateIterationCounter(0);
+    stepCount = 0;
   }
 
   private Text createText(String message) {
@@ -77,16 +78,18 @@ public class BottomBarView extends VBox {
   }
 
   private void setupStateChangeChart() {
-    NumberAxis xAxis = new NumberAxis();
-    NumberAxis yAxis = new NumberAxis();
     xAxis.setLabel("Simulation Step");
     yAxis.setLabel("Population");
+    yAxis.setAutoRanging(false);
+    yAxis.setLowerBound(0);
 
     stateChangeChart = new LineChart<>(xAxis, yAxis);
     stateChangeChart.setTitle("State Population Change Over Time");
     stateChangeChart.setMinWidth(GRID_WIDTH);
     stateChangeChart.setMaxWidth(GRID_WIDTH);
-
+    stateChangeChart.getStyleClass().add("state-change");
+    stateChangeChart.setLegendVisible(false);
+    stateChangeChart.setMinHeight(GRID_HEIGHT);
     stateChangeChart.setMaxHeight(GRID_HEIGHT);
 
     getChildren().add(stateChangeChart);
@@ -99,16 +102,21 @@ public class BottomBarView extends VBox {
    * @param simType     The simulation type string
    */
   public void updateStateChangeChart(Map<String, Integer> stateCounts, String simType) {
-    for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
-      String stateName = entry.getKey();
-      int newValue = entry.getValue();
-      addStateNameToStateChangeMap(stateName);
-      stateChangeSeriesMap.get(stateName).getData().add(new XYChart.Data<>(stepCount, newValue));
-    }
+    Platform.runLater(() -> {
+      int totalStates = sumMapValues(stateCounts);
+      yAxis.setUpperBound(totalStates);
+      yAxis.setTickUnit(totalStates/5);
+      for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
+        String stateName = entry.getKey();
+        int newValue = entry.getValue();
+        addStateNameToStateChangeMap(stateName);
+        stateChangeSeriesMap.get(stateName).getData().add(new XYChart.Data<>(stepCount, newValue));
+      }
 
-    updateXYChart(simType);
+      updateXYChart(simType);
 
-    stepCount++;
+      stepCount++;
+    });
   }
 
   private void updateXYChart(String simType) {
@@ -116,7 +124,6 @@ public class BottomBarView extends VBox {
       for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
         String colorString = getColorStringForState(simType, series);
         series.getNode().setStyle("-fx-stroke: " + colorString + ";");
-        updateLegendNodeColor(series, colorString);
       }
     });
   }
@@ -127,15 +134,6 @@ public class BottomBarView extends VBox {
             series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
   }
 
-  private void updateLegendNodeColor(Series<Number, Number> series, String colorString) {
-    for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
-      if (legendNode != null && series.getName()
-          .equals(legendNode.getAccessibleText())) {
-        legendNode.setStyle("-fx-background-color: " + colorString + ", white;");
-      }
-    }
-  }
-
   private void addStateNameToStateChangeMap(String stateName) {
     if (!stateChangeSeriesMap.containsKey(stateName)) {
       XYChart.Series<Number, Number> newSeries = new XYChart.Series<>();
@@ -143,6 +141,15 @@ public class BottomBarView extends VBox {
       stateChangeSeriesMap.put(stateName, newSeries);
       stateChangeChart.getData().add(newSeries);
     }
+  }
+
+  private int sumMapValues(Map<String, Integer> map){
+    int total = 0;
+    for (String key: map.keySet()){
+      total += map.get(key);
+    }
+
+    return total;
   }
 
 }
