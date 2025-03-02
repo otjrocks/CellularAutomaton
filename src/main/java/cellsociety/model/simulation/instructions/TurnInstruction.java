@@ -1,7 +1,6 @@
-package cellsociety.model.simulation.Instructions;
+package cellsociety.model.simulation.instructions;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
