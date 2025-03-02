@@ -85,6 +85,17 @@ public class DarwinRules  extends SimulationRules {
     while (cellIterator.hasNext()) {
       Cell cell = cellIterator.next();
       DarwinCell darwinCell = (DarwinCell) cell;
+
+      if (darwinCell.getState() == State.INFECTED.getValue()) {
+        darwinCell.handleInfectionDecrease();
+
+        if (darwinCell.getInfectionCountdown() <= 0) {
+          DarwinCell previousSpecies = new DarwinCell(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, darwinCell.getAllInstructions());
+          grid.updateCell(previousSpecies);
+        }
+      }
+
+
       List<String> arguments = new ArrayList<>(Arrays.asList(darwinCell.getInstruction().split(" ")));
 
       if (arguments.isEmpty()) {

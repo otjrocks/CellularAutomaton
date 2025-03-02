@@ -80,6 +80,24 @@ public class DarwinCell extends Cell {
     }
   }
 
+  /**
+   * Getter for the state of the previous species
+   *
+   * @return - an int representation of the previous species's state
+   */
+  public int getPrevState() {
+    return prevSpecies;
+  }
+
+  /**
+   * Setter for the previous species
+   *
+   * @param prevSpecies - an int representation of the previous species's state
+   */
+  public void setPrevState(int prevSpecies) {
+    this.prevSpecies = prevSpecies;
+  }
+
 
   /**
    * Rotates the current orientation to the left by a rounded degrees
@@ -159,6 +177,7 @@ public class DarwinCell extends Cell {
   public void setCurInstructionIndex(int instructionIndex) {
     this.curInstructionIndex = instructionIndex;
   }
+
 
   /**
    * Gets the instruction list

@@ -49,7 +49,8 @@ public class InfectInstruction implements Instruction {
 
       DarwinCell speciesCell = (DarwinCell) curCell;
 
-      Cell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
+      DarwinCell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
+      infectedCell.setPrevState(speciesCell.getState());
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
     return updates;
