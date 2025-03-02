@@ -23,6 +23,7 @@ public class ConditionalInstruction implements Instruction {
    * Creates one instance of a Conditional Instruction
    *
    * @param conditionType - the string name of the condition
+   * @param layers - the number of layers that should be searched when getting neighbors
    */
   public ConditionalInstruction(String conditionType, int layers) {
     this.conditionType = conditionType;

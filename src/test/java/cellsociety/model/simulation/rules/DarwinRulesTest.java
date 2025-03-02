@@ -52,26 +52,99 @@ class DarwinRulesTest {
   }
 
   @Test
-  void getNextStatesForAllCells_RightInstruction_UpdatesExecuteCorrectly() {
+  void getNextStatesForAllCells_RightInstruction_UpdatesExecuteCorrectlyAndRounds() {
     DarwinCell cell = new DarwinCell(2, new Double(2, 2));
-    cell.setInstructions("RIGHT 90");
+    cell.setInstructions("RIGHT 70");
     grid.updateCell(cell);
 
     List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
     assertEquals(1, updates.size());
+    assertEquals(90, cell.getOrientation());
   }
 
   @Test
-  void testConditionalInstruction_IfEmpty_JumpsToCorrectInstruction() {
+  void getNextStatesForAllCells_ConditionalIfEmpty_JumpsToCorrectInstruction() {
     DarwinCell cell = new DarwinCell(2, new Double(2, 2));
     cell.setInstructions("IFEMPTY 2");
-    cell.setInstructions("MOVE 1");
-    cell.setInstructions("MOVE 1");
+
+    grid.updateCell(cell);
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+    assertEquals(2, cell.getCurInstructionIndex());
+  }
+
+  @Test
+  void getNextStatesForAllCells_ConditionalIfWall_JumpsCorrectly() {
+    DarwinCell cell = new DarwinCell(2, new Double(0, 0));
+    cell.setInstructions("IFWALL 2");
 
     grid.updateCell(cell);
 
     List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
     assertEquals(2, ((DarwinCell) updates.getFirst().getNextCell()).getCurInstructionIndex());
+    assertEquals(2, cell.getCurInstructionIndex());
+
+  }
+
+  @Test
+  void getNextStatesForAllCells_ConditionalIfWall_DoesNotJump() {
+    DarwinCell cell = new DarwinCell(2, new Double(2, 2));
+    cell.setInstructions("IFWALL 2");
+
+    grid.updateCell(cell);
+
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+    assertEquals(0, (updates.size()));
+    assertEquals(0, cell.getCurInstructionIndex());
+
+  }
+
+  @Test
+  void getNextStatesForAllCells_ConditionalIfSame_DoesNotJump() {
+    DarwinCell cell1 = new DarwinCell(2, new Double(2, 2));
+    DarwinCell cell2 = new DarwinCell(3, new Double(3, 2));
+
+    grid.updateCell(cell1);
+    grid.updateCell(cell2);
+
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+    assertEquals(0, updates.size());
+    assertEquals(0, cell1.getCurInstructionIndex());
+  }
+
+  @Test
+  void getNextStatesForAllCells_ConditionalIfSame_Jumps() {
+    DarwinCell cell1 = new DarwinCell(2, new Double(2, 2));
+    DarwinCell cell2 = new DarwinCell(2, new Double(3, 2));
+
+    cell1.setInstructions("IFSAME 2");
+
+    grid.updateCell(cell1);
+    grid.updateCell(cell2);
+
+    assertEquals(0, cell1.getCurInstructionIndex());
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+    assertEquals(2, cell1.getCurInstructionIndex());
+  }
+
+  @Test
+  void getNextStatesForAllCells_GoInstruction_SetsCorrectly() {
+    DarwinCell cell = new DarwinCell(2, new Double(2, 2));
+
+    cell.setInstructions("GO 2");
+    grid.updateCell(cell);
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+
+    assertEquals(2, cell.getCurInstructionIndex());
+  }
+
+  @Test
+  void getNextStatesForAllCells_InvalidCommands_NothingHappens() {
+    DarwinCell cell = new DarwinCell(2, new Double(2, 2));
+    cell.setInstructions("INVALID 5");
+    grid.addCell(cell);
+
+    List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+    assertTrue(updates.isEmpty());
   }
 
 }
