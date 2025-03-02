@@ -10,7 +10,6 @@ import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.config.SimulationConfig;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -57,6 +56,7 @@ public class BottomBarView extends VBox {
   public void update() {
     updateIterationCounter(0);
     stateChangeChart.getData().clear();
+    stepCount = 0;
   }
 
   private Text createText(String message) {
@@ -85,7 +85,8 @@ public class BottomBarView extends VBox {
     stateChangeChart.setTitle("State Population Change Over Time");
     stateChangeChart.setMinWidth(GRID_WIDTH);
     stateChangeChart.setMaxWidth(GRID_WIDTH);
-
+    stateChangeChart.setLegendVisible(false);
+    stateChangeChart.setMinHeight(GRID_HEIGHT);
     stateChangeChart.setMaxHeight(GRID_HEIGHT);
 
     getChildren().add(stateChangeChart);
@@ -115,7 +116,7 @@ public class BottomBarView extends VBox {
       for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
         String colorString = getColorStringForState(simType, series);
         series.getNode().setStyle("-fx-stroke: " + colorString + ";");
-        updateLegendNodeColor(series, colorString);
+
       }
     });
   }
@@ -124,15 +125,6 @@ public class BottomBarView extends VBox {
     return getCellColors().getString(
         (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType,
             series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
-  }
-
-  private void updateLegendNodeColor(Series<Number, Number> series, String colorString) {
-    for (Node legendNode : stateChangeChart.lookupAll(".chart-legend-item-symbol")) {
-      if (legendNode != null && series.getName()
-          .equals(legendNode.getAccessibleText())) {
-        legendNode.setStyle("-fx-background-color: " + colorString + ", white;");
-      }
-    }
   }
 
   private void addStateNameToStateChangeMap(String stateName) {
