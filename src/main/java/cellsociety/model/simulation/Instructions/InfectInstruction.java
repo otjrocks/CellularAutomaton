@@ -16,6 +16,15 @@ import java.util.List;
 
 public class InfectInstruction implements Instruction {
   private int layers;
+
+  /**
+   * Create instance of infection instruction
+   *
+   * @param layers - the number of layers of neighbors that should be searched
+   */
+  public InfectInstruction(int layers) {
+    this.layers = layers;
+  }
   /**
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell

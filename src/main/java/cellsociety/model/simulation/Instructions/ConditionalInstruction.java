@@ -24,8 +24,9 @@ public class ConditionalInstruction implements Instruction {
    *
    * @param conditionType - the string name of the condition
    */
-  public ConditionalInstruction(String conditionType) {
+  public ConditionalInstruction(String conditionType, int layers) {
     this.conditionType = conditionType;
+    this.layers = layers;
   }
 
   /**

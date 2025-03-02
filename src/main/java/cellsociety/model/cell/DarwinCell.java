@@ -187,4 +187,22 @@ public class DarwinCell extends Cell {
     return infectionCountdown;
   }
 
+  /**
+   * Setter for an instruction (used mainly for tests)
+   *
+   * @param instruction - an instruction for a species
+   */
+  public void setInstructions(String instruction) {
+    this.instructions.add(instruction);
+  }
+
+  /**
+   * Getter for the instruction index
+   *
+   * @return - the index of the current instruction to run
+   */
+  public int getCurInstructionIndex() {
+    return curInstructionIndex;
+  }
+
 }
