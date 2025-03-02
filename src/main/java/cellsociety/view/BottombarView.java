@@ -7,7 +7,6 @@ import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.config.SimulationConfig;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
