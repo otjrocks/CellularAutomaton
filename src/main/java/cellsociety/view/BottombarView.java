@@ -87,8 +87,8 @@ public class BottomBarView extends VBox {
     stateChangeChart.setTitle("State Population Change Over Time");
     stateChangeChart.setMinWidth(GRID_WIDTH);
     stateChangeChart.setMaxWidth(GRID_WIDTH);
-    stateChangeChart.setLegendVisible(false);
     stateChangeChart.getStyleClass().add("state-change");
+    stateChangeChart.setLegendVisible(false);
     stateChangeChart.setMinHeight(GRID_HEIGHT);
     stateChangeChart.setMaxHeight(GRID_HEIGHT);
 
@@ -124,7 +124,6 @@ public class BottomBarView extends VBox {
       for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
         String colorString = getColorStringForState(simType, series);
         series.getNode().setStyle("-fx-stroke: " + colorString + ";");
-
       }
     });
   }
