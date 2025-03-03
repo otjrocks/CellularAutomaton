@@ -500,6 +500,11 @@ public class MainController {
     } // can ignore thrown exception since we already handled them earlier in the chain
   }
 
+  /**
+   * Update the grid edge type for the grid controlled by this class
+   *
+   * @param edgeStrategyType The new edge strategy you want to use
+   */
   public void updateGridEdgeType(EdgeStrategyType edgeStrategyType) {
     myEdgeStrategyType = edgeStrategyType;
     myGrid.setEdgeStrategy(EdgeStrategyFactory.createEdgeStrategy(edgeStrategyType));
