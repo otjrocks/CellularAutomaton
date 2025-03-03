@@ -1,9 +1,10 @@
 package cellsociety.model.cell;
 
-import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * The cell type used for Darwin simulation
@@ -12,11 +13,15 @@ import java.util.List;
  */
 public class DarwinCell extends Cell {
 
+  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.Instructions";
+  private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
+      INSTRUCTIONS_FILE_PATH);
   private int prevSpecies;
   private int orientation;
   private int curInstructionIndex;
   private int infectionCountdown;
-  private List<String> instructions;
+  private boolean isInfected;
+  private final List<String> instructions;
 
   /**
    * The default constructor for a Cell
@@ -32,7 +37,9 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
-    this.instructions = new ArrayList<>();
+    this.instructions = assignInstructionsFromState(state);
+    this.isInfected = false;
+    this.prevSpecies = 0;
   }
 
   /**
@@ -47,14 +54,15 @@ public class DarwinCell extends Cell {
    * @param infectionCountdown - the number of steps left before a potential infection revers
    * @param instructions       - the list of movement or infection commands
    */
-  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown,
-      List<String> instructions) {
+  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown, int currentInstIndex,
+      List<String> instructions, boolean infected, int previousSpecies) {
     super(state, location);
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
-    this.curInstructionIndex = 0;
-    this.prevSpecies = 0;
+    this.curInstructionIndex = currentInstIndex;
+    this.prevSpecies = previousSpecies;
     this.infectionCountdown = infectionCountdown;
+    this.isInfected = infected;
   }
 
   /**
@@ -222,6 +230,20 @@ public class DarwinCell extends Cell {
    */
   public int getCurInstructionIndex() {
     return curInstructionIndex;
+  }
+
+  public boolean getInfected(){
+    return isInfected;
+  }
+
+  public void setInfected(boolean infectedValue){
+    isInfected = infectedValue;
+  }
+
+  public static List<String> assignInstructionsFromState(int state){
+    String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
+    List<String> instr = Arrays.asList(instrArray);
+    return instr;
   }
 
 }

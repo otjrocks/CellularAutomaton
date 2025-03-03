@@ -1,14 +1,15 @@
 package cellsociety.model.simulation.instructions;
 
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Infect Instruction class to handle infections in Darwin Simulation
@@ -49,14 +50,13 @@ public class InfectInstruction implements Instruction {
         continue;
       }
 
-      if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState()) {
+      DarwinCell speciesCell = (DarwinCell) curCell;
+
+      if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) {
         continue;
       }
 
-      DarwinCell speciesCell = (DarwinCell) curCell;
-
-      DarwinCell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
-      infectedCell.setPrevState(speciesCell.getState());
+      DarwinCell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, speciesCell.getState());
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
     return updates;

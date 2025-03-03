@@ -1,18 +1,17 @@
 package cellsociety;
 
-import cellsociety.model.Grid;
-import cellsociety.model.cell.CellUpdate;
-import cellsociety.model.cell.DarwinCell;
-import cellsociety.model.simulation.GetNeighbors;
-import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
-import cellsociety.model.simulation.rules.DarwinRules;
-import cellsociety.model.simulation.rules.DarwinRules.State;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cellsociety.model.Grid;
+import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.rules.DarwinRules;
 
 /**
  * A simple test program to run DarwinRules in a 5x5 grid and print output to the console.
@@ -47,19 +46,16 @@ public class DarwinRulesConsoleTest {
     }
 
     // Place some DarwinCells with different species
-    DarwinCell cell1 = new DarwinCell(1, new Point2D.Double(2, 2), 90, 0, new ArrayList<>()); // Species 1 in center
-    DarwinCell cell2 = new DarwinCell(2, new Point2D.Double(2, 3), 0, 0, new ArrayList<>()); // Species 2 right of center
-    DarwinCell cell3 = new DarwinCell(3, new Point2D.Double(1, 2), 0, 0, new ArrayList<>()); // Species 3 above center
+    DarwinCell cell1 = new DarwinCell(2, new Point2D.Double(2, 2), 0, 0, 0, new ArrayList<>(), false, 0); // Species 1 in center
 
     // Set up instructions
     cell1.setInstructions("MOVE 1"); // Move forward 1 cell
-    cell2.setInstructions("IFEMPTY 2"); // Jump if empty
-    cell3.setInstructions("INFECT 3"); // Infect nearby cells
+    cell1.setInstructions("LEFT 90"); // Turn
+    cell1.setInstructions("GO 1"); // Repeat
+
 
     // Add cells to the grid
     grid.updateCell(cell1);
-    grid.updateCell(cell2);
-    grid.updateCell(cell3);
 
     // Print the initial state
     System.out.println("Initial Grid:");

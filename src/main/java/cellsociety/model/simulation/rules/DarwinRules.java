@@ -1,28 +1,30 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.Grid;
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellUpdate;
-import cellsociety.model.cell.DarwinCell;
-import cellsociety.model.simulation.GetNeighbors;
-import cellsociety.model.simulation.Instruction;
-import cellsociety.model.simulation.instructions.ConditionalInstruction;
-import cellsociety.model.simulation.instructions.GoInstruction;
-import cellsociety.model.simulation.instructions.InfectInstruction;
-import cellsociety.model.simulation.instructions.LeftInstruction;
-import cellsociety.model.simulation.instructions.MoveInstruction;
-import cellsociety.model.simulation.instructions.RightInstruction;
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.Instruction;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.SimulationRules;
+import cellsociety.model.simulation.instructions.ConditionalInstruction;
+import cellsociety.model.simulation.instructions.GoInstruction;
+import cellsociety.model.simulation.instructions.InfectInstruction;
+import cellsociety.model.simulation.instructions.LeftInstruction;
+import cellsociety.model.simulation.instructions.MoveInstruction;
+import cellsociety.model.simulation.instructions.RightInstruction;
 
 /**
  * Rules class for the Darwin Simulation
@@ -97,8 +99,9 @@ public class DarwinRules  extends SimulationRules {
       Instruction instruction = instructionHandlers.get(arguments.getFirst());
       if (instruction != null) {
         List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid);
+        darwinCell.nextInstruction();
         updates.addAll(instructionUpdates);
-      } else {
+      } else if(!(darwinCell.getState() == State.EMPTY.getValue())){
         LOGGER.warn("No instruction handler found for {}", arguments.getFirst());
       }
     }
@@ -107,11 +110,11 @@ public class DarwinRules  extends SimulationRules {
   }
 
   private static void handleInfection(Grid grid, DarwinCell darwinCell) {
-    if (darwinCell.getState() == State.INFECTED.getValue()) {
+    if (darwinCell.getInfected()) {
       darwinCell.handleInfectionDecrease();
 
       if (darwinCell.getInfectionCountdown() <= 0) {
-        DarwinCell previousSpecies = new DarwinCell(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, darwinCell.getAllInstructions());
+        DarwinCell previousSpecies = new DarwinCell(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, DarwinCell.assignInstructionsFromState(darwinCell.getPrevState()), false, 0);
         grid.updateCell(previousSpecies);
       }
     }
@@ -121,7 +124,7 @@ public class DarwinRules  extends SimulationRules {
    * An enum to store the possible states for this simulation
    */
   public enum State {
-    EMPTY, INFECTED, HOPPER, FLYTRAP, CREEPER;
+    EMPTY, HOPPER, FLYTRAP, CREEPER;
 
     /**
      * Get the ordinal value of this enum entry

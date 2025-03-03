@@ -1,11 +1,12 @@
 package cellsociety.model.simulation.instructions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Abstract class to define the turning instructions

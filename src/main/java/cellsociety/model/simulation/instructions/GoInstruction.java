@@ -1,11 +1,12 @@
 package cellsociety.model.simulation.instructions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Go Instruction class to handle setting a new instruction index
@@ -20,7 +21,7 @@ public class GoInstruction implements Instruction {
   @Override
   public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
     int instructionIndex = Integer.parseInt(arguments.get(1));
-    darwinCell.setCurInstructionIndex(instructionIndex);
+    darwinCell.setCurInstructionIndex(instructionIndex-2);
 
     List<CellUpdate> updates = new ArrayList<>();
     updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
