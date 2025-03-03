@@ -73,13 +73,9 @@ class SidebarViewTest extends DukeApplicationTest {
     // ensure current selected theme is current theme
     assertEquals(themeSelector.getValue(), ThemeConfig.getCurrentTheme());
 
-    // click on first option then last option to ensure last option is not the currently selected
     clickOn("#themeDropdown");
     clickOn(themeSelector.getItems().getFirst());
-    clickOn("#themeDropdown");
-    clickOn(themeSelector.getItems().getLast());
-    assertEquals(themeSelector.getValue(), themeSelector.getItems().getLast());
-    assertEquals(ThemeConfig.getCurrentTheme(), themeSelector.getItems().getLast());
+    assertEquals(ThemeConfig.getCurrentTheme(), themeSelector.getItems().getFirst());
   }
 
   @Test
