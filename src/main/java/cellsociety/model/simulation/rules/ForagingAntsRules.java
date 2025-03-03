@@ -394,6 +394,9 @@ public class ForagingAntsRules extends SimulationRules {
       return emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
     }
 
+    if (candidates.isEmpty()){
+      return null;
+    }
     return candidates.get(random.nextInt(candidates.size()));
   }
 
