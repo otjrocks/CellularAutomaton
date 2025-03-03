@@ -5,14 +5,21 @@ import java.util.Map;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
+import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.config.SimulationConfig;
+import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -27,12 +34,15 @@ import javafx.scene.text.TextAlignment;
 public class BottomBarView extends VBox {
 
   public static final double ELEMENT_SPACING = 10;
-  private final Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
+  private final Text myIterationText = new Text();
   private LineChart<Number, Number> stateChangeChart;
-  private final Map<String, XYChart.Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final Map<String, Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
   private final NumberAxis xAxis = new NumberAxis();
   private final NumberAxis yAxis = new NumberAxis();
   private int stepCount = 0;
+  private final String myIterationCountLabel;
+  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+  private volatile int latestCount = 0;
 
   /**
    * Create a bottom bar view with a preferred size of width x height
@@ -45,6 +55,13 @@ public class BottomBarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    myIterationCountLabel = getMessage("ITERATOR_TEXT");
+    myIterationText.setLayoutX(width - 2 * MARGIN);
+    myIterationText.setLayoutY(height - 2 * MARGIN);
+    // I asked ChatGPT for assistance in scheduling the text UI updates to improve efficiency.
+    scheduler.scheduleAtFixedRate(
+        () -> Platform.runLater(() -> myIterationText.setText(myIterationCountLabel + latestCount)),
+        0, 200, TimeUnit.MILLISECONDS);
     this.getChildren().add(myIterationText);
     setupStateChangeChart();
     update();
@@ -73,8 +90,9 @@ public class BottomBarView extends VBox {
    *
    * @param count The new count you want to display
    */
+
   public void updateIterationCounter(int count) {
-    myIterationText.setText(getMessage("ITERATOR_TEXT") + count);
+    latestCount = count;
   }
 
   private void setupStateChangeChart() {
@@ -105,12 +123,12 @@ public class BottomBarView extends VBox {
     Platform.runLater(() -> {
       int totalStates = sumMapValues(stateCounts);
       yAxis.setUpperBound(totalStates);
-      yAxis.setTickUnit(totalStates/5);
-      for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
+      yAxis.setTickUnit(totalStates / 5);
+      for (Entry<String, Integer> entry : stateCounts.entrySet()) {
         String stateName = entry.getKey();
         int newValue = entry.getValue();
         addStateNameToStateChangeMap(stateName);
-        stateChangeSeriesMap.get(stateName).getData().add(new XYChart.Data<>(stepCount, newValue));
+        stateChangeSeriesMap.get(stateName).getData().add(new Data<>(stepCount, newValue));
       }
 
       updateXYChart(simType);
@@ -121,7 +139,7 @@ public class BottomBarView extends VBox {
 
   private void updateXYChart(String simType) {
     Platform.runLater(() -> {
-      for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
+      for (Series<Number, Number> series : stateChangeChart.getData()) {
         String colorString = getColorStringForState(simType, series);
         series.getNode().setStyle("-fx-stroke: " + colorString + ";");
       }
@@ -136,16 +154,16 @@ public class BottomBarView extends VBox {
 
   private void addStateNameToStateChangeMap(String stateName) {
     if (!stateChangeSeriesMap.containsKey(stateName)) {
-      XYChart.Series<Number, Number> newSeries = new XYChart.Series<>();
+      Series<Number, Number> newSeries = new Series<>();
       newSeries.setName(stateName);
       stateChangeSeriesMap.put(stateName, newSeries);
       stateChangeChart.getData().add(newSeries);
     }
   }
 
-  private int sumMapValues(Map<String, Integer> map){
+  private int sumMapValues(Map<String, Integer> map) {
     int total = 0;
-    for (String key: map.keySet()){
+    for (String key : map.keySet()) {
       total += map.get(key);
     }
 

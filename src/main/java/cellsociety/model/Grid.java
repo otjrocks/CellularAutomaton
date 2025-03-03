@@ -79,9 +79,6 @@ public class Grid {
     if (checkOutOfBounds(adjustedPoint)) {
       return null;
     }
-    if (!cellExists(adjustedPoint)) {
-      return null;
-    }
     return myCells.get(adjustedPoint);
   }
 
@@ -95,9 +92,6 @@ public class Grid {
   public Cell getCell(Point2D point) {
     Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(point, myNumRows, myNumCols);
     if (checkOutOfBounds(adjustedPoint)) {
-      return null;
-    }
-    if (!cellExists(adjustedPoint)) {
       return null;
     }
     return myCells.get(adjustedPoint);
@@ -166,12 +160,9 @@ public class Grid {
   /**
    * Attempt to update a cell in the grid
    *
-   * @param cell the cell you which to update. This will update the grid with the cell provided
+   * @param cell the cell you which to update.
    */
   public void updateCell(Cell cell) {
-    if (!cellExists(cell.getLocation())) {
-      return;
-    }
     attemptAddCell(cell);
   }
 
