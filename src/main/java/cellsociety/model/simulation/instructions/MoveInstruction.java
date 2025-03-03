@@ -42,7 +42,12 @@ public class MoveInstruction implements Instruction {
         newRow += (int) direction.getX();
         newCol += (int) direction.getY();
 
-        Cell curCell = grid.getCell(newRow, newCol);
+        Cell curCell;
+        try {
+          curCell = grid.getCell(newRow, newCol);
+        } catch (IndexOutOfBoundsException e) {
+          break;
+        }
         if (curCell == null || curCell.getState() != State.EMPTY.getValue()) {
           break;
         }

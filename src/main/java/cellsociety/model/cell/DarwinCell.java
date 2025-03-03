@@ -53,7 +53,7 @@ public class DarwinCell extends Cell {
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
     this.curInstructionIndex = 0;
-    this.prevSpecies = -1;
+    this.prevSpecies = 0;
     this.infectionCountdown = infectionCountdown;
   }
 
