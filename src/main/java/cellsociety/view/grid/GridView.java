@@ -2,6 +2,7 @@ package cellsociety.view.grid;
 
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -42,9 +43,6 @@ public abstract class GridView extends Group {
     myWidth = width;
     myHeight = height;
     myGrid = initializeGrid();
-
-    zoomConditional();
-
     addGridElementsToGroupAndSetEventHandlers(mainController);
     this.setId("gridView");
   }
@@ -186,48 +184,4 @@ public abstract class GridView extends Group {
       tooltip.setStyle("-fx-background-color: white; -fx-text-fill: " + colorString + ";");
     });
   }
-
-  private void zoomConditional(){
-    this.setOnScroll(event -> {
-        double zoomFactor = 1.1;
-
-        if (event.getDeltaY() > 0) {
-            zoomIn(zoomFactor, event.getSceneX(), event.getSceneY());
-        } else {
-            zoomOut(zoomFactor, event.getSceneX(), event.getSceneY());
-        }
-    });
-  }
-
-  private void zoomIn(double zoomFactor, double mouseX, double mouseY) { 
-    double newScaleX = getScaleX() * zoomFactor;
-    double newScaleY = getScaleY() * zoomFactor;
-    setScale(newScaleX, newScaleY);
-
-    double offsetX = mouseX - getLayoutX();
-    double offsetY = mouseY - getLayoutY();
-
-    setLayoutX(getLayoutX() - offsetX * (zoomFactor - 1));
-    setLayoutY(getLayoutY() - offsetY * (zoomFactor - 1));
-
-  }
-
-  private void zoomOut(double zoomFactor, double mouseX, double mouseY) {
-    double newScaleX = getScaleX() / zoomFactor;
-    double newScaleY = getScaleY() / zoomFactor;
-    setScale(newScaleX, newScaleY);
-
-    double offsetX = mouseX - getLayoutX();
-    double offsetY = mouseY - getLayoutY();
-
-    setLayoutX(getLayoutX() + offsetX * (1 - 1 / zoomFactor));
-    setLayoutY(getLayoutY() + offsetY * (1 - 1 / zoomFactor));
-
-  }
-
-  private void setScale(double scaleX, double scaleY) {
-    this.setScaleX(scaleX);
-    this.setScaleY(scaleY);
-  }
-
 }
