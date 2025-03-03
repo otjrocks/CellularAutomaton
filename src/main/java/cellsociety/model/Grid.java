@@ -70,7 +70,8 @@ public class Grid {
    *
    * @param row: Row of cell
    * @param col: Column of cell
-   * @return The cell at the specified location if it exists, or null if it does not exist
+   * @return The cell at the specified location if it exists, or null if it does not exist or is out
+   * of bounds
    */
   public Cell getCell(int row, int col) {
     Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(new Point2D.Double(row, col), myNumRows,
@@ -88,14 +89,13 @@ public class Grid {
    * Get a cell at specified point if it exists
    *
    * @param point: point
-   * @return The cell at the specified location if it exists, or null if it does not exist
-   * @throws IllegalArgumentException if you request a point that is not in the grid
+   * @return The cell at the specified location if it exists, or null if it does not exist or is out
+   * of bounds
    */
   public Cell getCell(Point2D point) {
     Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(point, myNumRows, myNumCols);
     if (checkOutOfBounds(adjustedPoint)) {
-      throw new IndexOutOfBoundsException(
-          "Invalid coordinate. Point must be within bounds of grid.");
+      return null;
     }
     if (!cellExists(adjustedPoint)) {
       return null;

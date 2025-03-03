@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ class GameOfLifeGeneralRulesTest {
 
   @Test
   void GameOfLifeGeneral_rulestringB4S2_cellIsCorrectlyBorn() throws InvalidParameterException{
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
 
     gameOfLifeRules = new GameOfLifeRules(Map.of("ruleString", new Parameter<>("B4/S2")), new MooreNeighbors(1));
     Cell cell = new DefaultCell(0, new Double(2, 2));
@@ -46,7 +47,7 @@ class GameOfLifeGeneralRulesTest {
 
   @Test
   void GameOfLifeGeneral_rulestringB5S2_cellShouldeNotBeBorn() throws InvalidParameterException{
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
 
     gameOfLifeRules = new GameOfLifeRules(Map.of("ruleString", new Parameter<>("B5/S2")), new MooreNeighbors(1));
     Cell cell = new DefaultCell(0, new Double(2, 2));
@@ -62,7 +63,7 @@ class GameOfLifeGeneralRulesTest {
 
   @Test
   void GameOfLifeGeneral_noParameter_worksAsNormalConwaysGoL() throws InvalidParameterException{
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
 
     gameOfLifeRules = new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1));
     Cell cell = new DefaultCell(0, new Double(2, 2));
@@ -77,7 +78,7 @@ class GameOfLifeGeneralRulesTest {
 
    @Test
    void GameOfLifeGeneral_rulestringB8S1234567_cellDoesNotRemainAlive() throws InvalidParameterException{
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
 
     gameOfLifeRules = new GameOfLifeRules(Map.of("ruleString", new Parameter<>("B5/S2")), new MooreNeighbors(1));
     Cell cell = new DefaultCell(1, new Double(2, 2));

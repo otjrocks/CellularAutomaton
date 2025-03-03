@@ -7,6 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorWorldCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
@@ -26,7 +27,7 @@ class WaTorWorldRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     parameters.put("fishReproductionTime", new Parameter<>("3.0"));
     parameters.put("sharkReproductionTime", new Parameter<>("4.0"));
     parameters.put("sharkEnergyGain", new Parameter<>("2.0"));

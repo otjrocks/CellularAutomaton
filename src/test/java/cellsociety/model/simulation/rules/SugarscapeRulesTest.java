@@ -6,6 +6,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.SugarscapeCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
@@ -24,7 +25,7 @@ class SugarscapeRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     parameters.put("patchSugarGrowBackRate", new Parameter<>(4));
     parameters.put("patchSugarGrowBackInterval", new Parameter<>(3));
     parameters.put("patchSugar", new Parameter<>(3));

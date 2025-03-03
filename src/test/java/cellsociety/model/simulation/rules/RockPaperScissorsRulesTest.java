@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
@@ -24,7 +25,7 @@ public class RockPaperScissorsRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     parameters.put("minThreshold", new Parameter<>(0.5));
     parameters.put("numStates", new Parameter<>(3));
 
@@ -44,7 +45,7 @@ public class RockPaperScissorsRulesTest {
   private void initializeGrid(int[][] states) {
     int rows = states.length;
     int cols = states[0].length;
-    Grid grid = new Grid(rows, cols);
+    Grid grid = new Grid(rows, cols, new FixedEdgeStrategy());
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {

@@ -2,6 +2,7 @@ package cellsociety.model.simulation.rules;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
@@ -23,7 +24,7 @@ class FallingSandRulesTest {
   @BeforeEach
   void setUp() throws InvalidParameterException {
     // Create a grid with dimensions 3x3 for simplicity
-    grid = new Grid(3, 3);
+    grid = new Grid(3, 3, new FixedEdgeStrategy());
     Map<String, Parameter<?>> parameters = new HashMap<>();
     fallingSandRules = new FallingSandRules(parameters, new MooreNeighbors(1));
     for (int i = 0; i < 3; i++) {

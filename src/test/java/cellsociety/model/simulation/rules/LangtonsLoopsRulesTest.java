@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
@@ -54,7 +55,7 @@ class LangtonsLoopsRulesTest {
   @BeforeEach
   void setup() {
     parameters = new HashMap<>();
-    grid = new Grid(3, 3);
+    grid = new Grid(3, 3, new FixedEdgeStrategy());
     grid.addCell(new DefaultCell(0, new Point2D.Double(1, 1)));
     grid.addCell(new DefaultCell(0, new Point2D.Double(0, 1)));
     grid.addCell(new DefaultCell(0, new Point2D.Double(1, 2)));

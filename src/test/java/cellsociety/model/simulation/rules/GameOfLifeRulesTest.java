@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import java.awt.geom.Point2D;
@@ -21,7 +22,7 @@ class GameOfLifeRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     gameOfLifeRules = new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1));
 
     int[][] gridPattern = {
@@ -39,7 +40,7 @@ class GameOfLifeRulesTest {
   private Grid initializeGrid(int[][] states) {
     int rows = states.length;
     int cols = states[0].length;
-    Grid grid = new Grid(rows, cols);
+    Grid grid = new Grid(rows, cols, new FixedEdgeStrategy());
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
