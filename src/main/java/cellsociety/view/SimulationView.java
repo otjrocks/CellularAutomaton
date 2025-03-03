@@ -40,9 +40,9 @@ public class SimulationView extends Group {
 
 
   private double zoomFactor = 1.0;
-  private final double zoomIncrement = 0.1;
-  private final double minZoom = 0.3;
-  private final double maxZoom = 3.0;
+  private final double zoomIncrement = 0.08;
+  private final double minZoom = 0.5;
+  private final double maxZoom = 3.5;
 
   /**
    * Create a simulation view
