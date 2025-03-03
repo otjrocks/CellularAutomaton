@@ -1,4 +1,4 @@
-package cellsociety.model.simulation.Instructions;
+package cellsociety.model.simulation.instructions;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -16,6 +16,15 @@ import java.util.List;
 
 public class InfectInstruction implements Instruction {
   private int layers;
+
+  /**
+   * Create instance of infection instruction
+   *
+   * @param layers - the number of layers of neighbors that should be searched
+   */
+  public InfectInstruction(int layers) {
+    this.layers = layers;
+  }
   /**
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
@@ -33,14 +42,21 @@ public class InfectInstruction implements Instruction {
       newRow += (int) direction.getX();
       newCol += (int) direction.getY();
 
-      Cell curCell = grid.getCell(newRow, newCol);
+      Cell curCell;
+      try {
+        curCell = grid.getCell(newRow, newCol);
+      } catch (IndexOutOfBoundsException e) {
+        continue;
+      }
+
       if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState()) {
         continue;
       }
 
       DarwinCell speciesCell = (DarwinCell) curCell;
 
-      Cell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
+      DarwinCell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, speciesCell.getAllInstructions());
+      infectedCell.setPrevState(speciesCell.getState());
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
     return updates;

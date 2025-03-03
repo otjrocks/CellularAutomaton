@@ -1,4 +1,4 @@
-package cellsociety.model.simulation.Instructions;
+package cellsociety.model.simulation.instructions;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -23,9 +23,11 @@ public class ConditionalInstruction implements Instruction {
    * Creates one instance of a Conditional Instruction
    *
    * @param conditionType - the string name of the condition
+   * @param layers - the number of layers that should be searched when getting neighbors
    */
-  public ConditionalInstruction(String conditionType) {
+  public ConditionalInstruction(String conditionType, int layers) {
     this.conditionType = conditionType;
+    this.layers = layers;
   }
 
   /**
@@ -58,7 +60,13 @@ public class ConditionalInstruction implements Instruction {
       newRow += (int) direction.getX();
       newCol += (int) direction.getY();
 
-      Cell curCell = grid.getCell(newRow, newCol);
+      Cell curCell;
+      try {
+        curCell = grid.getCell(newRow, newCol);
+      } catch (IndexOutOfBoundsException e) {
+        break;
+      }
+
       if (curCell == null) {
         continue;
       }

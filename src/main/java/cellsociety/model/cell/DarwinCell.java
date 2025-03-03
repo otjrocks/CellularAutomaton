@@ -53,7 +53,7 @@ public class DarwinCell extends Cell {
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
     this.curInstructionIndex = 0;
-    this.prevSpecies = -1;
+    this.prevSpecies = 0;
     this.infectionCountdown = infectionCountdown;
   }
 
@@ -78,6 +78,24 @@ public class DarwinCell extends Cell {
     if (!instructions.isEmpty()) {
       curInstructionIndex = (curInstructionIndex + 1) % instructions.size();
     }
+  }
+
+  /**
+   * Getter for the state of the previous species
+   *
+   * @return - an int representation of the previous species's state
+   */
+  public int getPrevState() {
+    return prevSpecies;
+  }
+
+  /**
+   * Setter for the previous species
+   *
+   * @param prevSpecies - an int representation of the previous species's state
+   */
+  public void setPrevState(int prevSpecies) {
+    this.prevSpecies = prevSpecies;
   }
 
 
@@ -160,6 +178,7 @@ public class DarwinCell extends Cell {
     this.curInstructionIndex = instructionIndex;
   }
 
+
   /**
    * Gets the instruction list
    *
@@ -185,6 +204,24 @@ public class DarwinCell extends Cell {
    */
   public int getInfectionCountdown() {
     return infectionCountdown;
+  }
+
+  /**
+   * Setter for an instruction (used mainly for tests)
+   *
+   * @param instruction - an instruction for a species
+   */
+  public void setInstructions(String instruction) {
+    this.instructions.add(instruction);
+  }
+
+  /**
+   * Getter for the instruction index
+   *
+   * @return - the index of the current instruction to run
+   */
+  public int getCurInstructionIndex() {
+    return curInstructionIndex;
   }
 
 }

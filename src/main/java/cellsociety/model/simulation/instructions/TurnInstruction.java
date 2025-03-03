@@ -1,9 +1,10 @@
-package cellsociety.model.simulation.Instructions;
+package cellsociety.model.simulation.instructions;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,9 @@ public abstract class TurnInstruction implements Instruction {
   public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
     int degrees = Integer.parseInt(arguments.get(1));
     turn(darwinCell, degrees, stepSize);
-    return List.of();
+    List<CellUpdate> updates = new ArrayList<>();
+    updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
+    return updates;
   }
 
   /**
