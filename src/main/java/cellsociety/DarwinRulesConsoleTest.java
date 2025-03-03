@@ -24,6 +24,10 @@ import cellsociety.model.simulation.rules.DarwinRules;
  */
 public class DarwinRulesConsoleTest {
   public static final Logger LOGGER = LogManager.getLogger();
+
+  /**
+  * Activates console test simulation
+  */
   public static void main(String[] args) {
     try {
       runSimulation();
