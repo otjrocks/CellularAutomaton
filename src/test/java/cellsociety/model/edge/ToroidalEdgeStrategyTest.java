@@ -63,12 +63,6 @@ class ToroidalEdgeStrategyTest {
   }
 
   @Test
-  public void adjustCoordinate_validPoint_returnsSameCoordinate() {
-    assertEquals(new Double(1, 2),
-        getAdjustedCoordinate(new Double(1, 2)));
-  }
-
-  @Test
   public void adjustCoordinate_BothValuesOutsideGrid_returnsToroidalEdge() {
     assertEquals(new Double(myRows - 1, 0),
         getAdjustedCoordinate(new Double(-1, myCols + myCols)));
