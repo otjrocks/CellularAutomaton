@@ -135,6 +135,15 @@ public class MainController {
     }
   }
 
+
+  /**
+   * Method to call the simulation view to reset the Grid view to be back to normal pr-zoom
+   *
+   */
+  public void resetZoomButton() {
+    mySimulationView.resetZoom();
+  }
+
   /**
    * Returns the current simulation object
    *

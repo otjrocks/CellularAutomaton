@@ -209,4 +209,19 @@ public class SimulationView extends Group {
     scrollPane.setVvalue(0.5);
     scrollPane.setHvalue(0.5);
   }
+
+  /**
+   * Method to reset the Grid view to be back to normal pr-zoom
+   *
+   */
+  public void resetZoom() {
+    gridContainer.setScaleX(1.0);
+    gridContainer.setScaleY(1.0);
+
+    gridContainer.setTranslateX((double) (myWidth - myGridView.getWidth()) / 2);
+    gridContainer.setTranslateY((double) (myHeight - myGridView.getHeight()) / 2);
+
+    scrollPane.setHvalue(0.5);
+    scrollPane.setVvalue(0.5);
+  }
 }
