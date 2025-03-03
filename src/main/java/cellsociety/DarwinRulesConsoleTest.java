@@ -92,6 +92,9 @@ public class DarwinRulesConsoleTest {
     }
   }
 
+  /**
+  * Print map for debugging purposes
+  */
   private static void printGrid(Grid grid, int size) {
     for (int row = 0; row < size; row++) {
       for (int col = 0; col < size; col++) {

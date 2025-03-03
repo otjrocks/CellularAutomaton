@@ -21,7 +21,7 @@ public class DarwinCell extends Cell {
   private int curInstructionIndex;
   private int infectionCountdown;
   private final boolean isInfected;
-  private final ArrayList<String> instructions;
+  private final List<String> instructions;
 
   /**
    * The default constructor for a Cell
@@ -38,10 +38,10 @@ public class DarwinCell extends Cell {
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
     if(state < 4){
-    this.instructions = assignInstructionsFromState(state);
+      this.instructions = assignInstructionsFromState(state);
     }
     else{
-    this.instructions = new ArrayList<>();
+      this.instructions = new ArrayList<>();
     }
     this.isInfected = false;
     this.prevSpecies = 0;
@@ -250,9 +250,9 @@ public class DarwinCell extends Cell {
    *
    * @param state: Integer representing the species of the animal (or empty)
    */
-  public static ArrayList<String> assignInstructionsFromState(int state){
+  public static List<String> assignInstructionsFromState(int state){
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    ArrayList<String> instr = new ArrayList<>(Arrays.asList(instrArray));
+    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
     return instr;
   }
 
