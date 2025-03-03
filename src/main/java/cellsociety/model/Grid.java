@@ -1,5 +1,6 @@
 package cellsociety.model;
 
+import cellsociety.model.edge.EdgeStrategy;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,16 +22,19 @@ public class Grid {
   private final int myNumRows;
   private final int myNumCols;
   private final Map<Point2D, Cell> myCells;
+  private EdgeStrategy myEdgeStrategy;
 
   /**
    * Initialize a data structure to store a grid with the defined width and height
    *
-   * @param numRows: (int) number of rows
-   * @param numCols: (int) number of columns
+   * @param numRows:      (int) number of rows
+   * @param numCols:      (int) number of columns
+   * @param edgeStrategy: The edge strategy to use handling the edges of this grid
    */
-  public Grid(int numRows, int numCols) {
+  public Grid(int numRows, int numCols, EdgeStrategy edgeStrategy) {
     myNumRows = numRows;
     myNumCols = numCols;
+    myEdgeStrategy = edgeStrategy;
     myCells = new HashMap<>();
   }
 
@@ -60,14 +64,16 @@ public class Grid {
    * @return The cell at the specified location if it exists, or null if it does not exist
    */
   public Cell getCell(int row, int col) {
-    if (checkOutOfBounds(new Point2D.Double(row, col))) {
+    Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(new Point2D.Double(row, col), myNumRows,
+        myNumCols);
+    if (checkOutOfBounds(adjustedPoint)) {
       throw new IndexOutOfBoundsException(
           "Invalid coordinate. Point must be within bounds of grid.");
     }
-    if (!cellExists(new Point2D.Double(row, col))) {
+    if (!cellExists(adjustedPoint)) {
       return null;
     }
-    return myCells.get(new Point2D.Double(row, col));
+    return myCells.get(adjustedPoint);
   }
 
   /**
@@ -78,14 +84,15 @@ public class Grid {
    * @throws IllegalArgumentException if you request a point that is not in the grid
    */
   public Cell getCell(Point2D point) {
-    if (checkOutOfBounds(point)) {
+    Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(point, myNumRows, myNumCols);
+    if (checkOutOfBounds(adjustedPoint)) {
       throw new IndexOutOfBoundsException(
           "Invalid coordinate. Point must be within bounds of grid.");
     }
-    if (!cellExists(point)) {
+    if (!cellExists(adjustedPoint)) {
       return null;
     }
-    return myCells.get(point);
+    return myCells.get(adjustedPoint);
   }
 
   /**
@@ -111,6 +118,7 @@ public class Grid {
    * @return true if the cell exists, false otherwise
    */
   public boolean cellExists(Point2D location) {
+    location = myEdgeStrategy.adjustCoordinate(location, myNumRows, myNumCols);
     return myCells.containsKey(location);
   }
 
@@ -140,6 +148,7 @@ public class Grid {
    * @return - a boolean representation on whether it is a wall.
    */
   public boolean isWall(int row, int col) {
+
     if (checkOutOfBounds(new Point2D.Double(row, col))) {
       return false;
     }
@@ -191,6 +200,7 @@ public class Grid {
   }
 
   private boolean checkOutOfBounds(Point2D location) {
+    location = myEdgeStrategy.adjustCoordinate(location, myNumRows, myNumCols);
     return (!(location.getX() >= 0)) ||
         (!(location.getY() >= 0)) ||
         (!(location.getX() < myNumRows)) ||

@@ -1,6 +1,9 @@
 package cellsociety.controller;
 
 import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.edge.FixedEdgeStrategy;
+import cellsociety.model.edge.MirrorEdgeStrategy;
+import cellsociety.model.edge.ToroidalEdgeStrategy;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 
 import java.io.File;
@@ -206,7 +209,7 @@ public class MainController {
    */
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
-    myGrid = new Grid(rows, cols);
+    myGrid = new Grid(rows, cols, new MirrorEdgeStrategy());
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {

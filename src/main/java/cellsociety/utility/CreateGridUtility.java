@@ -3,6 +3,9 @@ package cellsociety.utility;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.SugarscapeCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
+import cellsociety.model.edge.MirrorEdgeStrategy;
+import cellsociety.model.edge.ToroidalEdgeStrategy;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.cell.Cell;
@@ -31,7 +34,7 @@ public class CreateGridUtility {
    */
   public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, Simulation sim)
       throws GridException, InvalidStateException {
-    Grid grid = new Grid(gridHeight, gridWidth);
+    Grid grid = new Grid(gridHeight, gridWidth, new ToroidalEdgeStrategy());
     NodeList rows = gridDoc.getElementsByTagName("Row");
     addAllCellsToGrid(gridHeight, gridWidth, sim, rows, grid);
     return grid;
@@ -116,7 +119,7 @@ public class CreateGridUtility {
 
   private static Grid generateRandomGrid(Document gridDoc, int gridHeight, int gridWidth,
       Simulation sim, boolean fromDistribution) {
-    Grid grid = new Grid(gridHeight, gridWidth);
+    Grid grid = new Grid(gridHeight, gridWidth, new ToroidalEdgeStrategy());
     int totalCells = gridHeight * gridWidth;
 
     Map<Integer, Integer> stateCounts = new HashMap<>();
