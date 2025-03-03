@@ -123,9 +123,14 @@ public class ViewModeView extends VBox {
             simulationData.description())
     );
     description.setId("viewModeSimulationDescription");
+    Text edgeType = createText(
+        String.format(COMBINE_TWO_STRINGS, getMessage("EDGE_TYPE_LABEL"),
+            myMainController.getEdgeStrategyType().toString())
+    );
+    edgeType.setId("viewModeEdgeTypeDisplay");
     VBox metaDataBox = new VBox();
     metaDataBox.setSpacing(ELEMENT_SPACING);
-    metaDataBox.getChildren().addAll(infoText, name, type, author, description);
+    metaDataBox.getChildren().addAll(infoText, name, type, author, edgeType, description);
     metaDataBox.getStyleClass().add("metadata-container");
     this.getChildren().add(metaDataBox);
   }

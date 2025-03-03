@@ -3,6 +3,7 @@ package cellsociety.utility;
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.SugarscapeCell;
+import cellsociety.model.edge.EdgeStrategy;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.cell.Cell;
@@ -29,9 +30,10 @@ public class CreateGridUtility {
    * @param gridWidth:  Width of the grid you're looking to initialize
    * @param sim:        The current simulation for getting correct cell types
    */
-  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, Simulation sim)
+  public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, Simulation sim,
+      EdgeStrategy edgeStrategy)
       throws GridException, InvalidStateException {
-    Grid grid = new Grid(gridHeight, gridWidth);
+    Grid grid = new Grid(gridHeight, gridWidth, edgeStrategy);
     NodeList rows = gridDoc.getElementsByTagName("Row");
     addAllCellsToGrid(gridHeight, gridWidth, sim, rows, grid);
     return grid;
@@ -89,34 +91,36 @@ public class CreateGridUtility {
   /**
    * Method to generate random Grid from a number of defined states
    *
-   * @param gridDoc:    Document from which you are parsing the random arguments from
-   * @param gridHeight: Height of the grid you're looking to initialize
-   * @param gridWidth:  Width of the grid you're looking to initialize
-   * @param sim:        The current simulation for getting correct cell types
+   * @param gridDoc:      Document from which you are parsing the random arguments from
+   * @param gridHeight:   Height of the grid you're looking to initialize
+   * @param gridWidth:    Width of the grid you're looking to initialize
+   * @param edgeStrategy: The edge strategy for this grid
+   * @param sim:          The current simulation for getting correct cell types
    */
   public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight,
-      int gridWidth, Simulation sim) {
+      int gridWidth, EdgeStrategy edgeStrategy, Simulation sim) {
     // generate a grid with fromDistribution equal to false
-    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, false);
+    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, edgeStrategy, false);
   }
 
   /**
    * Method to generate random Grid from a distribution of defined states
    *
-   * @param gridDoc:    Document from which you are parsing the random arguments from
-   * @param gridHeight: Height of the grid you're looking to initialize
-   * @param gridWidth:  Width of the grid you're looking to initialize
-   * @param sim:        The current simulation for getting correct cell types
+   * @param gridDoc:      Document from which you are parsing the random arguments from
+   * @param gridHeight:   Height of the grid you're looking to initialize
+   * @param gridWidth:    Width of the grid you're looking to initialize
+   * @param edgeStrategy: The edge strategy to create the grid with
+   * @param sim:          The current simulation for getting correct cell types
    */
   public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight,
-      int gridWidth, Simulation sim) {
+      int gridWidth, EdgeStrategy edgeStrategy, Simulation sim) {
     // generate a grid with fromDistribution equal to true
-    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, true);
+    return generateRandomGrid(gridDoc, gridHeight, gridWidth, sim, edgeStrategy, true);
   }
 
   private static Grid generateRandomGrid(Document gridDoc, int gridHeight, int gridWidth,
-      Simulation sim, boolean fromDistribution) {
-    Grid grid = new Grid(gridHeight, gridWidth);
+      Simulation sim, EdgeStrategy edgeStrategy, boolean fromDistribution) {
+    Grid grid = new Grid(gridHeight, gridWidth, edgeStrategy);
     int totalCells = gridHeight * gridWidth;
 
     Map<Integer, Integer> stateCounts = new HashMap<>();
