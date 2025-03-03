@@ -4,7 +4,10 @@ import static cellsociety.config.MainConfig.getMessage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import cellsociety.model.Grid;
+import cellsociety.model.cell.DefaultCell;
 import cellsociety.view.components.AlertField;
+import java.awt.geom.Point2D.Double;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
@@ -16,7 +19,7 @@ public class TestUtils extends DukeApplicationTest {
   /**
    * Helper method to verify if a specific Text node matches expected text
    *
-   * @param fxId       the FX ID of the Text node
+   * @param fxId    the FX ID of the Text node
    * @param message the message you are expecting
    */
   public void verifyText(String fxId, String message) {
@@ -43,6 +46,19 @@ public class TestUtils extends DukeApplicationTest {
    */
   public void verifyAlertFieldContains(AlertField alertField, String message) {
     assertTrue(alertField.getMessages().contains(message));
+  }
+
+  /**
+   * Initialize a grid with cells with all state 0
+   *
+   * @param grid The grid you want to initialize
+   */
+  public static void initializeEmptyGrid(Grid grid) {
+    for (int i = 0; i < grid.getRows(); i++) {
+      for (int j = 0; j < grid.getCols(); j++) {
+        grid.addCell(new DefaultCell(0, new Double(i, j)));
+      }
+    }
   }
 
 }

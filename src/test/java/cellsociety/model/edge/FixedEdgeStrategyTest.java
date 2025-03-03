@@ -4,11 +4,11 @@ package cellsociety.model.edge;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.DefaultCell;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.TestUtils;
 
 class FixedEdgeStrategyTest {
 
@@ -19,7 +19,7 @@ class FixedEdgeStrategyTest {
 
   @BeforeEach
   public void setUp() {
-    initializeEmptyGrid();
+    TestUtils.initializeEmptyGrid(myGrid);
   }
 
   @Test
@@ -53,13 +53,5 @@ class FixedEdgeStrategyTest {
 
   private Point2D getAdjustedCoordinate(Point2D point) {
     return myFixedEdgeStrategy.adjustCoordinate(point, myRows, myCols);
-  }
-
-  private void initializeEmptyGrid() {
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        myGrid.addCell(new DefaultCell(0, new Double(i, j)));
-      }
-    }
   }
 }
