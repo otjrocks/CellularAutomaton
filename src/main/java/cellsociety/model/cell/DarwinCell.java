@@ -2,9 +2,9 @@ package cellsociety.model.cell;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
+
+import cellsociety.config.SimulationConfig;
 
 /**
  * The cell type used for Darwin simulation
@@ -13,9 +13,6 @@ import java.util.ResourceBundle;
  */
 public class DarwinCell extends Cell {
 
-  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.Instructions";
-  private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
-      INSTRUCTIONS_FILE_PATH);
   private int prevSpecies;
   private int orientation;
   private int curInstructionIndex;
@@ -38,7 +35,7 @@ public class DarwinCell extends Cell {
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
     if(state < 4){
-      this.instructions = assignInstructionsFromState(state);
+      this.instructions = SimulationConfig.assignInstructionsFromState(state);
     }
     else{
       this.instructions = new ArrayList<>();
@@ -243,17 +240,6 @@ public class DarwinCell extends Cell {
    */
   public boolean getInfected(){
     return isInfected;
-  }
-
-  /**
-   * Gets instructions for predefined species from the properties file
-   *
-   * @param state: Integer representing the species of the animal (or empty)
-   */
-  public static List<String> assignInstructionsFromState(int state){
-    String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
-    return instr;
   }
 
 }

@@ -32,6 +32,9 @@ public class DarwinRulesConsoleTest {
     }
   }
 
+  /**
+  * Run simulation for console testing
+  */
   private static void runSimulation() throws InvalidParameterException {
     int gridSize = 5;
 

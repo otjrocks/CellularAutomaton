@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
@@ -115,7 +116,7 @@ public class DarwinRules  extends SimulationRules {
       darwinCell.handleInfectionDecrease();
 
       if (darwinCell.getInfectionCountdown() <= 0) {
-        DarwinCell previousSpecies = new DarwinCell(new DarwinCellRecord(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, DarwinCell.assignInstructionsFromState(darwinCell.getPrevState()), false, 0));
+        DarwinCell previousSpecies = new DarwinCell(new DarwinCellRecord(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, SimulationConfig.assignInstructionsFromState(darwinCell.getPrevState()), false, 0));
         grid.updateCell(previousSpecies);
       }
     }
