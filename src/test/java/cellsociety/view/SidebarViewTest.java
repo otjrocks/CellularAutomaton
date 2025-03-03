@@ -81,4 +81,11 @@ class SidebarViewTest extends DukeApplicationTest {
     assertEquals(themeSelector.getValue(), themeSelector.getItems().getLast());
     assertEquals(ThemeConfig.getCurrentTheme(), themeSelector.getItems().getLast());
   }
+
+  @Test
+  public void resetButton_ResetsZoom_Success() {
+    //ensures the button is clickable
+    clickOn("#resetZoomButton");
+  }
+
 }

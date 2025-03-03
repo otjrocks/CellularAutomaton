@@ -7,6 +7,7 @@ import cellsociety.controller.MainController;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.cell.CellView;
 import cellsociety.view.grid.GridView;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +31,7 @@ class GridViewTest extends DukeApplicationTest {
     myMainController = createNewSimulation.launchNewSimulation();
     myMainController.hideSplashScreen(); // hide splash screen to jump directly to main screen
     myMainControllerSpy = Mockito.spy(myMainController);
-    myGridView = lookup("#gridView").query();
+    Platform.runLater(() -> myGridView = lookup("#gridView").query());
   }
 
   @BeforeEach

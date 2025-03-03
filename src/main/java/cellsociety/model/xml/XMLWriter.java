@@ -3,6 +3,7 @@ package cellsociety.model.xml;
 import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
 import java.util.Map;
@@ -53,13 +54,14 @@ public class XMLWriter {
 
       Element simElement = doc.createElement("Simulation");
       doc.appendChild(simElement);
+      SimulationRules rules = sim.rules();
 
       writeSimData(doc, sim, simElement);
       writeCellShapeType(doc, cellShapeType, simElement);
       writeEdgeStrategyType(doc, edgeStrategyType, simElement);
+      writeNeighbors(doc, rules, simElement);
       writeGrid(doc, grid, simElement);
 
-      SimulationRules rules = sim.rules();
       writeParameters(doc, rules, simElement);
 
       transformXML(doc, file);
@@ -153,6 +155,27 @@ public class XMLWriter {
       addElement(doc, parametersElement, entry.getKey(), String.valueOf(entry.getValue()));
     }
   }
+
+  /**
+   * Helper method to add neighbor configuration to the XML Writer document
+   *
+   * @param doc        Document to which the neighbors data will be added
+   * @param rules      SimulationRules object that contains neighbor configuration
+   * @param simElement The parent XML element where the neighbors configuration
+   */
+  private static void writeNeighbors(Document doc, SimulationRules rules, Element simElement) {
+    Element neighborsElement = doc.createElement("Neighbors");
+    simElement.appendChild(neighborsElement);
+
+    GetNeighbors neighbors = rules.getNeighborConfig();
+
+    String neighborType = neighbors.getClass().getSimpleName().replace("Neighbors", "");
+    int neighborLayer = neighbors.getLayers();
+
+    addElement(doc, neighborsElement, "NeighborType", neighborType);
+    addElement(doc, neighborsElement, "NeighborLayer", String.valueOf(neighborLayer));
+  }
+
 
   /**
    * Helper method to transform doc into XML file at designated path
