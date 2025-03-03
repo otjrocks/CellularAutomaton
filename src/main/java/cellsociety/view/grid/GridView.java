@@ -226,22 +226,8 @@ public abstract class GridView extends Group {
   }
 
   private void setScale(double scaleX, double scaleY) {
-
     this.setScaleX(scaleX);
     this.setScaleY(scaleY);
-    
-    scaleCells(scaleX);
-  }
-
-  private void scaleCells(double scaleFactor) {
-    for (int row = 0; row < myNumRows; row++) {
-        for (int col = 0; col < myNumColumns; col++) {
-            CellView cell = myGrid[row][col];
-
-            cell.setScaleX(scaleFactor);
-            cell.setScaleY(scaleFactor);
-        }
-    }
   }
 
 }
