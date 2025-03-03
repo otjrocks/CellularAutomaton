@@ -1,6 +1,8 @@
 package cellsociety.controller;
 
 import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.edge.EdgeStrategyFactory;
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.edge.MirrorEdgeStrategy;
 import cellsociety.model.edge.ToroidalEdgeStrategy;
@@ -485,5 +487,9 @@ public class MainController {
     } catch (Exception e) {
       LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
+  }
+
+  public void updateGridEdgeType(EdgeStrategyType edgeStrategyType) {
+    myGrid.setEdgeStrategy(EdgeStrategyFactory.createEdgeStrategy(edgeStrategyType));
   }
 }

@@ -14,7 +14,6 @@ public class ToroidalEdgeStrategy implements EdgeStrategy {
     // I used ChatGPT to help get the newX and newY for this edge strategy
     int newX = (((int) point.getX() % numRows) + numRows) % numRows;
     int newY = (((int) point.getY() % numCols) + numCols) % numCols;
-    point.setLocation(newX, newY);
-    return point;
+    return new Point2D.Double(newX, newY);
   }
 }

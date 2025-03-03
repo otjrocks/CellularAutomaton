@@ -7,6 +7,7 @@ import cellsociety.controller.MainController;
 
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.SelectorField;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
@@ -29,6 +30,7 @@ public class EditModeView extends VBox {
   private ParameterView myParameterView;
   private NeighborView myNeighborView;
   private SelectorField myShapeSelector;
+  private SelectorField myEdgeTypeSelector;
 
   /**
    * Create a edit mode view
@@ -79,7 +81,8 @@ public class EditModeView extends VBox {
     myHeaderBox.setSpacing(ELEMENT_SPACING * 3);
     createHeaderElements();
     myHeaderBox.getChildren()
-        .addAll(myStateInfoView, myParameterView, myNeighborView, myShapeSelector, instructions,
+        .addAll(myStateInfoView, myParameterView, myNeighborView, myShapeSelector,
+            myEdgeTypeSelector, instructions,
             title);
     this.getChildren().add(myHeaderBox);
   }
@@ -89,6 +92,22 @@ public class EditModeView extends VBox {
     myParameterView = new ParameterView(myMainController, true);
     myNeighborView = new NeighborView(myMainController, true);
     myShapeSelector = createShapeSelector();
+    myEdgeTypeSelector = createEdgeTypeSelector();
+  }
+
+  private SelectorField createEdgeTypeSelector() {
+    List<EdgeStrategyType> edgeStrategies = List.of(EdgeStrategyType.values());
+    List<String> displayNames = new ArrayList<>();
+    for (EdgeStrategyType edgeStrategyType : edgeStrategies) {
+      displayNames.add(edgeStrategyType.toString());
+    }
+    return new SelectorField(displayNames, displayNames.getFirst(), "editModeEdgeTypeSelector",
+        getMessage("EDGE_TYPE_SELECTOR"), e -> updateGridEdgeType());
+  }
+
+  private void updateGridEdgeType() {
+    String selectedValue = myEdgeTypeSelector.getValue();
+    myMainController.updateGridEdgeType(EdgeStrategyType.valueOf(selectedValue.toUpperCase()));
   }
 
   private SelectorField createShapeSelector() {

@@ -39,6 +39,15 @@ public class Grid {
   }
 
   /**
+   * Set the edge strategy for this grid
+   *
+   * @param edgeStrategy The edge strategy you want to use
+   */
+  public void setEdgeStrategy(EdgeStrategy edgeStrategy) {
+    myEdgeStrategy = edgeStrategy;
+  }
+
+  /**
    * Get the number of rows in a grid
    *
    * @return (int) number of rows in a grid
@@ -67,8 +76,7 @@ public class Grid {
     Point2D adjustedPoint = myEdgeStrategy.adjustCoordinate(new Point2D.Double(row, col), myNumRows,
         myNumCols);
     if (checkOutOfBounds(adjustedPoint)) {
-      throw new IndexOutOfBoundsException(
-          "Invalid coordinate. Point must be within bounds of grid.");
+      return null;
     }
     if (!cellExists(adjustedPoint)) {
       return null;
@@ -148,7 +156,6 @@ public class Grid {
    * @return - a boolean representation on whether it is a wall.
    */
   public boolean isWall(int row, int col) {
-
     if (checkOutOfBounds(new Point2D.Double(row, col))) {
       return false;
     }
