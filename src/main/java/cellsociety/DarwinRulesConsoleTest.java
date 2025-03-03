@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.cell.DarwinCellRecord;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
@@ -51,7 +52,7 @@ public class DarwinRulesConsoleTest {
     }
 
     // Place some DarwinCells with different species
-    DarwinCell cell1 = new DarwinCell(2, new Point2D.Double(2, 2), 0, 0, 0, new ArrayList<>(), false, 0); // Species 1 in center
+    DarwinCell cell1 = new DarwinCell(new DarwinCellRecord(2, new Point2D.Double(2, 2), 0, 0, 0, new ArrayList<>(), false, 0)); // Species 1 in center
 
     // Set instructions
     setCellInstruction(cell1);
@@ -60,7 +61,7 @@ public class DarwinRulesConsoleTest {
     grid.updateCell(cell1);
 
     // Print the initial state
-    System.out.println("Initial Grid:");
+    //System.out.println("Initial Grid:");
     printGrid(grid, gridSize);
 
     // Run the simulation for 5 steps
@@ -71,16 +72,20 @@ public class DarwinRulesConsoleTest {
       List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
 
       // Debug: Check if updates exist
+      /*
       if (updates.isEmpty()) {
-        //System.out.println("No updates generated.");
+        System.out.println("No updates generated.");
       } else {
-        //System.out.println("Applying " + updates.size() + " updates...");
+        System.out.println("Applying " + updates.size() + " updates...");
       }
+      */
 
+      /*
       // Apply updates to the grid manually
       for (CellUpdate update : updates) {
         grid.updateCell(update.getNextCell());
       }
+      */
 
       // Print the updated grid
       printGrid(grid, gridSize);
@@ -101,6 +106,9 @@ public class DarwinRulesConsoleTest {
     }
   }
 
+  /**
+ * Set instructions for the test cell
+ */
   private static void setCellInstruction(DarwinCell cell){
     cell.setInstructions("MOVE 1"); // Move forward 1 cell
     cell.setInstructions("LEFT 90"); // Turn

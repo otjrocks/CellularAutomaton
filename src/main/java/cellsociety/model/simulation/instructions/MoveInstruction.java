@@ -9,6 +9,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.cell.DarwinCellRecord;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
 
@@ -80,9 +81,9 @@ public class MoveInstruction implements Instruction {
     List<CellUpdate> updates = new ArrayList<>();
     if (!curLocation.equals(darwinCell.getLocation())) {
       Cell newEmpty = new DarwinCell(State.EMPTY.getValue(), darwinCell.getLocation());
-      Cell newCell = new DarwinCell(darwinCell.getState(), new Double(newRow, newCol),
+      Cell newCell = new DarwinCell(new DarwinCellRecord(darwinCell.getState(), new Double(newRow, newCol),
           darwinCell.getOrientation(), darwinCell.getInfectionCountdown(), darwinCell.getCurInstructionIndex() + 1, 
-          darwinCell.getAllInstructions(), darwinCell.getInfected(), darwinCell.getPrevState());
+          darwinCell.getAllInstructions(), darwinCell.getInfected(), darwinCell.getPrevState()));
 
       updates.add(new CellUpdate(darwinCell.getLocation(),  newEmpty));
       updates.add(new CellUpdate(new Double(newRow, newCol), newCell));

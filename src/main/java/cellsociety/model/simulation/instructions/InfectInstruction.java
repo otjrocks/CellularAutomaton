@@ -8,6 +8,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.cell.DarwinCellRecord;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
 
@@ -56,7 +57,7 @@ public class InfectInstruction implements Instruction {
         continue;
       }
 
-      DarwinCell infectedCell = new DarwinCell(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, speciesCell.getState());
+      DarwinCell infectedCell = new DarwinCell(new DarwinCellRecord(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, speciesCell.getState()));
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
     return updates;

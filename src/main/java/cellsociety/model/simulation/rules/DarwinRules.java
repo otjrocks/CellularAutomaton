@@ -14,6 +14,7 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.cell.DarwinCellRecord;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.InvalidParameterException;
@@ -114,7 +115,7 @@ public class DarwinRules  extends SimulationRules {
       darwinCell.handleInfectionDecrease();
 
       if (darwinCell.getInfectionCountdown() <= 0) {
-        DarwinCell previousSpecies = new DarwinCell(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, DarwinCell.assignInstructionsFromState(darwinCell.getPrevState()), false, 0);
+        DarwinCell previousSpecies = new DarwinCell(new DarwinCellRecord(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, DarwinCell.assignInstructionsFromState(darwinCell.getPrevState()), false, 0));
         grid.updateCell(previousSpecies);
       }
     }

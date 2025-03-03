@@ -21,7 +21,7 @@ public class DarwinCell extends Cell {
   private int curInstructionIndex;
   private int infectionCountdown;
   private final boolean isInfected;
-  private final List<String> instructions;
+  private final ArrayList<String> instructions;
 
   /**
    * The default constructor for a Cell
@@ -37,7 +37,12 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
+    if(state < 4){
     this.instructions = assignInstructionsFromState(state);
+    }
+    else{
+    this.instructions = new ArrayList<>();
+    }
     this.isInfected = false;
     this.prevSpecies = 0;
   }
@@ -54,17 +59,14 @@ public class DarwinCell extends Cell {
    * @param infectionCountdown - the number of steps left before a potential infection revers
    * @param instructions       - the list of movement or infection commands
    */
-  public DarwinCell(int state, Point2D location, int orientation, 
-      int infectionCountdown, int currentInstIndex,
-      List<String> instructions, boolean infected, 
-      int previousSpecies) {
-    super(state, location);
-    this.orientation = orientation;
-    this.instructions = new ArrayList<>(instructions);
-    this.curInstructionIndex = currentInstIndex;
-    this.prevSpecies = previousSpecies;
-    this.infectionCountdown = infectionCountdown;
-    this.isInfected = infected;
+  public DarwinCell(DarwinCellRecord record) {
+    super(record.state(), record.location());
+    this.orientation = record.orientation();
+    this.instructions = new ArrayList<>(record.instructions());
+    this.curInstructionIndex = record.currentInstIndex();
+    this.prevSpecies = record.previousSpecies();
+    this.infectionCountdown = record.infectionCountdown();
+    this.isInfected = record.infected();
   }
 
   /**
@@ -248,9 +250,9 @@ public class DarwinCell extends Cell {
    *
    * @param state: Integer representing the species of the animal (or empty)
    */
-  public static List<String> assignInstructionsFromState(int state){
+  public static ArrayList<String> assignInstructionsFromState(int state){
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    List<String> instr = Arrays.asList(instrArray);
+    ArrayList<String> instr = new ArrayList<>(Arrays.asList(instrArray));
     return instr;
   }
 
