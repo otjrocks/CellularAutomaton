@@ -20,7 +20,7 @@ public class DarwinCell extends Cell {
   private int orientation;
   private int curInstructionIndex;
   private int infectionCountdown;
-  private boolean isInfected;
+  private final boolean isInfected;
   private final List<String> instructions;
 
   /**
@@ -54,8 +54,10 @@ public class DarwinCell extends Cell {
    * @param infectionCountdown - the number of steps left before a potential infection revers
    * @param instructions       - the list of movement or infection commands
    */
-  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown, int currentInstIndex,
-      List<String> instructions, boolean infected, int previousSpecies) {
+  public DarwinCell(int state, Point2D location, int orientation, 
+      int infectionCountdown, int currentInstIndex,
+      List<String> instructions, boolean infected, 
+      int previousSpecies) {
     super(state, location);
     this.orientation = orientation;
     this.instructions = new ArrayList<>(instructions);
@@ -232,14 +234,20 @@ public class DarwinCell extends Cell {
     return curInstructionIndex;
   }
 
+  /**
+   * Getter for the infection state of the cell
+   *
+   * @return - whether or not the cell is infected
+   */
   public boolean getInfected(){
     return isInfected;
   }
 
-  public void setInfected(boolean infectedValue){
-    isInfected = infectedValue;
-  }
-
+  /**
+   * Gets instructions for predefined species from the properties file
+   *
+   * @param state: Integer representing the species of the animal (or empty)
+   */
   public static List<String> assignInstructionsFromState(int state){
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
     List<String> instr = Arrays.asList(instrArray);
