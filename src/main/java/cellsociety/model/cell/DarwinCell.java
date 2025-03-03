@@ -1,9 +1,10 @@
 package cellsociety.model.cell;
 
-import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import cellsociety.config.SimulationConfig;
 
 /**
  * The cell type used for Darwin simulation
@@ -16,7 +17,8 @@ public class DarwinCell extends Cell {
   private int orientation;
   private int curInstructionIndex;
   private int infectionCountdown;
-  private List<String> instructions;
+  private final boolean isInfected;
+  private final List<String> instructions;
 
   /**
    * The default constructor for a Cell
@@ -32,7 +34,14 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
-    this.instructions = new ArrayList<>();
+    if(state < 4){
+      this.instructions = SimulationConfig.assignInstructionsFromState(state);
+    }
+    else{
+      this.instructions = new ArrayList<>();
+    }
+    this.isInfected = false;
+    this.prevSpecies = 0;
   }
 
   /**
@@ -47,14 +56,14 @@ public class DarwinCell extends Cell {
    * @param infectionCountdown - the number of steps left before a potential infection revers
    * @param instructions       - the list of movement or infection commands
    */
-  public DarwinCell(int state, Point2D location, int orientation, int infectionCountdown,
-      List<String> instructions) {
-    super(state, location);
-    this.orientation = orientation;
-    this.instructions = new ArrayList<>(instructions);
-    this.curInstructionIndex = 0;
-    this.prevSpecies = 0;
-    this.infectionCountdown = infectionCountdown;
+  public DarwinCell(DarwinCellRecord record) {
+    super(record.state(), record.location());
+    this.orientation = record.orientation();
+    this.instructions = new ArrayList<>(record.instructions());
+    this.curInstructionIndex = record.currentInstIndex();
+    this.prevSpecies = record.previousSpecies();
+    this.infectionCountdown = record.infectionCountdown();
+    this.isInfected = record.infected();
   }
 
   /**
@@ -222,6 +231,15 @@ public class DarwinCell extends Cell {
    */
   public int getCurInstructionIndex() {
     return curInstructionIndex;
+  }
+
+  /**
+   * Getter for the infection state of the cell
+   *
+   * @return - whether or not the cell is infected
+   */
+  public boolean getInfected(){
+    return isInfected;
   }
 
 }

@@ -1,10 +1,10 @@
 package cellsociety.config;
 
-import cellsociety.model.simulation.GetNeighbors;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -12,9 +12,9 @@ import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
@@ -30,10 +30,14 @@ import cellsociety.utility.FileUtility;
 public class SimulationConfig {
 
   private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
+  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
   public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
   public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
   private static final ResourceBundle myValues = ResourceBundle.getBundle(
       VALUES_FILE_PATH);
+  private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
+      INSTRUCTIONS_FILE_PATH);
+  
 
   /**
    * List of all the simulation names Note: The simulation rules must follow the naming convention
@@ -177,6 +181,17 @@ public class SimulationConfig {
       throw new IllegalArgumentException(
           String.format("Invalid neighbor configuration: %s", e));
     }
+  }
+
+  /**
+   * Gets instructions for predefined species from the properties file
+   *
+   * @param state: Integer representing the species of the animal (or empty)
+   */
+  public static List<String> assignInstructionsFromState(int state){
+    String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
+    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
+    return instr;
   }
 
 }
