@@ -30,7 +30,7 @@ import cellsociety.utility.FileUtility;
 public class SimulationConfig {
 
   private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
-  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.Instructions";
+  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DarwinInstructions";
   public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
   public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
   private static final ResourceBundle myValues = ResourceBundle.getBundle(
