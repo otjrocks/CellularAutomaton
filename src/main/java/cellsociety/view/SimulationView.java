@@ -70,9 +70,11 @@ public class SimulationView extends Group {
       CellShapeType cellShapeType, MainController mainController) {
     myGridView = GridViewFactory.createCellView(cellShapeType, width, height, numRows, numCols,
         mainController);
+    myGridView.setId("gridView");
     initializeInitialGridStates(numRows, numCols, grid);
 
     gridContainer = new Group(myGridView);
+    gridContainer.setId("gridContainer");
     gridContainer.setTranslateX((double) (width - myGridView.getWidth()) / 2);
     gridContainer.setTranslateY((double) (height - myGridView.getHeight()) / 2);
 
