@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ class SimulationRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
 
     for (int row = 0; row < 5; row++) {
       for (int col = 0; col < 5; col++) {

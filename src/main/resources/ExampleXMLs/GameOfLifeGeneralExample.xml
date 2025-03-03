@@ -6,7 +6,7 @@
     <Description>Using the "B3/S12345" rulestring to generate a mazelike structure</Description>
 
     <Neighbors>
-        <NeighborType>VonNeumann</NeighborType>
+        <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
 

@@ -2,6 +2,7 @@ package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.LOGGER;
 
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
@@ -40,6 +41,7 @@ public class XMLWriter {
    * @param grid: The grid containing cell states
    */
   public static void saveSimulationToXML(Simulation sim, Grid grid, CellShapeType cellShapeType,
+      EdgeStrategyType edgeStrategyType,
       Stage stage) {
     File file = FileChooserConfig.makeSaveChooser(sim.data().name()).showSaveDialog(stage);
     if (file == null) {
@@ -56,6 +58,7 @@ public class XMLWriter {
 
       writeSimData(doc, sim, simElement);
       writeCellShapeType(doc, cellShapeType, simElement);
+      writeEdgeStrategyType(doc, edgeStrategyType, simElement);
       writeNeighbors(doc, rules, simElement);
       writeGrid(doc, grid, simElement);
 
@@ -86,6 +89,10 @@ public class XMLWriter {
   private static void writeCellShapeType(Document doc, CellShapeType cellShapeType,
       Element simElement) {
     addElement(doc, simElement, "CellType", cellShapeType.toString());
+  }
+
+  private static void writeEdgeStrategyType(Document doc, EdgeStrategyType edgeStrategyType, Element simElement) {
+    addElement(doc, simElement, "EdgeType", edgeStrategyType.toString());
   }
 
   /**

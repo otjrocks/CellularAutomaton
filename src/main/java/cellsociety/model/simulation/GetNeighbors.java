@@ -88,11 +88,9 @@ public abstract class GetNeighbors {
   }
 
   private static void addNeighborCell(Grid grid, int newRow, int newCol, List<Cell> neighbors) {
-    if (newRow >= 0 && newRow < grid.getRows() && newCol >= 0 && newCol < grid.getCols()) {
-      Cell newCell = grid.getCell(newRow, newCol);
-      if (newCell != null) {
-        neighbors.add(newCell);
-      }
+    Cell newCell = grid.getCell(newRow, newCol);
+    if (newCell != null) {
+      neighbors.add(newCell);
     }
   }
 }
