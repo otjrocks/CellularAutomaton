@@ -40,9 +40,9 @@ public class SimulationView extends Group {
 
 
   private double zoomFactor = 1.0;
-  private final double zoomIncrement = 0.1; // Zoom step per scroll
-  private final double minZoom = 0.5; // Minimum zoom level
-  private final double maxZoom = 2.5; // Maximum zoom level
+  private final double zoomIncrement = 0.1;
+  private final double minZoom = 0.3;
+  private final double maxZoom = 3.0;
 
   /**
    * Create a simulation view
@@ -68,7 +68,8 @@ public class SimulationView extends Group {
 
   private void initializeGrid(int width, int height, int numRows, int numCols, Grid grid,
       CellShapeType cellShapeType, MainController mainController) {
-    myGridView = GridViewFactory.createCellView(cellShapeType, width, height, numRows, numCols, mainController);
+    myGridView = GridViewFactory.createCellView(cellShapeType, width, height, numRows, numCols,
+        mainController);
     initializeInitialGridStates(numRows, numCols, grid);
 
     gridContainer = new Group(myGridView);
@@ -79,8 +80,9 @@ public class SimulationView extends Group {
     scrollPane = new ScrollPane(gridContainer);
     scrollPane.setPrefSize(width, height);
     scrollPane.setPannable(true);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setFitToHeight(true);
+
+    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     getChildren().add(scrollPane);
 
@@ -175,6 +177,8 @@ public class SimulationView extends Group {
    * @param event Scroll event that triggers zoom in or out
    */
   private void handleZoom(ScrollEvent event) {
+    event.consume(); // Prevent ScrollPane from also scrolling
+
     double oldZoom = zoomFactor;
 
     if (event.getDeltaY() > 0) {
@@ -187,6 +191,7 @@ public class SimulationView extends Group {
   }
 
   //Had ChatGPT debug why the offset wasn't working
+
   /**
    * Applies the zoom effect to the GridView contents while keeping its actual size constant.
    */
