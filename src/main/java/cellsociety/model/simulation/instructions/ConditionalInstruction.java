@@ -1,15 +1,16 @@
 package cellsociety.model.simulation.instructions;
 
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Conditional Instruction class to handle the various conditionals in Darwin Simulation
@@ -72,7 +73,7 @@ public class ConditionalInstruction implements Instruction {
       }
 
       if (checkIfConditionIsMet(darwinCell, curCell, grid)) {
-        darwinCell.setCurInstructionIndex(nextInstruction);
+        darwinCell.setCurInstructionIndex(nextInstruction-2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
     }
