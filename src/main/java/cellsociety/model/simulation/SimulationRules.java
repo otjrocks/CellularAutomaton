@@ -89,6 +89,15 @@ public abstract class SimulationRules {
   }
 
   /**
+   * Get the GetNeighbor object for the active simulation rules class
+   *
+   * @return - the configuration of neighbor and layers
+   */
+  public GetNeighbors getNeighborConfig() {
+    return myGetNeighbors;
+  }
+
+  /**
    * Get a list of all required parameters for a simulation. If a simulation rules set requires
    * parameters, then this method should be overwritten to declare all required parameters for the
    * simulation. If no parameters are required, then you do not need to implement this static

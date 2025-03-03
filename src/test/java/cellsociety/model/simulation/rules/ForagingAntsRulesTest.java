@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ class ForagingAntsRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     parameters.put("antReproductionTime", new Parameter<>("3.0"));
     parameters.put("pheromoneDecayRate", new Parameter<>("0.2"));
     parameters.put("maxPheromoneAmount", new Parameter<>("100"));

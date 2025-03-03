@@ -13,8 +13,11 @@ import cellsociety.view.grid.GridView;
 import cellsociety.view.grid.GridViewFactory;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import javafx.scene.Group;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Simulation view for the visualizing the simulation
@@ -24,6 +27,9 @@ import javafx.scene.paint.Paint;
 public class SimulationView extends Group {
 
   private GridView myGridView;
+  private Group gridContainer;
+  private ScrollPane scrollPane;
+
   private final Simulation mySimulation;
   private final int myWidth;
   private final int myHeight;
@@ -31,6 +37,12 @@ public class SimulationView extends Group {
   private final int myNumColumns;
   private final MainController myMainController;
   private boolean myGridLinesEnabled = true;
+
+
+  private double zoomFactor = 1.0;
+  private final double zoomIncrement = 0.08;
+  private final double minZoom = 0.5;
+  private final double maxZoom = 3.5;
 
   /**
    * Create a simulation view
@@ -50,15 +62,33 @@ public class SimulationView extends Group {
     myMainController = mainController;
     mySimulation = mainController.getSimulation();
     initializeGrid(width, height, myNumRows, myNumColumns, grid, cellShapeType, mainController);
+
+    this.setOnScroll(this::handleZoom);
   }
 
   private void initializeGrid(int width, int height, int numRows, int numCols, Grid grid,
       CellShapeType cellShapeType, MainController mainController) {
-    myGridView = GridViewFactory.createCellView(cellShapeType, width,
-        height, numRows, numCols, mainController);
+    myGridView = GridViewFactory.createCellView(cellShapeType, width, height, numRows, numCols,
+        mainController);
+    myGridView.setId("gridView");
     initializeInitialGridStates(numRows, numCols, grid);
-    getChildren().add(myGridView);
-    myGridView.updateGridLinesColor(); // ensure grid lines are proper color on simulation view initialization
+
+    gridContainer = new Group(myGridView);
+    gridContainer.setId("gridContainer");
+    gridContainer.setTranslateX((double) (width - myGridView.getWidth()) / 2);
+    gridContainer.setTranslateY((double) (height - myGridView.getHeight()) / 2);
+
+    //ScrollPane keeps the gridcontainer in the bounds
+    scrollPane = new ScrollPane(gridContainer);
+    scrollPane.setPrefSize(width, height);
+    scrollPane.setPannable(true);
+
+    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+    getChildren().add(scrollPane);
+
+    myGridView.updateGridLinesColor();
   }
 
   /**
@@ -107,13 +137,15 @@ public class SimulationView extends Group {
    * @param value            The new CellShapeType value.
    */
   public void updateGridShape(List<CellUpdate> currentGridState, CellShapeType value) {
-    this.getChildren().remove(myGridView);
+    this.getChildren().remove(gridContainer);
     myGridView = GridViewFactory.createCellView(value, myWidth,
         myHeight, myNumRows, myNumColumns, myMainController);
     updateGridViewFromCellUpdateList(currentGridState);
     myGridView.updateGridLinesColor();
     myGridView.setGridLines(myGridLinesEnabled);
-    this.getChildren().add(myGridView);
+
+    gridContainer = new Group(myGridView);
+    getChildren().add(gridContainer);
   }
 
   private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
@@ -139,5 +171,59 @@ public class SimulationView extends Group {
       myGridView.setColor(stateUpdate.getRow(), stateUpdate.getCol(), nextColor);
       myGridView.setOpacity(stateUpdate.getRow(), stateUpdate.getCol(), nextOpacity);
     }
+  }
+
+  /**
+   * Handles zooming behavior when the user scrolls
+   *
+   * @param event Scroll event that triggers zoom in or out
+   */
+  private void handleZoom(ScrollEvent event) {
+    event.consume(); // Prevent ScrollPane from also scrolling
+
+    double oldZoom = zoomFactor;
+
+    if (event.getDeltaY() > 0) {
+      zoomFactor = Math.min(maxZoom, zoomFactor + zoomIncrement);
+    } else {
+      zoomFactor = Math.max(minZoom, zoomFactor - zoomIncrement);
+    }
+
+    applyZoom(event.getSceneX(), event.getSceneY(), oldZoom);
+  }
+
+  //Had ChatGPT debug why the offset wasn't working
+
+  /**
+   * Applies the zoom effect to the GridView contents while keeping its actual size constant.
+   */
+  private void applyZoom(double zoomCenterX, double zoomCenterY, double oldZoom) {
+    double scaleChange = zoomFactor / oldZoom;
+
+    double dx = (zoomCenterX - scrollPane.getWidth() / 2) * (1 - scaleChange);
+    double dy = (zoomCenterY - scrollPane.getHeight() / 2) * (1 - scaleChange);
+
+    gridContainer.setScaleX(zoomFactor);
+    gridContainer.setScaleY(zoomFactor);
+    gridContainer.setTranslateX(gridContainer.getTranslateX() + dx);
+    gridContainer.setTranslateY(gridContainer.getTranslateY() + dy);
+
+    scrollPane.setVvalue(0.5);
+    scrollPane.setHvalue(0.5);
+  }
+
+  /**
+   * Method to reset the Grid view to be back to normal pr-zoom
+   *
+   */
+  public void resetZoom() {
+    gridContainer.setScaleX(1.0);
+    gridContainer.setScaleY(1.0);
+
+    gridContainer.setTranslateX((double) (myWidth - myGridView.getWidth()) / 2);
+    gridContainer.setTranslateY((double) (myHeight - myGridView.getHeight()) / 2);
+
+    scrollPane.setHvalue(0.5);
+    scrollPane.setVvalue(0.5);
   }
 }

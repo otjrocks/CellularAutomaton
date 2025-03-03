@@ -1,8 +1,11 @@
 package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
+import static cellsociety.config.MainConfig.DEFAULT_EDGE_STRATEGY;
 import static cellsociety.config.MainConfig.LOGGER;
 
+import cellsociety.model.edge.EdgeStrategyFactory;
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
@@ -43,6 +46,7 @@ public class XMLHandler {
   private static SimulationMetaData mySimData;
   private static Map<String, Parameter<?>> myParameters;
   private static CellShapeType myCellShapeType;
+  private static EdgeStrategyType myEdgeStrategyType;
 
   /**
    * XMLHandler constructor for referencing data
@@ -89,6 +93,7 @@ public class XMLHandler {
     String author = data.getElementsByTagName("Author").item(0).getTextContent();
     String description = data.getElementsByTagName("Description").item(0).getTextContent();
     parseCellTypeIfPresent(data);
+    parseEdgeTypeIfPresent(data);
     Element neighborsElement = (Element) data.getElementsByTagName("Neighbors").item(0);
     String neighborType = neighborsElement.getElementsByTagName("NeighborType").item(0)
         .getTextContent();
@@ -104,6 +109,15 @@ public class XMLHandler {
     } catch (
         Exception e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
       myCellShapeType = DEFAULT_CELL_SHAPE;
+    }
+  }
+
+  private static void parseEdgeTypeIfPresent(Document data) {
+    try {
+      String edgeType = data.getElementsByTagName("EdgeType").item(0).getTextContent();
+      myEdgeStrategyType = EdgeStrategyType.valueOf(edgeType.toUpperCase());
+    } catch (Exception e) { // fallback to default edge type if field is missing
+      myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
     }
   }
 
@@ -128,12 +142,13 @@ public class XMLHandler {
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
       myGrid = CreateGridUtility.generateRandomGridFromStateNumber(gridDoc, myGridHeight,
-          myGridWidth, mySim);
+          myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
     } else if (gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
       myGrid = CreateGridUtility.generateRandomGridFromDistribution(gridDoc, myGridHeight,
-          myGridWidth, mySim);
+          myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
     } else {
-      myGrid = CreateGridUtility.generateGrid(gridDoc, myGridHeight, myGridWidth, mySim);
+      myGrid = CreateGridUtility.generateGrid(gridDoc, myGridHeight, myGridWidth, mySim,
+          EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType));
     }
   }
 
@@ -255,5 +270,14 @@ public class XMLHandler {
    */
   public CellShapeType getCellShapeType() {
     return myCellShapeType;
+  }
+
+  /**
+   * Returns the current simulation's
+   *
+   * @return EdgeStrategyType from the file or the default edge type if not found in the file
+   */
+  public EdgeStrategyType getEdgeStrategyType() {
+    return myEdgeStrategyType;
   }
 }

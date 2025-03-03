@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
@@ -21,7 +22,7 @@ class SpreadingOfFireRulesTest {
   @BeforeEach
   void setUp() throws InvalidParameterException {
     spreadingOfFireRules = new SpreadingOfFireRules(null, new VonNeumannNeighbors(1));
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
   }
 
   @Test

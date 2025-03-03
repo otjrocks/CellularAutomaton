@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
+import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
 
@@ -21,7 +22,7 @@ class DarwinRulesTest {
 
   @BeforeEach
   void setUp() throws InvalidParameterException {
-    grid = new Grid(5, 5);
+    grid = new Grid(5, 5, new FixedEdgeStrategy());
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getCols(); j++) {
         grid.addCell(new DarwinCell(0, new Point2D.Double(i, j)));

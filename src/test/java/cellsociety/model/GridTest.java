@@ -1,5 +1,8 @@
 package cellsociety.model;
 
+import cellsociety.model.edge.FixedEdgeStrategy;
+import cellsociety.model.edge.MirrorEdgeStrategy;
+import cellsociety.model.edge.ToroidalEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
@@ -10,6 +13,7 @@ import java.awt.geom.Point2D.Double;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
+import util.TestUtils;
 
 class GridTest {
 
@@ -33,10 +38,11 @@ class GridTest {
   void setUp() throws InvalidParameterException {
     myNumRows = 4;
     myNumCols = 4;
-    myGrid = new Grid(myNumRows, myNumCols);
+    myGrid = new Grid(myNumRows, myNumCols, new FixedEdgeStrategy());
     myCell = new DefaultCell(0, new Double(1, 1));
     myGrid.addCell(myCell);
-    myGameOfLifeSimulation = new Simulation(new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)),
+    myGameOfLifeSimulation = new Simulation(
+        new GameOfLifeRules(new HashMap<>(), new MooreNeighbors(1)),
         new SimulationMetaData("GameOfLife", "", "", "", "Moore", 1));
   }
 
@@ -58,22 +64,22 @@ class GridTest {
 
   @Test
   void getCellOutOfBounds() {
-    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(0, -1));
+    assertNull(myGrid.getCell(0, -1));
   }
 
   @Test
   void getCellOutOfGridNumColumns() {
-    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(0, myNumCols));
+    assertNull(myGrid.getCell(0, myNumCols));
   }
 
   @Test
   void getCellOutOfGridNumRows() {
-    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(myNumRows, 0));
+    assertNull(myGrid.getCell(myNumRows, 0));
   }
 
   @Test
   void getCellOutOfGridPoint() {
-    assertThrows(IndexOutOfBoundsException.class, () -> myGrid.getCell(new Double(-1, 1)));
+    assertNull(myGrid.getCell(new Double(-1, 1)));
   }
 
   @Test
@@ -160,5 +166,30 @@ class GridTest {
     myGrid.addCell(new DefaultCell(0, new Double(0, 0)));
     myGrid.setState(0, 0, 1, myGameOfLifeSimulation);
     assertEquals(1, myGrid.getCell(0, 0).getState());
+  }
+
+  @Test
+  void setNewEdgeStrategy_SwitchEdgePolicy_ValidCellsReturned() {
+    TestUtils.initializeEmptyGrid(myGrid);
+    myGrid.setEdgeStrategy(new FixedEdgeStrategy());
+    assertNull(myGrid.getCell(-1, 0));
+    myGrid.setEdgeStrategy(new ToroidalEdgeStrategy());
+    assertEquals(
+        new ToroidalEdgeStrategy().adjustCoordinate(new Double(-1, 0), myNumRows, myNumCols),
+        myGrid.getCell(-1, 0).getLocation());
+    myGrid.setEdgeStrategy(new MirrorEdgeStrategy());
+    assertEquals(
+        new MirrorEdgeStrategy().adjustCoordinate(new Double(1, myNumCols + 1), myNumRows, myNumCols),
+        myGrid.getCell(1, myNumCols + 1).getLocation());
+  }
+
+  @Test
+  void isWall_CheckIfCellIsWall_Success() {
+    assertTrue(myGrid.isWall(0, 1));
+    assertTrue(myGrid.isWall(1, 0));
+    assertTrue(myGrid.isWall(myNumRows - 1, 1));
+    assertTrue(myGrid.isWall( 1, myNumCols - 1));
+    assertFalse(myGrid.isWall(-1, 0));
+    assertFalse(myGrid.isWall(1, 1)); // valid point that isn't a wall
   }
 }

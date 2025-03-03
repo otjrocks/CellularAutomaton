@@ -29,6 +29,7 @@ public class SidebarView extends VBox {
   private boolean isEditing = false;
   private Button myModeButton;
   private SelectorField myThemeSelector;
+  private Button resetZoomButton;
   private final HBox myGridLinesCheckboxField = new HBox();
   private AlertField myAlertField;
   private final EditModeView myEditModeView;
@@ -53,6 +54,7 @@ public class SidebarView extends VBox {
     createChangeModeButton();
     createThemeSelector();
     createShowGridLinesCheckboxField();
+    createResetZoomButton();
     myViewModeView = new ViewModeView(myMainController, myAlertField);
     myEditModeView = new EditModeView(myMainController, myAlertField);
     addControlsToBox();
@@ -71,6 +73,14 @@ public class SidebarView extends VBox {
     myThemeSelector.setAlignment(Pos.CENTER_LEFT);
     this.getChildren().add(myThemeSelector);
     return myThemeSelector;
+  }
+
+
+  private void createResetZoomButton() {
+    resetZoomButton = new Button(getMessage("RESET_ZOOM"));
+    resetZoomButton.setId("resetZoomButton");
+    resetZoomButton.setOnMouseClicked(e -> myMainController.resetZoomButton());
+    this.getChildren().add(resetZoomButton);
   }
 
   /**
@@ -93,7 +103,7 @@ public class SidebarView extends VBox {
     myControlsBox.setAlignment(Pos.CENTER_LEFT);
     myControlsBox.setHgap(ELEMENT_SPACING);
     myControlsBox.setVgap(ELEMENT_SPACING);
-    myControlsBox.getChildren().addAll(myModeButton, myThemeSelector, myGridLinesCheckboxField);
+    myControlsBox.getChildren().addAll(myModeButton, myThemeSelector, myGridLinesCheckboxField, resetZoomButton);
   }
 
   private void addAllEditModeComponents() {
@@ -116,6 +126,7 @@ public class SidebarView extends VBox {
     myViewModeView.update();
     myEditModeView.updateDisplay();
   }
+
 
   private void initializeAlertField() {
     myAlertField = new AlertField();
@@ -183,5 +194,6 @@ public class SidebarView extends VBox {
         e -> myMainController.setGridLines(gridLinesCheckbox.isSelected()));
     return gridLinesCheckbox;
   }
+
 
 }
