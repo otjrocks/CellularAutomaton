@@ -3,9 +3,6 @@ package cellsociety.controller;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
-import cellsociety.model.edge.FixedEdgeStrategy;
-import cellsociety.model.edge.MirrorEdgeStrategy;
-import cellsociety.model.edge.ToroidalEdgeStrategy;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 
 import java.io.File;
@@ -21,6 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
+import static cellsociety.config.MainConfig.DEFAULT_EDGE_STRATEGY;
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.LOGGER;
@@ -71,7 +70,8 @@ public class MainController {
   private Simulation mySimulation;
   private final SplashScreenView mySplashScreenView;
   private Grid myGrid;
-  private CellShapeType myCellShapeType = CellShapeType.RECTANGLE;
+  private CellShapeType myCellShapeType = DEFAULT_CELL_SHAPE;
+  private EdgeStrategyType myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
   private final VBox myMainViewContainer = new VBox();
   private final Timeline mySimulationAnimation = new Timeline();
   private boolean isEditing = false;
@@ -211,7 +211,7 @@ public class MainController {
    */
   public void createNewSimulation(int rows, int cols, String type, SimulationMetaData metaData,
       Map<String, Parameter<?>> parameters) {
-    myGrid = new Grid(rows, cols, new MirrorEdgeStrategy());
+    myGrid = new Grid(rows, cols, EdgeStrategyFactory.createEdgeStrategy(DEFAULT_EDGE_STRATEGY));
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {
@@ -265,7 +265,8 @@ public class MainController {
    * XMLWriter
    */
   public void handleSavingToFile() {
-    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myCellShapeType, myStage);
+    XMLWriter.saveSimulationToXML(mySimulation, myGrid, myCellShapeType, myEdgeStrategyType,
+        myStage);
   }
 
   /**
@@ -292,9 +293,9 @@ public class MainController {
   }
 
   /**
-   * Initialize the bottombar of the program
+   * Initialize the bottom bar of the program
    */
-  public void initializeBottombar() {
+  public void initializeBottomBar() {
     myBottomBarView = new BottomBarView(GRID_WIDTH,
         GRID_HEIGHT * 2);
     myBottomBarView.setLayoutX(MARGIN);
@@ -352,7 +353,7 @@ public class MainController {
   /**
    * Compute the count of each state present in the current simulation grid
    *
-   * @return A map where the string represents the state's name and a int value for the count
+   * @return A map where the string represents the state's name and an int value for the count
    */
   public Map<String, Integer> computeStateCounts() {
     Map<String, Integer> stateCounts = new HashMap<>();
@@ -365,6 +366,15 @@ public class MainController {
       }
     }
     return stateCounts;
+  }
+
+  /**
+   * Get the current edge strategy type of this main controller
+   *
+   * @return The edge strategy type for the current simulation
+   */
+  public EdgeStrategyType getEdgeStrategyType() {
+    return myEdgeStrategyType;
   }
 
   private void initializeGridWithCells() {
@@ -431,6 +441,7 @@ public class MainController {
     XMLHandler xmlHandler = new XMLHandler(filePath);
     myGrid = xmlHandler.getGrid();
     myCellShapeType = xmlHandler.getCellShapeType();
+    myEdgeStrategyType = xmlHandler.getEdgeStrategyType();
     updateSimulation(xmlHandler.getSim());
   }
 
@@ -444,7 +455,7 @@ public class MainController {
 
   private void createOrUpdateBottomBar() {
     if (myBottomBarView == null) {
-      initializeBottombar();
+      initializeBottomBar();
     } else {
       myBottomBarView.update();
     }
@@ -490,6 +501,7 @@ public class MainController {
   }
 
   public void updateGridEdgeType(EdgeStrategyType edgeStrategyType) {
+    myEdgeStrategyType = edgeStrategyType;
     myGrid.setEdgeStrategy(EdgeStrategyFactory.createEdgeStrategy(edgeStrategyType));
   }
 }

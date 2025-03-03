@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
  * @author Justin Aronwald
  */
 public class MainConfig {
+
   // CONSTANTS
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
   public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
@@ -40,6 +42,7 @@ public class MainConfig {
   public static final int MIN_GRID_NUM_COLS = 5;
   public static final int SIDEBAR_WIDTH = WIDTH - GRID_WIDTH - (3 * MARGIN);
   public static final CellShapeType DEFAULT_CELL_SHAPE = CellShapeType.RECTANGLE;
+  public static final EdgeStrategyType DEFAULT_EDGE_STRATEGY = EdgeStrategyType.FIXED;
   public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user
   public static final Logger LOGGER = LogManager.getLogger(); // The logger for this program
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);

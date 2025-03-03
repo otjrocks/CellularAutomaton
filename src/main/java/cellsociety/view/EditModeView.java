@@ -101,7 +101,8 @@ public class EditModeView extends VBox {
     for (EdgeStrategyType edgeStrategyType : edgeStrategies) {
       displayNames.add(edgeStrategyType.toString());
     }
-    return new SelectorField(displayNames, displayNames.getFirst(), "editModeEdgeTypeSelector",
+    return new SelectorField(displayNames, myMainController.getEdgeStrategyType().toString(),
+        "editModeEdgeTypeSelector",
         getMessage("EDGE_TYPE_SELECTOR"), e -> updateGridEdgeType());
   }
 
