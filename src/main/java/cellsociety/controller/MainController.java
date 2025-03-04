@@ -172,7 +172,7 @@ public class MainController {
    *
    * @param speed the new speed of the animation
    * @param start a boolean to determine if the animation should start with the new speed or remain
-   *               stopped
+   *              stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
     PreferencesController.setPreference("animationSpeed", String.valueOf(speed));
@@ -183,7 +183,8 @@ public class MainController {
           try {
             step();  // step function
           } catch (ClassCastException ev) {
-            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+            throw new IllegalStateException("Unexpected type encountered during step execution",
+                ev);
           } catch (IllegalStateException ev) {
             throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
@@ -416,12 +417,10 @@ public class MainController {
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       attemptUpdateFromFilePath(filePath);
-    } catch (SAXException | ParserConfigurationException | IOException | GridException | InvalidStateException e) {
+    } catch (SAXException | ParserConfigurationException | IOException | GridException |
+             InvalidStateException e) {
       handleGridAndSimulationCreationExceptions(e);
       throw e;
-    } catch (RuntimeException e) {
-      handleGridAndSimulationCreationExceptions(e);
-      throw new IllegalStateException("Unexpected runtime error during XML handling", e);
     }
   }
 
@@ -490,7 +489,8 @@ public class MainController {
           try {
             step();  // step function
           } catch (ClassCastException ev) {
-            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+            throw new IllegalStateException("Unexpected type encountered during step execution",
+                ev);
           } catch (IllegalStateException ev) {
             throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
@@ -511,7 +511,8 @@ public class MainController {
     myMainViewContainer.setAlignment(Pos.CENTER);
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    }  catch (IOException | SAXException | ParserConfigurationException | GridException | InvalidStateException e) {
+    } catch (IOException | SAXException | ParserConfigurationException | GridException |
+             InvalidStateException e) {
       LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
   }

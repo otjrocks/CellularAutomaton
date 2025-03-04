@@ -111,17 +111,6 @@ public class CreateDefaultSimView extends VBox {
     }
   }
 
-  private TextField createTextField(String label, VBox target) {
-    HBox box = new HBox();
-    box.setAlignment(Pos.CENTER_LEFT);
-    box.setSpacing(5);
-    TextField textField = new TextField();
-    Text textFieldLabel = new Text(label);
-    box.getChildren().addAll(textFieldLabel, textField);
-    target.getChildren().add(box);
-    return textField;
-  }
-
   /**
    * Handles the row input for the simulation.
    */
@@ -179,6 +168,17 @@ public class CreateDefaultSimView extends VBox {
 
     createNeighborTypeSelector();
     createNeighborLayerField();
+  }
+
+  private TextField createTextField(String label, VBox target) {
+    HBox box = new HBox();
+    box.setAlignment(Pos.CENTER_LEFT);
+    box.setSpacing(5);
+    TextField textField = new TextField();
+    Text textFieldLabel = new Text(label);
+    box.getChildren().addAll(textFieldLabel, textField);
+    target.getChildren().add(box);
+    return textField;
   }
 
   private TextField createTextField(String label, String defaultValue) {

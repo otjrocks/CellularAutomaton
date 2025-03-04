@@ -25,6 +25,7 @@ import java.util.Random;
  * @author Justin Aronwald
  */
 public class SpreadingOfFireRules extends SimulationRules {
+
   private static final int minPThresholdVal = 0;
   private static final int maxPThresholdVal = 1;
 
@@ -61,7 +62,8 @@ public class SpreadingOfFireRules extends SimulationRules {
     if (myGrowthInEmptyCell < minPThresholdVal || myGrowthInEmptyCell > maxPThresholdVal) {
       throwInvalidParameterException(GROW_IN_EMPTY_CELL);
     }
-    if (myIgnitionWithoutNeighbors < minPThresholdVal || myIgnitionWithoutNeighbors > maxPThresholdVal) {
+    if (myIgnitionWithoutNeighbors < minPThresholdVal
+        || myIgnitionWithoutNeighbors > maxPThresholdVal) {
       throwInvalidParameterException(IGNITION_WITHOUT_NEIGHBORS);
     }
   }
@@ -114,10 +116,14 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   private int randomIgnitionOfTreeCell(int currentState) {
-    if (currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors)) {
+    if (shouldIgnite(currentState)) {
       return fireState;
     }
     return currentState;
+  }
+
+  private boolean shouldIgnite(int currentState) {
+    return currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors);
   }
 
   private int growTreeRandomly() {
