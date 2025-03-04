@@ -29,7 +29,8 @@ import java.util.Random;
  * @author Justin Aronwald
  */
 public class SegregationRules extends SimulationRules {
-
+  private static final int toleranceMinChecker = 0;
+  private static final int toleranceMaxChecker = 1;
   public static final String TOLERANCE_THRESHOLD = "toleranceThreshold";
   private final Random RANDOM = new Random();
   private final double myToleranceThreshold;
@@ -52,7 +53,7 @@ public class SegregationRules extends SimulationRules {
   }
 
   private void validateParameterRange() throws InvalidParameterException {
-    if (myToleranceThreshold < 0 || myToleranceThreshold > 1) {
+    if (myToleranceThreshold < toleranceMinChecker || myToleranceThreshold > toleranceMaxChecker) {
       throwInvalidParameterException(TOLERANCE_THRESHOLD);
     }
   }

@@ -25,6 +25,12 @@ import java.util.Random;
  * @author Justin Aronwald
  */
 public class SpreadingOfFireRules extends SimulationRules {
+  private static final int minPThresholdVal = 0;
+  private static final int maxPThresholdVal = 1;
+
+  private static final int emptyState = 0;
+  private static final int treeState = 1;
+  private static final int fireState = 2;
 
   public static final String GROW_IN_EMPTY_CELL = "growInEmptyCell";
   public static final String IGNITION_WITHOUT_NEIGHBORS = "ignitionWithoutNeighbors";
@@ -52,10 +58,10 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   private void validateParameterRange() throws InvalidParameterException {
-    if (myGrowthInEmptyCell < 0 || myGrowthInEmptyCell > 1) {
+    if (myGrowthInEmptyCell < minPThresholdVal || myGrowthInEmptyCell > maxPThresholdVal) {
       throwInvalidParameterException(GROW_IN_EMPTY_CELL);
     }
-    if (myIgnitionWithoutNeighbors < 0 || myIgnitionWithoutNeighbors > 1) {
+    if (myIgnitionWithoutNeighbors < minPThresholdVal || myIgnitionWithoutNeighbors > maxPThresholdVal) {
       throwInvalidParameterException(IGNITION_WITHOUT_NEIGHBORS);
     }
   }
@@ -85,14 +91,14 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   private int getNextStateFromCurrentState(Cell cell, Grid grid, int currentState) {
-    if (currentState == 2) { // burning to empty
-      return 0;
+    if (currentState == fireState) { // burning to empty
+      return emptyState;
     }
-    if (currentState == 0) { // grow tree randomly
+    if (currentState == emptyState) { // grow tree randomly
       return growTreeRandomly();
     }
     if (treeNeighborIsBurning(cell, grid)) { // burn if neighbor is burning
-      return 2;
+      return fireState;
     }
     return randomIgnitionOfTreeCell(currentState); // randomly ignite if tree
   }
@@ -100,7 +106,7 @@ public class SpreadingOfFireRules extends SimulationRules {
   private boolean treeNeighborIsBurning(Cell cell, Grid grid) {
     List<Cell> neighbors = getNeighbors(cell, grid);
     for (Cell neighbor : neighbors) {
-      if (cell.getState() == 1 && neighbor.getState() == 2) { // Neighbor is burning
+      if (cell.getState() == treeState && neighbor.getState() == fireState) { // Neighbor is burning
         return true;
       }
     }
@@ -109,16 +115,16 @@ public class SpreadingOfFireRules extends SimulationRules {
 
   private int randomIgnitionOfTreeCell(int currentState) {
     if (currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors)) {
-      return 2;
+      return fireState;
     }
     return currentState;
   }
 
   private int growTreeRandomly() {
     if (random.nextDouble() < myGrowthInEmptyCell) {
-      return 1;
+      return treeState;
     }
-    return 0;
+    return emptyState;
   }
 
   /**

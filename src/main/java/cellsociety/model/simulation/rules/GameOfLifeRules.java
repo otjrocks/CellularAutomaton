@@ -21,6 +21,10 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class GameOfLifeRules extends SimulationRules {
 
+  private static final String backSlash = "/";
+  private static final String B = "B";
+  private static final String S = "S";
+  private static final int aliveState = 1;
   public static final String RULE_STRING = "ruleString";
   private String myRuleString;
   private List<Integer> birthValues;
@@ -53,7 +57,7 @@ public class GameOfLifeRules extends SimulationRules {
     if (myRuleString.isEmpty()) {
       myRuleString = "B3/S23";
     }
-    if (!myRuleString.contains("/") || !myRuleString.contains("B") || !myRuleString.contains("S")) {
+    if (!myRuleString.contains(backSlash) || !myRuleString.contains(B) || !myRuleString.contains(S)) {
       throwInvalidParameterException(RULE_STRING);
     }
   }
@@ -95,7 +99,7 @@ public class GameOfLifeRules extends SimulationRules {
     List<Cell> neighbors = getNeighbors(cell, grid);
     int aliveNeighbors = 0;
     for (Cell neighbor : neighbors) {
-      if (neighbor.getState() == 1) {
+      if (neighbor.getState() == aliveState) {
         aliveNeighbors++;
       }
     }

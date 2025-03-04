@@ -30,6 +30,7 @@ public class ForagingAntsRules extends SimulationRules {
   public static final String NEW_ANTS_NUM = "newAntsNum";
   public static final String HOME = "home";
   public static final String FOOD = "food";
+  private static final double randChecker = 0.1;
   private final Random random = new Random();
   private final double myPheromoneDecayRate;
   private final int myAntReproductionTime;
@@ -390,7 +391,7 @@ public class ForagingAntsRules extends SimulationRules {
     double maxPheromone = 0;
     updateCanidatesList(emptyNeighbors, type, maxPheromone, candidates);
     // Introduces element of randomness to avoid oscillation between multiple ants
-    if (random.nextDouble() < 0.1) {
+    if (random.nextDouble() < randChecker) {
       return emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
     }
 

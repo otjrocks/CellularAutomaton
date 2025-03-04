@@ -2,6 +2,7 @@ package cellsociety.controller;
 
 import static cellsociety.config.MainConfig.LOGGER;
 
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -24,8 +25,8 @@ public class PreferencesController {
     preferences.put(key, value);
     try {
       preferences.flush(); // Ensure the preference is written to storage
-    } catch (Exception e) {
-      LOGGER.warn("Error saving preferences: {}", e.getMessage());
+    } catch (BackingStoreException e) {
+      LOGGER.warn("Error saving preferences: {}", e.getMessage(), e);
     }
   }
 
