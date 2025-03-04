@@ -24,7 +24,8 @@ public class MainConfig {
   public static final String LANGUAGE_FILE_PATH = "cellsociety.languages.";
   public static final String COLOR_CONFIG_FILE = "cellsociety.colors.CellColors";
   private static final String DEFAULT_LANGUAGE = "English";
-  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference("language",
+  public static final String LANGUAGE = "language";
+  private static final String INITIAL_LANGUAGE = PreferencesController.getPreference(LANGUAGE,
       DEFAULT_LANGUAGE);
   private static ResourceBundle myMessages = ResourceBundle.getBundle(
       LANGUAGE_FILE_PATH + INITIAL_LANGUAGE);
@@ -91,7 +92,7 @@ public class MainConfig {
       LOGGER.error("Could not load language: {}", language);
       throw new IllegalArgumentException("Language file not found" + e);
     }
-    PreferencesController.setPreference("language", language);
+    PreferencesController.setPreference(LANGUAGE, language);
   }
 
   /**
@@ -109,7 +110,7 @@ public class MainConfig {
    * @return The language of the program
    */
   public static String getLanguage() {
-    return PreferencesController.getPreference("language", DEFAULT_LANGUAGE);
+    return PreferencesController.getPreference(LANGUAGE, DEFAULT_LANGUAGE);
   }
 
   /**

@@ -40,6 +40,14 @@ public class StateDisplayConfig {
     });
   }
 
+  /**
+   * Get the state info for the provide simulation, state, and language.
+   *
+   * @param simulation The simulation you are querying for
+   * @param state      The state you want to find.
+   * @param language   The language to return the state display name in
+   * @return A state info object for the queried state.
+   */
   public static StateInfo getStateInfo(Simulation simulation, int state, String language) {
     String currentLanguage = MainConfig.getLanguage();
     MainConfig.setLanguage(language);
