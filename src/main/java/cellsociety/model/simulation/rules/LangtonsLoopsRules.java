@@ -51,6 +51,14 @@ public class LangtonsLoopsRules extends SimulationRules {
       "612225", "700077", "701120", "701220", "701250", "702120", "702221", "702251",
       "702321", "702525", "702720"
   };
+
+  private static final int[][] DIRECTIONS = {
+      {-1, 0}, // Top
+      {0, 1},  // Right
+      {1, 0},  // Bottom
+      {0, -1}  // Left
+  };
+
   private static final Map<String, Integer> TRANSITIONS_MAP = new HashMap<>();
   public static final String FORMAT_FIVE_STRINGS_COMBINED = "%s%s%s%s%s";
 
@@ -128,17 +136,10 @@ public class LangtonsLoopsRules extends SimulationRules {
   }
 
   private static void populateStatesList(Cell cell, List<Cell> neighbors, int[] states) {
-    int[][] directions = {
-        {-1, 0}, // Top
-        {0, 1},  // Right
-        {1, 0},  // Bottom
-        {0, -1}  // Left
-    };
-
     for (Cell neighbor : neighbors) {
-      for (int i = 0; i < directions.length; i++) {
-        int newRow = cell.getRow() + directions[i][0];
-        int newCol = cell.getCol() + directions[i][1];
+      for (int i = 0; i < DIRECTIONS.length; i++) {
+        int newRow = cell.getRow() + DIRECTIONS[i][0];
+        int newCol = cell.getCol() + DIRECTIONS[i][1];
 
         if (neighbor.getRow() == newRow && neighbor.getCol() == newCol) {
           states[i + 1] = neighbor.getState();

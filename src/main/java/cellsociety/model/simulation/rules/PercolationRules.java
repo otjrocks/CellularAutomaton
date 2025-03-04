@@ -22,6 +22,9 @@ import java.util.Map;
  * @author Justin Aronwald
  */
 public class PercolationRules extends SimulationRules {
+  private static final int blockedState = 0;
+  private static final int openState = 1;
+  private static final int filledState = 2;
 
   /**
    * constructor for percolation model
@@ -52,19 +55,19 @@ public class PercolationRules extends SimulationRules {
   }
 
   private int getNextStatesGivenCurrentState(Cell cell, Grid grid, int currentState) {
-    if (currentState == 0 || currentState == 2) {
+    if (currentState == blockedState || currentState == filledState) {
       return currentState;
     }
-    if (cell.getRow() == 0 && currentState == 1) {
-      return 2;
+    if (cell.getRow() == blockedState && currentState == openState) {
+      return filledState;
     }
     List<Cell> neighbors = getNeighbors(cell, grid);
     for (Cell neighbor : neighbors) {
-      if (neighbor.getState() == 2) {
-        return 2;
+      if (neighbor.getState() == filledState) {
+        return filledState;
       }
     }
-    return 1;
+    return openState;
   }
 
   /**

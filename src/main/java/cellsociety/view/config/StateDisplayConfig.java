@@ -1,16 +1,15 @@
 package cellsociety.view.config;
 
-import java.lang.reflect.Field;
+import cellsociety.config.MainConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import javafx.scene.paint.Color;
 
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.simulation.Simulation;
-import javafx.scene.paint.Color;
-
 
 /**
  * A config file to determine how to display a given state in the front end. This centralizes state
@@ -18,25 +17,49 @@ import javafx.scene.paint.Color;
  *
  * @author Owen Jennings
  */
-// I used ChatGPT to assist with refactoring this code
 public class StateDisplayConfig {
 
   private static final Random RANDOM = new Random();
   private static final Map<String, Color> RANDOM_COLORS_MAP = new HashMap<>();
-  // store the random colors previously used for undefined states so that all cells
-  // of the same state are assigned the same random color everytime they are generated.
+  private static final Map<StateCacheKey, StateInfo> STATE_INFO_CACHE = new HashMap<>();
 
   /**
-   * Get the state information for front-end display. If no custom color or name is defined, use a
-   * default name and a randomly generated color that persists.
+   * Get the state information for front-end display. Uses caching to avoid redundant computations.
    *
    * @param simulation The simulation you are running.
    * @param state      The state you are querying for.
    * @return The state information of the provided state and simulation.
    */
   public static StateInfo getStateInfo(Simulation simulation, int state) {
-    String simulationType = simulation.data().type().toUpperCase();
-    return getStateInfoFromSimulationTypeString(state, simulationType);
+    StateCacheKey cacheKey = new StateCacheKey(simulation, state);
+
+    // ChatGPT assisted in creating a cache to store values instead of looking up everytime to improve efficiency
+    return STATE_INFO_CACHE.computeIfAbsent(cacheKey, key -> {
+      String simulationType = simulation.data().type().toUpperCase();
+      return getStateInfoFromSimulationTypeString(state, simulationType);
+    });
+  }
+
+  /**
+   * Get the state info for the provide simulation, state, and language.
+   *
+   * @param simulation The simulation you are querying for
+   * @param state      The state you want to find.
+   * @param language   The language to return the state display name in
+   * @return A state info object for the queried state.
+   */
+  public static StateInfo getStateInfo(Simulation simulation, int state, String language) {
+    String currentLanguage = MainConfig.getLanguage();
+    MainConfig.setLanguage(language);
+    StateCacheKey cacheKey = new StateCacheKey(simulation, state);
+
+    // ChatGPT assisted in creating a cache to store values instead of looking up everytime to improve efficiency
+    StateInfo result = STATE_INFO_CACHE.computeIfAbsent(cacheKey, key -> {
+      String simulationType = simulation.data().type().toUpperCase();
+      return getStateInfoFromSimulationTypeString(state, simulationType);
+    });
+    MainConfig.setLanguage(currentLanguage); // reset to original language
+    return result;
   }
 
   private static StateInfo getStateInfoFromSimulationTypeString(int state, String simulationType) {
@@ -46,29 +69,20 @@ public class StateDisplayConfig {
     String stateName = getStateName(nameKey, state);
     Color stateColor = getStateColor(colorKey, simulationType, state);
 
-    return new StateInfo(stateName, stateColor);
+    return new StateInfo(state, stateName, stateColor);
   }
 
-  /**
-   * Retrieves the state name from the messages configuration or defaults to "STATE {state}".
-   */
   private static String getStateName(String key, int state) {
     String stateName = getMessage(key);
-    if (stateName.equals(getMessage("MISSING_KEY")) || stateName.equals(
-        "UNKNOWN")) {
-      return String.format(getMessage("STATE"), state); // State k as a default
+    if (stateName.equals(getMessage("MISSING_KEY")) || stateName.equals("UNKNOWN")) {
+      return String.format(getMessage("STATE"), state);
     }
     return stateName;
   }
 
-  /**
-   * Retrieves the state color using reflection, falling back to a persistent randomly generated
-   * color if not found.
-   */
   private static Color getStateColor(String key, String simulationType, int state) {
     String stateKey = "%s_%d".formatted(simulationType, state);
 
-    // If a random color was already assigned, return it
     if (RANDOM_COLORS_MAP.containsKey(stateKey)) {
       return RANDOM_COLORS_MAP.get(stateKey);
     }
@@ -78,21 +92,24 @@ public class StateDisplayConfig {
   private static Color attemptGettingColorFromPropertyFileOrReturnDefaultColor(String key,
       String stateKey) {
     try {
-      Field field = Color.class.getField(getCellColors().getString(key).toUpperCase());
-      Color color = (Color) field.get(null);
-      RANDOM_COLORS_MAP.put(stateKey, color); // Store the found color
+      Color color = Color.valueOf(getCellColors().getString(key).toUpperCase());
+      RANDOM_COLORS_MAP.put(stateKey, color);
       return color;
     } catch (Exception e) {
       Color randomColor = getRandomColor();
-      RANDOM_COLORS_MAP.put(stateKey, randomColor); // Store the random color
+      RANDOM_COLORS_MAP.put(stateKey, randomColor);
       return randomColor;
     }
   }
 
-  /**
-   * Generates a random color if a predefined one is not found.
-   */
   private static Color getRandomColor() {
     return Color.rgb(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
+  }
+
+  /**
+   * A key for caching state information, using a record for simplicity.
+   */
+  private record StateCacheKey(Simulation simulation, int state) {
+
   }
 }

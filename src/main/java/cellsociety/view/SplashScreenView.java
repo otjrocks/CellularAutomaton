@@ -10,14 +10,19 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
 import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.SelectorField;
+import java.io.IOException;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * A view that handles the splash screen that is shown when the program first loads
@@ -26,8 +31,6 @@ import javafx.scene.text.Text;
  * @author Justin Aronwald
  */
 public class SplashScreenView extends VBox {
-
-  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   private final AlertField myAlertField;
   private SelectorField myLanguageField;
@@ -99,7 +102,7 @@ public class SplashScreenView extends VBox {
   }
 
   private void createLanguageDropdown() {
-    List<String> languages = fetchLanguages();
+    List<String> languages = MainConfig.fetchLanguages();
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
@@ -119,10 +122,6 @@ public class SplashScreenView extends VBox {
     initialize();
   }
 
-  private List<String> fetchLanguages() {
-    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
-  }
-
   private void createFileChooserButton() {
     Button myChooseFileButton = new Button(getMessage("CHOOSE_FILE_BUTTON"));
     Text chooseFileText = new Text(getMessage("LOAD_BUTTON_TEXT"));
@@ -135,15 +134,10 @@ public class SplashScreenView extends VBox {
   private void handleChooseFileAction() {
     try {
       myMainController.handleNewSimulationFromFile();
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | GridException | InvalidStateException | IOException |
+             ParserConfigurationException | SAXException e) {
       myAlertField.flash(e.getMessage(), true);
       myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      return;
-    } catch (Exception e) {
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
       return;
     }
     myMainController.hideSplashScreen();

@@ -1,22 +1,28 @@
 package cellsociety.view;
 
+import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
-import static cellsociety.config.MainConfig.getCellColors;
+import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getMessage;
-import cellsociety.config.SimulationConfig;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
+
+import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -26,13 +32,17 @@ import javafx.scene.text.TextAlignment;
  */
 public class BottomBarView extends VBox {
 
-  public static final double ELEMENT_SPACING = 10;
-  private final Text myIterationText = createText(getMessage("ITERATOR_TEXT") + "0");
+  private static final int MAX_HISTORY_SIZE = 300;
+  private final Text myIterationText = new Text();
   private LineChart<Number, Number> stateChangeChart;
-  private final Map<String, XYChart.Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final Map<StateInfo, Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final Map<String, StateInfo> stateInfoMap = new HashMap<>();
   private final NumberAxis xAxis = new NumberAxis();
   private final NumberAxis yAxis = new NumberAxis();
   private int stepCount = 0;
+  private final String myIterationCountLabel;
+  private volatile int latestCount = 0;
+
 
   /**
    * Create a bottom bar view with a preferred size of width x height
@@ -45,6 +55,14 @@ public class BottomBarView extends VBox {
     this.setPrefSize(width, height);
     this.setAlignment(Pos.TOP_LEFT);
     this.setSpacing(ELEMENT_SPACING);
+    myIterationCountLabel = getMessage("ITERATOR_TEXT");
+    myIterationText.setLayoutX(width - 2 * MARGIN);
+    myIterationText.setLayoutY(height - 2 * MARGIN);
+    // I asked ChatGPT for assistance in scheduling the text UI updates to improve efficiency.
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    scheduler.scheduleAtFixedRate(
+        () -> Platform.runLater(() -> myIterationText.setText(myIterationCountLabel + latestCount)),
+        0, 200, TimeUnit.MILLISECONDS);
     this.getChildren().add(myIterationText);
     setupStateChangeChart();
     update();
@@ -59,13 +77,8 @@ public class BottomBarView extends VBox {
     stateChangeSeriesMap.clear();
     updateIterationCounter(0);
     stepCount = 0;
-  }
-
-  private Text createText(String message) {
-    Text text = new Text(message);
-    text.setTextAlignment(TextAlignment.LEFT);
-    text.setWrappingWidth(GRID_WIDTH - (ELEMENT_SPACING * 6));
-    return text;
+    xAxis.setLowerBound(0);
+    xAxis.setUpperBound(MAX_HISTORY_SIZE);
   }
 
   /**
@@ -73,82 +86,115 @@ public class BottomBarView extends VBox {
    *
    * @param count The new count you want to display
    */
+
   public void updateIterationCounter(int count) {
-    myIterationText.setText(getMessage("ITERATOR_TEXT") + count);
+    latestCount = count;
   }
 
   private void setupStateChangeChart() {
-    xAxis.setLabel("Simulation Step");
-    yAxis.setLabel("Population");
-    yAxis.setAutoRanging(false);
-    yAxis.setLowerBound(0);
+    setupXAxis();
+    setupYAxis();
+    setupChart();
+    getChildren().add(stateChangeChart);
+  }
 
+  private void setupChart() {
     stateChangeChart = new LineChart<>(xAxis, yAxis);
-    stateChangeChart.setTitle("State Population Change Over Time");
+    stateChangeChart.setCreateSymbols(false);
+    stateChangeChart.setAnimated(true);
+    stateChangeChart.setTitle(getMessage("STATECHANGE_CHART"));
     stateChangeChart.setMinWidth(GRID_WIDTH);
     stateChangeChart.setMaxWidth(GRID_WIDTH);
     stateChangeChart.getStyleClass().add("state-change");
     stateChangeChart.setLegendVisible(false);
     stateChangeChart.setMinHeight(GRID_HEIGHT);
     stateChangeChart.setMaxHeight(GRID_HEIGHT);
+  }
 
-    getChildren().add(stateChangeChart);
+  private void setupYAxis() {
+    yAxis.setLabel(getMessage("STATECHANGE_CHART_Y"));
+    yAxis.setAutoRanging(false);
+    yAxis.setLowerBound(0);
+  }
+
+  private void setupXAxis() {
+    xAxis.setLabel(getMessage("STATECHANGE_CHART_X"));
+    xAxis.setAutoRanging(false);
+    xAxis.setMinorTickVisible(false);
+    xAxis.setTickMarkVisible(false);
+    xAxis.setTickLabelsVisible(false);
   }
 
   /**
    * Update the state change chart
    *
    * @param stateCounts The count of all states from the current simulation state
-   * @param simType     The simulation type string
    */
-  public void updateStateChangeChart(Map<String, Integer> stateCounts, String simType) {
+  public void updateStateChangeChart(Map<StateInfo, Integer> stateCounts) {
     Platform.runLater(() -> {
+      for (StateInfo stateInfo : stateCounts.keySet()) {
+        stateInfoMap.putIfAbsent(stateInfo.displayName(), stateInfo);
+      }
       int totalStates = sumMapValues(stateCounts);
       yAxis.setUpperBound(totalStates);
-      yAxis.setTickUnit(totalStates/5);
-      for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
-        String stateName = entry.getKey();
-        int newValue = entry.getValue();
-        addStateNameToStateChangeMap(stateName);
-        stateChangeSeriesMap.get(stateName).getData().add(new XYChart.Data<>(stepCount, newValue));
-      }
-
-      updateXYChart(simType);
-
+      yAxis.setTickUnit((double) totalStates / 5);
+      updateSeriesWithNewStateCounts(stateCounts);
+      updateXYChart();
       stepCount++;
     });
   }
 
-  private void updateXYChart(String simType) {
-    Platform.runLater(() -> {
-      for (XYChart.Series<Number, Number> series : stateChangeChart.getData()) {
-        String colorString = getColorStringForState(simType, series);
-        series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+  private void updateSeriesWithNewStateCounts(Map<StateInfo, Integer> stateCounts) {
+    for (Entry<StateInfo, Integer> entry : stateCounts.entrySet()) {
+      StateInfo state = entry.getKey();
+      int newValue = entry.getValue();
+      addStateToStateChangeMap(state);
+
+      Series<Number, Number> series = stateChangeSeriesMap.get(state);
+      series.getData().add(new Data<>(stepCount, newValue));
+
+      // Ensure the series maintains a fixed history size
+      if (series.getData().size() > MAX_HISTORY_SIZE) {
+        series.getData().removeFirst(); // Remove the oldest data point
       }
-    });
+      xAxis.setUpperBound(stepCount);
+      if (stepCount > MAX_HISTORY_SIZE) {
+        xAxis.setLowerBound(stepCount - MAX_HISTORY_SIZE + 1);
+      }
+    }
   }
 
-  private static String getColorStringForState(String simType, Series<Number, Number> series) {
-    return getCellColors().getString(
-        (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType,
-            series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
+
+  private void updateXYChart() {
+    for (Series<Number, Number> series : stateChangeChart.getData()) {
+      String colorString = BottomBarView.getWebColorString(
+          stateInfoMap.get(series.getName()).color());
+      series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+    }
   }
 
-  private void addStateNameToStateChangeMap(String stateName) {
-    if (!stateChangeSeriesMap.containsKey(stateName)) {
-      XYChart.Series<Number, Number> newSeries = new XYChart.Series<>();
-      newSeries.setName(stateName);
-      stateChangeSeriesMap.put(stateName, newSeries);
+  // I used ChatGPT to write this method.
+  private static String getWebColorString(Color color) {
+    return String.format("#%02X%02X%02X",
+        (int) (color.getRed() * 255),
+        (int) (color.getGreen() * 255),
+        (int) (color.getBlue() * 255));
+  }
+
+  private void addStateToStateChangeMap(StateInfo state) {
+    if (!stateChangeSeriesMap.containsKey(state)) {
+      Series<Number, Number> newSeries = new Series<>();
+      newSeries.setName(state.displayName());
+      stateChangeSeriesMap.put(state, newSeries);
       stateChangeChart.getData().add(newSeries);
     }
   }
 
-  private int sumMapValues(Map<String, Integer> map){
+  private int sumMapValues(Map<StateInfo, Integer> map) {
     int total = 0;
-    for (String key: map.keySet()){
+    for (StateInfo key : map.keySet()) {
       total += map.get(key);
     }
-
     return total;
   }
 

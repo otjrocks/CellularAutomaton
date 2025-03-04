@@ -8,6 +8,7 @@ import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.view.config.StateInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -130,7 +131,7 @@ public class CreateGridUtility {
     for (int i = 0; i < randomParams.getLength(); i++) {
       Element stateElement = (Element) randomParams.item(i);
       String stateName = stateElement.getAttribute("name");
-      int stateValue = SimulationConfig.returnStateValueBasedOnName(sim.data().type(), stateName);
+      int stateValue = getStateValueFromName(sim, stateName);
       int count = getRandomGridCount(fromDistribution, stateElement, totalCells);
 
       stateCounts.put(stateValue, count);
@@ -138,6 +139,17 @@ public class CreateGridUtility {
     }
 
     return initializeGrid(gridHeight, gridWidth, sim, grid, totalCells, stateCounts, assignedCells);
+  }
+
+  private static int getStateValueFromName(Simulation sim, String stateName) {
+    int stateValue;
+    StateInfo stateInfo = SimulationConfig.getStateInfoFromDisplayName(sim, stateName);
+    if (stateInfo == null) {
+      stateValue = 0;
+    } else {
+      stateValue = stateInfo.value();
+    }
+    return stateValue;
   }
 
   private static int getRandomGridCount(boolean fromDistribution, Element stateElement,

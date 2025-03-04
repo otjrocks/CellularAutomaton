@@ -1,5 +1,7 @@
 package cellsociety.config;
 
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -7,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.getMessage;
+
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.GetNeighbors;
@@ -32,12 +34,9 @@ public class SimulationConfig {
   private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
   public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
   public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
-  public static final String VALUES_FILE_PATH = "cellsociety.state values.StateValues";
-  private static final ResourceBundle myValues = ResourceBundle.getBundle(
-      VALUES_FILE_PATH);
   private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
       INSTRUCTIONS_FILE_PATH);
-  
+
 
   /**
    * List of all the simulation names Note: The simulation rules must follow the naming convention
@@ -64,16 +63,16 @@ public class SimulationConfig {
       return new ArrayList<>();
     } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
       LOGGER.warn(e.getMessage());
-      throw new RuntimeException(e);
+      throw new RuntimeException("Error fetching parameters: " + e);
     }
   }
 
   /**
    * Get the appropriate cell type for a simulation type
    *
-   * @param row:            row location for created cell
-   * @param col:            col location for created cell
-   * @param state:          initial state for created cell
+   * @param row: row location for created cell
+   * @param col: col location for created cell
+   * @param state: initial state for created cell
    * @param simulationName: name/type of simulation to create cell for
    * @return the appropriate cell for a given simulation or default cell if the simulation does not
    * exist
@@ -115,21 +114,24 @@ public class SimulationConfig {
   }
 
   /**
-   * Return the int representing a state value from its name
+   * Return a StateInfo with the provided display name and from the provided simulation
    *
-   * @param simType The simulation type you are querying for
-   * @param name    The name of the state you are querying for
-   * @return The int representing the state if it exists, or 0 if it does not
+   * @param simulation The simulation you are querying for
+   * @param name       The name of the state you are querying for
+   * @return The state info for the simulation and display name you are querying for
    */
-  public static int returnStateValueBasedOnName(String simType, String name) {
-    String stateKey = "%s_VALUE_%s".formatted(simType, name);
-    try {
-      String valueStr = myValues.getString(stateKey.toUpperCase());
-      return Integer.parseInt(valueStr);
-    } catch (MissingResourceException | NumberFormatException e) {
-      LOGGER.warn(e.getMessage());
-      return 0;
+  public static StateInfo getStateInfoFromDisplayName(Simulation simulation, String name) {
+    int numStates = simulation.rules().getNumberStates();
+    // check all possible state info for all languages until you find the state info with a display name matching the provided name
+    for (String language : MainConfig.fetchLanguages()) {
+      for (int i = 0; i < numStates; i++) {
+        StateInfo currentStateInfo = StateDisplayConfig.getStateInfo(simulation, i, language);
+        if (currentStateInfo.displayName().equalsIgnoreCase(name)) {
+          return currentStateInfo;
+        }
+      }
     }
+    return null;
   }
 
   private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
@@ -188,7 +190,7 @@ public class SimulationConfig {
    *
    * @param state: Integer representing the species of the animal (or empty)
    */
-  public static List<String> assignInstructionsFromState(int state){
+  public static List<String> assignInstructionsFromState(int state) {
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
     List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
     return instr;

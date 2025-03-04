@@ -75,7 +75,10 @@ public abstract class GridView extends Group {
    * @param color: color you want to set
    */
   public void setColor(int row, int col, Paint color) {
-    myGrid[row][col].setFill(color);
+    if (myGrid[row][col] != null && !myGrid[row][col].getFill()
+        .equals(color)) { // only update color if different
+      myGrid[row][col].setFill(color);
+    }
   }
 
   /**
@@ -146,7 +149,10 @@ public abstract class GridView extends Group {
    * @param nextOpacity next opacity level for cell
    */
   public void setOpacity(int row, int col, double nextOpacity) {
-    myGrid[row][col].setOpacity(nextOpacity);
+    if (myGrid[row][col] != null
+        && myGrid[row][col].getOpacity() != nextOpacity) { // only update opacity if changed
+      myGrid[row][col].setOpacity(nextOpacity);
+    }
   }
 
   private void addGridElementsToGroupAndSetEventHandlers(MainController mainController) {
