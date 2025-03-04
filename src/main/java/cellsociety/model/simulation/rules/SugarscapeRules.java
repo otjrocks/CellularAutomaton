@@ -192,7 +192,7 @@ public class SugarscapeRules extends SimulationRules {
   }
 
   /**
-   * The simulation has 3 states: EMPTY, PATCH, AGENT
+   * The simulation has 3 states: EMPTY, PATCH, AGENT.
    *
    * @return 3 for number of states
    */

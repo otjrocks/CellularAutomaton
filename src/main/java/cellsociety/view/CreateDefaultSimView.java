@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.view.components.SelectorField;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +106,7 @@ public class CreateDefaultSimView extends VBox {
       myParametersControlBox.getChildren().add(parametersTitle);
     }
     for (String parameter : SimulationConfig.getParameters(simulationName)) {
-      TextField newParameterField = createTextField(parameter, myParametersControlBox);
+      TextField newParameterField = createTextField(parameter, "", myParametersControlBox);
       newParameterField.setId(String.format("createSimulationParameter_%s", parameter));
       myParameterTextFields.put(parameter, newParameterField);
     }
@@ -118,9 +119,8 @@ public class CreateDefaultSimView extends VBox {
     myRowField = new IntegerField();
     myRowField.setId("createSimulationRowField");
     myRowField.setText(String.valueOf(DEFAULT_NUM_CELLS));
-    myRowField.textProperty()
-        .addListener(
-            (observableValue, oldVal, newVal) -> myNumRows = parseIntegerField(myRowField, 0));
+    myRowField.textProperty().addListener(
+        (observableValue, oldVal, newVal) -> myNumRows = parseIntegerField(myRowField, 0));
 
     HBox rowBox = new HBox(new Text(getMessage("NUMBER_ROWS")), myRowField);
     rowBox.setAlignment(Pos.CENTER_LEFT);
@@ -156,32 +156,21 @@ public class CreateDefaultSimView extends VBox {
    * Handles the text metadata for the simulation
    */
   private void createSimulationMetaDataTextFields() {
-    myNameField = createTextField(getMessage("NAME_LABEL"), getMessage("DEFAULT_NAME"));
+    myNameField = createTextField(getMessage("NAME_LABEL"), getMessage("DEFAULT_NAME"), this);
     myNameField.setId("createSimulationNameTextField");
 
-    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"), getMessage("DEFAULT_AUTHOR"));
+    myAuthorField = createTextField(getMessage("AUTHOR_LABEL"), getMessage("DEFAULT_AUTHOR"), this);
     myAuthorField.setId("createSimulationAuthorTextField");
 
     myDescriptionField = createTextField(getMessage("DESCRIPTION_LABEL"),
-        getMessage("DEFAULT_DESCRIPTION"));
+        getMessage("DEFAULT_DESCRIPTION"), this);
     myDescriptionField.setId("createSimulationDescriptionTextField");
 
     createNeighborTypeSelector();
     createNeighborLayerField();
   }
 
-  private TextField createTextField(String label, VBox target) {
-    HBox box = new HBox();
-    box.setAlignment(Pos.CENTER_LEFT);
-    box.setSpacing(5);
-    TextField textField = new TextField();
-    Text textFieldLabel = new Text(label);
-    box.getChildren().addAll(textFieldLabel, textField);
-    target.getChildren().add(box);
-    return textField;
-  }
-
-  private TextField createTextField(String label, String defaultValue) {
+  private TextField createTextField(String label, String defaultValue, VBox target) {
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
@@ -189,7 +178,7 @@ public class CreateDefaultSimView extends VBox {
     textField.setPromptText(defaultValue);
     Text textFieldLabel = new Text(label);
     box.getChildren().addAll(textFieldLabel, textField);
-    this.getChildren().add(box);
+    target.getChildren().add(box);
     return textField;
   }
 
@@ -207,9 +196,9 @@ public class CreateDefaultSimView extends VBox {
     myNeighborLayerField.setText("1");
     myNeighborLayer = 1;
 
-    myNeighborLayerField.textProperty()
-        .addListener((observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(
-            myNeighborLayerField, 1));
+    myNeighborLayerField.textProperty().addListener(
+        (observable, oldVal, newVal) -> myNeighborLayer = parseIntegerField(myNeighborLayerField,
+            1));
     HBox box = new HBox();
     box.setAlignment(Pos.CENTER_LEFT);
     box.setSpacing(5);
@@ -232,14 +221,9 @@ public class CreateDefaultSimView extends VBox {
 
 
   SimulationMetaData createMetaData() {
-    return new SimulationMetaData(
-        mySimulationSelector.getValue(),
-        myNameField.getText(),
-        myAuthorField.getText(),
-        myDescriptionField.getText(),
-        myNeighborTypeSelector.getValue(),
-        myNeighborLayer
-    );
+    return new SimulationMetaData(mySimulationSelector.getValue(), myNameField.getText(),
+        myAuthorField.getText(), myDescriptionField.getText(), myNeighborTypeSelector.getValue(),
+        myNeighborLayer);
   }
 
   private int getRowCount() {
@@ -258,12 +242,10 @@ public class CreateDefaultSimView extends VBox {
     if (!validateRows(myNumRows) || !validateCols(myNumCols)) {
       return true;
     }
-    return checkInvalidText(mySimulationSelector.getValue()) ||
-        checkInvalidText(myNameField.getText()) ||
-        checkInvalidText(myAuthorField.getText()) ||
-        checkInvalidText(myDescriptionField.getText()) ||
-        checkInvalidNeighborType(myNeighborTypeSelector.getValue()) ||
-        checkInvalidLayer(myNeighborLayer);
+    return checkInvalidText(mySimulationSelector.getValue()) || checkInvalidText(
+        myNameField.getText()) || checkInvalidText(myAuthorField.getText()) || checkInvalidText(
+        myDescriptionField.getText()) || checkInvalidNeighborType(myNeighborTypeSelector.getValue())
+        || checkInvalidLayer(myNeighborLayer);
   }
 
   private boolean checkInvalidLayer(int myNeighborLayer) {
@@ -281,8 +263,7 @@ public class CreateDefaultSimView extends VBox {
   private boolean checkInvalidNeighborType(String myNeighborType) {
     try {
       String className = String.format("cellsociety.model.simulation.neighbors.%s%s",
-          myNeighborType,
-          "Neighbors");
+          myNeighborType, "Neighbors");
       Class.forName(className);
       return false;
     } catch (ClassNotFoundException e) {
@@ -302,8 +283,8 @@ public class CreateDefaultSimView extends VBox {
   private boolean validateRows(int numRows) {
     boolean valid = numRows >= MIN_GRID_NUM_ROWS && numRows <= MAX_GRID_NUM_ROWS;
     if (!valid) {
-      myAlertField.flash(String.format(
-          getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS), true);
+      myAlertField.flash(
+          String.format(getMessage("INVALID_ROWS"), MIN_GRID_NUM_ROWS, MAX_GRID_NUM_ROWS), true);
       return false;
     }
     return true;
@@ -312,8 +293,8 @@ public class CreateDefaultSimView extends VBox {
   private boolean validateCols(int numCols) {
     boolean valid = numCols >= MIN_GRID_NUM_COLS && numCols <= MAX_GRID_NUM_COLS;
     if (!valid) {
-      myAlertField.flash(String.format(
-          getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS), true);
+      myAlertField.flash(
+          String.format(getMessage("INVALID_COLS"), MIN_GRID_NUM_COLS, MAX_GRID_NUM_COLS), true);
       return false;
     }
     return true;
@@ -340,7 +321,7 @@ public class CreateDefaultSimView extends VBox {
       myMainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
       myAlertField.flash(String.format(getMessage("NEW_SIMULATION_CREATED")), false);
-    } catch (Exception e) {
+    } catch (SimulationCreationException e) {
       myAlertField.flash(String.format(getMessage("ERROR_CREATING_SIMULATION")), true);
       myAlertField.flash(String.format((e.getMessage())), true);
       throw e;
@@ -360,7 +341,7 @@ public class CreateDefaultSimView extends VBox {
     }
     try {
       createNewSimulation();
-    } catch (Exception e) {
+    } catch (SimulationCreationException e) {
       return;
     }
     handleAdditionalButtonActions();

@@ -6,6 +6,7 @@ import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
@@ -18,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -39,6 +41,8 @@ import cellsociety.model.simulation.SimulationMetaData;
 public class XMLHandler {
 
   public static final String RULE_STRING = "ruleString";
+  public static final String EDGE_TYPE = "EdgeType";
+  public static final String CELL_TYPE = "CellType";
   private static int myGridHeight;
   private static int myGridWidth;
   private static Grid myGrid;
@@ -67,7 +71,11 @@ public class XMLHandler {
    *                    represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+      throws SAXException,
+      IOException,
+      ParserConfigurationException,
+      GridException,
+      InvalidStateException {
 
     File xmlFile = new File(xmlFilePath);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -104,20 +112,47 @@ public class XMLHandler {
 
   private static void parseCellTypeIfPresent(Document data) {
     try {
-      String cellType = data.getElementsByTagName("CellType").item(0).getTextContent();
-      myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
-    } catch (
-        Exception e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
+      if (data.getElementsByTagName(CELL_TYPE).item(0) == null) {
+        myCellShapeType = DEFAULT_CELL_SHAPE;
+      } else {
+        attemptSettingCellType(data);
+      }
+    } catch (IllegalArgumentException |
+             DOMException e) {
+      // fallback to default cell shape if field is missing in xml file,
+      // incorrectly spelled, or other error
       myCellShapeType = DEFAULT_CELL_SHAPE;
+    }
+  }
+
+  private static void attemptSettingCellType(Document data) {
+    String cellType = data.getElementsByTagName(CELL_TYPE).item(0).getTextContent();
+    if (cellType == null) {
+      myCellShapeType = DEFAULT_CELL_SHAPE;
+    } else {
+      myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
     }
   }
 
   private static void parseEdgeTypeIfPresent(Document data) {
     try {
-      String edgeType = data.getElementsByTagName("EdgeType").item(0).getTextContent();
-      myEdgeStrategyType = EdgeStrategyType.valueOf(edgeType.toUpperCase());
-    } catch (Exception e) { // fallback to default edge type if field is missing
+      if (data.getElementsByTagName(EDGE_TYPE).item(0) == null) {
+        myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+      } else {
+        attemptSettingEdgeType(data);
+      }
+    } catch (IllegalArgumentException |
+             DOMException e) { // fallback to default edge type if field is missing
       myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+    }
+  }
+
+  private static void attemptSettingEdgeType(Document data) {
+    String edgeType = data.getElementsByTagName(EDGE_TYPE).item(0).getTextContent();
+    if (edgeType == null) {
+      myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+    } else {
+      myEdgeStrategyType = EdgeStrategyType.valueOf(edgeType.toUpperCase());
     }
   }
 
@@ -210,9 +245,12 @@ public class XMLHandler {
 
   private void checkAndLoadRuleString(Element paramElement) {
     try {
-      String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0).getTextContent();
-      myParameters.put(RULE_STRING, new Parameter<>(paramString));
-    } catch (Exception e) {
+      if (paramElement.getElementsByTagName(RULE_STRING).item(0) != null) {
+        String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0)
+            .getTextContent();
+        myParameters.put(RULE_STRING, new Parameter<>(paramString));
+      }
+    } catch (DOMException e) {
       myParameters.clear();
     }
   }
@@ -225,7 +263,8 @@ public class XMLHandler {
       mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
     } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new SimulationCreationException(
+          "Unable to assign the simulation rules based on the provided simulation type", e);
     }
   }
 
@@ -272,7 +311,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's cell shape type
+   * Returns the current simulation's cell shape type.
    *
    * @return CellShapeType from the file or the default cell shape if not found
    */
@@ -281,7 +320,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's
+   * Returns the current simulation's edge strategy.
    *
    * @return EdgeStrategyType from the file or the default edge type if not found in the file
    */

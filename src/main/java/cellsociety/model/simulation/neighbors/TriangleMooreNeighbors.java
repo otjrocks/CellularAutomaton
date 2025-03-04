@@ -3,14 +3,14 @@ package cellsociety.model.simulation.neighbors;
 import cellsociety.model.simulation.GetNeighbors;
 
 /**
- * Implementation of Moore Neighbors for a Triangle grid
+ * Implementation of Moore Neighbors for a Triangle grid.
  *
  * @author Owen Jennings
  */
 public class TriangleMooreNeighbors extends GetNeighbors {
 
   /**
-   * The default constructor for a moore neighbors for triangle grid
+   * The default constructor for a moore neighbors for triangle grid.
    *
    * @param layers The number of layers of neighbors to include
    */
@@ -19,6 +19,8 @@ public class TriangleMooreNeighbors extends GetNeighbors {
   }
 
   /**
+   * Get the directions based on triangle moore neighbor rules.
+   *
    * @return - the coordinate system for the directions to obtain the neighbors (the 12 cells that
    * touch the central triangle)
    */

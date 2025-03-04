@@ -13,7 +13,7 @@ import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
 
 /**
- * The implementation of Game of Life
+ * The implementation of Game of Life.
  *
  * @author Justin Aronwald
  * @author Owen Jennings
@@ -31,7 +31,7 @@ public class GameOfLifeRules extends SimulationRules {
   private List<Integer> surviveValues;
 
   /**
-   * A default constructor for Game Of Life
+   * A default constructor for Game Of Life.
    *
    * @param parameters     The parameters provided to initialize this simulation
    * @param myGetNeighbors The neighbor policy to use
@@ -57,13 +57,19 @@ public class GameOfLifeRules extends SimulationRules {
     if (myRuleString.isEmpty()) {
       myRuleString = "B3/S23";
     }
-    if (!myRuleString.contains(backSlash) || !myRuleString.contains(B) || !myRuleString.contains(S)) {
+    if (checkInvalidRuleString()) {
       throwInvalidParameterException(RULE_STRING);
     }
   }
 
+  private boolean checkInvalidRuleString() {
+    return !myRuleString.contains(backSlash) ||
+        !myRuleString.contains(B) ||
+        !myRuleString.contains(S);
+  }
+
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */
@@ -75,7 +81,7 @@ public class GameOfLifeRules extends SimulationRules {
   /**
    * Game of Life: Any cell with fewer than 2 neighbors dies due to underpopulation Any cell with 2
    * - 3 neighbors moves on to the next generation Any cell with more than 3 neighbors dies due to
-   * overpopulation Any inactive cell with exactly 3 neighbors becomes active
+   * overpopulation Any inactive cell with exactly 3 neighbors becomes active.
    *
    * @param cell - individual cell from grid
    * @return the next state of a cell based on the rules of game of life

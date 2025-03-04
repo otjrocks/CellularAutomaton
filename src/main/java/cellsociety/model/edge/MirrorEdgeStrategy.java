@@ -3,7 +3,7 @@ package cellsociety.model.edge;
 import java.awt.geom.Point2D;
 
 /**
- * An implementation of the Mirror edge policy
+ * An implementation of the Mirror edge policy.
  *
  * @author Owen Jennings
  */

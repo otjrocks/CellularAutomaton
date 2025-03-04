@@ -14,19 +14,19 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * A rules class to implement the falling sand simulation
+ * A rules class to implement the falling sand simulation.
  *
  * @author Owen Jennings
  */
 public class FallingSandRules extends SimulationRules {
 
-  private final Random RANDOM = new Random();
+  private static final Random RANDOM = new Random();
 
   /**
    * Create falling sand rules class. No parameters are required for this rules class.
    *
    * @param parameters parameters for the simulation (may not be used)
-   * @throws InvalidParameterException: an exception for missing or invalid parameters provided.
+   * @throws InvalidParameterException an exception for missing or invalid parameters provided.
    */
   public FallingSandRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
       throws InvalidParameterException {
@@ -34,13 +34,13 @@ public class FallingSandRules extends SimulationRules {
   }
 
   /**
-   * An enum to store the possible states for this simulation
+   * An enum to store the possible states for this simulation.
    */
   public enum State {
     EMPTY, WALL, SAND;
 
     /**
-     * Get the ordinal value of this enum entry
+     * Get the ordinal value of this enum entry.
      *
      * @return An int representing the state
      */
@@ -50,7 +50,7 @@ public class FallingSandRules extends SimulationRules {
   }
 
   /**
-   * Get the next states cell update list for all cells in the simulation
+   * Get the next states cell update list for all cells in the simulation.
    *
    * @param grid The grid that you wish to get the next states for
    * @return A list of cell updates representing changes that need to be made to the grid on next
@@ -82,7 +82,7 @@ public class FallingSandRules extends SimulationRules {
   }
 
   /**
-   * The simulation has 3 states: EMPTY, WALL, SAND
+   * The simulation has 3 states: EMPTY, WALL, SAND.
    *
    * @return 3 for number of states
    */
@@ -113,7 +113,8 @@ public class FallingSandRules extends SimulationRules {
   private void moveToRandomDiagonal(Grid grid, Cell sandCell, List<CellUpdate> updates,
       Cell leftDiagonalCell,
       Cell rightDiagonalCell) {
-    boolean moveLeft = RANDOM.nextBoolean(); // if both diagonals are empty, randomly choose one to move to
+    boolean moveLeft = RANDOM.nextBoolean();
+    // if both diagonals are empty, randomly choose one to move to
     if (moveLeft) {
       attemptMove(grid, leftDiagonalCell, updates, sandCell);
     } else {

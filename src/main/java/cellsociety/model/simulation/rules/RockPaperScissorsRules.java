@@ -13,18 +13,19 @@ import java.util.Map;
 
 /**
  * The implementation of the Rock Paper Scissors simulation rules For RockPaperScissors there can be
- * any number of states up to 20
+ * any number of states up to 20.
  * <p>
  * Winning depends on the next one in the circle (i.e with 3 states: 1 beats 2, 2 beats 3, 3 beats
- * 1)
+ * 1).
  * <p>
- * The number of states the current state beats as well as loses to is N/2 (rounded down)
+ * The number of states the current state beats as well as loses to is N/2 (rounded down).
  * <p>
- * This is determined by (current state - opponent state + numStates) % numStates
+ * This is determined by (current state - opponent state + numStates) % numStates.
  *
  * @author Justin Aronwald
  */
 public class RockPaperScissorsRules extends SimulationRules {
+
   private static final int numStatesValChecker = 1;
   private static final int minThresholdVal = 0;
 
@@ -72,6 +73,8 @@ public class RockPaperScissorsRules extends SimulationRules {
 
 
   /**
+   * Get the next state based on the rock paper scissors rules.
+   *
    * @param cell -  individual cell from grid
    * @param grid - the collection of cell objects representing the grid
    * @return - the next state of a cell based on the rules of Rock Paper Scissors Model
@@ -99,7 +102,7 @@ public class RockPaperScissorsRules extends SimulationRules {
   }
 
   /**
-   * gets the total number of states
+   * gets the total number of states.
    *
    * @return - the total number of states
    */

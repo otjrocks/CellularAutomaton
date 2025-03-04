@@ -70,7 +70,7 @@ public class WaTorWorldRules extends SimulationRules {
   }
 
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */
@@ -90,13 +90,13 @@ public class WaTorWorldRules extends SimulationRules {
 
   /**
    * An enum to store the state of the simulation I asked ChatGPT for help with implementing this
-   * enum
+   * enum.
    */
   public enum State {
     EMPTY, FISH, SHARK;
 
     /**
-     * Get the ordinal value of the state
+     * Get the ordinal value of the state.
      *
      * @return An int representing the state
      */
@@ -112,6 +112,8 @@ public class WaTorWorldRules extends SimulationRules {
 
 
   /**
+   * Get the next states for all cells in the grid based on WaTor World rules.
+   *
    * @param grid - the grid object containing the cell objects
    * @return - A list containing the updates that will happen to cells
    */
