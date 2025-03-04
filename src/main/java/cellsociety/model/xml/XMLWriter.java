@@ -100,7 +100,7 @@ public class XMLWriter {
    *
    * @param doc        Document to which you are adding the simulation data
    * @param sim        The simulation containing the data you want to save
-   * @param simElement: The parent element for all the simulation data
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeSimData(Document doc, Simulation sim, Element simElement) {
     SimulationMetaData simData = sim.data();
@@ -113,9 +113,9 @@ public class XMLWriter {
   /**
    * Helper method to add grid configuration data to XML Writer document
    *
-   * @param doc:        Document to which you are adding the grid data
-   * @param grid:       The grid containing the data you want to save
-   * @param simElement: The parent element for all the simulation data
+   * @param doc Document to which you are adding the grid data
+   * @param grid The grid containing the data you want to save
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeGrid(Document doc, Grid grid, Element simElement) {
     Element gridElement = doc.createElement("GridDimensions");
@@ -143,9 +143,9 @@ public class XMLWriter {
   /**
    * Helper method to add necessary parameters to XML Writer document
    *
-   * @param doc:        Document to which you are adding the grid data
-   * @param rules:      SimulationRules pbject that dictates necessary parameters
-   * @param simElement: The parent element for all the simulation data
+   * @param doc Document to which you are adding the grid data
+   * @param rules SimulationRules pbject that dictates necessary parameters
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeParameters(Document doc, SimulationRules rules, Element simElement) {
     Element parametersElement = doc.createElement("Parameters");
@@ -180,8 +180,8 @@ public class XMLWriter {
   /**
    * Helper method to transform doc into XML file at designated path
    *
-   * @param doc:  Document to which you are adding the grid data
-   * @param file: The file generated from filepath
+   * @param doc Document to which you are adding the grid data
+   * @param file The file generated from filepath
    */
   private static void transformXML(Document doc, File file) throws TransformerException {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();

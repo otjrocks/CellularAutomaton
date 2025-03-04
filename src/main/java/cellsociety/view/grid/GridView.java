@@ -29,10 +29,10 @@ public abstract class GridView extends Group {
   /**
    * Create a grid view
    *
-   * @param width:         Width of the view
-   * @param height:        Height of the view
-   * @param numRows:       Number of rows in the grid
-   * @param numColumns:    Number of cells per row in the grid
+   * @param width Width of the view
+   * @param height Height of the view
+   * @param numRows Number of rows in the grid
+   * @param numColumns Number of cells per row in the grid
    * @param mainController : Main controller of the program
    */
   public GridView(int width, int height, int numRows, int numColumns,
@@ -70,9 +70,9 @@ public abstract class GridView extends Group {
   /**
    * Set the color of a cell in the grid
    *
-   * @param row:   row of cell
-   * @param col:   column of cell
-   * @param color: color you want to set
+   * @param row row of cell
+   * @param col column of cell
+   * @param color color you want to set
    */
   public void setColor(int row, int col, Paint color) {
     if (myGrid[row][col] != null && !myGrid[row][col].getFill()
@@ -84,7 +84,7 @@ public abstract class GridView extends Group {
   /**
    * Handle whether grid lines should be shown or not
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     for (int row = 0; row < myNumRows; row++) {

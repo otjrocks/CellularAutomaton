@@ -137,7 +137,7 @@ public class XMLHandler {
   /**
    * Helper method to differentiate between explicit and random grid generation
    *
-   * @param gridDoc: Document from which you are extracting/generating the initial grid data
+   * @param gridDoc Document from which you are extracting/generating the initial grid data
    */
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
     if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
@@ -155,7 +155,7 @@ public class XMLHandler {
   /**
    * Method that assigns the parameters for the current simulation based on simulation type
    *
-   * @param doc: parsed XML file containing the simulation data most importantly for this function,
+   * @param doc parsed XML file containing the simulation data most importantly for this function,
    *             the additional sim parameters
    */
   private void parseParameters(Document doc) {
@@ -187,8 +187,8 @@ public class XMLHandler {
   /**
    * Method that checks an XML file for a parameter with a given name
    *
-   * @param paramElement: element containing all parameters for a given simulation
-   * @param paramName:    name of the parameter being checked
+   * @param paramElement element containing all parameters for a given simulation
+   * @param paramName name of the parameter being checked
    */
   private void checkAndLoadParameter(Element paramElement, String paramName) {
     try {

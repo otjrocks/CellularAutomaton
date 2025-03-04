@@ -17,11 +17,11 @@ public class HexagonGridView extends GridView {
   /**
    * Create a grid view
    *
-   * @param width:          Width of the view
-   * @param height:         Height of the view
-   * @param numRows:        Number of rows in the grid
-   * @param numColumns:     Number of cells per row in the grid
-   * @param mainController: The main controller of the program
+   * @param width Width of the view
+   * @param height Height of the view
+   * @param numRows Number of rows in the grid
+   * @param numColumns Number of cells per row in the grid
+   * @param mainController The main controller of the program
    */
   public HexagonGridView(int width, int height, int numRows, int numColumns,
       MainController mainController) {

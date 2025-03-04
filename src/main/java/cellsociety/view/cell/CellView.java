@@ -22,10 +22,10 @@ public abstract class CellView extends Group {
   /**
    * Create a cell with the default fill color
    *
-   * @param x:      x location of cell
-   * @param y:      y location of cell
-   * @param width:  width of cell
-   * @param height: height of cell
+   * @param x x location of cell
+   * @param y y location of cell
+   * @param width width of cell
+   * @param height height of cell
    */
   public CellView(double x, double y, double width, double height) {
     super();
@@ -42,7 +42,7 @@ public abstract class CellView extends Group {
   /**
    * Handle whether grid lines should be shown or not
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     if (selected) {
@@ -55,7 +55,7 @@ public abstract class CellView extends Group {
   /**
    * Set the fill color for a cell
    *
-   * @param color: The color you wish to set
+   * @param color The color you wish to set
    */
   public void setFill(Paint color) {
     myShape.setFill(color);

@@ -22,11 +22,11 @@ public class SelectorField extends HBox {
   /**
    * Create a Selector field.
    *
-   * @param options:      A list of strings representing the possible options
-   * @param defaultValue: The default value of the selector
-   * @param id:           The id of the combobox used in this field
-   * @param labelText:    The label text for the selector
-   * @param action:       The action to run on change in the selector's value
+   * @param options A list of strings representing the possible options
+   * @param defaultValue The default value of the selector
+   * @param id The id of the combobox used in this field
+   * @param labelText The label text for the selector
+   * @param action The action to run on change in the selector's value
    */
   public SelectorField(List<String> options, String defaultValue, String id, String labelText,
       EventHandler<ActionEvent> action) {

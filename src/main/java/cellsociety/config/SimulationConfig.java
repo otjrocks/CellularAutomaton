@@ -70,9 +70,9 @@ public class SimulationConfig {
   /**
    * Get the appropriate cell type for a simulation type
    *
-   * @param row row location for created cell
-   * @param col col location for created cell
-   * @param state initial state for created cell
+   * @param row            row location for created cell
+   * @param col            col location for created cell
+   * @param state          initial state for created cell
    * @param simulationName name/type of simulation to create cell for
    * @return the appropriate cell for a given simulation or default cell if the simulation does not
    * exist
@@ -99,7 +99,7 @@ public class SimulationConfig {
    * @param simulationName     Type/name of the simulation you want to create
    * @param simulationMetaData MetaData for your simulation
    * @param parameters         Map of parameter values String (parameter name) -> Double (parameter
-   *                            value)
+   *                           value)
    * @return the appropriate simulation object for the specified simulation name or Game of Life if
    * the simulation does not exist
    */
@@ -192,8 +192,7 @@ public class SimulationConfig {
    */
   public static List<String> assignInstructionsFromState(int state) {
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
-    return instr;
+    return new ArrayList<>(Arrays.asList(instrArray));
   }
 
 }

@@ -36,9 +36,8 @@ public class MainConfig {
   public static final int GRID_WIDTH = (3 * WIDTH) / 5;
   public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
   public static final double INITIAL_STEP_SPEED = 0.5;
-  public static final double STEP_SPEED =
-      1 / Double.parseDouble(PreferencesController.getPreference("animationSpeed",
-          String.valueOf(INITIAL_STEP_SPEED)));
+  public static final double STEP_SPEED = 1 / Double.parseDouble(
+      PreferencesController.getPreference("animationSpeed", String.valueOf(INITIAL_STEP_SPEED)));
   public static final int MAX_GRID_NUM_ROWS = 150;
   public static final int MAX_GRID_NUM_COLS = 150;
   public static final int MIN_GRID_NUM_ROWS = 5;

@@ -47,8 +47,8 @@ public class BottomBarView extends VBox {
   /**
    * Create a bottom bar view with a preferred size of width x height
    *
-   * @param width:  preferred width of bottom bar box
-   * @param height: preferred height of bottom bar box
+   * @param width preferred width of bottom bar box
+   * @param height preferred height of bottom bar box
    */
   public BottomBarView(int width, int height) {
     super();
