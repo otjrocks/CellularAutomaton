@@ -134,8 +134,11 @@ public class SplashScreenView extends VBox {
       myMainController.handleNewSimulationFromFile();
     } catch (IllegalArgumentException | GridException | InvalidStateException | IOException |
              ParserConfigurationException | SAXException e) {
-      myAlertField.flash(e.getMessage(), true);
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
+      String errorMessageKey = MainController.getErrorMessageKey(e);
+      myAlertField.flash(getMessage(errorMessageKey), true);
+      if (e.getMessage() != null) {
+        myAlertField.flash(e.getMessage(), true);
+      }
       return;
     }
     myMainController.hideSplashScreen();

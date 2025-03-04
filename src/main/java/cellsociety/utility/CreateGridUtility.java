@@ -204,7 +204,7 @@ public class CreateGridUtility {
     if (checkSimulationsWithoutStateMaximum(sim)) {
       int maxState = sim.rules().getNumberStates() - 1;
       if (state > maxState) {
-        throw new InvalidStateException();
+        throw new InvalidStateException("State " + state + " exceeded maximum state " + maxState);
       }
     }
   }
