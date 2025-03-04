@@ -19,9 +19,10 @@ public class GoInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
+      Grid grid) {
     int instructionIndex = Integer.parseInt(arguments.get(1));
-    darwinCell.setCurInstructionIndex(instructionIndex-2);
+    darwinCell.setCurInstructionIndex(instructionIndex - 2);
 
     List<CellUpdate> updates = new ArrayList<>();
     updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
@@ -34,7 +35,7 @@ public class GoInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //not needed here
+    //not needed here
   }
 
   /**

@@ -5,14 +5,14 @@ import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.TriangleCellView;
 
 /**
- * An isometric triangle grid representation implementation
+ * An isometric triangle grid representation implementation.
  *
  * @author Owen Jennings
  */
 public class TriangleGridView extends GridView {
 
   /**
-   * Create a grid view
+   * Create a grid view.
    *
    * @param width          :      Width of the view
    * @param height         :     Height of the view

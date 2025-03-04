@@ -26,10 +26,10 @@ public class CreateGridUtility {
   /**
    * Method to generate Grid from explicitly defined grid from XML data
    *
-   * @param gridDoc:    Document from which you are parsing the explicit grid from
-   * @param gridHeight: Height of the grid you're looking to initialize
-   * @param gridWidth:  Width of the grid you're looking to initialize
-   * @param sim:        The current simulation for getting correct cell types
+   * @param gridDoc Document from which you are parsing the explicit grid from
+   * @param gridHeight Height of the grid you're looking to initialize
+   * @param gridWidth Width of the grid you're looking to initialize
+   * @param sim The current simulation for getting correct cell types
    */
   public static Grid generateGrid(Document gridDoc, int gridHeight, int gridWidth, Simulation sim,
       EdgeStrategy edgeStrategy)
@@ -92,11 +92,11 @@ public class CreateGridUtility {
   /**
    * Method to generate random Grid from a number of defined states
    *
-   * @param gridDoc:      Document from which you are parsing the random arguments from
-   * @param gridHeight:   Height of the grid you're looking to initialize
-   * @param gridWidth:    Width of the grid you're looking to initialize
-   * @param edgeStrategy: The edge strategy for this grid
-   * @param sim:          The current simulation for getting correct cell types
+   * @param gridDoc Document from which you are parsing the random arguments from
+   * @param gridHeight Height of the grid you're looking to initialize
+   * @param gridWidth Width of the grid you're looking to initialize
+   * @param edgeStrategy The edge strategy for this grid
+   * @param sim The current simulation for getting correct cell types
    */
   public static Grid generateRandomGridFromStateNumber(Document gridDoc, int gridHeight,
       int gridWidth, EdgeStrategy edgeStrategy, Simulation sim) {
@@ -107,11 +107,11 @@ public class CreateGridUtility {
   /**
    * Method to generate random Grid from a distribution of defined states
    *
-   * @param gridDoc:      Document from which you are parsing the random arguments from
-   * @param gridHeight:   Height of the grid you're looking to initialize
-   * @param gridWidth:    Width of the grid you're looking to initialize
-   * @param edgeStrategy: The edge strategy to create the grid with
-   * @param sim:          The current simulation for getting correct cell types
+   * @param gridDoc Document from which you are parsing the random arguments from
+   * @param gridHeight Height of the grid you're looking to initialize
+   * @param gridWidth Width of the grid you're looking to initialize
+   * @param edgeStrategy The edge strategy to create the grid with
+   * @param sim The current simulation for getting correct cell types
    */
   public static Grid generateRandomGridFromDistribution(Document gridDoc, int gridHeight,
       int gridWidth, EdgeStrategy edgeStrategy, Simulation sim) {

@@ -146,7 +146,7 @@ public abstract class SimulationRules {
    * the same time as determining the next states of the entire grid, this method should be
    * overwritten.
    *
-   * @param grid: The grid that you wish to get the next states for
+   * @param grid The grid that you wish to get the next states for
    * @return A list of cell updates that should occur
    * @see CellUpdate
    */

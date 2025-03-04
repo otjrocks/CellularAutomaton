@@ -135,7 +135,7 @@ public class SegregationRules extends SimulationRules {
   /**
    * This method runs getNextState on all cells
    *
-   * @param grid: The grid that you wish to get the next states for
+   * @param grid The grid that you wish to get the next states for
    * @return - A list of updates that will occur for the grid
    */
   @Override

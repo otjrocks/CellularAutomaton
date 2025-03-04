@@ -51,7 +51,7 @@ public class SimulationConfig {
    * getRequiredParameters() from a simulation rules class if it exists, or returns an empty list if
    * no required parameters method is available for a class.
    *
-   * @param simulationName: the name of the simulation you are querying for
+   * @param simulationName the name of the simulation you are querying for
    * @return A list of strings representing the parameter names
    */
   public static List<String> getParameters(String simulationName) {
@@ -70,10 +70,10 @@ public class SimulationConfig {
   /**
    * Get the appropriate cell type for a simulation type
    *
-   * @param row: row location for created cell
-   * @param col: col location for created cell
-   * @param state: initial state for created cell
-   * @param simulationName: name/type of simulation to create cell for
+   * @param row            row location for created cell
+   * @param col            col location for created cell
+   * @param state          initial state for created cell
+   * @param simulationName name/type of simulation to create cell for
    * @return the appropriate cell for a given simulation or default cell if the simulation does not
    * exist
    */
@@ -96,10 +96,10 @@ public class SimulationConfig {
    * Get the appropriate simulation class for a given simulation name. Construct the simulation with
    * the required parameters and metadata
    *
-   * @param simulationName:     Type/name of the simulation you want to create
-   * @param simulationMetaData: MetaData for your simulation
-   * @param parameters:         Map of parameter values String (parameter name) -> Double (parameter
-   *                            value)
+   * @param simulationName     Type/name of the simulation you want to create
+   * @param simulationMetaData MetaData for your simulation
+   * @param parameters         Map of parameter values String (parameter name) -> Double (parameter
+   *                           value)
    * @return the appropriate simulation object for the specified simulation name or Game of Life if
    * the simulation does not exist
    */
@@ -188,12 +188,11 @@ public class SimulationConfig {
   /**
    * Gets instructions for predefined species from the properties file
    *
-   * @param state: Integer representing the species of the animal (or empty)
+   * @param state Integer representing the species of the animal (or empty)
    */
   public static List<String> assignInstructionsFromState(int state) {
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
-    return instr;
+    return new ArrayList<>(Arrays.asList(instrArray));
   }
 
 }

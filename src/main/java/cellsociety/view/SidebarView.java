@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 /**
- * A class to handle all the sidebar view elements of the app
+ * A class to handle all the sidebar view elements of the app.
  *
  * @author Owen Jennings
  */
@@ -38,10 +38,10 @@ public class SidebarView extends VBox {
 
 
   /**
-   * Create a sidebar view with a preferred size of width x height
+   * Create a sidebar view with a preferred size of width x height.
    *
-   * @param width:  preferred width of sidebar box
-   * @param height: preferred height of sidebar box
+   * @param width  preferred width of sidebar box
+   * @param height preferred height of sidebar box
    */
   public SidebarView(int width, int height, MainController controller) {
     super();
@@ -62,7 +62,7 @@ public class SidebarView extends VBox {
   }
 
   /**
-   * Create the theme selector element, which can be accessed across multiple views
+   * Create the theme selector element, which can be accessed across multiple views.
    *
    * @return A SelectorField containing the theme selector and its label
    */
@@ -120,7 +120,7 @@ public class SidebarView extends VBox {
   }
 
   /**
-   * Update both the edit mode view and the view mode view that are part of this sidebar
+   * Update both the edit mode view and the view mode view that are part of this sidebar.
    */
   public void update() {
     myViewModeView.update();

@@ -16,8 +16,8 @@ public class FileUtility {
    * Get a list of all the files in the provided directory that end with a specific string or file
    * extension
    *
-   * @param directoryPath: The directory you are querying
-   * @param ending: The ending of the files you which to query for
+   * @param directoryPath The directory you are querying
+   * @param ending The ending of the files you which to query for
    * @return: A list of all the file names in the directory provided that end with the provided ending
    */
   public static List<String> getFileNamesInDirectory(String directoryPath, String ending) {

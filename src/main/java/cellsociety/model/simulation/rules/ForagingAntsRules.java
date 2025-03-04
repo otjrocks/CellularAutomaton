@@ -142,7 +142,7 @@ public class ForagingAntsRules extends SimulationRules {
    * Method that determines which cells need to be updated and adds them to a List of CellUpdate
    * objects that will be carried out by the Grid
    *
-   * @param grid: grid on which the cells are/will be located
+   * @param grid grid on which the cells are/will be located
    */
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
@@ -200,10 +200,10 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that carries out the proper of update of ant position for all ants in the simulation.
    *
-   * @param cell:          current ant being updated
-   * @param grid:          grid on which the ants are/will be located
-   * @param nextStates:    list of CellUpdates that will hold ant's next cell representation
-   * @param occupiedCells: cells that already have an ant moving to them this cycle
+   * @param cell          current ant being updated
+   * @param grid          grid on which the ants are/will be located
+   * @param nextStates    list of CellUpdates that will hold ant's next cell representation
+   * @param occupiedCells cells that already have an ant moving to them this cycle
    */
   private void processAntMovement(Cell cell, Grid grid, List<CellUpdate> nextStates,
       Set<Point2D> occupiedCells) {
@@ -316,9 +316,9 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that updates the pheremones for the cell the ant is moving to
    *
-   * @param antCell: the cell the ant is moving to and thus needs have its pheremones updated
-   * @param grid:    grid on which the cell is located
-   * @param type:    String differentiating between home and food pheromones
+   * @param antCell the cell the ant is moving to and thus needs have its pheremones updated
+   * @param grid    grid on which the cell is located
+   * @param type    String differentiating between home and food pheromones
    */
   private double updatePheromone(ForagingAntsCell antCell, Grid grid, String type) {
 
@@ -360,9 +360,9 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that gets neighbors based on state value
    *
-   * @param cell:          the cell whose neighbors you want to find
-   * @param grid:          grid on which the cell is located
-   * @param occupiedCells: cells that have an ant moving to them this cycle
+   * @param cell          the cell whose neighbors you want to find
+   * @param grid          grid on which the cell is located
+   * @param occupiedCells cells that have an ant moving to them this cycle
    */
   private List<Cell> getNeighborsByState(Cell cell, Grid grid, int state,
       Set<Point2D> occupiedCells) {
@@ -380,8 +380,8 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that finds the neighbor of a given cell with the highest pheromones
    *
-   * @param emptyNeighbors: neighbors with an empty state value
-   * @param type:           String to differentiate between home and food pheromones
+   * @param emptyNeighbors neighbors with an empty state value
+   * @param type           String to differentiate between home and food pheromones
    */
   private Cell highestPheromoneNeighbor(List<Cell> emptyNeighbors, String type) {
     if (emptyNeighbors.isEmpty()) {
@@ -422,8 +422,8 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that adds a new ant with full health to the grid
    *
-   * @param newAnt:     the ant cell to be added
-   * @param nextStates: list of CellUpdates to be handled by the grid
+   * @param newAnt the ant cell to be added
+   * @param nextStates list of CellUpdates to be handled by the grid
    */
   private void addNewAnt(ForagingAntsCell newAnt, List<CellUpdate> nextStates) {
     nextStates.add(new CellUpdate(newAnt.getLocation(),
@@ -436,11 +436,11 @@ public class ForagingAntsRules extends SimulationRules {
    * Method that moves an ant to somewhere else in the grid (adds new cell with properly updated
    * values)
    *
-   * @param ant:          the current ant to based update values on
-   * @param nextLocation: the location where the ant is moving
-   * @param grid:         the grid on which the ant is located
-   * @param nextStates:   list of CellUpdates to be handled by the grid
-   * @param hasFood:      does the ant have food after being updated
+   * @param ant the current ant to based update values on
+   * @param nextLocation the location where the ant is moving
+   * @param grid the grid on which the ant is located
+   * @param nextStates list of CellUpdates to be handled by the grid
+   * @param hasFood does the ant have food after being updated
    */
   private void addUpdatedAnt(ForagingAntsCell ant, ForagingAntsCell nextLocation, Grid grid,
       List<CellUpdate> nextStates, boolean hasFood) {
@@ -454,8 +454,8 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that adds an empty cell in the case of when an ant moves or dies
    *
-   * @param ant:        the ant cell to be referenced for position
-   * @param nextStates: list of CellUpdates to be handled by the grid
+   * @param ant the ant cell to be referenced for position
+   * @param nextStates list of CellUpdates to be handled by the grid
    */
   private void addEmptyCell(ForagingAntsCell ant, List<CellUpdate> nextStates) {
     nextStates.add(new CellUpdate(ant.getLocation(),
@@ -468,9 +468,9 @@ public class ForagingAntsRules extends SimulationRules {
    * Method that checks if reproduction time has been reached and adds a specified number of ants
    * and random cells adjacent to nests
    *
-   * @param grid:          the grid where ants are being added
-   * @param nextStates:    list of CellUpdates to be handled by the grid
-   * @param occupiedCells: cells that have an ant moving to them this cycle
+   * @param grid the grid where ants are being added
+   * @param nextStates list of CellUpdates to be handled by the grid
+   * @param occupiedCells cells that have an ant moving to them this cycle
    */
   private void checkIfTimeForMoreAnts(Grid grid, List<CellUpdate> nextStates,
       Set<Point2D> occupiedCells) {

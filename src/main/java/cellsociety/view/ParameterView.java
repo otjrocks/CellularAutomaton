@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 /**
- * A view to display and edit the parameters of a simulation
+ * A view to display and edit the parameters of a simulation.
  *
  * @author Owen Jennings
  */
@@ -31,7 +31,7 @@ public class ParameterView extends VBox {
   private final AlertField myAlertField;
 
   /**
-   * Create a new parameter view using the current parameter values of the provided simulation
+   * Create a new parameter view using the current parameter values of the provided simulation.
    *
    * @param mainController The main controller of the program
    * @param isEditing      Whether the user should be able to edit parameters or not

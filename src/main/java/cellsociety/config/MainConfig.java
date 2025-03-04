@@ -36,9 +36,8 @@ public class MainConfig {
   public static final int GRID_WIDTH = (3 * WIDTH) / 5;
   public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
   public static final double INITIAL_STEP_SPEED = 0.5;
-  public static final double STEP_SPEED =
-      1 / Double.parseDouble(PreferencesController.getPreference("animationSpeed",
-          String.valueOf(INITIAL_STEP_SPEED)));
+  public static final double STEP_SPEED = 1 / Double.parseDouble(
+      PreferencesController.getPreference("animationSpeed", String.valueOf(INITIAL_STEP_SPEED)));
   public static final int MAX_GRID_NUM_ROWS = 150;
   public static final int MAX_GRID_NUM_COLS = 150;
   public static final int MIN_GRID_NUM_ROWS = 5;
@@ -83,7 +82,7 @@ public class MainConfig {
    * Set the language for the program if it exists. If the language does not exist, the preferred
    * language will not update.
    *
-   * @param language: The new language to set
+   * @param language The new language to set
    */
   public static void setLanguage(String language) {
     try {

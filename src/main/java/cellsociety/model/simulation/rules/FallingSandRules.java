@@ -25,7 +25,7 @@ public class FallingSandRules extends SimulationRules {
   /**
    * Create falling sand rules class. No parameters are required for this rules class.
    *
-   * @param parameters: parameters for the simulation (may not be used)
+   * @param parameters parameters for the simulation (may not be used)
    * @throws InvalidParameterException: an exception for missing or invalid parameters provided.
    */
   public FallingSandRules(Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
@@ -52,7 +52,7 @@ public class FallingSandRules extends SimulationRules {
   /**
    * Get the next states cell update list for all cells in the simulation
    *
-   * @param grid: The grid that you wish to get the next states for
+   * @param grid The grid that you wish to get the next states for
    * @return A list of cell updates representing changes that need to be made to the grid on next
    * update
    */

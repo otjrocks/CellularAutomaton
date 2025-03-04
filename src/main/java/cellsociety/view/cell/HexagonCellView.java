@@ -4,14 +4,14 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
 /**
- * The cell used in a hexagon grid view
+ * The cell used in a hexagon grid view.
  *
  * @author Owen Jennings
  */
 public class HexagonCellView extends CellView {
 
   /**
-   * Create a cell with the default fill color
+   * Create a cell with the default fill color.
    *
    * @param x      :      x location of cell
    * @param y      :      y location of cell

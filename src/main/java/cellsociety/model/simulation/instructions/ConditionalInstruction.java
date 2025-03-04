@@ -16,6 +16,7 @@ import cellsociety.model.simulation.rules.DarwinRules.State;
  * Conditional Instruction class to handle the various conditionals in Darwin Simulation
  */
 public class ConditionalInstruction implements Instruction {
+
   private int layers;
   private final String conditionType;
   private final Random random = new Random();
@@ -24,7 +25,7 @@ public class ConditionalInstruction implements Instruction {
    * Creates one instance of a Conditional Instruction
    *
    * @param conditionType - the string name of the condition
-   * @param layers - the number of layers that should be searched when getting neighbors
+   * @param layers        - the number of layers that should be searched when getting neighbors
    */
   public ConditionalInstruction(String conditionType, int layers) {
     this.conditionType = conditionType;
@@ -37,7 +38,8 @@ public class ConditionalInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
+      Grid grid) {
     Point2D direction = darwinCell.getFrontDirection();
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
@@ -73,7 +75,7 @@ public class ConditionalInstruction implements Instruction {
       }
 
       if (checkIfConditionIsMet(darwinCell, curCell, grid)) {
-        darwinCell.setCurInstructionIndex(nextInstruction-2);
+        darwinCell.setCurInstructionIndex(nextInstruction - 2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
     }
@@ -81,7 +83,7 @@ public class ConditionalInstruction implements Instruction {
 
   private List<CellUpdate> handleRandomCase(DarwinCell darwinCell, int nextInstruction,
       List<CellUpdate> updates) {
-    if ( conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
+    if (conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
       if (random.nextBoolean()) {
         darwinCell.setCurInstructionIndex(nextInstruction-2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
@@ -122,8 +124,8 @@ public class ConditionalInstruction implements Instruction {
      * Calls the checker to validate the condition
      *
      * @param darwinCell - the cell that the instruction is executed on
-     * @param curCell - the current cell that is being compared to the darwinCell
-     * @param grid - the collection of cell objects
+     * @param curCell    - the current cell that is being compared to the darwinCell
+     * @param grid       - the collection of cell objects
      * @return - a boolean on whether the condition passed
      */
     public boolean check(DarwinCell darwinCell, Cell curCell, Grid grid) {
@@ -141,8 +143,8 @@ public class ConditionalInstruction implements Instruction {
      * Method to check whether or not the condition is validated
      *
      * @param darwinCell - the cell that the instruction is executed on
-     * @param curCell - the current cell that is being compared to the darwinCell
-     * @param grid - the collection of cell objects
+     * @param curCell    - the current cell that is being compared to the darwinCell
+     * @param grid       - the collection of cell objects
      * @return - a boolean on whether the condition passed
      */
     boolean check(DarwinCell darwinCell, Cell curCell, Grid grid);
@@ -153,7 +155,7 @@ public class ConditionalInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //unneeded here
+    //unneeded here
   }
 
   /**

@@ -53,7 +53,7 @@ public class SugarscapeRules extends SimulationRules {
   /**
    * the method that handles all cell updates so the grid knows where to move the cells
    *
-   * @param grid: The grid that you wish to get the next states for
+   * @param grid The grid that you wish to get the next states for
    * @return - a list of updates for each cell that the grid uses to update each location
    */
   @Override

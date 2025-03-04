@@ -5,7 +5,7 @@ import cellsociety.utility.FileUtility;
 import java.util.List;
 
 /**
- * A class to handle to initialization and changing of the program's theme
+ * A class to handle to initialization and changing of the program's theme.
  *
  * @author Owen Jennings
  */
@@ -34,7 +34,7 @@ public class ThemeConfig {
       DEFAULT_THEME);
 
   /**
-   * Get the path of the current theme's css file
+   * Get the path of the current theme's css file.
    *
    * @return the path of the current theme's css file
    */
@@ -43,7 +43,7 @@ public class ThemeConfig {
   }
 
   /**
-   * Get the string of the current theme
+   * Get the string of the current theme.
    *
    * @return String representing the current theme name
    */
@@ -55,7 +55,7 @@ public class ThemeConfig {
    * Set the theme to the provided theme name. Requires that a file named "themeName.css" exists in
    * the themes folder
    *
-   * @param themeName: Name of the theme you want to set
+   * @param themeName Name of the theme you want to set
    */
   public static void setTheme(String themeName) {
     myThemePath = "%s%s.css".formatted(THEMES_RESOURCES_FOLDER, themeName);

@@ -85,7 +85,7 @@ public class MainController {
   /**
    * Initialize the MainController
    *
-   * @param root: the main root group of the program
+   * @param root the main root group of the program
    */
   public MainController(Stage stage, Group root) {
     myThemeController = new ThemeController(stage);
@@ -116,7 +116,7 @@ public class MainController {
   /**
    * Set the theme to the themeName provided if it exists, otherwise fallback to default theme
    *
-   * @param themeName: Name of theme you which to set
+   * @param themeName Name of theme you which to set
    */
   public void setTheme(String themeName) {
     myThemeController.setTheme(themeName);
@@ -170,8 +170,8 @@ public class MainController {
   /**
    * Update the animation to have a new speed
    *
-   * @param speed: the new speed of the animation
-   * @param start: a boolean to determine if the animation should start with the new speed or remain
+   * @param speed the new speed of the animation
+   * @param start a boolean to determine if the animation should start with the new speed or remain
    *               stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
@@ -196,7 +196,7 @@ public class MainController {
   /**
    * Set whether the user is editing the simulation
    *
-   * @param editing: boolean indicating if user is editing the view
+   * @param editing boolean indicating if user is editing the view
    */
   public void setEditing(boolean editing) {
     isEditing = editing;
@@ -242,8 +242,8 @@ public class MainController {
    * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
    * from user input. The cell state will only be changed if the user is currently in editing mode
    *
-   * @param row:    row of cell you which to change state of
-   * @param column: column of cell you which to change state of
+   * @param row    row of cell you which to change state of
+   * @param column column of cell you which to change state of
    */
   public void changeCellState(int row, int column) {
     if (isEditing) {
@@ -284,7 +284,7 @@ public class MainController {
   /**
    * Update the main simulation of the program
    *
-   * @param simulation: The simulation you wish to switch to
+   * @param simulation The simulation you wish to switch to
    */
   public void updateSimulation(Simulation simulation) {
     mySimulation = simulation;
@@ -319,7 +319,7 @@ public class MainController {
   /**
    * Handle whether grid lines should be shown or not
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     PreferencesController.setPreference("gridLines", String.valueOf(selected));

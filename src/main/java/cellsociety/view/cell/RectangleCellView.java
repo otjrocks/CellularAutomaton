@@ -4,14 +4,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 /**
- * A rectangle implementation of a cell view
+ * A rectangle implementation of a cell view.
  *
  * @author Owen Jennings
  */
 public class RectangleCellView extends CellView {
 
   /**
-   * Create a rectangle cell view
+   * Create a rectangle cell view.
    *
    * @param x      :      x location of cell
    * @param y      :      y location of cell
