@@ -44,21 +44,8 @@ public class MoveInstruction implements Instruction {
         newRow += (int) direction.getX();
         newCol += (int) direction.getY();
 
-        if (newRow > grid.getRows()-1){
-          newRow = grid.getRows()-1;
-        }
-
-        if (newRow < 0){
-          newRow = 0;
-        }
-
-        if (newCol > grid.getCols()-1){
-          newCol = grid.getCols()-1;
-        }
-
-        if (newCol < 0){
-          newCol = 0;
-        }
+        newRow = verifyInBounds(newRow, grid.getRows());
+        newCol = verifyInBounds(newCol, grid.getCols());
 
         Cell curCell;
         try {
@@ -105,6 +92,19 @@ public class MoveInstruction implements Instruction {
       updates.add(new CellUpdate(new Double(newRow, newCol), newCell));
     }
     return updates;
+  }
+
+
+  private int verifyInBounds(int rowOrCol, int numRowsOrCols){
+    if (rowOrCol > numRowsOrCols-1){
+      rowOrCol = numRowsOrCols-1;
+    }
+
+    if (rowOrCol < 0){
+      rowOrCol = 0;
+    }
+
+    return rowOrCol;
   }
 
 }
