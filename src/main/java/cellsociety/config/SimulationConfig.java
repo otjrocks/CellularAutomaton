@@ -164,11 +164,13 @@ public class SimulationConfig {
   }
 
   private static GetNeighbors createGetNeighborInstance(String neighborType, int layers) {
-    if (neighborType == null || layers <= 0) {
-      throw new IllegalArgumentException("Invalid neighbor configuration.");
-    }
+    checkValidNeighborConfiguration(neighborType, layers);
     String className = String.format("cellsociety.model.simulation.neighbors.%s%s", neighborType,
         "Neighbors");
+    return getNeighborsFromClassNameString(layers, className);
+  }
+
+  private static GetNeighbors getNeighborsFromClassNameString(int layers, String className) {
     GetNeighbors getNeighbors;
     try {
       Class<?> neighborClass = Class.forName(className);
@@ -180,6 +182,12 @@ public class SimulationConfig {
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       LOGGER.warn(e.getMessage());
       throw new RuntimeException(e);
+    }
+  }
+
+  private static void checkValidNeighborConfiguration(String neighborType, int layers) {
+    if (neighborType == null || layers <= 0) {
+      throw new IllegalArgumentException("Invalid neighbor configuration.");
     }
   }
 
