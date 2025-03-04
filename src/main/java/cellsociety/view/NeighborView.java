@@ -137,13 +137,6 @@ public class NeighborView extends VBox {
 
     neighborLayerField = new IntegerField();
     neighborLayerField.setText(Integer.toString(neighborLayer));
-    neighborLayerField.textProperty().addListener((observable, oldVal, newValue) -> {
-      try {
-        neighborLayer = Integer.parseInt(newValue);
-      } catch (NumberFormatException e) {
-        myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
-      }
-    });
 
     VBox editableBox = new VBox();
     editableBox.getChildren().addAll(
