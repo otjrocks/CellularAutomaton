@@ -1,5 +1,6 @@
 package cellsociety.view.config;
 
+import cellsociety.config.MainConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -39,6 +40,20 @@ public class StateDisplayConfig {
     });
   }
 
+  public static StateInfo getStateInfo(Simulation simulation, int state, String language) {
+    String currentLanguage = MainConfig.getLanguage();
+    MainConfig.setLanguage(language);
+    StateCacheKey cacheKey = new StateCacheKey(simulation, state);
+
+    // ChatGPT assisted in creating a cache to store values instead of looking up everytime to improve efficiency
+    StateInfo result = STATE_INFO_CACHE.computeIfAbsent(cacheKey, key -> {
+      String simulationType = simulation.data().type().toUpperCase();
+      return getStateInfoFromSimulationTypeString(state, simulationType);
+    });
+    MainConfig.setLanguage(currentLanguage); // reset to original language
+    return result;
+  }
+
   private static StateInfo getStateInfoFromSimulationTypeString(int state, String simulationType) {
     String nameKey = "%s_NAME_%d".formatted(simulationType, state);
     String colorKey = "%s_COLOR_%d".formatted(simulationType, state);
@@ -46,7 +61,7 @@ public class StateDisplayConfig {
     String stateName = getStateName(nameKey, state);
     Color stateColor = getStateColor(colorKey, simulationType, state);
 
-    return new StateInfo(stateName, stateColor);
+    return new StateInfo(state, stateName, stateColor);
   }
 
   private static String getStateName(String key, int state) {

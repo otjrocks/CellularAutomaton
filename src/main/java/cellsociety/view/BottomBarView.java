@@ -1,16 +1,15 @@
 package cellsociety.view;
 
+import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
-import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
-import cellsociety.config.SimulationConfig;
 import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,6 +21,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 
@@ -35,7 +35,8 @@ public class BottomBarView extends VBox {
   private static final int MAX_HISTORY_SIZE = 300;
   private final Text myIterationText = new Text();
   private LineChart<Number, Number> stateChangeChart;
-  private final Map<String, Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final Map<StateInfo, Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
+  private final Map<String, StateInfo> stateInfoMap = new HashMap<>();
   private final NumberAxis xAxis = new NumberAxis();
   private final NumberAxis yAxis = new NumberAxis();
   private int stepCount = 0;
@@ -128,26 +129,28 @@ public class BottomBarView extends VBox {
    * Update the state change chart
    *
    * @param stateCounts The count of all states from the current simulation state
-   * @param simType     The simulation type string
    */
-  public void updateStateChangeChart(Map<String, Integer> stateCounts, String simType) {
+  public void updateStateChangeChart(Map<StateInfo, Integer> stateCounts) {
     Platform.runLater(() -> {
+      for (StateInfo stateInfo : stateCounts.keySet()) {
+        stateInfoMap.putIfAbsent(stateInfo.displayName(), stateInfo);
+      }
       int totalStates = sumMapValues(stateCounts);
       yAxis.setUpperBound(totalStates);
       yAxis.setTickUnit((double) totalStates / 5);
       updateSeriesWithNewStateCounts(stateCounts);
-      updateXYChart(simType);
+      updateXYChart();
       stepCount++;
     });
   }
 
-  private void updateSeriesWithNewStateCounts(Map<String, Integer> stateCounts) {
-    for (Entry<String, Integer> entry : stateCounts.entrySet()) {
-      String stateName = entry.getKey();
+  private void updateSeriesWithNewStateCounts(Map<StateInfo, Integer> stateCounts) {
+    for (Entry<StateInfo, Integer> entry : stateCounts.entrySet()) {
+      StateInfo state = entry.getKey();
       int newValue = entry.getValue();
-      addStateNameToStateChangeMap(stateName);
+      addStateToStateChangeMap(state);
 
-      Series<Number, Number> series = stateChangeSeriesMap.get(stateName);
+      Series<Number, Number> series = stateChangeSeriesMap.get(state);
       series.getData().add(new Data<>(stepCount, newValue));
 
       // Ensure the series maintains a fixed history size
@@ -162,31 +165,34 @@ public class BottomBarView extends VBox {
   }
 
 
-  private void updateXYChart(String simType) {
+  private void updateXYChart() {
     for (Series<Number, Number> series : stateChangeChart.getData()) {
-      String colorString = getColorStringForState(simType, series);
+      String colorString = BottomBarView.getWebColorString(
+          stateInfoMap.get(series.getName()).color());
       series.getNode().setStyle("-fx-stroke: " + colorString + ";");
     }
   }
 
-  private static String getColorStringForState(String simType, Series<Number, Number> series) {
-    return getCellColors().getString(
-        (simType + "_COLOR_" + SimulationConfig.returnStateValueBasedOnName(simType,
-            series.getName().replaceAll("\\s+", ""))).toUpperCase()).toLowerCase();
+  // I used ChatGPT to write this method.
+  private static String getWebColorString(Color color) {
+    return String.format("#%02X%02X%02X",
+        (int) (color.getRed() * 255),
+        (int) (color.getGreen() * 255),
+        (int) (color.getBlue() * 255));
   }
 
-  private void addStateNameToStateChangeMap(String stateName) {
-    if (!stateChangeSeriesMap.containsKey(stateName)) {
+  private void addStateToStateChangeMap(StateInfo state) {
+    if (!stateChangeSeriesMap.containsKey(state)) {
       Series<Number, Number> newSeries = new Series<>();
-      newSeries.setName(stateName);
-      stateChangeSeriesMap.put(stateName, newSeries);
+      newSeries.setName(state.displayName());
+      stateChangeSeriesMap.put(state, newSeries);
       stateChangeChart.getData().add(newSeries);
     }
   }
 
-  private int sumMapValues(Map<String, Integer> map) {
+  private int sumMapValues(Map<StateInfo, Integer> map) {
     int total = 0;
-    for (String key : map.keySet()) {
+    for (StateInfo key : map.keySet()) {
       total += map.get(key);
     }
     return total;

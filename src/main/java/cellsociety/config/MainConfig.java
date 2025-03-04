@@ -1,6 +1,8 @@
 package cellsociety.config;
 
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.utility.FileUtility;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -46,6 +48,7 @@ public class MainConfig {
   public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user
   public static final Logger LOGGER = LogManager.getLogger(); // The logger for this program
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
+  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   /**
    * Get the message string from the config file for the provided key
@@ -89,6 +92,24 @@ public class MainConfig {
       throw new IllegalArgumentException("Language file not found" + e);
     }
     PreferencesController.setPreference("language", language);
+  }
+
+  /**
+   * Get a list of all the available languages
+   *
+   * @return A list of strings representing the languages.
+   */
+  public static List<String> fetchLanguages() {
+    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
+  }
+
+  /**
+   * Get the current language of the program
+   *
+   * @return The language of the program
+   */
+  public static String getLanguage() {
+    return PreferencesController.getPreference("language", DEFAULT_LANGUAGE);
   }
 
   /**
