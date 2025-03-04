@@ -12,7 +12,7 @@ import cellsociety.config.SimulationConfig;
  * @author Justin Aronwald
  */
 public class DarwinCell extends Cell {
-  private static final int stateValChecker = 4;
+  private static final int stateValChecker = 10;
 
   private int prevSpecies;
   private int orientation;
