@@ -72,8 +72,9 @@ This project implements a cellular automata simulator.
       down. If it can only move to its left or right diagonal, it will randomly choose one of the
       diagonals if both of them are empty. If only one diagonal is empty and it cannot fall directly
       down, it will move to the only open diagonal.
-    * In Sugarscape, an agent's metabolism will always be subtracted before checking its neighbors. Thus, it must have sufficient metabolism prior to movement. Then, it determines the maximum sugar patch within its vision. It breaks ties using a minimum distance. 
-
+    * In Sugarscape, an agent's metabolism will always be subtracted before checking its neighbors. Thus, it must have sufficient metabolism prior to movement. Then, it determines the maximum sugar patch within its vision. It breaks ties using a minimum distance.
+    * In Darwin, we assume that for each move instruction, each pixel represents one block in our simulation. So, for example, a MOVE 4, will move 4 blocks, rather than simply four pixels. We also assume that degrees will get rounded to the nearest 45 degree. So if, somebody inputs something like 30 degrees, we round that handle the orientation differently depedning on if the neighbor configuration is Moore or Von Neumann. So, for 30 degrees and 0 degree initial orientation, a right turn for Moore rounds to 45 degrees, while a right turn for Von Neumann rounds to 0 degrees.  
+    
 * Known Bugs:
 
 * Features implemented:
