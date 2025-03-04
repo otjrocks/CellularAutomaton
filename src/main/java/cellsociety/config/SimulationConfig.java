@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
 import java.awt.geom.Point2D;
@@ -63,7 +64,7 @@ public class SimulationConfig {
       return new ArrayList<>();
     } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
       LOGGER.warn(e.getMessage());
-      throw new RuntimeException("Error fetching parameters", e);
+      throw new SimulationCreationException("Error fetching parameters", e);
     }
   }
 
@@ -181,7 +182,7 @@ public class SimulationConfig {
       throw new IllegalArgumentException(String.format("Invalid neighbor configuration: %s", e));
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       LOGGER.warn(e.getMessage());
-      throw new RuntimeException(e);
+      throw new SimulationCreationException(e);
     }
   }
 

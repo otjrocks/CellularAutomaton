@@ -6,6 +6,7 @@ import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
@@ -225,7 +226,8 @@ public class XMLHandler {
       mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
     } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new SimulationCreationException(
+          "Unable to assign the simulation rules based on the provided simulation type", e);
     }
   }
 

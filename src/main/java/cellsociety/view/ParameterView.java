@@ -96,7 +96,7 @@ public class ParameterView extends VBox {
     try {
       field.setText(param.getString());
     } catch (InvalidParameterException e) {
-      throw new RuntimeException("Invalid Parameter ", e);
+      throw new IllegalArgumentException("Invalid Parameter ", e);
     }
     return field;
   }
@@ -105,7 +105,7 @@ public class ParameterView extends VBox {
     try {
       createText(String.format("• %s: %s", key, param.getString()), false);
     } catch (InvalidParameterException e) {
-      throw new RuntimeException("Invalid Parameter ", e);
+      throw new IllegalArgumentException("Invalid Parameter ", e);
     }
   }
 
