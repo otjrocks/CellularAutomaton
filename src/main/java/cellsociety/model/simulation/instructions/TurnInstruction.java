@@ -12,6 +12,7 @@ import cellsociety.model.simulation.Instruction;
  * Abstract class to define the turning instructions
  */
 public abstract class TurnInstruction implements Instruction {
+
   private int stepSize;
 
   /**
@@ -38,12 +39,13 @@ public abstract class TurnInstruction implements Instruction {
    * Method that executes the instructions
    *
    * @param darwinCell - the cell that the instruction is executed on
-   * @param arguments - the list of instructions for the given cell
-   * @param grid - the collection of cell objects
-   * @return - empty List due to no cellupdates needed
+   * @param arguments  - the list of instructions for the given cell
+   * @param grid       - the collection of cell objects
+   * @return - empty List due to no CellUpdates needed
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
+      Grid grid) {
     int degrees = Integer.parseInt(arguments.get(1));
     turn(darwinCell, degrees, stepSize);
     List<CellUpdate> updates = new ArrayList<>();

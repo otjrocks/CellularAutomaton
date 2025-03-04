@@ -17,6 +17,7 @@ import cellsociety.model.simulation.rules.DarwinRules.State;
  */
 
 public class InfectInstruction implements Instruction {
+
   private int layers;
 
   /**
@@ -27,14 +28,16 @@ public class InfectInstruction implements Instruction {
   public InfectInstruction(int layers) {
     this.layers = layers;
   }
+
   /**
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
-    Point2D direction =  darwinCell.getFrontDirection();
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
+      Grid grid) {
+    Point2D direction = darwinCell.getFrontDirection();
     int newInfectionCountdown = Integer.parseInt(arguments.get(1));
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
@@ -53,16 +56,19 @@ public class InfectInstruction implements Instruction {
 
       DarwinCell speciesCell = (DarwinCell) curCell;
 
-      if (curCell == null || curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) {
+      if (curCell == null || curCell.getState() == State.EMPTY.getValue()
+          || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) {
         continue;
       }
 
-      DarwinCell infectedCell = new DarwinCell(new DarwinCellRecord(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, speciesCell.getState()));
+      DarwinCell infectedCell = new DarwinCell(
+          new DarwinCellRecord(darwinCell.getState(), speciesCell.getLocation(),
+              speciesCell.getOrientation(), newInfectionCountdown, 0,
+              darwinCell.getAllInstructions(), true, speciesCell.getState()));
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
     return updates;
   }
-
 
 
   /**
@@ -70,7 +76,7 @@ public class InfectInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //not needed here
+    //not needed here
   }
 
   /**
