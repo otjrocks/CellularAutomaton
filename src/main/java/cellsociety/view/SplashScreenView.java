@@ -2,7 +2,6 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.MARGIN;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
@@ -12,7 +11,6 @@ import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
-import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.SelectorField;
 import java.io.IOException;

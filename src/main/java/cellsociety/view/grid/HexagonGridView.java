@@ -17,10 +17,10 @@ public class HexagonGridView extends GridView {
   /**
    * Create a grid view.
    *
-   * @param width Width of the view
-   * @param height Height of the view
-   * @param numRows Number of rows in the grid
-   * @param numColumns Number of cells per row in the grid
+   * @param width          Width of the view
+   * @param height         Height of the view
+   * @param numRows        Number of rows in the grid
+   * @param numColumns     Number of cells per row in the grid
    * @param mainController The main controller of the program
    */
   public HexagonGridView(int width, int height, int numRows, int numColumns,
@@ -54,10 +54,14 @@ public class HexagonGridView extends GridView {
       double verticalSpacing, CellView[][] grid, double hexWidth, double hexHeight) {
     double x = column * horizontalSpacing;
     double y = row * verticalSpacing;
-    if (column % 2 == 1) {
+    if (isOdd(column)) {
       y += verticalSpacing / 2; // Shift odd columns downward to create honeycomb effect
     }
     grid[row][column] = new HexagonCellView(x, y, hexWidth, hexHeight);
+  }
+
+  private static boolean isOdd(int value) {
+    return value % 2 == 1;
   }
 
   private double getHexagonHeight() {

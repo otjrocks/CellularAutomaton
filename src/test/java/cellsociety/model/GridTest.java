@@ -6,7 +6,7 @@ import cellsociety.model.edge.ToroidalEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.neighbors.MooreNeighbors;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;

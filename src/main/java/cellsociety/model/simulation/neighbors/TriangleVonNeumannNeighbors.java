@@ -1,4 +1,4 @@
-package cellsociety.model.simulation.getNeighborOptions;
+package cellsociety.model.simulation.neighbors;
 
 import cellsociety.model.simulation.GetNeighbors;
 

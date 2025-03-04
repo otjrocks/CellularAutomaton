@@ -170,7 +170,7 @@ public class SimulationConfig {
     if (neighborType == null || layers <= 0) {
       throw new IllegalArgumentException("Invalid neighbor configuration.");
     }
-    String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
+    String className = String.format("cellsociety.model.simulation.neighbors.%s%s",
         neighborType,
         "Neighbors");
     GetNeighbors getNeighbors;

@@ -267,11 +267,15 @@ public class CreateDefaultSimView extends VBox {
   }
 
   private boolean checkInvalidLayer(int myNeighborLayer) {
-    if (myNeighborLayer < 1) {
+    if (hasInvalidNumberOfLayers(myNeighborLayer)) {
       myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
       return true;
     }
     return false;
+  }
+
+  private static boolean hasInvalidNumberOfLayers(int myNeighborLayer) {
+    return myNeighborLayer < 1;
   }
 
   private boolean checkInvalidNeighborType(String myNeighborType) {

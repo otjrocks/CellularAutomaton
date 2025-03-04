@@ -2,7 +2,7 @@ package cellsociety.model.simulation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.neighbors.MooreNeighbors;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
 import cellsociety.view.config.StateDisplayConfig;
 import java.util.HashMap;

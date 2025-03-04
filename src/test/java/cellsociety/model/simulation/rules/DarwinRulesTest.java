@@ -14,7 +14,7 @@ import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.neighbors.MooreNeighbors;
 
 class DarwinRulesTest {
   private DarwinRules darwinRules;
