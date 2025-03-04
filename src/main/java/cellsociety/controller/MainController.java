@@ -3,6 +3,7 @@ package cellsociety.controller;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.view.config.StateInfo;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 
 import java.io.File;
@@ -143,7 +144,6 @@ public class MainController {
 
   /**
    * Method to call the simulation view to reset the Grid view to be back to normal pr-zoom
-   *
    */
   public void resetZoomButton() {
     mySimulationView.resetZoom();
@@ -367,14 +367,13 @@ public class MainController {
    *
    * @return A map where the string represents the state's name and an int value for the count
    */
-  public Map<String, Integer> computeStateCounts() {
-    Map<String, Integer> stateCounts = new HashMap<>();
+  public Map<StateInfo, Integer> computeStateCounts() {
+    Map<StateInfo, Integer> stateCounts = new HashMap<>();
     for (int row = 0; row < myGrid.getRows(); row++) {
       for (int col = 0; col < myGrid.getCols(); col++) {
         int state = myGrid.getCell(row, col).getState();
-        stateCounts.put(getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()),
-            stateCounts.getOrDefault(
-                getMessage((mySimulation.data().type() + "_NAME_" + state).toUpperCase()), 0) + 1);
+        StateInfo key = StateDisplayConfig.getStateInfo(mySimulation, state);
+        stateCounts.put(key, stateCounts.getOrDefault(key, 0) + 1);
       }
     }
     return stateCounts;
@@ -502,8 +501,8 @@ public class MainController {
     myIterationCount++;
     myBottomBarView.updateIterationCounter(myIterationCount);
     mySimulationView.step(myGrid, mySimulation);
-    Map<String, Integer> stateCounts = computeStateCounts();
-    myBottomBarView.updateStateChangeChart(stateCounts, mySimulation.data().type());
+    Map<StateInfo, Integer> stateCounts = computeStateCounts();
+    myBottomBarView.updateStateChangeChart(stateCounts);
   }
 
   private void createMainContainerAndView() {

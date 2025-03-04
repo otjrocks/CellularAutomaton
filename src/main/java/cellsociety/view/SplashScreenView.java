@@ -32,8 +32,6 @@ import org.xml.sax.SAXException;
  */
 public class SplashScreenView extends VBox {
 
-  private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
-
   private final AlertField myAlertField;
   private SelectorField myLanguageField;
   private CreateDefaultSimView myCreateDefaultSimView;
@@ -104,7 +102,7 @@ public class SplashScreenView extends VBox {
   }
 
   private void createLanguageDropdown() {
-    List<String> languages = fetchLanguages();
+    List<String> languages = MainConfig.fetchLanguages();
 
     if (languages.isEmpty()) {
       myAlertField.flash(getMessage("NO_LANGUAGES_FOUND"), false);
@@ -122,10 +120,6 @@ public class SplashScreenView extends VBox {
     MainConfig.setLanguage(myLanguageField.getValue());
     this.getChildren().clear();
     initialize();
-  }
-
-  private List<String> fetchLanguages() {
-    return FileUtility.getFileNamesInDirectory(LANGUAGES_PATH, ".properties");
   }
 
   private void createFileChooserButton() {

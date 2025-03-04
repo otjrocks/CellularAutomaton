@@ -16,8 +16,8 @@
     </GridDimensions>
 
     <RandomInitByProb>
-        <State name="GROUPONE">50</State>
-        <State name="GROUPTWO">25</State>
+        <State name="GROUP ONE">50</State>
+        <State name="GROUP TWO">25</State>
     </RandomInitByProb>
 
     <Parameters>
