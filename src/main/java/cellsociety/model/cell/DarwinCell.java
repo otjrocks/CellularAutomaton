@@ -12,6 +12,7 @@ import cellsociety.config.SimulationConfig;
  * @author Justin Aronwald
  */
 public class DarwinCell extends Cell {
+  private static final int stateValChecker = 4;
 
   private int prevSpecies;
   private int orientation;
@@ -34,7 +35,7 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
-    if(state < 4){
+    if(state < stateValChecker) {
       this.instructions = SimulationConfig.assignInstructionsFromState(state);
     }
     else{

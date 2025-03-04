@@ -18,8 +18,8 @@ public class SugarscapeCell extends Cell {
 
   private int vision;
   private int metabolism;
-  private final int DEFAULT_VALUE = 2;
-  private final int MAX_SUGAR_AMOUNT = 15;
+  private static final int DEFAULT_VALUE = 2;
+  private static final int MAX_SUGAR_AMOUNT = 15;
 
 
   /**
