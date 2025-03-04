@@ -31,7 +31,7 @@ import javafx.scene.text.Text;
 
 
 /**
- * A class handling the creation of the "create a new default" simulation form
+ * A class handling the creation of the "create a new default" simulation form.
  *
  * @author Owen Jennings
  * @author Justin Aronwald
@@ -58,7 +58,7 @@ public class CreateDefaultSimView extends VBox {
   private static final int DEFAULT_NUM_CELLS = 25;
 
   /**
-   * This constructor creates the default sim view to display in splashscreen and the sim
+   * This constructor creates the default sim view to display in splashscreen and the sim.
    *
    * @param mainController - an instance of the main controller
    * @param alertField     - the field that flashes errors
@@ -85,7 +85,7 @@ public class CreateDefaultSimView extends VBox {
   }
 
   /**
-   * Handles the simulation selection process
+   * Handles the simulation selection process.
    */
   private void createSimulationTypeControl() {
     mySimulationSelector = new SelectorField(List.of(SimulationConfig.SIMULATIONS),
@@ -123,7 +123,7 @@ public class CreateDefaultSimView extends VBox {
   }
 
   /**
-   * Handles the row input for the simulation
+   * Handles the row input for the simulation.
    */
   private void createRowControl() {
     myRowField = new IntegerField();

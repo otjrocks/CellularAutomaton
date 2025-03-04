@@ -20,7 +20,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Simulation view for the visualizing the simulation
+ * Simulation view for the visualizing the simulation.
  *
  * @author Owen Jennings
  */
@@ -45,7 +45,7 @@ public class SimulationView extends Group {
   private static final double maxZoom = 3.5;
 
   /**
-   * Create a simulation view
+   * Create a simulation view.
    *
    * @param width         width of simulation view
    * @param height        height of simulation view

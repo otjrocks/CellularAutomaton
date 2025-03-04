@@ -27,7 +27,7 @@ public abstract class GridView extends Group {
   private final CellView[][] myGrid;
 
   /**
-   * Create a grid view
+   * Create a grid view.
    *
    * @param width Width of the view
    * @param height Height of the view
@@ -57,7 +57,7 @@ public abstract class GridView extends Group {
   protected abstract CellView[][] initializeGrid();
 
   /**
-   * For testing, get the cell view at the provided coordinate
+   * For testing, get the cell view at the provided coordinate.
    *
    * @param row The row you are querying
    * @param col The column you are querying
@@ -68,7 +68,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Set the color of a cell in the grid
+   * Set the color of a cell in the grid.
    *
    * @param row row of cell
    * @param col column of cell
@@ -82,7 +82,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Handle whether grid lines should be shown or not
+   * Handle whether grid lines should be shown or not.
    *
    * @param selected Whether to show grid lines
    */
@@ -95,7 +95,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Get number of rows in grid
+   * Get number of rows in grid.
    *
    * @return int representing number of rows
    */
@@ -104,7 +104,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Get number of columns in grid
+   * Get number of columns in grid.
    *
    * @return int representing number of columns
    */
@@ -113,7 +113,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Get the width of this grid
+   * Get the width of this grid.
    *
    * @return The width of the grid
    */
@@ -122,7 +122,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Get the height of this grid
+   * Get the height of this grid.
    *
    * @return The height of the grid
    */
@@ -131,7 +131,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Reset the grid line colors on theme change
+   * Reset the grid line colors on theme change.
    */
   public void updateGridLinesColor() {
     for (int row = 0; row < myNumRows; row++) {
@@ -142,7 +142,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Set the opacity of provided cell
+   * Set the opacity of provided cell.
    *
    * @param row         Row of cell
    * @param col         Column of cell
@@ -168,7 +168,7 @@ public abstract class GridView extends Group {
   }
 
   /**
-   * Add the cell tool tip for a provided row, col in the grid
+   * Add the cell tool tip for a provided row, col in the grid.
    *
    * @param row     The row of the cell
    * @param col     The col of the cell

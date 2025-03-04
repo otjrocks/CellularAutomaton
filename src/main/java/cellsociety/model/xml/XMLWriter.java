@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 public class XMLWriter {
 
   /**
-   * Saves the current simulation to an XML file
+   * Saves the current simulation to an XML file.
    *
    * @param sim  The simulation object
    * @param grid The grid containing cell states
@@ -72,7 +72,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add a child element with text content to a parent element
+   * Helper method to add a child element with text content to a parent element.
    *
    * @param doc     Document to which you are adding the element
    * @param parent  Parent element you're appending the new element to
@@ -96,7 +96,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add simulation data to XML Writer document
+   * Helper method to add simulation data to XML Writer document.
    *
    * @param doc        Document to which you are adding the simulation data
    * @param sim        The simulation containing the data you want to save
@@ -111,7 +111,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add grid configuration data to XML Writer document
+   * Helper method to add grid configuration data to XML Writer document.
    *
    * @param doc Document to which you are adding the grid data
    * @param grid The grid containing the data you want to save
@@ -141,7 +141,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add necessary parameters to XML Writer document
+   * Helper method to add necessary parameters to XML Writer document.
    *
    * @param doc Document to which you are adding the grid data
    * @param rules SimulationRules pbject that dictates necessary parameters
@@ -157,7 +157,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add neighbor configuration to the XML Writer document
+   * Helper method to add neighbor configuration to the XML Writer document.
    *
    * @param doc        Document to which the neighbors data will be added
    * @param rules      SimulationRules object that contains neighbor configuration

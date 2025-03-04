@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 /**
- * A view to handle all the UI components that are shown when view mode is enabled
+ * A view to handle all the UI components that are shown when view mode is enabled.
  *
  * @author Owen Jennings
  */
@@ -56,7 +56,7 @@ public class ViewModeView extends VBox {
   }
 
   /**
-   * Update the non-static content of the sidebar
+   * Update the non-static content of the sidebar.
    */
   public void update() {
     this.getChildren().clear();

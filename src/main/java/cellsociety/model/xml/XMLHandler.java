@@ -32,7 +32,7 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 
 /**
- * Allows the program to collect data from an XML configuration file and store the associated date
+ * Allows the program to collect data from an XML configuration file and store the associated date.
  *
  * @author Troy Ludwig
  */

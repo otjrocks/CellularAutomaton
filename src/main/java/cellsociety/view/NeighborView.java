@@ -32,7 +32,7 @@ public class NeighborView extends VBox {
   private SelectorField neighborTypeSelector;
 
   /**
-   * Create a new neighbor view
+   * Create a new neighbor view.
    *
    * @param mainController The main controller of the program
    * @param isEditing      Whether the user should be able to edit parameters or not

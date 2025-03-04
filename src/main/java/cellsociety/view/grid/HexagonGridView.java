@@ -5,7 +5,7 @@ import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.HexagonCellView;
 
 /**
- * A hexagon grid implementation
+ * A hexagon grid implementation.
  *
  * @author Owen Jennings
  */
@@ -15,7 +15,7 @@ public class HexagonGridView extends GridView {
   // getRow and getColumn translate a point into our vertical and horizontal spacing to get correct row and column for provided point
 
   /**
-   * Create a grid view
+   * Create a grid view.
    *
    * @param width Width of the view
    * @param height Height of the view

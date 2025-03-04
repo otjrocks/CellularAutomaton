@@ -23,7 +23,7 @@ public class AlertField extends VBox {
   public static final int ALERT_DURATION_SECONDS = 5; // Time before an alert disappears
 
   /**
-   * Initialize the alert field
+   * Initialize the alert field.
    */
   public AlertField() {
     super();
@@ -31,7 +31,7 @@ public class AlertField extends VBox {
   }
 
   /**
-   * Flash a message in the alert area
+   * Flash a message in the alert area.
    *
    * @param message The message you wish to alert the user with
    * @param warning denotes if the alert is a warning or just an informational alert
@@ -44,7 +44,7 @@ public class AlertField extends VBox {
   }
 
   /**
-   * Get a list of all the current alert messages for this field
+   * Get a list of all the current alert messages for this field.
    *
    * @return A list of all the current alert messages for this field
    */

@@ -3,12 +3,12 @@ package cellsociety.view.grid;
 import cellsociety.controller.MainController;
 
 /**
- * A factory to create grid views based on a cell type
+ * A factory to create grid views based on a cell type.
  */
 public class GridViewFactory {
 
   /**
-   * This enum stores all the supported Cell/Grid Shape types
+   * This enum stores all the supported Cell/Grid Shape types.
    */
   public enum CellShapeType {
     RECTANGLE("Rectangle"),

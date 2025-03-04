@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 /**
- * A view to handle the setting of new coordinates for the simulation grid
+ * A view to handle the setting of new coordinates for the simulation grid.
  *
  * @author Owen Jennings
  */
@@ -33,7 +33,7 @@ public class EditModeView extends VBox {
   private SelectorField myEdgeTypeSelector;
 
   /**
-   * Create a edit mode view
+   * Create a edit mode view.
    *
    * @param mainController the main controller of this view
    * @param alertField     the alert field to display messages
@@ -65,7 +65,7 @@ public class EditModeView extends VBox {
   }
 
   /**
-   * Update the edit display whenever the simulation potential has changed
+   * Update the edit display whenever the simulation potential has changed.
    */
   public void updateDisplay() {
     myHeaderBox.getChildren().clear();

@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 /**
- * A field that is used to select and item from a combo box and do some action with it
+ * A field that is used to select and item from a combo box and do some action with it.
  *
  * @author Owen Jennings
  */
@@ -44,7 +44,7 @@ public class SelectorField extends HBox {
   }
 
   /**
-   * Get the current value of the selector field
+   * Get the current value of the selector field.
    *
    * @return The current value of the selector/combobox
    */
