@@ -126,7 +126,7 @@ public class DarwinRules  extends SimulationRules {
    * An enum to store the possible states for this simulation
    */
   public enum State {
-    EMPTY, HOPPER, FLYTRAP, CREEPER;
+    EMPTY, HOPPER, FLYTRAP, CREEPER, LANDMINE, OODFAY, ROVER, DANCER, SNAKE, RUNNER;
 
     /**
      * Get the ordinal value of this enum entry

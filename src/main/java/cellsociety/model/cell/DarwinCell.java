@@ -34,7 +34,7 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
-    if(state < 4){
+    if(state < 10){
       this.instructions = SimulationConfig.assignInstructionsFromState(state);
     }
     else{

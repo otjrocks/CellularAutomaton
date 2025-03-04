@@ -44,6 +44,22 @@ public class MoveInstruction implements Instruction {
         newRow += (int) direction.getX();
         newCol += (int) direction.getY();
 
+        if (newRow > grid.getRows()-1){
+          newRow = grid.getRows()-1;
+        }
+
+        if (newRow < 0){
+          newRow = 0;
+        }
+
+        if (newCol > grid.getCols()-1){
+          newCol = grid.getCols()-1;
+        }
+
+        if (newCol < 0){
+          newCol = 0;
+        }
+
         Cell curCell;
         try {
           curCell = grid.getCell(newRow, newCol);
