@@ -25,6 +25,8 @@ import java.util.Map;
  * @author Justin Aronwald
  */
 public class RockPaperScissorsRules extends SimulationRules {
+  private static final int numStatesValChecker = 1;
+  private static final int minThresholdVal = 0;
 
   public static final String NUM_STATES = "numStates";
   public static final String MIN_THRESHOLD = "minThreshold";
@@ -60,10 +62,10 @@ public class RockPaperScissorsRules extends SimulationRules {
   }
 
   private void validateParameterRange() throws InvalidParameterException {
-    if (myNumStates < 1) {
+    if (myNumStates < numStatesValChecker) {
       throwInvalidParameterException(NUM_STATES);
     }
-    if (myMinThreshold < 0 || myMinThreshold > 1) {
+    if (myMinThreshold < minThresholdVal || myMinThreshold > numStatesValChecker) {
       throwInvalidParameterException(MIN_THRESHOLD);
     }
   }
