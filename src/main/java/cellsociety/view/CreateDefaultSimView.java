@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.view.components.SelectorField;
 import java.util.HashMap;
 import java.util.List;
@@ -320,7 +321,7 @@ public class CreateDefaultSimView extends VBox {
       myMainController.createNewSimulation(getRowCount(), getColCount(), getSelectedSimulation(),
           metaData, parameters);
       myAlertField.flash(String.format(getMessage("NEW_SIMULATION_CREATED")), false);
-    } catch (Exception e) {
+    } catch (SimulationCreationException e) {
       myAlertField.flash(String.format(getMessage("ERROR_CREATING_SIMULATION")), true);
       myAlertField.flash(String.format((e.getMessage())), true);
       throw e;
@@ -340,7 +341,7 @@ public class CreateDefaultSimView extends VBox {
     }
     try {
       createNewSimulation();
-    } catch (Exception e) {
+    } catch (SimulationCreationException e) {
       return;
     }
     handleAdditionalButtonActions();

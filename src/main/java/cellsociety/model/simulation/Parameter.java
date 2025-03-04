@@ -30,7 +30,7 @@ public class Parameter<T> {
   public String getString() throws InvalidParameterException {
     try {
       return (String) myValue;
-    } catch (Exception e) {
+    } catch (ClassCastException e) {
       throwInvalidParameterException();
     }
     return null;
@@ -49,7 +49,7 @@ public class Parameter<T> {
         return (Double) myValue;
       }
       return Double.parseDouble((String) myValue);
-    } catch (Exception e) {
+    } catch (ClassCastException | NumberFormatException e) {
       throwInvalidParameterException();
     }
     return null;
@@ -68,7 +68,7 @@ public class Parameter<T> {
         return (Integer) myValue;
       }
       return getDouble().intValue();
-    } catch (Exception e) {
+    } catch (ClassCastException | InvalidParameterException e) {
       throwInvalidParameterException();
     }
     return null;
