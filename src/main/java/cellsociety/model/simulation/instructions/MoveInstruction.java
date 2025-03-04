@@ -27,15 +27,40 @@ public class MoveInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
-      Grid grid) {
-    Point2D direction = darwinCell.getFrontDirection();
-    Point2D curLocation = darwinCell.getLocation();
-    int numMovements;
-    try {
-      numMovements = Integer.parseInt(arguments.get(1));
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid movement number");
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+      Point2D direction =  darwinCell.getFrontDirection();
+      Point2D curLocation = darwinCell.getLocation();
+      int numMovements;
+      try {
+        numMovements = Integer.parseInt(arguments.get(1));
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("Invalid movement number");
+      }
+
+      int newRow = darwinCell.getRow();
+      int newCol = darwinCell.getCol();
+
+      for (int i = 0; i < numMovements; i++) {
+        newRow += (int) direction.getX();
+        newCol += (int) direction.getY();
+
+        newRow = verifyInBounds(newRow, grid.getRows());
+        newCol = verifyInBounds(newCol, grid.getCols());
+
+        Cell curCell;
+        try {
+          curCell = grid.getCell(newRow, newCol);
+        } catch (IndexOutOfBoundsException e) {
+          break;
+        }
+        if (curCell == null || curCell.getState() != State.EMPTY.getValue()) {
+          break;
+        }
+
+        curLocation = new Point2D.Double(newRow, newCol);
+      }
+
+      return updateGridForMovement(darwinCell, grid, curLocation, newRow, newCol);
     }
 
     int newRow = darwinCell.getRow();
@@ -93,6 +118,19 @@ public class MoveInstruction implements Instruction {
       updates.add(new CellUpdate(new Double(newRow, newCol), newCell));
     }
     return updates;
+  }
+
+
+  private int verifyInBounds(int rowOrCol, int numRowsOrCols){
+    if (rowOrCol > numRowsOrCols-1){
+      rowOrCol = numRowsOrCols-1;
+    }
+
+    if (rowOrCol < 0){
+      rowOrCol = 0;
+    }
+
+    return rowOrCol;
   }
 
 }
