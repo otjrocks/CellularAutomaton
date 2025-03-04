@@ -3,6 +3,7 @@ package cellsociety.model.simulation;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
@@ -21,7 +22,7 @@ public interface Instruction {
    * @param arguments - the list of instructions for the given cell
    * @param grid - the collection of cell objects
    */
-  List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells);
+  List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells);
 
   /**
    * Sets the step size for neighbor configuration

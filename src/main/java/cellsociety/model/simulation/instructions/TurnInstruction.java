@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
@@ -45,7 +46,7 @@ public abstract class TurnInstruction implements Instruction {
    * @return - empty List due to no cellupdates needed
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     int degrees = Integer.parseInt(arguments.get(1));
     turn(darwinCell, degrees, stepSize);
     List<CellUpdate> updates = new ArrayList<>();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -38,7 +39,7 @@ public class ConditionalInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     Point2D direction = darwinCell.getFrontDirection();
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();

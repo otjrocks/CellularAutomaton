@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -27,7 +28,7 @@ public class MoveInstruction implements Instruction {
    * @param grid - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
       Point2D direction =  darwinCell.getFrontDirection();
       Point2D curLocation = darwinCell.getLocation();
       int numMovements;
@@ -53,6 +54,7 @@ public class MoveInstruction implements Instruction {
         } catch (IndexOutOfBoundsException e) {
           break;
         }
+
         if (curCell == null || curCell.getState() != State.EMPTY.getValue() || occupiedCells.keySet().contains(curCell.getLocation())) {
           break;
         }
@@ -60,7 +62,7 @@ public class MoveInstruction implements Instruction {
         curLocation = new Point2D.Double(newRow, newCol);
       }
 
-      return updateGridForMovement(darwinCell, curLocation, occupiedCells);
+      return updateGridForMovement(darwinCell, curLocation, occupiedCells, movingCells);
     }
 
   /**
@@ -80,7 +82,7 @@ public class MoveInstruction implements Instruction {
   }
 
   private static List<CellUpdate> updateGridForMovement(DarwinCell darwinCell,
-      Point2D curLocation, Map<Point2D, DarwinCell> occupiedCells) {
+      Point2D curLocation, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     List<CellUpdate> updates = new ArrayList<>();
     if (!curLocation.equals(darwinCell.getLocation())) {
       Cell newEmpty = new DarwinCell(State.EMPTY.getValue(), darwinCell.getLocation());
@@ -89,6 +91,8 @@ public class MoveInstruction implements Instruction {
           darwinCell.getAllInstructions(), darwinCell.getInfected(), darwinCell.getPrevState()));
 
       occupiedCells.put(newCell.getLocation(), (DarwinCell)newCell);
+      movingCells.add(newEmpty.getLocation());
+
 
       updates.add(new CellUpdate(darwinCell.getLocation(),  newEmpty));
       updates.add(new CellUpdate(curLocation, newCell));

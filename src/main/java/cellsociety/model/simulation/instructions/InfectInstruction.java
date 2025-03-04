@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -34,7 +35,7 @@ public class InfectInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     Point2D direction =  darwinCell.getFrontDirection();
     int newInfectionCountdown = Integer.parseInt(arguments.get(1));
     int newRow = darwinCell.getRow();
@@ -53,16 +54,12 @@ public class InfectInstruction implements Instruction {
       }
 
       DarwinCell speciesCell = (DarwinCell) curCell;
-      
-      if(curCell == null){
+
+      if (curCell == null || ((curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) && !occupiedCells.keySet().contains(curCell.getLocation()))) {
         continue;
       }
 
-      if ((curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) && !occupiedCells.keySet().contains(curCell.getLocation())) {
-        continue;
-      }
-
-      addAppropriateInfectedCell(darwinCell, speciesCell, newInfectionCountdown, occupiedCells, updates);
+      addAppropriateInfectedCell(darwinCell, speciesCell, newInfectionCountdown, occupiedCells, movingCells, updates);
     }
     return updates;
   }
@@ -85,12 +82,12 @@ public class InfectInstruction implements Instruction {
     this.layers = layers;
   }
 
-  private void addAppropriateInfectedCell(DarwinCell darwinCell, DarwinCell speciesCell, int newInfectionCountdown, Map<Point2D, DarwinCell> occupiedCells, List<CellUpdate> updates){
-    if(!occupiedCells.keySet().contains(speciesCell.getLocation())){
+  private void addAppropriateInfectedCell(DarwinCell darwinCell, DarwinCell speciesCell, int newInfectionCountdown, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells, List<CellUpdate> updates){
+    if(!((occupiedCells.keySet().contains(speciesCell.getLocation())) || movingCells.contains(speciesCell.getLocation()))){
       DarwinCell infectedCell = new DarwinCell(new DarwinCellRecord(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, speciesCell.getState()));
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
-    else{
+    else if (occupiedCells.keySet().contains(speciesCell.getLocation()) && !(occupiedCells.get(speciesCell.getLocation()).getState() == darwinCell.getState())){
       DarwinCell infectedCell = new DarwinCell(new DarwinCellRecord(darwinCell.getState(), speciesCell.getLocation(), speciesCell.getOrientation(), newInfectionCountdown, 0, darwinCell.getAllInstructions(), true, occupiedCells.get(speciesCell.getLocation()).getState()));
       updates.add(new CellUpdate(speciesCell.getLocation(), infectedCell));
     }
