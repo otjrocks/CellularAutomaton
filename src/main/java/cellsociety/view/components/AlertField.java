@@ -33,8 +33,8 @@ public class AlertField extends VBox {
   /**
    * Flash a message in the alert area
    *
-   * @param message: The message you wish to alert the user with
-   * @param warning: denotes if the alert is a warning or just an informational alert
+   * @param message The message you wish to alert the user with
+   * @param warning denotes if the alert is a warning or just an informational alert
    */
   public void flash(String message, boolean warning) {
     if (getChildren().size() >= HISTORY_SIZE) {

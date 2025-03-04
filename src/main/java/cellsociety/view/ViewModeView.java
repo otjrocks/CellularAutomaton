@@ -42,8 +42,8 @@ public class ViewModeView extends VBox {
   /**
    * Initialize the ViewModeView.
    *
-   * @param mainController: the main controller of this view
-   * @param alertField:     the alert field to display alerts to the user
+   * @param mainController the main controller of this view
+   * @param alertField     the alert field to display alerts to the user
    */
   public ViewModeView(MainController mainController, AlertField alertField) {
     super();

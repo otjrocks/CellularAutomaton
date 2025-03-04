@@ -51,7 +51,7 @@ public class XMLHandler {
   /**
    * XMLHandler constructor for referencing data
    *
-   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
+   * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
    *                     represented as a String
    */
   public XMLHandler(String xmlFilePath)
@@ -63,7 +63,7 @@ public class XMLHandler {
    * Method for parsing the XML file and initializing the XMLHandler instance variables with the
    * associated data
    *
-   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
+   * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
    *                     represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
@@ -85,7 +85,7 @@ public class XMLHandler {
   /**
    * Helper method to parse simulation data from document
    *
-   * @param data: Document from which you are extracting the simulation data
+   * @param data Document from which you are extracting the simulation data
    */
   private void parseSimData(Document data) {
     String type = data.getElementsByTagName("Type").item(0).getTextContent();
@@ -124,7 +124,7 @@ public class XMLHandler {
   /**
    * Helper method to parse grid dimensions from document
    *
-   * @param dimDoc: Document from which you are extracting the grid dimensions
+   * @param dimDoc Document from which you are extracting the grid dimensions
    */
   private void parseDimensions(Document dimDoc) {
     Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);

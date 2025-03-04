@@ -24,7 +24,7 @@ public class StateInfoView extends VBox {
   /**
    * Create a new state info view for the current simulation
    *
-   * @param simulation: The simulation that is currently running
+   * @param simulation The simulation that is currently running
    */
   public StateInfoView(Simulation simulation) {
     super();

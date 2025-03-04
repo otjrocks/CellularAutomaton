@@ -40,8 +40,8 @@ public class SidebarView extends VBox {
   /**
    * Create a sidebar view with a preferred size of width x height
    *
-   * @param width:  preferred width of sidebar box
-   * @param height: preferred height of sidebar box
+   * @param width  preferred width of sidebar box
+   * @param height preferred height of sidebar box
    */
   public SidebarView(int width, int height, MainController controller) {
     super();

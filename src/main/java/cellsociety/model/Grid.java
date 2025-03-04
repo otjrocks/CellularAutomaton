@@ -27,9 +27,9 @@ public class Grid {
   /**
    * Initialize a data structure to store a grid with the defined width and height
    *
-   * @param numRows:      (int) number of rows
-   * @param numCols:      (int) number of columns
-   * @param edgeStrategy: The edge strategy to use handling the edges of this grid
+   * @param numRows      (int) number of rows
+   * @param numCols      (int) number of columns
+   * @param edgeStrategy The edge strategy to use handling the edges of this grid
    */
   public Grid(int numRows, int numCols, EdgeStrategy edgeStrategy) {
     myNumRows = numRows;
@@ -68,8 +68,8 @@ public class Grid {
   /**
    * Get a cell at the specified col and row, if it exists
    *
-   * @param row: Row of cell
-   * @param col: Column of cell
+   * @param row Row of cell
+   * @param col Column of cell
    * @return The cell at the specified location if it exists, or null if it does not exist or is out
    * of bounds
    */
@@ -85,7 +85,7 @@ public class Grid {
   /**
    * Get a cell at specified point if it exists
    *
-   * @param point: point
+   * @param point point
    * @return The cell at the specified location if it exists, or null if it does not exist or is out
    * of bounds
    */
@@ -100,7 +100,7 @@ public class Grid {
   /**
    * Add a cell to the grid
    *
-   * @param cell: The cell you which to add
+   * @param cell The cell you which to add
    * @return true if the cell is successfully added. false if the cell cannot be added because the
    * cells location is improperly formatted or because there is already a cell in the specified
    * location
@@ -116,7 +116,7 @@ public class Grid {
   /**
    * Check if a cell exists in the grid
    *
-   * @param location: Location of cell
+   * @param location Location of cell
    * @return true if the cell exists, false otherwise
    */
   public boolean cellExists(Point2D location) {
@@ -131,7 +131,7 @@ public class Grid {
    * are applied on each cell "simultaneously" (i.e., based on its current state and that of its
    * neighbors) and then cell states are updated in a second pass.""
    *
-   * @param simulation: The simulation you which to use to update the grid
+   * @param simulation The simulation you which to use to update the grid
    * @return The cell state updates that have occurred when the grid was updated
    */
   public List<CellUpdate> updateGrid(Simulation simulation) {
@@ -179,9 +179,9 @@ public class Grid {
   /**
    * Set the state of the cell at the specified location
    *
-   * @param row:      Row of cell you wish to update
-   * @param col:      Column of cell you wish to update
-   * @param newState: The new state you wish to give the cell
+   * @param row      Row of cell you wish to update
+   * @param col      Column of cell you wish to update
+   * @param newState The new state you wish to give the cell
    */
   public void setState(int row, int col, int newState, Simulation simulation) {
     Cell cell = SimulationConfig.getNewCell(row, col, newState, simulation.data().type());

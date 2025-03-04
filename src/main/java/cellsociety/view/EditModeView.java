@@ -35,8 +35,8 @@ public class EditModeView extends VBox {
   /**
    * Create a edit mode view
    *
-   * @param mainController: the main controller of this view
-   * @param alertField:     the alert field to display messages
+   * @param mainController the main controller of this view
+   * @param alertField     the alert field to display messages
    */
   public EditModeView(MainController mainController,
       AlertField alertField) {

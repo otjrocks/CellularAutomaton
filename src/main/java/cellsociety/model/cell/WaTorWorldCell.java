@@ -31,8 +31,8 @@ public class WaTorWorldCell extends Cell {
    * @param location            : The location in the simulation grid represented by a Point2D,
    *                            where the (x: row, y: col) value is the relative location of the
    *                            cell compared to other cells in the grid.
-   * @param health:             initial health of the cell
-   * @param reproductionEnergy: initial reproduction energy of cell
+   * @param health             initial health of the cell
+   * @param reproductionEnergy initial reproduction energy of cell
    */
   public WaTorWorldCell(int state, Point2D location, int health, double reproductionEnergy) {
     super(state, location);

@@ -47,10 +47,10 @@ public class SimulationView extends Group {
   /**
    * Create a simulation view
    *
-   * @param width:         width of simulation view
-   * @param height:        height of simulation view
-   * @param grid:          initial grid of the simulation view
-   * @param cellShapeType: the type of the cell shape to create a grid with
+   * @param width         width of simulation view
+   * @param height        height of simulation view
+   * @param grid          initial grid of the simulation view
+   * @param cellShapeType the type of the cell shape to create a grid with
    */
   public SimulationView(int width, int height, Grid grid, CellShapeType cellShapeType,
       MainController mainController) {
@@ -94,8 +94,8 @@ public class SimulationView extends Group {
   /**
    * Perform a single step of the animation
    *
-   * @param grid:       Grid of the simulation
-   * @param simulation: Simulation that contains rules for updating
+   * @param grid       Grid of the simulation
+   * @param simulation Simulation that contains rules for updating
    */
   public void step(Grid grid, Simulation simulation) {
     List<CellUpdate> stateUpdates = grid.updateGrid(simulation);
@@ -116,7 +116,7 @@ public class SimulationView extends Group {
   /**
    * Handle whether grid lines should be shown or not
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     myGridLinesEnabled = selected;

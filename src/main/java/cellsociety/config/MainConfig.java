@@ -83,7 +83,7 @@ public class MainConfig {
    * Set the language for the program if it exists. If the language does not exist, the preferred
    * language will not update.
    *
-   * @param language: The new language to set
+   * @param language The new language to set
    */
   public static void setLanguage(String language) {
     try {

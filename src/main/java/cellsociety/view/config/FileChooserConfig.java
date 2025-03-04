@@ -28,7 +28,7 @@ public class FileChooserConfig {
   /**
    * Create a file chooser for saving a xml file with a name.xml format
    *
-   * @param name: name of the file you wish to save
+   * @param name name of the file you wish to save
    * @return the file chooser you create
    */
   public static FileChooser makeSaveChooser(String name) {

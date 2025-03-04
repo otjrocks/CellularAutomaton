@@ -20,7 +20,7 @@ public class ThemeController {
   /**
    * Initialize a Theme Controller
    *
-   * @param stage: The stage you want the theme to be applied to
+   * @param stage The stage you want the theme to be applied to
    */
   public ThemeController(Stage stage) {
     myScene = stage.getScene();
@@ -38,7 +38,7 @@ public class ThemeController {
    * Set and update the theme to the theme specified by the name provided
    * Note, the theme must be a valid theme name in the resources folder theme
    *
-   * @param themeName: The name of the theme you wish to activate
+   * @param themeName The name of the theme you wish to activate
    */
   public void setTheme(String themeName) {
     ThemeConfig.setTheme(themeName);

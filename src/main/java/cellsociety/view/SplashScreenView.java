@@ -42,9 +42,9 @@ public class SplashScreenView extends VBox {
   /**
    * Create a splash screen  view
    *
-   * @param mainController: the main controller of this view
-   * @param alertField:     the alert field to display messages
-   * @param sidebar:        an instance of the sidebar view that holds a lot of simulation metadata
+   * @param mainController the main controller of this view
+   * @param alertField     the alert field to display messages
+   * @param sidebar        an instance of the sidebar view that holds a lot of simulation metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {

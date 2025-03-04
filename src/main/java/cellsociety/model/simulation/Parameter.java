@@ -5,7 +5,7 @@ import static cellsociety.config.MainConfig.getMessage;
 /**
  * A class to handle the creation and storage of parameter values
  *
- * @param <T>: The type of the parameter's value
+ * @param <T> The type of the parameter's value
  * @author Owen Jennings
  */
 public class Parameter<T> {

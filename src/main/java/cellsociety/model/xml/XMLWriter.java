@@ -37,8 +37,8 @@ public class XMLWriter {
   /**
    * Saves the current simulation to an XML file
    *
-   * @param sim:  The simulation object
-   * @param grid: The grid containing cell states
+   * @param sim  The simulation object
+   * @param grid The grid containing cell states
    */
   public static void saveSimulationToXML(Simulation sim, Grid grid, CellShapeType cellShapeType,
       EdgeStrategyType edgeStrategyType,
@@ -74,10 +74,10 @@ public class XMLWriter {
   /**
    * Helper method to add a child element with text content to a parent element
    *
-   * @param doc:     Document to which you are adding the element
-   * @param parent:  Parent element you're appending the new element to
-   * @param tagName: Tag label for newly added element
-   * @param value:   Value associated with the newly added element
+   * @param doc     Document to which you are adding the element
+   * @param parent  Parent element you're appending the new element to
+   * @param tagName Tag label for newly added element
+   * @param value   Value associated with the newly added element
    */
 
   private static void addElement(Document doc, Element parent, String tagName, String value) {
@@ -98,8 +98,8 @@ public class XMLWriter {
   /**
    * Helper method to add simulation data to XML Writer document
    *
-   * @param doc:        Document to which you are adding the simulation data
-   * @param sim:        The simulation containing the data you want to save
+   * @param doc        Document to which you are adding the simulation data
+   * @param sim        The simulation containing the data you want to save
    * @param simElement: The parent element for all the simulation data
    */
   private static void writeSimData(Document doc, Simulation sim, Element simElement) {

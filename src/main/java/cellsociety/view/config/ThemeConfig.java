@@ -55,7 +55,7 @@ public class ThemeConfig {
    * Set the theme to the provided theme name. Requires that a file named "themeName.css" exists in
    * the themes folder
    *
-   * @param themeName: Name of the theme you want to set
+   * @param themeName Name of the theme you want to set
    */
   public static void setTheme(String themeName) {
     myThemePath = "%s%s.css".formatted(THEMES_RESOURCES_FOLDER, themeName);
