@@ -173,7 +173,7 @@ public class ViewModeView extends VBox {
     try {
       myMainController.handleSavingToFile();
       myAlertField.flash(getMessage("FILE_SAVE_SUCCESS"), false);
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       myAlertField.flash(getMessage("FILE_SAVE_FAIL"), true);
       if (VERBOSE_ERROR_MESSAGES) {
         myAlertField.flash(e.getMessage(), true);

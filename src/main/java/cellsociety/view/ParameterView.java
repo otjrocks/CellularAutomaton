@@ -1,18 +1,15 @@
 package cellsociety.view;
 
 import static cellsociety.config.MainConfig.LOGGER;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.utility.SimulationUtility.updateSimulation;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
-import cellsociety.config.SimulationConfig;
 import cellsociety.controller.MainController;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.view.components.AlertField;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -99,7 +96,7 @@ public class ParameterView extends VBox {
     try {
       field.setText(param.getString());
     } catch (InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Invalid Parameter " + e);
     }
     return field;
   }
@@ -108,7 +105,7 @@ public class ParameterView extends VBox {
     try {
       createText(String.format("• %s: %s", key, param.getString()), false);
     } catch (InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Invalid Parameter " + e);
     }
   }
 

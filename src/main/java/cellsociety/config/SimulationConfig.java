@@ -71,9 +71,9 @@ public class SimulationConfig {
   /**
    * Get the appropriate cell type for a simulation type
    *
-   * @param row:            row location for created cell
-   * @param col:            col location for created cell
-   * @param state:          initial state for created cell
+   * @param row: row location for created cell
+   * @param col: col location for created cell
+   * @param state: initial state for created cell
    * @param simulationName: name/type of simulation to create cell for
    * @return the appropriate cell for a given simulation or default cell if the simulation does not
    * exist

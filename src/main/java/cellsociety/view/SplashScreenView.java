@@ -10,14 +10,19 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.config.MainConfig;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
 import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.SelectorField;
+import java.io.IOException;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * A view that handles the splash screen that is shown when the program first loads
@@ -135,15 +140,10 @@ public class SplashScreenView extends VBox {
   private void handleChooseFileAction() {
     try {
       myMainController.handleNewSimulationFromFile();
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | GridException | InvalidStateException | IOException |
+             ParserConfigurationException | SAXException e) {
       myAlertField.flash(e.getMessage(), true);
       myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      return;
-    } catch (Exception e) {
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
       return;
     }
     myMainController.hideSplashScreen();
