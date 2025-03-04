@@ -280,7 +280,7 @@ public class CreateDefaultSimView extends VBox {
 
   private boolean checkInvalidNeighborType(String myNeighborType) {
     try {
-      String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
+      String className = String.format("cellsociety.model.simulation.neighbors.%s%s",
           myNeighborType,
           "Neighbors");
       Class.forName(className);

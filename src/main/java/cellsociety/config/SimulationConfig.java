@@ -182,6 +182,8 @@ public class SimulationConfig {
       LOGGER.warn(e.getMessage());
       throw new IllegalArgumentException(
           String.format("Invalid neighbor configuration: %s", e));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
