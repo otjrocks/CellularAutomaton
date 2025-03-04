@@ -35,7 +35,7 @@ public class MoveInstruction implements Instruction {
     try {
       numMovements = Integer.parseInt(arguments.get(1));
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid movement number");
+      throw new IllegalArgumentException("Invalid movement number", e);
     }
 
     int newRow = darwinCell.getRow();
