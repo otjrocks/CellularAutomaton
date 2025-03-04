@@ -181,9 +181,11 @@ public class MainController {
     mySimulationAnimation.getKeyFrames()
         .add(new KeyFrame(Duration.seconds(speed), e -> {
           try {
-            step();
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            step();  // step function
+          } catch (ClassCastException ev) {
+            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+          } catch (IllegalStateException ev) {
+            throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
         }));
     if (!isEditing && start) {
@@ -224,13 +226,20 @@ public class MainController {
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {
-      throw new RuntimeException(
-          e.getCause()
-              .getMessage());  // provide exception message thrown by class, not the reflection api
-    } catch (ClassNotFoundException | NoSuchMethodException |
-             InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(
+          "Error instantiating simulation: " + e.getCause().getMessage(), e.getCause());
+    } catch (ClassNotFoundException e) {
+      throw new IllegalArgumentException("Simulation class not found: " + type, e);
+    } catch (NoSuchMethodException e) {
+      throw new IllegalStateException("Missing constructor for simulation: " + type, e);
+    } catch (InstantiationException e) {
+      throw new IllegalStateException("Failed to instantiate simulation: " + type, e);
+    } catch (IllegalAccessException e) {
+      throw new SecurityException("Illegal access to simulation class: " + type, e);
+    } catch (InvalidParameterException e) {
+      throw new IllegalArgumentException("Invalid simulation parameters provided", e);
     }
+
     initializeGridWithCells();
     createNewMainViewAndUpdateViewContainer();
   }
@@ -414,9 +423,12 @@ public class MainController {
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       attemptUpdateFromFilePath(filePath);
-    } catch (Exception e) {
+    } catch (SAXException | ParserConfigurationException | IOException | GridException | InvalidStateException e) {
       handleGridAndSimulationCreationExceptions(e);
       throw e;
+    } catch (RuntimeException e) {
+      handleGridAndSimulationCreationExceptions(e);
+      throw new IllegalStateException("Unexpected runtime error during XML handling", e);
     }
   }
 
@@ -484,8 +496,10 @@ public class MainController {
         .add(new KeyFrame(Duration.seconds(STEP_SPEED), e -> {
           try {
             step();  // step function
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
+          } catch (ClassCastException ev) {
+            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+          } catch (IllegalStateException ev) {
+            throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
         }));
   }
@@ -504,7 +518,7 @@ public class MainController {
     myMainViewContainer.setAlignment(Pos.CENTER);
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    } catch (Exception e) {
+    }  catch (IOException | SAXException | ParserConfigurationException | GridException | InvalidStateException e) {
       LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
   }
