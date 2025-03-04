@@ -83,7 +83,7 @@ public class ConditionalInstruction implements Instruction {
       List<CellUpdate> updates) {
     if ( conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
       if (random.nextBoolean()) {
-        darwinCell.setCurInstructionIndex(nextInstruction);
+        darwinCell.setCurInstructionIndex(nextInstruction-2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
       return updates;
