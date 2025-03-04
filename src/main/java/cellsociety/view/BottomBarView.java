@@ -135,28 +135,30 @@ public class BottomBarView extends VBox {
       int totalStates = sumMapValues(stateCounts);
       yAxis.setUpperBound(totalStates);
       yAxis.setTickUnit((double) totalStates / 5);
-
-      for (Entry<String, Integer> entry : stateCounts.entrySet()) {
-        String stateName = entry.getKey();
-        int newValue = entry.getValue();
-        addStateNameToStateChangeMap(stateName);
-
-        Series<Number, Number> series = stateChangeSeriesMap.get(stateName);
-        series.getData().add(new Data<>(stepCount, newValue));
-
-        // Ensure the series maintains a fixed history size
-        if (series.getData().size() > MAX_HISTORY_SIZE) {
-          series.getData().removeFirst(); // Remove the oldest data point
-        }
-        xAxis.setUpperBound(stepCount);
-        if (stepCount > MAX_HISTORY_SIZE) {
-          xAxis.setLowerBound(stepCount - MAX_HISTORY_SIZE + 1);
-        }
-      }
-
+      updateSeriesWithNewStateCounts(stateCounts);
       updateXYChart(simType);
       stepCount++;
     });
+  }
+
+  private void updateSeriesWithNewStateCounts(Map<String, Integer> stateCounts) {
+    for (Entry<String, Integer> entry : stateCounts.entrySet()) {
+      String stateName = entry.getKey();
+      int newValue = entry.getValue();
+      addStateNameToStateChangeMap(stateName);
+
+      Series<Number, Number> series = stateChangeSeriesMap.get(stateName);
+      series.getData().add(new Data<>(stepCount, newValue));
+
+      // Ensure the series maintains a fixed history size
+      if (series.getData().size() > MAX_HISTORY_SIZE) {
+        series.getData().removeFirst(); // Remove the oldest data point
+      }
+      xAxis.setUpperBound(stepCount);
+      if (stepCount > MAX_HISTORY_SIZE) {
+        xAxis.setLowerBound(stepCount - MAX_HISTORY_SIZE + 1);
+      }
+    }
   }
 
 
