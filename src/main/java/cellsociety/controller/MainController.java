@@ -226,14 +226,9 @@ public class MainController {
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {
-      throw new IllegalStateException(
-          "Error instantiating simulation: " + e.getCause().getMessage(), e.getCause());
-    } catch (ClassNotFoundException e) {
-      throw new IllegalArgumentException("Simulation class not found: " + type, e);
-    } catch (NoSuchMethodException e) {
-      throw new IllegalStateException("Missing constructor for simulation: " + type, e);
-    } catch (InstantiationException e) {
-      throw new IllegalStateException("Failed to instantiate simulation: " + type, e);
+      throw new IllegalStateException(e.getCause().getMessage());
+    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException e) {
+      throw new IllegalStateException("Error creating simulation: " + type, e);
     } catch (IllegalAccessException e) {
       throw new SecurityException("Illegal access to simulation class: " + type, e);
     } catch (InvalidParameterException e) {
