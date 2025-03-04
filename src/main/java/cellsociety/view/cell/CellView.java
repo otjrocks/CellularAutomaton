@@ -15,7 +15,6 @@ import javafx.scene.shape.StrokeType;
 public abstract class CellView extends Group {
 
   public static final Paint DEFAULT_COLOR = Color.WHITE;
-  public static final Paint BORDER_COLOR = Color.BLACK;
   public static final double BORDER_WIDTH = 0.6;
 
   private final Shape myShape;

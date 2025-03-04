@@ -8,6 +8,7 @@ import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.config.SimulationConfig;
 import java.util.Map.Entry;
@@ -18,12 +19,10 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -33,7 +32,7 @@ import javafx.scene.text.TextAlignment;
  */
 public class BottomBarView extends VBox {
 
-  public static final double ELEMENT_SPACING = 10;
+  private static final int MAX_HISTORY_SIZE = 300;
   private final Text myIterationText = new Text();
   private LineChart<Number, Number> stateChangeChart;
   private final Map<String, Series<Number, Number>> stateChangeSeriesMap = new HashMap<>();
@@ -41,8 +40,8 @@ public class BottomBarView extends VBox {
   private final NumberAxis yAxis = new NumberAxis();
   private int stepCount = 0;
   private final String myIterationCountLabel;
-  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
   private volatile int latestCount = 0;
+
 
   /**
    * Create a bottom bar view with a preferred size of width x height
@@ -59,6 +58,7 @@ public class BottomBarView extends VBox {
     myIterationText.setLayoutX(width - 2 * MARGIN);
     myIterationText.setLayoutY(height - 2 * MARGIN);
     // I asked ChatGPT for assistance in scheduling the text UI updates to improve efficiency.
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     scheduler.scheduleAtFixedRate(
         () -> Platform.runLater(() -> myIterationText.setText(myIterationCountLabel + latestCount)),
         0, 200, TimeUnit.MILLISECONDS);
@@ -76,13 +76,8 @@ public class BottomBarView extends VBox {
     stateChangeSeriesMap.clear();
     updateIterationCounter(0);
     stepCount = 0;
-  }
-
-  private Text createText(String message) {
-    Text text = new Text(message);
-    text.setTextAlignment(TextAlignment.LEFT);
-    text.setWrappingWidth(GRID_WIDTH - (ELEMENT_SPACING * 6));
-    return text;
+    xAxis.setLowerBound(0);
+    xAxis.setUpperBound(MAX_HISTORY_SIZE);
   }
 
   /**
@@ -96,21 +91,37 @@ public class BottomBarView extends VBox {
   }
 
   private void setupStateChangeChart() {
-    xAxis.setLabel("Simulation Step");
-    yAxis.setLabel("Population");
-    yAxis.setAutoRanging(false);
-    yAxis.setLowerBound(0);
+    setupXAxis();
+    setupYAxis();
+    setupChart();
+    getChildren().add(stateChangeChart);
+  }
 
+  private void setupChart() {
     stateChangeChart = new LineChart<>(xAxis, yAxis);
-    stateChangeChart.setTitle("State Population Change Over Time");
+    stateChangeChart.setCreateSymbols(false);
+    stateChangeChart.setAnimated(true);
+    stateChangeChart.setTitle(getMessage("STATECHANGE_CHART"));
     stateChangeChart.setMinWidth(GRID_WIDTH);
     stateChangeChart.setMaxWidth(GRID_WIDTH);
     stateChangeChart.getStyleClass().add("state-change");
     stateChangeChart.setLegendVisible(false);
     stateChangeChart.setMinHeight(GRID_HEIGHT);
     stateChangeChart.setMaxHeight(GRID_HEIGHT);
+  }
 
-    getChildren().add(stateChangeChart);
+  private void setupYAxis() {
+    yAxis.setLabel(getMessage("STATECHANGE_CHART_Y"));
+    yAxis.setAutoRanging(false);
+    yAxis.setLowerBound(0);
+  }
+
+  private void setupXAxis() {
+    xAxis.setLabel(getMessage("STATECHANGE_CHART_X"));
+    xAxis.setAutoRanging(false);
+    xAxis.setMinorTickVisible(false);
+    xAxis.setTickMarkVisible(false);
+    xAxis.setTickLabelsVisible(false);
   }
 
   /**
@@ -123,27 +134,37 @@ public class BottomBarView extends VBox {
     Platform.runLater(() -> {
       int totalStates = sumMapValues(stateCounts);
       yAxis.setUpperBound(totalStates);
-      yAxis.setTickUnit(totalStates / 5);
+      yAxis.setTickUnit((double) totalStates / 5);
+
       for (Entry<String, Integer> entry : stateCounts.entrySet()) {
         String stateName = entry.getKey();
         int newValue = entry.getValue();
         addStateNameToStateChangeMap(stateName);
-        stateChangeSeriesMap.get(stateName).getData().add(new Data<>(stepCount, newValue));
+
+        Series<Number, Number> series = stateChangeSeriesMap.get(stateName);
+        series.getData().add(new Data<>(stepCount, newValue));
+
+        // Ensure the series maintains a fixed history size
+        if (series.getData().size() > MAX_HISTORY_SIZE) {
+          series.getData().removeFirst(); // Remove the oldest data point
+        }
+        xAxis.setUpperBound(stepCount);
+        if (stepCount > MAX_HISTORY_SIZE) {
+          xAxis.setLowerBound(stepCount - MAX_HISTORY_SIZE + 1);
+        }
       }
 
       updateXYChart(simType);
-
       stepCount++;
     });
   }
 
+
   private void updateXYChart(String simType) {
-    Platform.runLater(() -> {
-      for (Series<Number, Number> series : stateChangeChart.getData()) {
-        String colorString = getColorStringForState(simType, series);
-        series.getNode().setStyle("-fx-stroke: " + colorString + ";");
-      }
-    });
+    for (Series<Number, Number> series : stateChangeChart.getData()) {
+      String colorString = getColorStringForState(simType, series);
+      series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+    }
   }
 
   private static String getColorStringForState(String simType, Series<Number, Number> series) {
@@ -166,7 +187,6 @@ public class BottomBarView extends VBox {
     for (String key : map.keySet()) {
       total += map.get(key);
     }
-
     return total;
   }
 

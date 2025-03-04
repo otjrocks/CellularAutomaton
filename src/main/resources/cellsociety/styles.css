@@ -235,7 +235,7 @@ Label, Text {
 }
 
 .state-change .chart-plot-background {
-  -fx-background-color: grey;
+  -fx-background-color: -fx-light;
 }
 
 .state-change .chart-horizontal-grid-lines, 
