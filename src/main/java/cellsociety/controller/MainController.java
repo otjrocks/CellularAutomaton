@@ -226,13 +226,12 @@ public class MainController {
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {
-      throw new IllegalStateException(e.getCause().getMessage());
-    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException e) {
-      throw new IllegalStateException("Error creating simulation: " + type, e);
-    } catch (IllegalAccessException e) {
-      throw new SecurityException("Illegal access to simulation class: " + type, e);
-    } catch (InvalidParameterException e) {
-      throw new IllegalArgumentException("Invalid simulation parameters provided", e);
+      throw new RuntimeException(
+          e.getCause()
+              .getMessage());  // provide exception message thrown by class, not the reflection api
+    } catch (ClassNotFoundException | NoSuchMethodException |
+             InstantiationException | IllegalAccessException | InvalidParameterException e) {
+      throw new RuntimeException(e);
     }
 
     initializeGridWithCells();
