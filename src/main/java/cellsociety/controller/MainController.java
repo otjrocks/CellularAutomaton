@@ -433,15 +433,11 @@ public class MainController {
       attemptUpdateFromFilePath(filePath);
     } catch (SAXException | ParserConfigurationException | IOException | GridException |
              InvalidStateException e) {
-      handleGridAndSimulationExceptions(e);
+      String errorMessageKey = getErrorMessageKey(e);
+      mySidebarView.flashWarning(getMessage(errorMessageKey));
+      LOGGER.warn(getMessage(errorMessageKey), e);
       throw e;
     }
-  }
-
-  private void handleGridAndSimulationExceptions(Exception e) {
-    String errorMessageKey = getErrorMessageKey(e);
-    mySidebarView.flashWarning(getMessage(errorMessageKey));
-    LOGGER.warn(getMessage(errorMessageKey), e);
   }
 
   private static String getErrorMessageKey(Exception e) {

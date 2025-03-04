@@ -395,7 +395,7 @@ public class ForagingAntsRules extends SimulationRules {
       return emptyNeighbors.get(random.nextInt(emptyNeighbors.size()));
     }
 
-    if (candidates.isEmpty()){
+    if (candidates.isEmpty()) {
       return null;
     }
     return candidates.get(random.nextInt(candidates.size()));
@@ -422,7 +422,7 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that adds a new ant with full health to the grid
    *
-   * @param newAnt the ant cell to be added
+   * @param newAnt     the ant cell to be added
    * @param nextStates list of CellUpdates to be handled by the grid
    */
   private void addNewAnt(ForagingAntsCell newAnt, List<CellUpdate> nextStates) {
@@ -436,11 +436,11 @@ public class ForagingAntsRules extends SimulationRules {
    * Method that moves an ant to somewhere else in the grid (adds new cell with properly updated
    * values)
    *
-   * @param ant the current ant to based update values on
+   * @param ant          the current ant to based update values on
    * @param nextLocation the location where the ant is moving
-   * @param grid the grid on which the ant is located
-   * @param nextStates list of CellUpdates to be handled by the grid
-   * @param hasFood does the ant have food after being updated
+   * @param grid         the grid on which the ant is located
+   * @param nextStates   list of CellUpdates to be handled by the grid
+   * @param hasFood      does the ant have food after being updated
    */
   private void addUpdatedAnt(ForagingAntsCell ant, ForagingAntsCell nextLocation, Grid grid,
       List<CellUpdate> nextStates, boolean hasFood) {
@@ -454,7 +454,7 @@ public class ForagingAntsRules extends SimulationRules {
   /**
    * Method that adds an empty cell in the case of when an ant moves or dies
    *
-   * @param ant the ant cell to be referenced for position
+   * @param ant        the ant cell to be referenced for position
    * @param nextStates list of CellUpdates to be handled by the grid
    */
   private void addEmptyCell(ForagingAntsCell ant, List<CellUpdate> nextStates) {
@@ -466,10 +466,10 @@ public class ForagingAntsRules extends SimulationRules {
 
   /**
    * Method that checks if reproduction time has been reached and adds a specified number of ants
-   * and random cells adjacent to nests
+   * and random cells adjacent to nests.
    *
-   * @param grid the grid where ants are being added
-   * @param nextStates list of CellUpdates to be handled by the grid
+   * @param grid          the grid where ants are being added
+   * @param nextStates    list of CellUpdates to be handled by the grid
    * @param occupiedCells cells that have an ant moving to them this cycle
    */
   private void checkIfTimeForMoreAnts(Grid grid, List<CellUpdate> nextStates,

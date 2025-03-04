@@ -33,10 +33,12 @@ import cellsociety.utility.FileUtility;
 public class SimulationConfig {
 
   private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
-  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
-  public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
-  private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
-      INSTRUCTIONS_FILE_PATH);
+  public static final String
+      INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
+  public static final String
+      SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
+  private static final ResourceBundle
+      myInstructions = ResourceBundle.getBundle(INSTRUCTIONS_FILE_PATH);
 
 
   /**
@@ -60,7 +62,8 @@ public class SimulationConfig {
     try {
       return getRequiredParametersForSimulationRulesClass(simulationName);
     } catch (NoSuchMethodException e) {
-      // if class does not have getRequiredParameters method, just return empty list (no required parameters)
+      // if class does not have getRequiredParameters method,
+      // just return empty list (no required parameters)
       return new ArrayList<>();
     } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
       LOGGER.warn(e.getMessage());
@@ -106,7 +109,12 @@ public class SimulationConfig {
    */
   public static Simulation getNewSimulation(String simulationName,
       SimulationMetaData simulationMetaData, Map<String, Parameter<?>> parameters)
-      throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidParameterException {
+      throws ClassNotFoundException,
+      InvocationTargetException,
+      NoSuchMethodException,
+      InstantiationException,
+      IllegalAccessException,
+      InvalidParameterException {
     validateSimulation(simulationName);
     GetNeighbors myGetNeighbors = createGetNeighborInstance(simulationMetaData.neighborType(),
         simulationMetaData.layers());
@@ -122,7 +130,8 @@ public class SimulationConfig {
    */
   public static StateInfo getStateInfoFromDisplayName(Simulation simulation, String name) {
     int numStates = simulation.rules().getNumberStates();
-    // check all possible state info for all languages until you find the state info with a display name matching the provided name
+    // check all possible state info for all languages until you
+    // find the state info with a display name matching the provided name
     for (String language : MainConfig.fetchLanguages()) {
       for (int i = 0; i < numStates; i++) {
         StateInfo currentStateInfo = StateDisplayConfig.getStateInfo(simulation, i, language);
@@ -135,7 +144,10 @@ public class SimulationConfig {
   }
 
   private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
-      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+      throws ClassNotFoundException,
+      NoSuchMethodException,
+      IllegalAccessException,
+      InvocationTargetException {
     // Get class name for simulation queried
     String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
     Class<?> ruleClass = Class.forName(className);
@@ -147,7 +159,11 @@ public class SimulationConfig {
 
   private static SimulationRules getRules(String simulationName,
       Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+      throws ClassNotFoundException,
+      NoSuchMethodException,
+      InvocationTargetException,
+      InstantiationException,
+      IllegalAccessException {
     validateSimulation(simulationName);
     String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
         "Rules");
@@ -193,7 +209,7 @@ public class SimulationConfig {
   }
 
   /**
-   * Gets instructions for predefined species from the properties file
+   * Gets instructions for predefined species from the properties file.
    *
    * @param state Integer representing the species of the animal (or empty)
    */

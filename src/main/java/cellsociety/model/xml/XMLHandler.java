@@ -71,7 +71,11 @@ public class XMLHandler {
    *                    represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+      throws SAXException,
+      IOException,
+      ParserConfigurationException,
+      GridException,
+      InvalidStateException {
 
     File xmlFile = new File(xmlFilePath);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -114,7 +118,9 @@ public class XMLHandler {
         attemptSettingCellType(data);
       }
     } catch (IllegalArgumentException |
-             DOMException e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
+             DOMException e) {
+      // fallback to default cell shape if field is missing in xml file,
+      // incorrectly spelled, or other error
       myCellShapeType = DEFAULT_CELL_SHAPE;
     }
   }
@@ -305,7 +311,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's cell shape type
+   * Returns the current simulation's cell shape type.
    *
    * @return CellShapeType from the file or the default cell shape if not found
    */
@@ -314,7 +320,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's
+   * Returns the current simulation's edge strategy.
    *
    * @return EdgeStrategyType from the file or the default edge type if not found in the file
    */

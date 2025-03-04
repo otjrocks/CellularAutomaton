@@ -3,14 +3,14 @@ package cellsociety.model.simulation.neighbors;
 import cellsociety.model.simulation.GetNeighbors;
 
 /**
- * The neighbor rules for a hexagon grid using Moore Technique
+ * The neighbor rules for a hexagon grid using Moore Technique.
  *
  * @author Owen Jennings
  */
 public class HexagonMooreNeighbors extends GetNeighbors {
 
   /**
-   * Create a HexagonMooreNeighbors with provided layers
+   * Create a HexagonMooreNeighbors with provided layers.
    *
    * @param layers The number of layers to use
    */
@@ -19,6 +19,8 @@ public class HexagonMooreNeighbors extends GetNeighbors {
   }
 
   /**
+   * The directions based on Hexagon Moore Neighbors rules.
+   *
    * @return - the coordinate system for the directions to obtain the neighbors (6 adjacent
    * neighbors of the current hexagon)
    */

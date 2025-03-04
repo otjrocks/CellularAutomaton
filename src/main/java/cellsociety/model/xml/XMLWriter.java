@@ -149,7 +149,7 @@ public class XMLWriter {
    * Helper method to add necessary parameters to XML Writer document.
    *
    * @param doc        Document to which you are adding the grid data
-   * @param rules      SimulationRules pbject that dictates necessary parameters
+   * @param rules      SimulationRules object that dictates necessary parameters
    * @param simElement The parent element for all the simulation data
    */
   private static void writeParameters(Document doc, SimulationRules rules, Element simElement) {
@@ -183,7 +183,7 @@ public class XMLWriter {
 
 
   /**
-   * Helper method to transform doc into XML file at designated path
+   * Helper method to transform doc into XML file at designated path.
    *
    * @param doc  Document to which you are adding the grid data
    * @param file The file generated from filepath
