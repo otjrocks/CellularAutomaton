@@ -137,6 +137,9 @@ public class SimulationView extends Group {
    * @param value            The new CellShapeType value.
    */
   public void updateGridShape(List<CellUpdate> currentGridState, CellShapeType value) {
+    scrollPane.setContent(null);
+
+    // Remove old gridContainer from SimulationView
     this.getChildren().remove(gridContainer);
     myGridView = GridViewFactory.createCellView(value, myWidth,
         myHeight, myNumRows, myNumColumns, myMainController);
@@ -145,7 +148,7 @@ public class SimulationView extends Group {
     myGridView.setGridLines(myGridLinesEnabled);
 
     gridContainer = new Group(myGridView);
-    getChildren().add(gridContainer);
+    scrollPane.setContent(gridContainer);
   }
 
   private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
