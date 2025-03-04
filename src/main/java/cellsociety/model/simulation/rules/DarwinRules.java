@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -84,6 +85,7 @@ public class DarwinRules  extends SimulationRules {
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> updates = new ArrayList<>();
+    Map<Point2D, DarwinCell> occupiedCells = new HashMap<>();
 
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
@@ -100,7 +102,7 @@ public class DarwinRules  extends SimulationRules {
 
       Instruction instruction = instructionHandlers.get(arguments.getFirst());
       if (instruction != null) {
-        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid);
+        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid, occupiedCells);
         darwinCell.nextInstruction();
         updates.addAll(instructionUpdates);
       } else if(!(darwinCell.getState() == State.EMPTY.getValue())){

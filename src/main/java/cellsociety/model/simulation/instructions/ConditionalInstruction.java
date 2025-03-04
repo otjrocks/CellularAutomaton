@@ -3,6 +3,7 @@ package cellsociety.model.simulation.instructions;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import cellsociety.model.Grid;
@@ -37,7 +38,7 @@ public class ConditionalInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells) {
     Point2D direction = darwinCell.getFrontDirection();
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
