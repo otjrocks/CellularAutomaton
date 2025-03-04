@@ -64,7 +64,7 @@ public class SimulationConfig {
       return new ArrayList<>();
     } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
       LOGGER.warn(e.getMessage());
-      throw new RuntimeException(e);
+      throw new RuntimeException("Error fetching parameters: " + e);
     }
   }
 

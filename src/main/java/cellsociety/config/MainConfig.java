@@ -84,9 +84,9 @@ public class MainConfig {
   public static void setLanguage(String language) {
     try {
       myMessages = ResourceBundle.getBundle(LANGUAGE_FILE_PATH + language);
-    } catch (Exception e) {
+    } catch (MissingResourceException e) {
       LOGGER.error("Could not load language: {}", language);
-      throw new IllegalArgumentException("Language file not found" + e);
+      throw new IllegalArgumentException("Language file not found:" + language, e);
     }
     PreferencesController.setPreference("language", language);
   }
