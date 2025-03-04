@@ -2,7 +2,6 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.INITIAL_STEP_SPEED;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
@@ -176,9 +175,6 @@ public class ViewModeView extends VBox {
       myAlertField.flash(getMessage("FILE_SAVE_SUCCESS"), false);
     } catch (IllegalArgumentException e) {
       myAlertField.flash(getMessage("FILE_SAVE_FAIL"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
     }
   }
 
