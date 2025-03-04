@@ -23,7 +23,7 @@ public class MoveInstruction implements Instruction {
    * Move the cell
    *
    * @param darwinCell - the cell that the instruction is executed on
-   * @param arguments  - the list of arguments needed - i.e instructions, numMovements
+   * @param arguments  - the list of arguments needed - i.e. instructions, numMovements
    * @param grid       - the collection of cell objects
    */
   @Override
@@ -35,7 +35,7 @@ public class MoveInstruction implements Instruction {
     try {
       numMovements = Integer.parseInt(arguments.get(1));
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid movement number");
+      throw new IllegalArgumentException("Invalid movement number", e);
     }
 
     int newRow = darwinCell.getRow();
@@ -61,7 +61,7 @@ public class MoveInstruction implements Instruction {
       curLocation = new Point2D.Double(newRow, newCol);
     }
 
-    return updateGridForMovement(darwinCell, grid, curLocation, newRow, newCol);
+    return updateGridForMovement(darwinCell, curLocation, newRow, newCol);
   }
 
   /**
@@ -80,7 +80,7 @@ public class MoveInstruction implements Instruction {
     //unneeded here
   }
 
-  private static List<CellUpdate> updateGridForMovement(DarwinCell darwinCell, Grid grid,
+  private static List<CellUpdate> updateGridForMovement(DarwinCell darwinCell,
       Point2D curLocation, int newRow, int newCol) {
     List<CellUpdate> updates = new ArrayList<>();
     if (!curLocation.equals(darwinCell.getLocation())) {
@@ -100,7 +100,7 @@ public class MoveInstruction implements Instruction {
 
 
   private int verifyInBounds(int rowOrCol, int numRowsOrCols) {
-    if (rowOrCol > numRowsOrCols - 1) {
+    if (valueGreaterThanBound(rowOrCol, numRowsOrCols)) {
       rowOrCol = numRowsOrCols - 1;
     }
 
@@ -109,6 +109,10 @@ public class MoveInstruction implements Instruction {
     }
 
     return rowOrCol;
+  }
+
+  private static boolean valueGreaterThanBound(int rowOrCol, int numRowsOrCols) {
+    return rowOrCol > numRowsOrCols - 1;
   }
 
 }

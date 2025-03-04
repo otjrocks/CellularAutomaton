@@ -74,10 +74,14 @@ public class StateDisplayConfig {
 
   private static String getStateName(String key, int state) {
     String stateName = getMessage(key);
-    if (stateName.equals(getMessage("MISSING_KEY")) || stateName.equals("UNKNOWN")) {
+    if (isMissingDisplayNamePropertyValue(stateName)) {
       return String.format(getMessage("STATE"), state);
     }
     return stateName;
+  }
+
+  private static boolean isMissingDisplayNamePropertyValue(String stateName) {
+    return stateName.equals(getMessage("MISSING_KEY")) || stateName.equals("UNKNOWN");
   }
 
   private static Color getStateColor(String key, String simulationType, int state) {

@@ -52,7 +52,7 @@ public class XMLHandler {
    * XMLHandler constructor for referencing data
    *
    * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
-   *                     represented as a String
+   *                    represented as a String
    */
   public XMLHandler(String xmlFilePath)
       throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
@@ -64,7 +64,7 @@ public class XMLHandler {
    * associated data
    *
    * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
-   *                     represented as a String
+   *                    represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
       throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
@@ -140,10 +140,10 @@ public class XMLHandler {
    * @param gridDoc Document from which you are extracting/generating the initial grid data
    */
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
-    if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
+    if (isRandomInitByState(gridDoc)) {
       myGrid = CreateGridUtility.generateRandomGridFromStateNumber(gridDoc, myGridHeight,
           myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
-    } else if (gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
+    } else if (isRandomInitByProb(gridDoc)) {
       myGrid = CreateGridUtility.generateRandomGridFromDistribution(gridDoc, myGridHeight,
           myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
     } else {
@@ -152,11 +152,19 @@ public class XMLHandler {
     }
   }
 
+  private static boolean isRandomInitByProb(Document gridDoc) {
+    return gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0;
+  }
+
+  private static boolean isRandomInitByState(Document gridDoc) {
+    return gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0;
+  }
+
   /**
    * Method that assigns the parameters for the current simulation based on simulation type
    *
    * @param doc parsed XML file containing the simulation data most importantly for this function,
-   *             the additional sim parameters
+   *            the additional sim parameters
    */
   private void parseParameters(Document doc) {
     myParameters = new HashMap<>();
@@ -188,7 +196,7 @@ public class XMLHandler {
    * Method that checks an XML file for a parameter with a given name
    *
    * @param paramElement element containing all parameters for a given simulation
-   * @param paramName name of the parameter being checked
+   * @param paramName    name of the parameter being checked
    */
   private void checkAndLoadParameter(Element paramElement, String paramName) {
     try {

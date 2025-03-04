@@ -83,14 +83,18 @@ public class ConditionalInstruction implements Instruction {
 
   private List<CellUpdate> handleRandomCase(DarwinCell darwinCell, int nextInstruction,
       List<CellUpdate> updates) {
-    if (conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
+    if (checkTypeIsRandomOrRnd()) {
       if (random.nextBoolean()) {
-        darwinCell.setCurInstructionIndex(nextInstruction-2);
+        darwinCell.setCurInstructionIndex(nextInstruction - 2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
       return updates;
     }
     return null;
+  }
+
+  private boolean checkTypeIsRandomOrRnd() {
+    return conditionType.equals("IFRANDOM") || conditionType.equals("RND?");
   }
 
   private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid) {

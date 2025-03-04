@@ -111,17 +111,6 @@ public class CreateDefaultSimView extends VBox {
     }
   }
 
-  private TextField createTextField(String label, VBox target) {
-    HBox box = new HBox();
-    box.setAlignment(Pos.CENTER_LEFT);
-    box.setSpacing(5);
-    TextField textField = new TextField();
-    Text textFieldLabel = new Text(label);
-    box.getChildren().addAll(textFieldLabel, textField);
-    target.getChildren().add(box);
-    return textField;
-  }
-
   /**
    * Handles the row input for the simulation.
    */
@@ -179,6 +168,17 @@ public class CreateDefaultSimView extends VBox {
 
     createNeighborTypeSelector();
     createNeighborLayerField();
+  }
+
+  private TextField createTextField(String label, VBox target) {
+    HBox box = new HBox();
+    box.setAlignment(Pos.CENTER_LEFT);
+    box.setSpacing(5);
+    TextField textField = new TextField();
+    Text textFieldLabel = new Text(label);
+    box.getChildren().addAll(textFieldLabel, textField);
+    target.getChildren().add(box);
+    return textField;
   }
 
   private TextField createTextField(String label, String defaultValue) {
@@ -267,16 +267,20 @@ public class CreateDefaultSimView extends VBox {
   }
 
   private boolean checkInvalidLayer(int myNeighborLayer) {
-    if (myNeighborLayer < 1) {
+    if (hasInvalidNumberOfLayers(myNeighborLayer)) {
       myAlertField.flash(getMessage("INVALID_NEIGHBOR_LAYER"), true);
       return true;
     }
     return false;
   }
 
+  private static boolean hasInvalidNumberOfLayers(int myNeighborLayer) {
+    return myNeighborLayer < 1;
+  }
+
   private boolean checkInvalidNeighborType(String myNeighborType) {
     try {
-      String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
+      String className = String.format("cellsociety.model.simulation.neighbors.%s%s",
           myNeighborType,
           "Neighbors");
       Class.forName(className);

@@ -91,7 +91,8 @@ public class XMLWriter {
     addElement(doc, simElement, "CellType", cellShapeType.toString());
   }
 
-  private static void writeEdgeStrategyType(Document doc, EdgeStrategyType edgeStrategyType, Element simElement) {
+  private static void writeEdgeStrategyType(Document doc, EdgeStrategyType edgeStrategyType,
+      Element simElement) {
     addElement(doc, simElement, "EdgeType", edgeStrategyType.toString());
   }
 
@@ -113,8 +114,8 @@ public class XMLWriter {
   /**
    * Helper method to add grid configuration data to XML Writer document.
    *
-   * @param doc Document to which you are adding the grid data
-   * @param grid The grid containing the data you want to save
+   * @param doc        Document to which you are adding the grid data
+   * @param grid       The grid containing the data you want to save
    * @param simElement The parent element for all the simulation data
    */
   private static void writeGrid(Document doc, Grid grid, Element simElement) {
@@ -130,7 +131,7 @@ public class XMLWriter {
       for (int j = 0; j < grid.getCols(); j++) {
         Cell cell = grid.getCell(i, j);
         rowValues.append(cell.getState());
-        if (j < grid.getCols() - 1) {
+        if (indexLessThanGridNumberOfColumns(grid, j)) {
           rowValues.append(",");
         }
       }
@@ -140,11 +141,15 @@ public class XMLWriter {
     }
   }
 
+  private static boolean indexLessThanGridNumberOfColumns(Grid grid, int j) {
+    return j < grid.getCols() - 1;
+  }
+
   /**
    * Helper method to add necessary parameters to XML Writer document.
    *
-   * @param doc Document to which you are adding the grid data
-   * @param rules SimulationRules pbject that dictates necessary parameters
+   * @param doc        Document to which you are adding the grid data
+   * @param rules      SimulationRules pbject that dictates necessary parameters
    * @param simElement The parent element for all the simulation data
    */
   private static void writeParameters(Document doc, SimulationRules rules, Element simElement) {
@@ -180,7 +185,7 @@ public class XMLWriter {
   /**
    * Helper method to transform doc into XML file at designated path
    *
-   * @param doc Document to which you are adding the grid data
+   * @param doc  Document to which you are adding the grid data
    * @param file The file generated from filepath
    */
   private static void transformXML(Document doc, File file) throws TransformerException {

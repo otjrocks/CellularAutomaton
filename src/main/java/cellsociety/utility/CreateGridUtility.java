@@ -60,11 +60,15 @@ public class CreateGridUtility {
     checkValidState(state, sim);
     Cell holdingCell = SimulationConfig.getNewCell(i, j, state, sim.data().type());
 
-    if (sim.data().type().equals("Sugarscape") && param != 0) {
+    if (isSugarscape(sim, param)) {
       ((SugarscapeCell) holdingCell).setSugar(param);
     }
 
     grid.addCell(holdingCell);
+  }
+
+  private static boolean isSugarscape(Simulation sim, int param) {
+    return sim.data().type().equals("Sugarscape") && param != 0;
   }
 
   private static String[] getRowValuesAndHandleExceptions(int gridHeight, int gridWidth,
@@ -81,11 +85,15 @@ public class CreateGridUtility {
   }
 
   private static int getDecimalValue(String rawString) {
-    if (!rawString.contains(".")) {
+    if (doesNotContainDecimal(rawString)) {
       return 0;
     }
     String param = rawString.split("\\.")[1];
     return Integer.parseInt(param);
+  }
+
+  private static boolean doesNotContainDecimal(String rawString) {
+    return !rawString.contains(".");
   }
 
 
@@ -193,12 +201,17 @@ public class CreateGridUtility {
   }
 
   private static void checkValidState(int state, Simulation sim) throws InvalidStateException {
-    if (!sim.data().type().equals("RockPaperScissors") && !sim.data().type().equals("Sugarscape")) {
+    if (checkSimulationsWithoutStateMaximum(sim)) {
       int maxState = sim.rules().getNumberStates() - 1;
       if (state > maxState) {
         throw new InvalidStateException();
       }
     }
+  }
+
+  private static boolean checkSimulationsWithoutStateMaximum(Simulation sim) {
+    return !sim.data().type().equals("RockPaperScissors") && !sim.data().type()
+        .equals("Sugarscape");
   }
 
 }

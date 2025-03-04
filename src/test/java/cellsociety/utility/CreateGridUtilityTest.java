@@ -1,7 +1,7 @@
 package cellsociety.utility;
 
 import cellsociety.model.edge.FixedEdgeStrategy;
-import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
+import cellsociety.model.simulation.neighbors.VonNeumannNeighbors;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;

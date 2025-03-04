@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
 public class NeighborConfig {
 
   //Had a little bit of ChatGPT help with the last few lines of this
-  private static final String NEIGHBOR_OPTION_DIRECTORY = "src/main/java/cellsociety/model/simulation/getNeighborOptions/";
+  private static final String NEIGHBOR_OPTION_DIRECTORY = "src/main/java/cellsociety/model/simulation/neighbors/";
 
   /**
    * Scans the directory to find the various different neighbor types.
