@@ -1,7 +1,6 @@
 package cellsociety.view;
 
 import cellsociety.utility.ColorUtility;
-import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,6 @@ import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-import cellsociety.view.config.StateInfo;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
@@ -23,7 +21,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 

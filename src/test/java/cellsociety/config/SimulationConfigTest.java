@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.cell.WaTorWorldCell;
-import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationMetaData;
 import java.util.HashMap;
