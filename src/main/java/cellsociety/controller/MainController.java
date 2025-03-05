@@ -1,12 +1,5 @@
 package cellsociety.controller;
 
-import cellsociety.model.cell.CellUpdate;
-import cellsociety.model.edge.EdgeStrategyFactory;
-import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
-import cellsociety.model.simulation.SimulationCreationException;
-import cellsociety.view.config.StateInfo;
-import cellsociety.view.grid.GridViewFactory.CellShapeType;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -29,18 +22,21 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
 import static cellsociety.config.MainConfig.STEP_SPEED;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.Grid;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.CellUpdate;
+import cellsociety.model.edge.EdgeStrategyFactory;
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationCreationException;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
 import cellsociety.model.xml.XMLHandler;
 import cellsociety.model.xml.XMLWriter;
-import cellsociety.model.cell.Cell;
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.Simulation;
-import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.BottomBarView;
 import cellsociety.view.SidebarView;
 import cellsociety.view.SimulationView;
@@ -48,6 +44,8 @@ import cellsociety.view.SplashScreenView;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.config.FileChooserConfig;
 import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -58,7 +56,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * A class to handle the main interactions between the model and view classes
+ * A class to handle the main interactions between the model and view classes.
  *
  * @author Owen Jennings
  */
@@ -82,8 +80,10 @@ public class MainController {
 
   private final ThemeController myThemeController;
   private int myIterationCount;
-  // I used ChatGPT to help in refactoring the getErrorMessageKey method to improve cyclomatic complexity
-  private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = new HashMap<>();
+  // I used ChatGPT to help in refactoring the getErrorMessageKey method to 
+  // improve cyclomatic complexity
+  private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = 
+    new HashMap<>();
 
   static {
     ERROR_MESSAGE_MAP.put(SAXException.class, "ERROR_FORMAT");
@@ -96,7 +96,7 @@ public class MainController {
   }
 
   /**
-   * Initialize the MainController
+   * Initialize the MainController.
    *
    * @param root the main root group of the program
    */
@@ -113,7 +113,7 @@ public class MainController {
   }
 
   /**
-   * Hide the splash screen view
+   * Hide the splash screen view.
    */
   public void hideSplashScreen() {
     myRoot.getChildren().remove(mySidebarView);
@@ -127,7 +127,7 @@ public class MainController {
   }
 
   /**
-   * Set the theme to the themeName provided if it exists, otherwise fallback to default theme
+   * Set the theme to the themeName provided if it exists, otherwise fallback to default theme.
    *
    * @param themeName Name of theme you which to set
    */
@@ -137,7 +137,7 @@ public class MainController {
   }
 
   /**
-   * Start the simulation animation if it is not already running
+   * Start the simulation animation if it is not already running.
    */
   public void startAnimation() {
     if (mySimulationAnimation.getStatus() != Status.RUNNING) {
@@ -146,7 +146,7 @@ public class MainController {
   }
 
   /**
-   * Stop the simulation animation if it is currently running
+   * Stop the simulation animation if it is currently running.
    */
   public void stopAnimation() {
     if (mySimulationAnimation.getStatus() == Status.RUNNING) {
@@ -156,14 +156,14 @@ public class MainController {
 
 
   /**
-   * Method to call the simulation view to reset the Grid view to be back to normal pr-zoom
+   * Method to call the simulation view to reset the Grid view to be back to normal pr-zoom.
    */
   public void resetZoomButton() {
     mySimulationView.resetZoom();
   }
 
   /**
-   * Returns the current simulation object
+   * Returns the current simulation object.
    *
    * @return The currently running simulation object
    */
@@ -173,7 +173,7 @@ public class MainController {
 
   /**
    * Runs a single step animation on the simulation view. If the simulation animation is currently
-   * running, stop the animation and conduct a single step
+   * running, stop the animation and conduct a single step.
    */
   public void handleSingleStep() {
     stopAnimation();
@@ -181,7 +181,7 @@ public class MainController {
   }
 
   /**
-   * Update the animation to have a new speed
+   * Update the animation to have a new speed.
    *
    * @param speed the new speed of the animation
    * @param start a boolean to determine if the animation should start with the new speed or remain
@@ -208,7 +208,7 @@ public class MainController {
   }
 
   /**
-   * Set whether the user is editing the simulation
+   * Set whether the user is editing the simulation.
    *
    * @param editing boolean indicating if user is editing the view
    */
@@ -217,7 +217,7 @@ public class MainController {
   }
 
   /**
-   * Get whether the grid animation is currently playing
+   * Get whether the grid animation is currently playing.
    *
    * @return true if the animation is playing, false otherwise
    */
@@ -226,7 +226,7 @@ public class MainController {
   }
 
   /**
-   * Create a new simulation with the provided information
+   * Create a new simulation with the provided information.
    *
    * @param rows       The number of rows for the grid
    * @param cols       the number of columns for the grid
@@ -255,7 +255,7 @@ public class MainController {
 
   /**
    * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
-   * from user input. The cell state will only be changed if the user is currently in editing mode
+   * from user input. The cell state will only be changed if the user is currently in editing mode.
    *
    * @param row    row of cell you which to change state of
    * @param column column of cell you which to change state of
@@ -265,7 +265,8 @@ public class MainController {
       Cell cell = myGrid.getCell(row, column);
       int nextState = getNextAvailableState(cell);
       myGrid.setState(row, column, nextState, mySimulation);
-      // create new cell instead of just updating cell status, to ensure that new cell has all other information reset for custom cell types
+      // create new cell instead of just updating cell status, to ensure that new cell 
+      // has all other information reset for custom cell types
       myGrid.updateCell(
           SimulationConfig.getNewCell(row, column, nextState, mySimulation.data().type()));
       mySimulationView.setColor(row, column,
@@ -274,7 +275,7 @@ public class MainController {
   }
 
   /**
-   * Handle the loading and creation of a new simulation from a file chooser
+   * Handle the loading and creation of a new simulation from a file chooser.
    */
   public void handleNewSimulationFromFile()
       throws GridException, InvalidStateException, IOException, ParserConfigurationException, SAXException {
@@ -289,7 +290,7 @@ public class MainController {
 
   /**
    * A method to handle the saving of the current state of the program to an XML file using the
-   * XMLWriter
+   * XMLWriter.
    */
   public void handleSavingToFile() {
     XMLWriter.saveSimulationToXML(mySimulation, myGrid, myCellShapeType, myEdgeStrategyType,
@@ -297,7 +298,7 @@ public class MainController {
   }
 
   /**
-   * Update the main simulation of the program
+   * Update the main simulation of the program.
    *
    * @param simulation The simulation you wish to switch to
    */
@@ -309,7 +310,7 @@ public class MainController {
   }
 
   /**
-   * Initialize the sidebar of the program
+   * Initialize the sidebar of the program.
    */
   public void initializeSidebar() {
     mySidebarView = new SidebarView(SIDEBAR_WIDTH,
@@ -320,7 +321,7 @@ public class MainController {
   }
 
   /**
-   * Initialize the bottom bar of the program
+   * Initialize the bottom bar of the program.
    */
   public void initializeBottomBar() {
     myBottomBarView = new BottomBarView(GRID_WIDTH,
@@ -332,7 +333,7 @@ public class MainController {
   }
 
   /**
-   * Handle whether grid lines should be shown or not
+   * Handle whether grid lines should be shown or not.
    *
    * @param selected Whether to show grid lines
    */
@@ -343,7 +344,7 @@ public class MainController {
   }
 
   /**
-   * Get current grid number of rows
+   * Get current grid number of rows.
    *
    * @return The current grid's number of rows
    */
@@ -352,7 +353,7 @@ public class MainController {
   }
 
   /**
-   * Get current grid number of columns
+   * Get current grid number of columns.
    *
    * @return The current grid's number of columns
    */
@@ -363,7 +364,7 @@ public class MainController {
   /**
    * Update the grid to use the new shape specified by the new value Calls updateGridShape from
    * simulation view class providing the current cell states in the grid along with the cell shape
-   * type to transition to
+   * type to transition to.
    *
    * @param value The CellShapeType to update to
    */
@@ -378,7 +379,7 @@ public class MainController {
   }
 
   /**
-   * Compute the count of each state present in the current simulation grid
+   * Compute the count of each state present in the current simulation grid.
    *
    * @return A map where the string represents the state's name and an int value for the count
    */
@@ -395,7 +396,7 @@ public class MainController {
   }
 
   /**
-   * Get the current edge strategy type of this main controller
+   * Get the current edge strategy type of this main controller.
    *
    * @return The edge strategy type for the current simulation
    */
@@ -423,11 +424,11 @@ public class MainController {
 
   private void updateSimulationFromFile(String filePath)
       throws SAXException, InvalidStateException, GridException, IOException, ParserConfigurationException {
-    attemptGettingGridAndSimulationFromXMLHandler(filePath);
+    attemptGettingGridAndSimulationFromXmlHandler(filePath);
   }
 
   // I used ChatGPT to assist in refactoring this method
-  private void attemptGettingGridAndSimulationFromXMLHandler(String filePath)
+  private void attemptGettingGridAndSimulationFromXmlHandler(String filePath)
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       attemptUpdateFromFilePath(filePath);
@@ -441,7 +442,7 @@ public class MainController {
   }
 
   /**
-   * Get the error message key for the front end based on the exception thrown
+   * Get the error message key for the front end based on the exception thrown.
    *
    * @param e The exception thrown
    * @return The error message key to display to the user on the front end or the default message if
@@ -453,7 +454,8 @@ public class MainController {
 
 
   private void attemptUpdateFromFilePath(String filePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+      throws SAXException, IOException, ParserConfigurationException, 
+      GridException, InvalidStateException {
     myIterationCount = 0;
     XMLHandler xmlHandler = new XMLHandler(filePath);
     myGrid = xmlHandler.getGrid();
@@ -522,7 +524,7 @@ public class MainController {
   }
 
   /**
-   * Update the grid edge type for the grid controlled by this class
+   * Update the grid edge type for the grid controlled by this class.
    *
    * @param edgeStrategyType The new edge strategy you want to use
    */

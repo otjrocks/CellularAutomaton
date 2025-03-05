@@ -3,9 +3,9 @@ package cellsociety.model.cell;
 import java.awt.geom.Point2D;
 
 /**
- * A wrapper method to pass update information from one class to another The location indicates
+ * A wrapper method to pass update information from one class to another. The location indicates
  * where in the grid the update is occurring. Cell contains all the state information for the update
- * to the location
+ * to the location.
  *
  * @author Owen Jennings
  */
@@ -55,7 +55,7 @@ public class CellUpdate {
   }
 
   /**
-   * Get cell for update
+   * Get cell for update.
    *
    * @return the cell with all updated information
    */

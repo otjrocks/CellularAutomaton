@@ -1,8 +1,5 @@
 package cellsociety.config;
 
-import cellsociety.model.simulation.SimulationCreationException;
-import cellsociety.view.config.StateDisplayConfig;
-import cellsociety.view.config.StateInfo;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,19 +11,21 @@ import java.util.ResourceBundle;
 
 import static cellsociety.config.MainConfig.LOGGER;
 import static cellsociety.config.MainConfig.getMessage;
-
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.SimulationRules;
 import cellsociety.utility.FileUtility;
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 
 /**
- * Store all information pertaining to simulations
+ * Store all information pertaining to simulations.
  *
  * @author Owen Jennings
  */
@@ -44,7 +43,7 @@ public class SimulationConfig {
   /**
    * List of all the simulation names Note: The simulation rules must follow the naming convention
    * NameRules.java, to be included. Additionally, the rules file must be located in the correct
-   * rules package
+   * rules package.
    */
   public static final String[] SIMULATIONS = FileUtility.getFileNamesInDirectory(
       SIMULATION_RULES_RELATIVE_PATH, "Rules.java").toArray(new String[0]);
@@ -72,7 +71,7 @@ public class SimulationConfig {
   }
 
   /**
-   * Get the appropriate cell type for a simulation type
+   * Get the appropriate cell type for a simulation type.
    *
    * @param row            row location for created cell
    * @param col            col location for created cell
@@ -98,7 +97,7 @@ public class SimulationConfig {
 
   /**
    * Get the appropriate simulation class for a given simulation name. Construct the simulation with
-   * the required parameters and metadata
+   * the required parameters and metadata.
    *
    * @param simulationName     Type/name of the simulation you want to create
    * @param simulationMetaData MetaData for your simulation
@@ -122,7 +121,7 @@ public class SimulationConfig {
   }
 
   /**
-   * Return a StateInfo with the provided display name and from the provided simulation
+   * Return a StateInfo with the provided display name and from the provided simulation.
    *
    * @param simulation The simulation you are querying for
    * @param name       The name of the state you are querying for

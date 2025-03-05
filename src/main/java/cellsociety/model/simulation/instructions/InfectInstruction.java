@@ -23,7 +23,7 @@ public class InfectInstruction implements Instruction {
   private int layers;
 
   /**
-   * Create instance of infection instruction
+   * Create instance of infection instruction.
    *
    * @param layers - the number of layers of neighbors that should be searched
    */
@@ -32,12 +32,16 @@ public class InfectInstruction implements Instruction {
   }
 
   /**
+   * Overidden function that carrys out the infection instruction.
+   * 
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, 
+            DarwinCell> occupiedCells, Set<Point2D> movingCells) {
+
     Point2D direction =  darwinCell.getFrontDirection();
     int newInfectionCountdown = Integer.parseInt(arguments.get(1));
     int newRow = darwinCell.getRow();
@@ -61,16 +65,20 @@ public class InfectInstruction implements Instruction {
         continue;
       }
 
-      addAppropriateInfectedCell(darwinCell, speciesCell, newInfectionCountdown, occupiedCells, movingCells, updates);
+      addAppropriateInfectedCell(darwinCell, speciesCell, newInfectionCountdown, 
+              occupiedCells, movingCells, updates);
     }
     return updates;
   }
 
-  private boolean isValidInfectionTarget(Cell curCell, DarwinCell darwinCell, Map<Point2D, DarwinCell> occupiedCells) {
+  private boolean isValidInfectionTarget(Cell curCell, DarwinCell darwinCell, 
+            Map<Point2D, DarwinCell> occupiedCells) {
+              
     if (curCell == null) return false;
     
     DarwinCell speciesCell = (DarwinCell) curCell;
-    boolean isEmptyOrSameSpecies = curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState();
+    boolean isEmptyOrSameSpecies = curCell.getState() == State.EMPTY.getValue() 
+            || curCell.getState() == darwinCell.getState();
     boolean isAlreadyInfected = speciesCell.getInfected();
     boolean isOccupied = occupiedCells.containsKey(curCell.getLocation());
 
@@ -78,6 +86,8 @@ public class InfectInstruction implements Instruction {
   }
 
   /**
+   * Instatiates the number of directions a species can look.
+   * 
    * @param stepSize - the number of directions to look towards for each configuration
    */
   @Override
@@ -86,6 +96,8 @@ public class InfectInstruction implements Instruction {
   }
 
   /**
+   * Instantiates number of tiles each species can see.
+   * 
    * @param layers - the number of cells to look forward
    */
   @Override

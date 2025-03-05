@@ -45,13 +45,13 @@ public class ForagingAntsCell extends Cell {
    * @param max_pher      The max pheromone amount for this cell
    */
   public ForagingAntsCell(int state, Point2D location, double homePheromone, double foodPheromone,
-      int health, boolean hasFood, double max_pher) {
+      int health, boolean hasFood, double maxPher) {
     super(state, location);
     this.myHomePheromone = homePheromone;
     this.myFoodPheromone = foodPheromone;
     this.myHealth = health;
     this.myHasFood = hasFood;
-    this.myMaxPher = max_pher;
+    this.myMaxPher = maxPher;
   }
 
   /**

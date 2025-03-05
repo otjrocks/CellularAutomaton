@@ -1,6 +1,5 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.GetNeighbors;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
@@ -21,11 +21,11 @@ import cellsociety.model.simulation.SimulationRules;
  */
 public class GameOfLifeRules extends SimulationRules {
 
-  private static final String backSlash = "/";
+  private static final String BACKSLASH = "/";
   private static final String B = "B";
   private static final String S = "S";
-  private static final int aliveState = 1;
   public static final String RULE_STRING = "ruleString";
+  private static final int aliveState = 1;
   private String myRuleString;
   private List<Integer> birthValues;
   private List<Integer> surviveValues;
@@ -49,7 +49,7 @@ public class GameOfLifeRules extends SimulationRules {
       checkMissingParameterAndThrowException(RULE_STRING);
       myRuleString = getParameters().get(RULE_STRING).getString();
       validateParameterRange();
-      initializeBSValues();
+      initializeBsValues();
     }
   }
 
@@ -63,7 +63,7 @@ public class GameOfLifeRules extends SimulationRules {
   }
 
   private boolean checkInvalidRuleString() {
-    return !myRuleString.contains(backSlash) ||
+    return !myRuleString.contains(BACKSLASH) ||
         !myRuleString.contains(B) ||
         !myRuleString.contains(S);
   }
@@ -112,16 +112,16 @@ public class GameOfLifeRules extends SimulationRules {
     return aliveNeighbors;
   }
 
-  private void initializeBSValues() {
+  private void initializeBsValues() {
 
-    String[] bStrings = myRuleString.split("/")[0].substring(1).split("");
-    String[] sStrings = myRuleString.split("/")[1].substring(1).split("");
+    String[] birthStrings = myRuleString.split("/")[0].substring(1).split("");
+    String[] surviveStrings = myRuleString.split("/")[1].substring(1).split("");
 
-    Integer[] bValues = convertStringArray(bStrings);
-    Integer[] sValues = convertStringArray(sStrings);
+    Integer[] birthValuesArray = convertStringArray(birthStrings);
+    Integer[] surviveValuesArray = convertStringArray(surviveStrings);
 
-    surviveValues = new ArrayList<>(Arrays.asList(sValues));
-    birthValues = new ArrayList<>(Arrays.asList(bValues));
+    surviveValues = new ArrayList<>(Arrays.asList(surviveValuesArray));
+    birthValues = new ArrayList<>(Arrays.asList(birthValuesArray));
   }
 
   private Integer[] convertStringArray(String[] strings) {

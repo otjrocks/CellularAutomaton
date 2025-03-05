@@ -1,18 +1,19 @@
 package cellsociety.config;
 
-import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
-import cellsociety.utility.FileUtility;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import cellsociety.controller.PreferencesController;
-import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cellsociety.controller.PreferencesController;
+import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.utility.FileUtility;
+import cellsociety.view.grid.GridViewFactory.CellShapeType;
+
 /**
- * The main config of the program
+ * The main config of the program.
  *
  * @author Owen Jennings
  * @author Troy Ludwig
@@ -95,7 +96,7 @@ public class MainConfig {
   }
 
   /**
-   * Get a list of all the available languages
+   * Get a list of all the available languages.
    *
    * @return A list of strings representing the languages.
    */
@@ -104,7 +105,7 @@ public class MainConfig {
   }
 
   /**
-   * Get the current language of the program
+   * Get the current language of the program.
    *
    * @return The language of the program
    */
