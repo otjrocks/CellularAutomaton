@@ -200,13 +200,13 @@ public class XMLHandler {
    * @param doc parsed XML file containing the simulation data most importantly for this function,
    *            the additional sim parameters
    */
-  private void parseParameters(Document doc) throws InvalidStateException {
+  private void parseParameters(Document doc) {
     myParameters = new HashMap<>();
     NodeList params = doc.getElementsByTagName("Parameters");
     getParametersIfTheyExist(params);
   }
 
-  private void getParametersIfTheyExist(NodeList params) throws InvalidStateException {
+  private void getParametersIfTheyExist(NodeList params) {
     if (params.getLength() > 0) {
       Node param = params.item(0);
       if (param.getNodeType() == Node.ELEMENT_NODE) {
@@ -216,7 +216,7 @@ public class XMLHandler {
     }
   }
 
-  private void handleParameterElement(Element paramElement) throws InvalidStateException {
+  private void handleParameterElement(Element paramElement) {
     for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
       checkAndLoadParameter(paramElement, paramString);
     }
@@ -228,10 +228,9 @@ public class XMLHandler {
    * @param paramElement element containing all parameters for a given simulation
    * @param paramName    name of the parameter being checked
    */
-  private void checkAndLoadParameter(Element paramElement, String paramName)
-      throws InvalidStateException {
-    if (getElement(paramElement, paramName, false) != null) {
-      String paramValue = getElement(paramElement, paramName, false).getTextContent();
+  private void checkAndLoadParameter(Element paramElement, String paramName) {
+    if (getElement(paramElement, paramName) != null) {
+      String paramValue = getElement(paramElement, paramName).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
     }
   }
@@ -309,13 +308,8 @@ public class XMLHandler {
     return myEdgeStrategyType;
   }
 
-  public static Element getElement(Element parent, String tagName, boolean required)
-      throws InvalidStateException {
-    Element element = (Element) parent.getElementsByTagName(tagName).item(0);
-    if (element == null && required) {
-      throw new InvalidStateException("Missing required element: " + tagName);
-    }
-    return element;
+  private static Element getElement(Element parent, String tagName) {
+    return (Element) parent.getElementsByTagName(tagName).item(0);
   }
 
   private static Element getElement(Document doc, String tagName, boolean required)
