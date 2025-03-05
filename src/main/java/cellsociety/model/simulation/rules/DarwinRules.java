@@ -41,11 +41,11 @@ public class DarwinRules extends SimulationRules {
 
   public static final Logger LOGGER = LogManager.getLogger();
   private Map<String, Instruction> instructionHandlers;
-  private final String IFEMPTY = "IFEMPTY";
-  private final String IFWALL = "IFWALL";
-  private final String IFSAME = "IFSAME";
-  private final String IFENEMY = "IFENEMY";
-  private final String IFRANDOM = "IFRANDOM";
+  private static final String IFEMPTY = "IFEMPTY";
+  private static final String IFWALL = "IFWALL";
+  private static final String IFSAME = "IFSAME";
+  private static final String IFENEMY = "IFENEMY";
+  private static final String IFRANDOM = "IFRANDOM";
 
   /**
    * The default constructor of a simulation rules class.
