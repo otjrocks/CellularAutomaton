@@ -16,8 +16,8 @@
     </GridDimensions>
 
     <RandomInitByState>
-        <State name="GROUPONE">40</State>
-        <State name="GROUPTWO">40</State>
+        <State name="GROUP ONE">40</State>
+        <State name="GROUP TWO">40</State>
     </RandomInitByState>
 
     <Parameters>

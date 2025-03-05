@@ -2,7 +2,6 @@ package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
 import static cellsociety.config.MainConfig.DEFAULT_EDGE_STRATEGY;
-import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
@@ -40,7 +39,6 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
-  public static final String RULE_STRING = "ruleString";
   public static final String EDGE_TYPE = "EdgeType";
   public static final String CELL_TYPE = "CellType";
   private static int myGridHeight;
@@ -220,11 +218,7 @@ public class XMLHandler {
 
   private void handleParameterElement(Element paramElement) {
     for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-      if (paramString.equals(RULE_STRING)) {
-        checkAndLoadRuleString(paramElement);
-      } else {
-        checkAndLoadParameter(paramElement, paramString);
-      }
+      checkAndLoadParameter(paramElement, paramString);
     }
   }
 
@@ -235,24 +229,9 @@ public class XMLHandler {
    * @param paramName    name of the parameter being checked
    */
   private void checkAndLoadParameter(Element paramElement, String paramName) {
-    try {
-      String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
+    if (getElement(paramElement, paramName) != null) {
+      String paramValue = getElement(paramElement, paramName).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
-    } catch (NumberFormatException e) {
-      LOGGER.warn("Warning: Invalid parameter value. Defaulting to 1.0.");
-      myParameters.put(paramName, new Parameter<Object>(1.0));
-    }
-  }
-
-  private void checkAndLoadRuleString(Element paramElement) {
-    try {
-      if (paramElement.getElementsByTagName(RULE_STRING).item(0) != null) {
-        String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0)
-            .getTextContent();
-        myParameters.put(RULE_STRING, new Parameter<>(paramString));
-      }
-    } catch (DOMException e) {
-      myParameters.clear();
     }
   }
 
@@ -327,6 +306,10 @@ public class XMLHandler {
    */
   public EdgeStrategyType getEdgeStrategyType() {
     return myEdgeStrategyType;
+  }
+
+  private static Element getElement(Element parent, String tagName) {
+    return (Element) parent.getElementsByTagName(tagName).item(0);
   }
 
   private static Element getElement(Document doc, String tagName, boolean required)
