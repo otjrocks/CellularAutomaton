@@ -2,7 +2,6 @@ package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
 import static cellsociety.config.MainConfig.DEFAULT_EDGE_STRATEGY;
-import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
@@ -40,7 +39,6 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
-  public static final String RULE_STRING = "ruleString";
   public static final String EDGE_TYPE = "EdgeType";
   public static final String CELL_TYPE = "CellType";
   private static int myGridHeight;
@@ -95,16 +93,15 @@ public class XMLHandler {
    *
    * @param data Document from which you are extracting the simulation data
    */
-  private void parseSimData(Document data) {
-    String type = data.getElementsByTagName("Type").item(0).getTextContent();
-    String title = data.getElementsByTagName("Title").item(0).getTextContent();
-    String author = data.getElementsByTagName("Author").item(0).getTextContent();
-    String description = data.getElementsByTagName("Description").item(0).getTextContent();
+  private void parseSimData(Document data) throws InvalidStateException {
+    String type = getElement(data, "Type", true).getTextContent();
+    String title = getElement(data, "Title", true).getTextContent();
+    String author = getElement(data, "Author", true).getTextContent();
+    String description = getElement(data, "Description", true).getTextContent();
     parseCellTypeIfPresent(data);
     parseEdgeTypeIfPresent(data);
-    Element neighborsElement = (Element) data.getElementsByTagName("Neighbors").item(0);
-    String neighborType = neighborsElement.getElementsByTagName("NeighborType").item(0)
-        .getTextContent();
+    Element neighborsElement = getElement(data, "Neighbors", true);
+    String neighborType = getElement(data, "NeighborType", true).getTextContent();
     int layers = Integer.parseInt(
         neighborsElement.getElementsByTagName("NeighborLayer").item(0).getTextContent());
     mySimData = new SimulationMetaData(type, title, author, description, neighborType, layers);
@@ -112,21 +109,21 @@ public class XMLHandler {
 
   private static void parseCellTypeIfPresent(Document data) {
     try {
-      if (data.getElementsByTagName(CELL_TYPE).item(0) == null) {
-        myCellShapeType = DEFAULT_CELL_SHAPE;
-      } else {
-        attemptSettingCellType(data);
-      }
+      attemptSettingCellType(data);
     } catch (IllegalArgumentException |
-             DOMException e) {
+             DOMException | InvalidStateException e) {
       // fallback to default cell shape if field is missing in xml file,
       // incorrectly spelled, or other error
       myCellShapeType = DEFAULT_CELL_SHAPE;
     }
   }
 
-  private static void attemptSettingCellType(Document data) {
-    String cellType = data.getElementsByTagName(CELL_TYPE).item(0).getTextContent();
+  private static void attemptSettingCellType(Document data) throws InvalidStateException {
+    if (getElement(data, CELL_TYPE, false) == null) {
+      myCellShapeType = DEFAULT_CELL_SHAPE;
+      return;
+    }
+    String cellType = getElement(data, CELL_TYPE, false).getTextContent();
     if (cellType == null) {
       myCellShapeType = DEFAULT_CELL_SHAPE;
     } else {
@@ -136,19 +133,20 @@ public class XMLHandler {
 
   private static void parseEdgeTypeIfPresent(Document data) {
     try {
-      if (data.getElementsByTagName(EDGE_TYPE).item(0) == null) {
-        myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
-      } else {
-        attemptSettingEdgeType(data);
-      }
+      attemptSettingEdgeType(data);
     } catch (IllegalArgumentException |
-             DOMException e) { // fallback to default edge type if field is missing
+             DOMException |
+             InvalidStateException e) { // fallback to default edge type if field is missing
       myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
     }
   }
 
-  private static void attemptSettingEdgeType(Document data) {
-    String edgeType = data.getElementsByTagName(EDGE_TYPE).item(0).getTextContent();
+  private static void attemptSettingEdgeType(Document data) throws InvalidStateException {
+    if (getElement(data, EDGE_TYPE, false) == null) {
+      myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+      return;
+    }
+    String edgeType = getElement(data, EDGE_TYPE, false).getTextContent();
     if (edgeType == null) {
       myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
     } else {
@@ -156,13 +154,14 @@ public class XMLHandler {
     }
   }
 
+
   /**
    * Helper method to parse grid dimensions from document
    *
    * @param dimDoc Document from which you are extracting the grid dimensions
    */
-  private void parseDimensions(Document dimDoc) {
-    Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
+  private void parseDimensions(Document dimDoc) throws InvalidStateException {
+    Element gridDimensions = getElement(dimDoc, "GridDimensions", true);
     myGridHeight = Integer.parseInt(
         gridDimensions.getElementsByTagName("Height").item(0).getTextContent());
     myGridWidth = Integer.parseInt(
@@ -219,11 +218,7 @@ public class XMLHandler {
 
   private void handleParameterElement(Element paramElement) {
     for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-      if (paramString.equals(RULE_STRING)) {
-        checkAndLoadRuleString(paramElement);
-      } else {
-        checkAndLoadParameter(paramElement, paramString);
-      }
+      checkAndLoadParameter(paramElement, paramString);
     }
   }
 
@@ -234,24 +229,9 @@ public class XMLHandler {
    * @param paramName    name of the parameter being checked
    */
   private void checkAndLoadParameter(Element paramElement, String paramName) {
-    try {
-      String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
+    if (getElement(paramElement, paramName) != null) {
+      String paramValue = getElement(paramElement, paramName).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
-    } catch (NumberFormatException e) {
-      LOGGER.warn("Warning: Invalid parameter value. Defaulting to 1.0.");
-      myParameters.put(paramName, new Parameter<Object>(1.0));
-    }
-  }
-
-  private void checkAndLoadRuleString(Element paramElement) {
-    try {
-      if (paramElement.getElementsByTagName(RULE_STRING).item(0) != null) {
-        String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0)
-            .getTextContent();
-        myParameters.put(RULE_STRING, new Parameter<>(paramString));
-      }
-    } catch (DOMException e) {
-      myParameters.clear();
     }
   }
 
@@ -326,5 +306,18 @@ public class XMLHandler {
    */
   public EdgeStrategyType getEdgeStrategyType() {
     return myEdgeStrategyType;
+  }
+
+  private static Element getElement(Element parent, String tagName) {
+    return (Element) parent.getElementsByTagName(tagName).item(0);
+  }
+
+  private static Element getElement(Document doc, String tagName, boolean required)
+      throws InvalidStateException {
+    Element element = (Element) doc.getElementsByTagName(tagName).item(0);
+    if (element == null && required) {
+      throw new InvalidStateException("Missing required element: " + tagName);
+    }
+    return element;
   }
 }

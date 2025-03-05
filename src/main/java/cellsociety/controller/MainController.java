@@ -432,7 +432,7 @@ public class MainController {
     try {
       attemptUpdateFromFilePath(filePath);
     } catch (SAXException | ParserConfigurationException | IOException | GridException |
-             InvalidStateException e) {
+             InvalidStateException | IllegalArgumentException e) {
       String errorMessageKey = getErrorMessageKey(e);
       mySidebarView.flashWarning(getMessage(errorMessageKey));
       LOGGER.warn(getMessage(errorMessageKey), e);
@@ -440,7 +440,14 @@ public class MainController {
     }
   }
 
-  private static String getErrorMessageKey(Exception e) {
+  /**
+   * Get the error message key for the front end based on the exception thrown
+   *
+   * @param e The exception thrown
+   * @return The error message key to display to the user on the front end or the default message if
+   * a message is not found for your exception
+   */
+  public static String getErrorMessageKey(Exception e) {
     return ERROR_MESSAGE_MAP.getOrDefault(e.getClass(), "ERROR_GENERAL");
   }
 
@@ -522,5 +529,14 @@ public class MainController {
   public void updateGridEdgeType(EdgeStrategyType edgeStrategyType) {
     myEdgeStrategyType = edgeStrategyType;
     myGrid.setEdgeStrategy(EdgeStrategyFactory.createEdgeStrategy(edgeStrategyType));
+  }
+
+  /**
+   * Return if the user is currently editing.
+   *
+   * @return will return if the user is currently in edit mode
+   */
+  public boolean isEditing() {
+    return isEditing;
   }
 }

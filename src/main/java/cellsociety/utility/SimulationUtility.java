@@ -1,7 +1,5 @@
 package cellsociety.utility;
 
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
@@ -41,9 +39,6 @@ public class SimulationUtility {
       return null;
     } catch (ClassNotFoundException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      if (VERBOSE_ERROR_MESSAGES) {
-        alertField.flash(e.getMessage(), true);
-      }
       throw new SimulationCreationException("Unable to update the simulation", e);
     }
     return newSimulation;

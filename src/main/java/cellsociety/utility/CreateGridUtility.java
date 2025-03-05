@@ -174,7 +174,6 @@ public class CreateGridUtility {
   private static Grid initializeGrid(int gridHeight, int gridWidth, Simulation sim, Grid grid,
       int totalCells, Map<Integer, Integer> stateCounts, int assignedCells) {
     int remainingCells = totalCells - assignedCells;
-
     List<Integer> cellStates = new ArrayList<>();
     for (Map.Entry<Integer, Integer> entry : stateCounts.entrySet()) {
       for (int i = 0; i < entry.getValue(); i++) {
@@ -204,7 +203,7 @@ public class CreateGridUtility {
     if (checkSimulationsWithoutStateMaximum(sim)) {
       int maxState = sim.rules().getNumberStates() - 1;
       if (state > maxState) {
-        throw new InvalidStateException();
+        throw new InvalidStateException("State " + state + " exceeded maximum state " + maxState);
       }
     }
   }
