@@ -38,10 +38,10 @@ public class SimulationView extends Group {
   private boolean myGridLinesEnabled = true;
 
 
-  private double zoomFactor = 1.0;
-  private static final double zoomIncrement = 0.08;
-  private static final double minZoom = 0.5;
-  private static final double maxZoom = 3.5;
+  private double ZOOM_FACTOR = 1.0;
+  private static final double ZOOM_INCREMENT = 0.08;
+  private static final double MIN_ZOOM = 0.5;
+  private static final double MAX_ZOOM = 3.5;
 
   /**
    * Create a simulation view.
@@ -136,6 +136,9 @@ public class SimulationView extends Group {
    * @param value            The new CellShapeType value.
    */
   public void updateGridShape(List<CellUpdate> currentGridState, CellShapeType value) {
+    scrollPane.setContent(null);
+
+    // Remove old gridContainer from SimulationView
     this.getChildren().remove(gridContainer);
     myGridView = GridViewFactory.createCellView(value, myWidth,
         myHeight, myNumRows, myNumColumns, myMainController);
@@ -144,7 +147,7 @@ public class SimulationView extends Group {
     myGridView.setGridLines(myGridLinesEnabled);
 
     gridContainer = new Group(myGridView);
-    getChildren().add(gridContainer);
+    scrollPane.setContent(gridContainer);
   }
 
   private void initializeInitialGridStates(int numRows, int numCols, Grid grid) {
@@ -180,12 +183,12 @@ public class SimulationView extends Group {
   private void handleZoom(ScrollEvent event) {
     event.consume(); // Prevent ScrollPane from also scrolling
 
-    double oldZoom = zoomFactor;
+    double oldZoom = ZOOM_FACTOR;
 
     if (event.getDeltaY() > 0) {
-      zoomFactor = Math.min(maxZoom, zoomFactor + zoomIncrement);
+      ZOOM_FACTOR = Math.min(MAX_ZOOM, ZOOM_FACTOR + ZOOM_INCREMENT);
     } else {
-      zoomFactor = Math.max(minZoom, zoomFactor - zoomIncrement);
+      ZOOM_FACTOR = Math.max(MIN_ZOOM, ZOOM_FACTOR - ZOOM_INCREMENT);
     }
 
     applyZoom(event.getSceneX(), event.getSceneY(), oldZoom);
@@ -197,13 +200,13 @@ public class SimulationView extends Group {
    * Applies the zoom effect to the GridView contents while keeping its actual size constant.
    */
   private void applyZoom(double zoomCenterX, double zoomCenterY, double oldZoom) {
-    double scaleChange = zoomFactor / oldZoom;
+    double scaleChange = ZOOM_FACTOR / oldZoom;
 
     double dx = (zoomCenterX - scrollPane.getWidth() / 2) * (1 - scaleChange);
     double dy = (zoomCenterY - scrollPane.getHeight() / 2) * (1 - scaleChange);
 
-    gridContainer.setScaleX(zoomFactor);
-    gridContainer.setScaleY(zoomFactor);
+    gridContainer.setScaleX(ZOOM_FACTOR);
+    gridContainer.setScaleY(ZOOM_FACTOR);
     gridContainer.setTranslateX(gridContainer.getTranslateX() + dx);
     gridContainer.setTranslateY(gridContainer.getTranslateY() + dy);
 
