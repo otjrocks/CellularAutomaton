@@ -17,7 +17,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Simulation view for the visualizing the simulation.
@@ -160,7 +159,7 @@ public class SimulationView extends Group {
         double nextOpacity = nextCell.getOpacity();
         myGridView.setColor(row, col, nextColor);
         myGridView.setOpacity(row, col, nextOpacity);
-        myGridView.addCellTooltip(row, col, grid, mySimulation.data().type());
+        myGridView.addCellTooltip(row, col, grid, mySimulation);
       }
     }
   }

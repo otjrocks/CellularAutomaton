@@ -9,7 +9,7 @@ import cellsociety.model.cell.SugarscapeCell;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.getNeighborOptions.MooreNeighbors;
+import cellsociety.model.simulation.neighbors.MooreNeighbors;
 import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 import java.util.HashMap;

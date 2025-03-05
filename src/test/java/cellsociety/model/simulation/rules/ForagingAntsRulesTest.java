@@ -1,7 +1,7 @@
 package cellsociety.model.simulation.rules;
 
 import cellsociety.model.edge.FixedEdgeStrategy;
-import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
+import cellsociety.model.simulation.neighbors.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;

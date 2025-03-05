@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A rules class to handle the state transitions of Langton's Loops simulation
+ * A rules class to handle the state transitions of Langton's Loops simulation.
  * <p>
  * Version information: C.G.Langton. "Self-reproduction in cellular automata."
  * <p>
@@ -80,7 +80,7 @@ public class LangtonsLoopsRules extends SimulationRules {
   }
 
   /**
-   * Get the next state based on the Langton's Loops rule strings above
+   * Get the next state based on the Langton's Loops rule strings above.
    *
    * @param cell The cell you are trying to find the next state for.
    * @param grid The grid that the cell is a part of
@@ -99,7 +99,9 @@ public class LangtonsLoopsRules extends SimulationRules {
     return cell.getState();
   }
 
-  // I asked ChatGPT for assistance in generating addRotatedRules and generateRotations. Helper method to add all 4 rotated rules to the map
+  // I asked ChatGPT for assistance in generating
+  // addRotatedRules and generateRotations.
+  // Helper method to add all 4 rotated rules to the map
   private void addRotatedRules(String key, int value) {
     String[] rotations = generateRotations(key);
     for (String rotation : rotations) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An abstract class representing a way to get a cell's neighbors in a grid
+ * An abstract class representing a way to get a cell's neighbors in a grid.
  *
  * @author Justin Aronwald
  * @author Owen Jennings
@@ -16,7 +16,7 @@ public abstract class GetNeighbors {
   private final int layers;
 
   /**
-   * An abstract method to return the directions to use for getting neighbors
+   * An abstract method to return the directions to use for getting neighbors.
    *
    * @param row    The row of the current cell
    * @param column The column of the current cell
@@ -28,7 +28,7 @@ public abstract class GetNeighbors {
 
 
   /**
-   * A method that obtains the total number of directions it must search in to find nieghbors
+   * A method that obtains the total number of directions it must search in to find neighbors.
    *
    * @return - the total number of directions it looks for
    */
@@ -38,7 +38,7 @@ public abstract class GetNeighbors {
   }
 
   /**
-   * Getter for the layers
+   * Getter for the layers.
    *
    * @return the number of layers to look for in a direction
    */
@@ -47,7 +47,7 @@ public abstract class GetNeighbors {
   }
 
   /**
-   * The default constructor of GetNeighbors
+   * The default constructor of GetNeighbors.
    *
    * @param layers The number of layers to include in the get neighbors calculation, if supported by
    *               a specific neighbor policy

@@ -7,7 +7,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
+import cellsociety.model.simulation.neighbors.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.List;

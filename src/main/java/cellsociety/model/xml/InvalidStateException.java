@@ -7,4 +7,12 @@ package cellsociety.model.xml;
  */
 public class InvalidStateException extends Exception {
 
+  /**
+   * Create an exception with an error message.
+   *
+   * @param s The message you want to provide
+   */
+  public InvalidStateException(String s) {
+    super(s);
+  }
 }

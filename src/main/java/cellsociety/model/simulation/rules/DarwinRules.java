@@ -1,11 +1,14 @@
 package cellsociety.model.simulation.rules;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,15 +32,17 @@ import cellsociety.model.simulation.instructions.MoveInstruction;
 import cellsociety.model.simulation.instructions.RightInstruction;
 
 /**
- * Rules class for the Darwin Simulation
- * @Author Justin Aronwald
+ * Rules class for the Darwin Simulation.
+ *
+ * @author Justin Aronwald
  */
-public class DarwinRules  extends SimulationRules {
+public class DarwinRules extends SimulationRules {
+
   public static final Logger LOGGER = LogManager.getLogger();
   private Map<String, Instruction> instructionHandlers;
 
   /**
-   * The default constructor of a simulation rules class
+   * The default constructor of a simulation rules class.
    *
    * @param parameters   The parameters map for the simulation rule. Each simulation rules
    *                     implementation should validate and ensure that parameters are present and
@@ -45,7 +50,8 @@ public class DarwinRules  extends SimulationRules {
    *                     class, then this can be null
    * @param getNeighbors The neighbor configuration for the simulation
    * @throws InvalidParameterException This exception should be thrown whenever a simulation rules
-   *                                   instance is created with invalid or missing parameter values.
+   *                                   instance is created with invalid or missing parameter
+   *                                   values.
    */
   public DarwinRules(Map<String, Parameter<?>> parameters,
       GetNeighbors getNeighbors) throws InvalidParameterException {
@@ -84,6 +90,8 @@ public class DarwinRules  extends SimulationRules {
   @Override
   public List<CellUpdate> getNextStatesForAllCells(Grid grid) {
     List<CellUpdate> updates = new ArrayList<>();
+    Map<Point2D, DarwinCell> occupiedCells = new HashMap<>();
+    Set<Point2D> movingCells = new HashSet<>();
 
     Iterator<Cell> cellIterator = grid.getCellIterator();
     while (cellIterator.hasNext()) {
@@ -91,7 +99,8 @@ public class DarwinRules  extends SimulationRules {
       DarwinCell darwinCell = (DarwinCell) cell;
 
       handleInfection(grid, darwinCell);
-      List<String> arguments = new ArrayList<>(Arrays.asList(darwinCell.getInstruction().split(" ")));
+      List<String> arguments = new ArrayList<>(
+          Arrays.asList(darwinCell.getInstruction().split(" ")));
 
       if (arguments.isEmpty()) {
         LOGGER.warn("Empty instruction for cell at {}", darwinCell.getLocation());
@@ -100,10 +109,10 @@ public class DarwinRules  extends SimulationRules {
 
       Instruction instruction = instructionHandlers.get(arguments.getFirst());
       if (instruction != null) {
-        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid);
+        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid, occupiedCells, movingCells);
         darwinCell.nextInstruction();
         updates.addAll(instructionUpdates);
-      } else if(!(darwinCell.getState() == State.EMPTY.getValue())){
+      } else if (!(darwinCell.getState() == State.EMPTY.getValue())) {
         LOGGER.warn("No instruction handler found for {}", arguments.getFirst());
       }
     }
@@ -116,20 +125,23 @@ public class DarwinRules  extends SimulationRules {
       darwinCell.handleInfectionDecrease();
 
       if (darwinCell.getInfectionCountdown() <= 0) {
-        DarwinCell previousSpecies = new DarwinCell(new DarwinCellRecord(darwinCell.getPrevState(), darwinCell.getLocation(), darwinCell.getOrientation(), 0, 0, SimulationConfig.assignInstructionsFromState(darwinCell.getPrevState()), false, 0));
+        DarwinCell previousSpecies = new DarwinCell(
+            new DarwinCellRecord(darwinCell.getPrevState(), darwinCell.getLocation(),
+                darwinCell.getOrientation(), 0, 0,
+                SimulationConfig.assignInstructionsFromState(darwinCell.getPrevState()), false, 0));
         grid.updateCell(previousSpecies);
       }
     }
   }
 
   /**
-   * An enum to store the possible states for this simulation
+   * An enum to store the possible states for this simulation.
    */
   public enum State {
     EMPTY, HOPPER, FLYTRAP, CREEPER, LANDMINE, OODFAY, ROVER, DANCER, SNAKE, RUNNER;
 
     /**
-     * Get the ordinal value of this enum entry
+     * Get the ordinal value of this enum entry.
      *
      * @return An int representing the state
      */

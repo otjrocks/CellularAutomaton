@@ -45,13 +45,12 @@ public class MainConfig {
   public static final int SIDEBAR_WIDTH = WIDTH - GRID_WIDTH - (3 * MARGIN);
   public static final CellShapeType DEFAULT_CELL_SHAPE = CellShapeType.RECTANGLE;
   public static final EdgeStrategyType DEFAULT_EDGE_STRATEGY = EdgeStrategyType.FIXED;
-  public static final boolean VERBOSE_ERROR_MESSAGES = false; // determine if error messages should be simple or display more details to user
   public static final Logger LOGGER = LogManager.getLogger(); // The logger for this program
   private static final ResourceBundle myCellColors = ResourceBundle.getBundle(COLOR_CONFIG_FILE);
   private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   /**
-   * Get the message string from the config file for the provided key
+   * Get the message string from the config file for the provided key.
    *
    * @param key The key you are looking for
    * @return The message specified in the language file for the provided key if it exists or a
@@ -69,7 +68,8 @@ public class MainConfig {
       // queries key does not exist in language file or trouble finding messages file
       // return a default string
       try {
-        // try displaying to user that key is missing in their preferred language, fallback to english
+        // try displaying to user that key is missing
+        // in their preferred language, fallback to english
         return myMessages.getString("MISSING_KEY");
       } catch (MissingResourceException e1) {
         logMissingMessage(e.getMessage());
@@ -113,7 +113,7 @@ public class MainConfig {
   }
 
   /**
-   * Get the cell colors resource bundle
+   * Get the cell colors resource bundle.
    *
    * @return A resource bundle containing all the cell colors
    */

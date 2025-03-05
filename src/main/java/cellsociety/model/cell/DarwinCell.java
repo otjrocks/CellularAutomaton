@@ -7,13 +7,12 @@ import java.util.List;
 import cellsociety.config.SimulationConfig;
 
 /**
- * The cell type used for Darwin simulation
+ * The cell type used for Darwin simulation.
  *
  * @author Justin Aronwald
  */
 public class DarwinCell extends Cell {
-
-  private static final int stateValChecker = 4;
+  private static final int stateValChecker = 10;
 
   private final int prevSpecies;
   private int orientation;
@@ -23,7 +22,7 @@ public class DarwinCell extends Cell {
   private final List<String> instructions;
 
   /**
-   * The default constructor for a Cell
+   * The default constructor for a Cell.
    *
    * @param state    The initial state of a cell, represented as an int. In this case, it represents
    *                 a species
@@ -46,7 +45,9 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Create a Darwin Cell
+   * Create a Darwin Cell.
+   *
+   * @param record The darwin cell record for the cell
    */
   public DarwinCell(DarwinCellRecord record) {
     super(record.state(), record.location());

@@ -1,5 +1,6 @@
 package cellsociety.model.xmlhandling;
 
+import cellsociety.model.xml.InvalidStateException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +22,7 @@ class XMLTest {
   @BeforeEach
   void setUp() {
     try {
-      myXMLHandler = new XMLHandler("src/main/resources/ExampleXMLs/GameOfLifeExample.xml");
+      myXMLHandler = new XMLHandler("src/main/resources/simulations/ExampleXMLs/GameOfLifeExample.xml");
     } catch (Exception e) {
     }
   }
@@ -68,35 +69,35 @@ class XMLTest {
   @Test
   void XMLHandler_loadInPoorlyFormattedFile_throwsSAXException() {
     assertThrows(SAXException.class,
-        () -> new XMLHandler("src/main/resources/TestXMLs/PoorlyFormatted.xml"));
+        () -> new XMLHandler("src/main/resources/simulations/TestXMLs/PoorlyFormatted.xml"));
 
   }
 
   @Test
-  void XMLHandler_loadInFileWithMissingFields_throwsNullPointerException() {
-    assertThrows(NullPointerException.class,
-        () -> new XMLHandler("src/main/resources/TestXMLs/MissingFields.xml"));
+  void XMLHandler_loadInFileWithMissingFields_throwsInvalidStateException() {
+    assertThrows(InvalidStateException.class,
+        () -> new XMLHandler("src/main/resources/simulations/TestXMLs/MissingFields.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithIncorrectArgumentType_throwsNumberFormatException() {
     assertThrows(NumberFormatException.class,
-        () -> new XMLHandler("src/main/resources/TestXMLs/LetterGrid.xml"));
+        () -> new XMLHandler("src/main/resources/simulations/TestXMLs/LetterGrid.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithGridTooTall_throwsGridException() {
     assertThrows(GridException.class,
-        () -> new XMLHandler("src/main/resources/TestXMLs/GridTooTall.xml"));
+        () -> new XMLHandler("src/main/resources/simulations/TestXMLs/GridTooTall.xml"));
 
   }
 
   @Test
   void XMLHandler_loadInFileWithGridTooWide_throwsGridException() {
     assertThrows(GridException.class,
-        () -> new XMLHandler("src/main/resources/TestXMLs/GridTooWide.xml"));
+        () -> new XMLHandler("src/main/resources/simulations/TestXMLs/GridTooWide.xml"));
 
   }
 }

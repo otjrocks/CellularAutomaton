@@ -16,15 +16,15 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * The implementation of Schelling's Model of Segregation simulation
+ * The implementation of Schelling's Model of Segregation simulation.
  * <p>
- * For a SegregationModel cell, there can be 3 states
+ * For a SegregationModel cell, there can be 3 states.
  * <p>
- * A cell with state 0 indicates it's empty
+ * A cell with state 0 indicates it's empty.
  * <p>
- * A cell with state 1 indicates it's a part of Group 1
+ * A cell with state 1 indicates it's a part of Group 1.
  * <p>
- * A cell with state 2 indicates it's a part of Group 2
+ * A cell with state 2 indicates it's a part of Group 2.
  *
  * @author Justin Aronwald
  */
@@ -32,7 +32,7 @@ public class SegregationRules extends SimulationRules {
   private static final int toleranceMinChecker = 0;
   private static final int toleranceMaxChecker = 1;
   public static final String TOLERANCE_THRESHOLD = "toleranceThreshold";
-  private final Random RANDOM = new Random();
+  private static final Random RANDOM = new Random();
   private final double myToleranceThreshold;
 
   /**
@@ -59,7 +59,7 @@ public class SegregationRules extends SimulationRules {
   }
 
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */
@@ -71,7 +71,7 @@ public class SegregationRules extends SimulationRules {
   /**
    * Schelling's Model of Segregation: There exists a probability tolerance threshold T (0.3)
    * representing the minimum number of neighbors that must be the same state for the cell to be
-   * satisfied
+   * satisfied.
    * <p>
    * If a cell has less than T of similar neighbors, they move to a random empty space If a cell >=
    * T of similar neighbors, they stay Cells move until all cells are satisfied or no empty spaces
@@ -133,7 +133,7 @@ public class SegregationRules extends SimulationRules {
   }
 
   /**
-   * This method runs getNextState on all cells
+   * This method runs getNextState on all cells.
    *
    * @param grid The grid that you wish to get the next states for
    * @return - A list of updates that will occur for the grid

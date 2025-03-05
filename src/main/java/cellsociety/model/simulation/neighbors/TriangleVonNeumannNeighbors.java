@@ -1,16 +1,16 @@
-package cellsociety.model.simulation.getNeighborOptions;
+package cellsociety.model.simulation.neighbors;
 
 import cellsociety.model.simulation.GetNeighbors;
 
 /**
- * The implementation of Von Neumann neighbors for Triangle grid
+ * The implementation of Von Neumann neighbors for Triangle grid.
  *
  * @author Owen Jennings
  */
 public class TriangleVonNeumannNeighbors extends GetNeighbors {
 
   /**
-   * The default constructor for Von Neumann Neighbors for Triangle Grid
+   * The default constructor for Von Neumann Neighbors for Triangle Grid.
    *
    * @param layers The number of layers required.
    */
@@ -19,8 +19,10 @@ public class TriangleVonNeumannNeighbors extends GetNeighbors {
   }
 
   /**
+   * The directions based on Triangle Von Neumann rules.
+   *
    * @return - the coordinate system for the directions to obtain the neighbors (the four cells that
-   * share an edge with the central triangle)
+   * share an edge with the central triangle).
    */
   @Override
   public int[][] getDirections(int row, int column) {

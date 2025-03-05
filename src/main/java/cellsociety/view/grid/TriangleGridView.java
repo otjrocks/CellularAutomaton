@@ -45,10 +45,14 @@ public class TriangleGridView extends GridView {
     double x = col * (getCellWidth() / 2);  // Half width to stagger triangles
     double y = row * getCellHeight();
     TriangleCellView triangle = new TriangleCellView(x, y, getCellWidth(), getCellHeight());
-    if ((row + col) % 2 == 1) { // rotate triangle upside down every other column
+    if (sumIsOdd(col, row)) { // rotate triangle upside down every other column
       triangle.setRotate(180);
     }
     grid[row][col] = triangle;
+  }
+
+  private static boolean sumIsOdd(int valueOne, int valueTwo) {
+    return (valueOne + valueTwo) % 2 == 1;
   }
 
   private double getCellWidth() {

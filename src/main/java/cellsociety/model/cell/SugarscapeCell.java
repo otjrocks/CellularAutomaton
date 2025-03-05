@@ -5,25 +5,25 @@ import cellsociety.model.simulation.rules.SugarscapeRules.State;
 import java.awt.geom.Point2D;
 
 /**
- * The cell used for SugarScape simulation
+ * The cell used for SugarScape simulation.
  *
  * @author Justin Aronwald
  */
 public class SugarscapeCell extends Cell {
 
   private int sugar;
-  private int sugarGrowBackRate;
-  private int sugarGrowBackInterval;
+  private final int sugarGrowBackRate;
+  private final int sugarGrowBackInterval;
   private int intervalsSinceLastGrowBack;
 
-  private int vision;
-  private int metabolism;
+  private final int vision;
+  private final int metabolism;
   private static final int DEFAULT_VALUE = 2;
   private static final int MAX_SUGAR_AMOUNT = 15;
 
 
   /**
-   * The default constructor of a sugar scape cell
+   * The default constructor of a sugar scape cell.
    *
    * @param state    The initial state
    * @param location The initial location
@@ -55,7 +55,8 @@ public class SugarscapeCell extends Cell {
       int sugarGrowBackRate, int vision, int metabolism) {
     super(state, location);
 
-    if (checkParametersArePositive(sugar, sugarGrowBackInterval, sugarGrowBackRate, vision, metabolism)) {
+    if (checkParametersArePositive(sugar, sugarGrowBackInterval, sugarGrowBackRate, vision,
+        metabolism)) {
       throw new IllegalArgumentException("All integers must be non-negative.");
     }
 
@@ -68,7 +69,8 @@ public class SugarscapeCell extends Cell {
     this.metabolism = metabolism;
   }
 
-  private static boolean checkParametersArePositive(int sugar, int sugarGrowBackInterval, int sugarGrowBackRate,
+  private static boolean checkParametersArePositive(int sugar, int sugarGrowBackInterval,
+      int sugarGrowBackRate,
       int vision, int metabolism) {
     return sugar < 0 || sugarGrowBackRate < 0 || sugarGrowBackInterval < 1 || vision < 0
         || metabolism < 0;
@@ -76,7 +78,7 @@ public class SugarscapeCell extends Cell {
 
 
   /**
-   * check if a cell is an agent
+   * check if a cell is an agent.
    *
    * @return - boolean on if the cell is an agent
    */
@@ -85,7 +87,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * check if a cell is a patch
+   * check if a cell is a patch.
    *
    * @return - boolean on if the cell is a patch cell
    */
@@ -95,7 +97,7 @@ public class SugarscapeCell extends Cell {
 
 
   /**
-   * getter for the vision
+   * getter for the vision.
    *
    * @return - the number of elements it searches for in the 4 directions for the agent
    */
@@ -104,7 +106,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * getter for the metabolism
+   * getter for the metabolism.
    *
    * @return - an integer representation of sugar consumed per round for the agent
    */
@@ -113,7 +115,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * a getter for the sugar
+   * a getter for the sugar.
    *
    * @return - an integer representation of the agent/patch's current amount of sugar
    */
@@ -123,7 +125,7 @@ public class SugarscapeCell extends Cell {
 
 
   /**
-   * setter for the sugar
+   * setter for the sugar.
    *
    * @param sugar - the current sugar contained in the cell
    */
@@ -143,7 +145,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * getter for the sugar grow back rate
+   * getter for the sugar grow back rate.
    *
    * @return - the int value of how much to increment the sugar by
    */
@@ -152,7 +154,7 @@ public class SugarscapeCell extends Cell {
   }
 
   /**
-   * getter for the sugar grow back interval
+   * getter for the sugar grow back interval.
    *
    * @return - the int representation of the time it takes before sugar can be replenished.
    */
@@ -162,7 +164,7 @@ public class SugarscapeCell extends Cell {
 
   /**
    * setter to increment the current sugar by the grow back rate of sugar and reset the intervals
-   * back to 0
+   * back to 0.
    */
   public void regenerateSugar() {
     if (!isPatch()) {
@@ -176,23 +178,4 @@ public class SugarscapeCell extends Cell {
       intervalsSinceLastGrowBack = 0;
     }
   }
-
-  /**
-   * sets the parameters of each cell based on the provided parmaters
-   *
-   * @param sugar                 - sugar value of the cell
-   * @param sugarGrowBackRate     - increment that the sugar gets on a certain interval
-   * @param sugarGrowBackInterval - the interval needed to increment sugar
-   * @param vision                - how far an agent cell can search in each direction
-   * @param metabolism            - how much sugar is consumed per round
-   */
-  public void setParameters(int sugar, int sugarGrowBackRate, int sugarGrowBackInterval, int vision,
-      int metabolism) {
-    this.sugar = sugar;
-    this.sugarGrowBackRate = sugarGrowBackRate;
-    this.sugarGrowBackInterval = sugarGrowBackInterval;
-    this.vision = vision;
-    this.metabolism = metabolism;
-  }
-
 }

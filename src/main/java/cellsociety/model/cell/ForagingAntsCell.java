@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import cellsociety.model.simulation.rules.ForagingAntsRules.State;
 
 /**
- * The cell type used for Foraging ants simulation
+ * The cell type used for Foraging ants simulation.
  *
  * @author Troy Ludwig
  * @author Owen Jennings
@@ -19,7 +19,7 @@ public class ForagingAntsCell extends Cell {
   private final double myMaxPher;
 
   /**
-   * The default constructor for a foraging ant cell
+   * The default constructor for a foraging ant cell.
    *
    * @param state    The initial state for the cell
    * @param location THe initial location for the cell
@@ -34,7 +34,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * A constructor for foraging ant cell with more initial configuration
+   * A constructor for foraging ant cell with more initial configuration.
    *
    * @param state         The initial state
    * @param location      The initial location
@@ -55,7 +55,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * Check if cell has food
+   * Check if cell has food.
    *
    * @return true if the cell has food, false otherwise
    */
@@ -64,7 +64,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * Get the home pheromone for the cell
+   * Get the home pheromone for the cell.
    *
    * @return A double representing the home pheromone
    */
@@ -73,7 +73,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * Get the food pheromone for the cell
+   * Get the food pheromone for the cell.
    *
    * @return The food pheromone
    */
@@ -82,7 +82,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * The health of the cell
+   * The health of the cell.
    *
    * @return An int representing the cell health
    */
@@ -91,7 +91,7 @@ public class ForagingAntsCell extends Cell {
   }
 
   /**
-   * Reduce the health of the cell by a determined amount or 0 if less than 0
+   * Reduce the health of the cell by a determined amount or 0 if less than 0.
    *
    * @param amount The amount to reduce health by
    */

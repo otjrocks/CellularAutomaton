@@ -2,15 +2,17 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.INITIAL_STEP_SPEED;
 import static cellsociety.config.MainConfig.SIDEBAR_WIDTH;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
+import java.io.IOException;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -18,6 +20,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * A view to handle all the UI components that are shown when view mode is enabled.
@@ -148,14 +152,12 @@ public class ViewModeView extends VBox {
     try {
       stopAnimationPlayIfRunning();
       myMainController.handleNewSimulationFromFile();
-    } catch (IllegalArgumentException e) {
-      myAlertField.flash(e.getMessage(), true);
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
-    } catch (Exception e) {
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
+    } catch (GridException | InvalidStateException | IOException |
+             ParserConfigurationException | SAXException | IllegalArgumentException e) {
+      if (e.getMessage() != null) {
         myAlertField.flash(e.getMessage(), true);
       }
+      myAlertField.flash(getMessage("LOAD_ERROR"), true);
     }
     stopAnimationPlayIfRunning();
   }
@@ -175,9 +177,6 @@ public class ViewModeView extends VBox {
       myAlertField.flash(getMessage("FILE_SAVE_SUCCESS"), false);
     } catch (IllegalArgumentException e) {
       myAlertField.flash(getMessage("FILE_SAVE_FAIL"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
     }
   }
 

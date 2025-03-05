@@ -3,7 +3,9 @@ package cellsociety.model.simulation.instructions;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
@@ -38,8 +40,7 @@ public class ConditionalInstruction implements Instruction {
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments,
-      Grid grid) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     Point2D direction = darwinCell.getFrontDirection();
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
@@ -83,14 +84,18 @@ public class ConditionalInstruction implements Instruction {
 
   private List<CellUpdate> handleRandomCase(DarwinCell darwinCell, int nextInstruction,
       List<CellUpdate> updates) {
-    if (conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
+    if (checkTypeIsRandomOrRnd()) {
       if (random.nextBoolean()) {
-        darwinCell.setCurInstructionIndex(nextInstruction-2);
+        darwinCell.setCurInstructionIndex(nextInstruction - 2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
       return updates;
     }
     return null;
+  }
+
+  private boolean checkTypeIsRandomOrRnd() {
+    return conditionType.equals("IFRANDOM") || conditionType.equals("RND?");
   }
 
   private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid) {

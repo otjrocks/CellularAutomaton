@@ -1,11 +1,10 @@
 package cellsociety.utility;
 
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
-
 import cellsociety.config.SimulationConfig;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.view.components.AlertField;
 import java.lang.reflect.InvocationTargetException;
@@ -40,10 +39,7 @@ public class SimulationUtility {
       return null;
     } catch (ClassNotFoundException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      if (VERBOSE_ERROR_MESSAGES) {
-        alertField.flash(e.getMessage(), true);
-      }
-      throw new RuntimeException(e);
+      throw new SimulationCreationException("Unable to update the simulation", e);
     }
     return newSimulation;
   }
