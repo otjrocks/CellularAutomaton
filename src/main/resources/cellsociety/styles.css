@@ -242,3 +242,9 @@ Label, Text {
 .state-change .chart-vertical-grid-lines {
   -fx-stroke: transparent;
 }
+
+.scroll-pane {
+  -fx-border-color: transparent;
+  -fx-background-color: transparent;
+  -fx-faint-focus-color: transparent;
+}

@@ -41,5 +41,7 @@
         <Row>5,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,9,0,5</Row>
         <Row>5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5</Row>
     </GridData>
-    <Parameters/>
+    <Parameters>
+        <NearbyAhead>3</NearbyAhead>
+    </Parameters>
 </Simulation>
