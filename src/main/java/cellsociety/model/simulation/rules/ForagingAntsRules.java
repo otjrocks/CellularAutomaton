@@ -14,10 +14,9 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.ForagingAntsCell;
-import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.neighbors.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.SimulationRules;
 
 /**
  * A class representing the rules for Foraging Ants

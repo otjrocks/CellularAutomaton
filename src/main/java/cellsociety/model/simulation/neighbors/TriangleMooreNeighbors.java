@@ -1,7 +1,5 @@
 package cellsociety.model.simulation.neighbors;
 
-import cellsociety.model.simulation.GetNeighbors;
-
 /**
  * Implementation of Moore Neighbors for a Triangle grid.
  *

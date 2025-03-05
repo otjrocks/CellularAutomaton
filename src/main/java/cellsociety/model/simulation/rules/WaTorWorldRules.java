@@ -1,6 +1,6 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.neighbors.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import java.awt.geom.Point2D;
@@ -16,7 +16,6 @@ import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.WaTorWorldCell;
-import cellsociety.model.simulation.SimulationRules;
 import java.util.Set;
 
 /**

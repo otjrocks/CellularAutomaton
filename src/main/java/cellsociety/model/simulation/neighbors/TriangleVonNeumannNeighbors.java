@@ -1,7 +1,5 @@
 package cellsociety.model.simulation.neighbors;
 
-import cellsociety.model.simulation.GetNeighbors;
-
 /**
  * The implementation of Von Neumann neighbors for Triangle grid.
  *
