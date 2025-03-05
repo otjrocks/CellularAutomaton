@@ -195,7 +195,7 @@ public abstract class GridView extends Group {
 
   private void displayToolTip(int row, int col, Grid grid, Simulation simulation, MouseEvent event,
       Tooltip tooltip, Shape cellShape) {
-    if (!myMainController.isEditing()) {
+    if (!myMainController.isEditing() && !myMainController.isPlaying()) {
       Cell cell = grid.getCell(row, col);
       StateInfo info = StateDisplayConfig.getStateInfo(simulation, cell.getState());
       tooltip.setText(String.format(STATE_MESSAGE, info.displayName()));
