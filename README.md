@@ -120,6 +120,9 @@ This project implements a cellular automata simulator.
     * In Sugarscape, an agent's metabolism will always be subtracted before checking its neighbors.
       Thus, it must have sufficient metabolism prior to movement. Then, it determines the maximum
       sugar patch within its vision. It breaks ties using a minimum distance.
+    * The tooltip feature to show the state for a given cell will only be displayed when the
+      animation is not running and when the user is not in edit mode. This is to not annoy the user
+      of the tool tip constantly showing when they put their mouse in the grid area.
 
 * Known Bugs:
 
