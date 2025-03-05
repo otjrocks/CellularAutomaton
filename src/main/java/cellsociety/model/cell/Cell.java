@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 /**
- * An abstract Cell model that allows for a state stored in an integer value The Cell class is
+ * An abstract Cell model that allows for a state stored in an integer value. The Cell class is
  * immutable, so that attributes cannot be improperly updated.
  *
  * @author Owen Jennings
@@ -72,7 +72,7 @@ public abstract class Cell {
   }
 
   /**
-   * Get col coordinate of cell
+   * Get col coordinate of cell.
    *
    * @return int representing col location
    */

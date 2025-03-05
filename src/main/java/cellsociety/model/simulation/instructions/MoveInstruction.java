@@ -21,52 +21,54 @@ import cellsociety.model.simulation.rules.DarwinRules.State;
 public class MoveInstruction implements Instruction {
 
   /**
-   * Move the cell
+   * Move the cell.
    *
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of arguments needed - i.e. instructions, numMovements
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
-      Point2D direction =  darwinCell.getFrontDirection();
-      Point2D curLocation = darwinCell.getLocation();
-      int numMovements;
-      try {
-        numMovements = Integer.parseInt(arguments.get(1));
-      } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("Invalid movement number", e);
-      }
-
-      int newRow = darwinCell.getRow();
-      int newCol = darwinCell.getCol();
-
-      for (int i = 0; i < numMovements; i++) {
-        newRow += (int) direction.getX();
-        newCol += (int) direction.getY();
-
-        newRow = verifyInBounds(newRow, grid.getRows());
-        newCol = verifyInBounds(newCol, grid.getCols());
-
-        Cell curCell;
-        try {
-          curCell = grid.getCell(newRow, newCol);
-        } catch (IndexOutOfBoundsException e) {
-          break;
-        }
-
-        if (shouldBreakTraversal(curCell, occupiedCells)) {
-          break;
-        }
-
-        curLocation = new Point2D.Double(newRow, newCol);
-      }
-
-      return updateGridForMovement(darwinCell, curLocation, occupiedCells, movingCells);
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid,
+             Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
+    Point2D direction =  darwinCell.getFrontDirection();
+    Point2D curLocation = darwinCell.getLocation();
+    int numMovements;
+    try {
+      numMovements = Integer.parseInt(arguments.get(1));
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Invalid movement number", e);
     }
 
+    int newRow = darwinCell.getRow();
+    int newCol = darwinCell.getCol();
+
+    for (int i = 0; i < numMovements; i++) {
+      newRow += (int) direction.getX();
+      newCol += (int) direction.getY();
+
+      newRow = verifyInBounds(newRow, grid.getRows());
+      newCol = verifyInBounds(newCol, grid.getCols());
+
+      Cell curCell;
+      try {
+        curCell = grid.getCell(newRow, newCol);
+      } catch (IndexOutOfBoundsException e) {
+        break;
+      }
+
+      if (shouldBreakTraversal(curCell, occupiedCells)) {
+        break;
+      }
+
+      curLocation = new Point2D.Double(newRow, newCol);
+    }
+
+    return updateGridForMovement(darwinCell, curLocation, occupiedCells, movingCells);
+  }
+
   private boolean shouldBreakTraversal(Cell curCell, Map<Point2D, DarwinCell> occupiedCells) {
-    return curCell == null || curCell.getState() != State.EMPTY.getValue() || occupiedCells.keySet().contains(curCell.getLocation());
+    return curCell == null || curCell.getState() != State.EMPTY.getValue()
+            || occupiedCells.keySet().contains(curCell.getLocation());
   }
 
   /**

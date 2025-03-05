@@ -1,5 +1,12 @@
 package cellsociety.model.simulation.rules;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.CellUpdate;
@@ -9,15 +16,9 @@ import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
- * A rules class to implement the Sugar Scape simulation
+ * A rules class to implement the Sugar Scape simulation.
  *
  * @author Justin Aronwald
  */
@@ -35,13 +36,13 @@ public class SugarscapeRules extends SimulationRules {
   }
 
   /**
-   * An enum to store the possible states for the simulation
+   * An enum to store the possible states for the simulation.
    */
   public enum State {
     EMPTY, PATCHES, AGENTS;
 
     /**
-     * Return the ordinal value of the state
+     * Return the ordinal value of the state.
      *
      * @return an int representing the state
      */
@@ -51,7 +52,7 @@ public class SugarscapeRules extends SimulationRules {
   }
 
   /**
-   * the method that handles all cell updates so the grid knows where to move the cells
+   * the method that handles all cell updates so the grid knows where to move the cells.
    *
    * @param grid The grid that you wish to get the next states for
    * @return - a list of updates for each cell that the grid uses to update each location

@@ -1,15 +1,16 @@
 package cellsociety.model.simulation.rules;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * The implementation of Spreading of Fire Simulation.
@@ -69,7 +70,7 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */
@@ -79,8 +80,8 @@ public class SpreadingOfFireRules extends SimulationRules {
 
   /**
    * Forest Fire: A burning cell (2) turns into an empty cell A tree (1) will burn if at least one
-   * neighbor is burning A tree ignites with probability f (0.15) even if no neighbor is burning An
-   * empty cell (0) fills with a tree with probability p (0.1)
+   * neighbor is burning. A tree ignites with probability f (0.15) even if no neighbor is burning An
+   * empty cell (0) fills with a tree with probability p (0.1).
    *
    * @param cell - individual cell from grid
    * @param grid - the list of cell objects representing the grid

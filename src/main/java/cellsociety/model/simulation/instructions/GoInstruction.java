@@ -12,11 +12,13 @@ import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.simulation.Instruction;
 
 /**
- * Go Instruction class to handle setting a new instruction index
+ * Go Instruction class to handle setting a new instruction index.
  */
 public class GoInstruction implements Instruction {
 
   /**
+   * Overidden function that carrys out the go instruction.
+   * 
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
    * @param grid       - the collection of cell objects
@@ -33,6 +35,8 @@ public class GoInstruction implements Instruction {
   }
 
   /**
+   * Instatiates the number of directions a species can look.
+   * 
    * @param stepSize - the number of directions to look towards for each configuration
    */
   @Override
@@ -41,6 +45,8 @@ public class GoInstruction implements Instruction {
   }
 
   /**
+   * Instantiates number of tiles each species can see.
+   * 
    * @param layers - the number of cells to look forward
    */
   @Override
