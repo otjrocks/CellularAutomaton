@@ -2,7 +2,6 @@ package cellsociety.model.xml;
 
 import static cellsociety.config.MainConfig.DEFAULT_CELL_SHAPE;
 import static cellsociety.config.MainConfig.DEFAULT_EDGE_STRATEGY;
-import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
@@ -40,7 +39,6 @@ import cellsociety.model.simulation.SimulationMetaData;
  */
 public class XMLHandler {
 
-  public static final String RULE_STRING = "ruleString";
   public static final String EDGE_TYPE = "EdgeType";
   public static final String CELL_TYPE = "CellType";
   private static int myGridHeight;
@@ -202,13 +200,13 @@ public class XMLHandler {
    * @param doc parsed XML file containing the simulation data most importantly for this function,
    *            the additional sim parameters
    */
-  private void parseParameters(Document doc) {
+  private void parseParameters(Document doc) throws InvalidStateException {
     myParameters = new HashMap<>();
     NodeList params = doc.getElementsByTagName("Parameters");
     getParametersIfTheyExist(params);
   }
 
-  private void getParametersIfTheyExist(NodeList params) {
+  private void getParametersIfTheyExist(NodeList params) throws InvalidStateException {
     if (params.getLength() > 0) {
       Node param = params.item(0);
       if (param.getNodeType() == Node.ELEMENT_NODE) {
@@ -218,13 +216,9 @@ public class XMLHandler {
     }
   }
 
-  private void handleParameterElement(Element paramElement) {
+  private void handleParameterElement(Element paramElement) throws InvalidStateException {
     for (String paramString : SimulationConfig.getParameters(mySimData.type())) {
-      if (paramString.equals(RULE_STRING)) {
-        checkAndLoadRuleString(paramElement);
-      } else {
-        checkAndLoadParameter(paramElement, paramString);
-      }
+      checkAndLoadParameter(paramElement, paramString);
     }
   }
 
@@ -234,25 +228,11 @@ public class XMLHandler {
    * @param paramElement element containing all parameters for a given simulation
    * @param paramName    name of the parameter being checked
    */
-  private void checkAndLoadParameter(Element paramElement, String paramName) {
-    try {
-      String paramValue = paramElement.getElementsByTagName(paramName).item(0).getTextContent();
+  private void checkAndLoadParameter(Element paramElement, String paramName)
+      throws InvalidStateException {
+    if (getElement(paramElement, paramName, false) != null) {
+      String paramValue = getElement(paramElement, paramName, false).getTextContent();
       myParameters.put(paramName, new Parameter<>(paramValue));
-    } catch (NumberFormatException e) {
-      LOGGER.warn("Warning: Invalid parameter value. Defaulting to 1.0.");
-      myParameters.put(paramName, new Parameter<Object>(1.0));
-    }
-  }
-
-  private void checkAndLoadRuleString(Element paramElement) {
-    try {
-      if (paramElement.getElementsByTagName(RULE_STRING).item(0) != null) {
-        String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0)
-            .getTextContent();
-        myParameters.put(RULE_STRING, new Parameter<>(paramString));
-      }
-    } catch (DOMException e) {
-      myParameters.clear();
     }
   }
 
@@ -327,6 +307,15 @@ public class XMLHandler {
    */
   public EdgeStrategyType getEdgeStrategyType() {
     return myEdgeStrategyType;
+  }
+
+  public static Element getElement(Element parent, String tagName, boolean required)
+      throws InvalidStateException {
+    Element element = (Element) parent.getElementsByTagName(tagName).item(0);
+    if (element == null && required) {
+      throw new InvalidStateException("Missing required element: " + tagName);
+    }
+    return element;
   }
 
   private static Element getElement(Document doc, String tagName, boolean required)
