@@ -24,8 +24,8 @@ public class MoveInstruction implements Instruction {
    * Move the cell
    *
    * @param darwinCell - the cell that the instruction is executed on
-   * @param arguments - the list of arguments needed - i.e instructions, numMovements
-   * @param grid - the collection of cell objects
+   * @param arguments  - the list of arguments needed - i.e. instructions, numMovements
+   * @param grid       - the collection of cell objects
    */
   @Override
   public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
@@ -105,16 +105,21 @@ public class MoveInstruction implements Instruction {
   }
 
 
-  private int verifyInBounds(int rowOrCol, int numRowsOrCols){
-    if (rowOrCol > numRowsOrCols-1){
-      rowOrCol = numRowsOrCols-1;
+  private int verifyInBounds(int rowOrCol, int numRowsOrCols) {
+    if (valueGreaterThanBound(rowOrCol, numRowsOrCols)) {
+      rowOrCol = numRowsOrCols - 1;
     }
 
-    if (rowOrCol < 0){
+    if (rowOrCol < 0) {
       rowOrCol = 0;
     }
 
     return rowOrCol;
   }
 
+  private static boolean valueGreaterThanBound(int rowOrCol, int numRowsOrCols) {
+    return rowOrCol > numRowsOrCols - 1;
+  }
+
 }
+

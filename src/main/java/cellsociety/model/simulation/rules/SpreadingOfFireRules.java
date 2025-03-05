@@ -12,19 +12,20 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * The implementation of Spreading of Fire Simulation
+ * The implementation of Spreading of Fire Simulation.
  * <p>
- * For a Forest Fire cell, there can be 3 states
+ * For a Forest Fire cell, there can be 3 states.
  * <p>
- * A cell with state 0 indicates it's empty
+ * A cell with state 0 indicates it's empty.
  * <p>
- * A cell with state 1 indicates it's occupied by a tree
+ * A cell with state 1 indicates it's occupied by a tree.
  * <p>
- * A cell with state 2 indicates it's burning
+ * A cell with state 2 indicates it's burning.
  *
  * @author Justin Aronwald
  */
 public class SpreadingOfFireRules extends SimulationRules {
+
   private static final int minPThresholdVal = 0;
   private static final int maxPThresholdVal = 1;
 
@@ -61,7 +62,8 @@ public class SpreadingOfFireRules extends SimulationRules {
     if (myGrowthInEmptyCell < minPThresholdVal || myGrowthInEmptyCell > maxPThresholdVal) {
       throwInvalidParameterException(GROW_IN_EMPTY_CELL);
     }
-    if (myIgnitionWithoutNeighbors < minPThresholdVal || myIgnitionWithoutNeighbors > maxPThresholdVal) {
+    if (myIgnitionWithoutNeighbors < minPThresholdVal
+        || myIgnitionWithoutNeighbors > maxPThresholdVal) {
       throwInvalidParameterException(IGNITION_WITHOUT_NEIGHBORS);
     }
   }
@@ -114,10 +116,14 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   private int randomIgnitionOfTreeCell(int currentState) {
-    if (currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors)) {
+    if (shouldIgnite(currentState)) {
       return fireState;
     }
     return currentState;
+  }
+
+  private boolean shouldIgnite(int currentState) {
+    return currentState == 1 && (random.nextDouble() < myIgnitionWithoutNeighbors);
   }
 
   private int growTreeRandomly() {
@@ -128,7 +134,7 @@ public class SpreadingOfFireRules extends SimulationRules {
   }
 
   /**
-   * gets the total number of states
+   * gets the total number of states.
    *
    * @return - 3, the total number of states
    */

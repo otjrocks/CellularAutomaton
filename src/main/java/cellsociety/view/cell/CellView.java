@@ -20,12 +20,12 @@ public abstract class CellView extends Group {
   private final Shape myShape;
 
   /**
-   * Create a cell with the default fill color
+   * Create a cell with the default fill color.
    *
-   * @param x:      x location of cell
-   * @param y:      y location of cell
-   * @param width:  width of cell
-   * @param height: height of cell
+   * @param x x location of cell
+   * @param y y location of cell
+   * @param width width of cell
+   * @param height height of cell
    */
   public CellView(double x, double y, double width, double height) {
     super();
@@ -40,9 +40,9 @@ public abstract class CellView extends Group {
   }
 
   /**
-   * Handle whether grid lines should be shown or not
+   * Handle whether grid lines should be shown or not.
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     if (selected) {
@@ -53,16 +53,16 @@ public abstract class CellView extends Group {
   }
 
   /**
-   * Set the fill color for a cell
+   * Set the fill color for a cell.
    *
-   * @param color: The color you wish to set
+   * @param color The color you wish to set
    */
   public void setFill(Paint color) {
     myShape.setFill(color);
   }
 
   /**
-   * Get the fill color for a cell
+   * Get the fill color for a cell.
    *
    * @return: the color of the fill
    */
@@ -71,7 +71,7 @@ public abstract class CellView extends Group {
   }
 
   /**
-   * Get the shape representation of a cell
+   * Get the shape representation of a cell.
    *
    * @return: the shape of the cell
    */
@@ -80,14 +80,14 @@ public abstract class CellView extends Group {
   }
 
   /**
-   * Reset the stroke color of the cell on theme updates
+   * Reset the stroke color of the cell on theme updates.
    */
   public void resetStrokeColor() {
     myShape.setStyle("-fx-stroke: -fx-primary;");
   }
 
   /**
-   * Create the shape used in this view. It should be defined in the implementation of a cell view
+   * Create the shape used in this view. It should be defined in the implementation of a cell view.
    *
    * @return The specific Shape instance for the cell
    */

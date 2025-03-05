@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
 import java.awt.geom.Point2D;
@@ -32,10 +33,12 @@ import cellsociety.utility.FileUtility;
 public class SimulationConfig {
 
   private static final String SIMULATION_RULES_PACKAGE = "cellsociety.model.simulation.rules.";
-  public static final String INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
-  public static final String SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
-  private static final ResourceBundle myInstructions = ResourceBundle.getBundle(
-      INSTRUCTIONS_FILE_PATH);
+  public static final String
+      INSTRUCTIONS_FILE_PATH = "cellsociety.darwin instructions.DInstructions";
+  public static final String
+      SIMULATION_RULES_RELATIVE_PATH = "src/main/java/cellsociety/model/simulation/rules/";
+  private static final ResourceBundle
+      myInstructions = ResourceBundle.getBundle(INSTRUCTIONS_FILE_PATH);
 
 
   /**
@@ -51,7 +54,7 @@ public class SimulationConfig {
    * getRequiredParameters() from a simulation rules class if it exists, or returns an empty list if
    * no required parameters method is available for a class.
    *
-   * @param simulationName: the name of the simulation you are querying for
+   * @param simulationName the name of the simulation you are querying for
    * @return A list of strings representing the parameter names
    */
   public static List<String> getParameters(String simulationName) {
@@ -59,21 +62,22 @@ public class SimulationConfig {
     try {
       return getRequiredParametersForSimulationRulesClass(simulationName);
     } catch (NoSuchMethodException e) {
-      // if class does not have getRequiredParameters method, just return empty list (no required parameters)
+      // if class does not have getRequiredParameters method,
+      // just return empty list (no required parameters)
       return new ArrayList<>();
     } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
       LOGGER.warn(e.getMessage());
-      throw new RuntimeException("Error fetching parameters: " + e);
+      throw new SimulationCreationException("Error fetching parameters", e);
     }
   }
 
   /**
    * Get the appropriate cell type for a simulation type
    *
-   * @param row: row location for created cell
-   * @param col: col location for created cell
-   * @param state: initial state for created cell
-   * @param simulationName: name/type of simulation to create cell for
+   * @param row            row location for created cell
+   * @param col            col location for created cell
+   * @param state          initial state for created cell
+   * @param simulationName name/type of simulation to create cell for
    * @return the appropriate cell for a given simulation or default cell if the simulation does not
    * exist
    */
@@ -96,17 +100,21 @@ public class SimulationConfig {
    * Get the appropriate simulation class for a given simulation name. Construct the simulation with
    * the required parameters and metadata
    *
-   * @param simulationName:     Type/name of the simulation you want to create
-   * @param simulationMetaData: MetaData for your simulation
-   * @param parameters:         Map of parameter values String (parameter name) -> Double (parameter
-   *                            value)
+   * @param simulationName     Type/name of the simulation you want to create
+   * @param simulationMetaData MetaData for your simulation
+   * @param parameters         Map of parameter values String (parameter name) -> Double (parameter
+   *                           value)
    * @return the appropriate simulation object for the specified simulation name or Game of Life if
    * the simulation does not exist
    */
   public static Simulation getNewSimulation(String simulationName,
-      SimulationMetaData simulationMetaData,
-      Map<String, Parameter<?>> parameters)
-      throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidParameterException {
+      SimulationMetaData simulationMetaData, Map<String, Parameter<?>> parameters)
+      throws ClassNotFoundException,
+      InvocationTargetException,
+      NoSuchMethodException,
+      InstantiationException,
+      IllegalAccessException,
+      InvalidParameterException {
     validateSimulation(simulationName);
     GetNeighbors myGetNeighbors = createGetNeighborInstance(simulationMetaData.neighborType(),
         simulationMetaData.layers());
@@ -122,7 +130,8 @@ public class SimulationConfig {
    */
   public static StateInfo getStateInfoFromDisplayName(Simulation simulation, String name) {
     int numStates = simulation.rules().getNumberStates();
-    // check all possible state info for all languages until you find the state info with a display name matching the provided name
+    // check all possible state info for all languages until you
+    // find the state info with a display name matching the provided name
     for (String language : MainConfig.fetchLanguages()) {
       for (int i = 0; i < numStates; i++) {
         StateInfo currentStateInfo = StateDisplayConfig.getStateInfo(simulation, i, language);
@@ -135,7 +144,10 @@ public class SimulationConfig {
   }
 
   private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
-      throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+      throws ClassNotFoundException,
+      NoSuchMethodException,
+      IllegalAccessException,
+      InvocationTargetException {
     // Get class name for simulation queried
     String className = String.format("%s%sRules", SIMULATION_RULES_PACKAGE, simulationName);
     Class<?> ruleClass = Class.forName(className);
@@ -147,14 +159,17 @@ public class SimulationConfig {
 
   private static SimulationRules getRules(String simulationName,
       Map<String, Parameter<?>> parameters, GetNeighbors myGetNeighbors)
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+      throws ClassNotFoundException,
+      NoSuchMethodException,
+      InvocationTargetException,
+      InstantiationException,
+      IllegalAccessException {
     validateSimulation(simulationName);
     String className = String.format("cellsociety.model.simulation.rules.%s%s", simulationName,
         "Rules");
     SimulationRules simulationRules;
     simulationRules = (SimulationRules) Class.forName(className)
-        .getConstructor(Map.class, GetNeighbors.class)
-        .newInstance(parameters, myGetNeighbors);
+        .getConstructor(Map.class, GetNeighbors.class).newInstance(parameters, myGetNeighbors);
     return simulationRules;
   }
 
@@ -165,35 +180,42 @@ public class SimulationConfig {
     }
   }
 
-  private static GetNeighbors createGetNeighborInstance(String neighborType, int layers)
-      throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    if (neighborType == null || layers <= 0) {
-      throw new IllegalArgumentException("Invalid neighbor configuration.");
-    }
-    String className = String.format("cellsociety.model.simulation.getNeighborOptions.%s%s",
-        neighborType,
+  private static GetNeighbors createGetNeighborInstance(String neighborType, int layers) {
+    checkValidNeighborConfiguration(neighborType, layers);
+    String className = String.format("cellsociety.model.simulation.neighbors.%s%s", neighborType,
         "Neighbors");
+    return getNeighborsFromClassNameString(layers, className);
+  }
+
+  private static GetNeighbors getNeighborsFromClassNameString(int layers, String className) {
     GetNeighbors getNeighbors;
     try {
       Class<?> neighborClass = Class.forName(className);
       getNeighbors = (GetNeighbors) neighborClass.getConstructor(int.class).newInstance(layers);
       return getNeighbors;
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException | NoSuchMethodException e) {
       LOGGER.warn(e.getMessage());
-      throw new IllegalArgumentException(
-          String.format("Invalid neighbor configuration: %s", e));
+      throw new IllegalArgumentException(String.format("Invalid neighbor configuration: %s", e));
+    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+      LOGGER.warn(e.getMessage());
+      throw new SimulationCreationException(e);
+    }
+  }
+
+  private static void checkValidNeighborConfiguration(String neighborType, int layers) {
+    if (neighborType == null || layers <= 0) {
+      throw new IllegalArgumentException("Invalid neighbor configuration.");
     }
   }
 
   /**
-   * Gets instructions for predefined species from the properties file
+   * Gets instructions for predefined species from the properties file.
    *
-   * @param state: Integer representing the species of the animal (or empty)
+   * @param state Integer representing the species of the animal (or empty)
    */
   public static List<String> assignInstructionsFromState(int state) {
     String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    List<String> instr = new ArrayList<>(Arrays.asList(instrArray));
-    return instr;
+    return new ArrayList<>(Arrays.asList(instrArray));
   }
 
 }

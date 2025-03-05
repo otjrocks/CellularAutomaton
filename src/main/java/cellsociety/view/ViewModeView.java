@@ -9,8 +9,11 @@ import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.simulation.SimulationMetaData;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
 import cellsociety.utility.CreateNewSimulation;
 import cellsociety.view.components.AlertField;
+import java.io.IOException;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -18,9 +21,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
- * A view to handle all the UI components that are shown when view mode is enabled
+ * A view to handle all the UI components that are shown when view mode is enabled.
  *
  * @author Owen Jennings
  */
@@ -42,8 +47,8 @@ public class ViewModeView extends VBox {
   /**
    * Initialize the ViewModeView.
    *
-   * @param mainController: the main controller of this view
-   * @param alertField:     the alert field to display alerts to the user
+   * @param mainController the main controller of this view
+   * @param alertField     the alert field to display alerts to the user
    */
   public ViewModeView(MainController mainController, AlertField alertField) {
     super();
@@ -56,7 +61,7 @@ public class ViewModeView extends VBox {
   }
 
   /**
-   * Update the non-static content of the sidebar
+   * Update the non-static content of the sidebar.
    */
   public void update() {
     this.getChildren().clear();
@@ -148,14 +153,10 @@ public class ViewModeView extends VBox {
     try {
       stopAnimationPlayIfRunning();
       myMainController.handleNewSimulationFromFile();
-    } catch (IllegalArgumentException e) {
+    } catch (GridException | InvalidStateException | IOException |
+             ParserConfigurationException | SAXException | IllegalArgumentException e) {
       myAlertField.flash(e.getMessage(), true);
       myAlertField.flash(getMessage("LOAD_ERROR"), true);
-    } catch (Exception e) {
-      myAlertField.flash(getMessage("LOAD_ERROR"), true);
-      if (VERBOSE_ERROR_MESSAGES) {
-        myAlertField.flash(e.getMessage(), true);
-      }
     }
     stopAnimationPlayIfRunning();
   }

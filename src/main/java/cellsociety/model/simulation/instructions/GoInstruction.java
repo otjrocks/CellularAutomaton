@@ -24,7 +24,7 @@ public class GoInstruction implements Instruction {
   @Override
   public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     int instructionIndex = Integer.parseInt(arguments.get(1));
-    darwinCell.setCurInstructionIndex(instructionIndex-2);
+    darwinCell.setCurInstructionIndex(instructionIndex - 2);
 
     List<CellUpdate> updates = new ArrayList<>();
     updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
@@ -37,7 +37,7 @@ public class GoInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //not needed here
+    //not needed here
   }
 
   /**

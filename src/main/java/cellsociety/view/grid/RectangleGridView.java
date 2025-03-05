@@ -5,14 +5,14 @@ import cellsociety.view.cell.CellView;
 import cellsociety.view.cell.RectangleCellView;
 
 /**
- * A rectangle grid implementation
+ * A rectangle grid implementation.
  *
  * @author Owen Jennings
  */
 public class RectangleGridView extends GridView {
 
   /**
-   * Create a grid view
+   * Create a grid view.
    *
    * @param width          :      Width of the view
    * @param height         :     Height of the view

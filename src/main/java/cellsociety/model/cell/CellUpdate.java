@@ -16,7 +16,7 @@ public class CellUpdate {
 
 
   /**
-   * Initialize a Cell State Update Object
+   * Initialize a Cell State Update Object.
    *
    * @param location location you which to update
    * @param nextCell new cell to update at location
@@ -28,7 +28,7 @@ public class CellUpdate {
 
 
   /**
-   * Get row of cell to update
+   * Get row of cell to update.
    *
    * @return row of cell to update
    */
@@ -37,7 +37,7 @@ public class CellUpdate {
   }
 
   /**
-   * Get column of cell to update
+   * Get column of cell to update.
    *
    * @return column of cell to update
    */
@@ -46,7 +46,7 @@ public class CellUpdate {
   }
 
   /**
-   * Get state to update to
+   * Get state to update to.
    *
    * @return integer for state to update
    */

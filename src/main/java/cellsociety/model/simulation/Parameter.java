@@ -3,9 +3,9 @@ package cellsociety.model.simulation;
 import static cellsociety.config.MainConfig.getMessage;
 
 /**
- * A class to handle the creation and storage of parameter values
+ * A class to handle the creation and storage of parameter values.
  *
- * @param <T>: The type of the parameter's value
+ * @param <T> The type of the parameter's value
  * @author Owen Jennings
  */
 public class Parameter<T> {
@@ -13,7 +13,7 @@ public class Parameter<T> {
   private final T myValue;
 
   /**
-   * Create a new parameter of type T
+   * Create a new parameter of type T.
    *
    * @param value The value of the parameter. This value will be of type T
    */
@@ -22,7 +22,7 @@ public class Parameter<T> {
   }
 
   /**
-   * Get the string representation of a parameter if current value can be cast to String
+   * Get the string representation of a parameter if current value can be cast to String.
    *
    * @return String representation of current parameter value
    * @throws InvalidParameterException If the current parameter value cannot be cast to a String.
@@ -30,14 +30,14 @@ public class Parameter<T> {
   public String getString() throws InvalidParameterException {
     try {
       return (String) myValue;
-    } catch (Exception e) {
+    } catch (ClassCastException e) {
       throwInvalidParameterException();
     }
     return null;
   }
 
   /**
-   * The Double representation of the current parameter value
+   * The Double representation of the current parameter value.
    *
    * @return The Double representation of the value
    * @throws InvalidParameterException If the current parameter cannot be cast or parsed as a
@@ -49,14 +49,14 @@ public class Parameter<T> {
         return (Double) myValue;
       }
       return Double.parseDouble((String) myValue);
-    } catch (Exception e) {
+    } catch (ClassCastException | NumberFormatException e) {
       throwInvalidParameterException();
     }
     return null;
   }
 
   /**
-   * The Integer representation of parameter
+   * The Integer representation of parameter.
    *
    * @return An Integer value
    * @throws InvalidParameterException If the current parameter cannot be cast or converted to an
@@ -68,7 +68,7 @@ public class Parameter<T> {
         return (Integer) myValue;
       }
       return getDouble().intValue();
-    } catch (Exception e) {
+    } catch (ClassCastException | InvalidParameterException e) {
       throwInvalidParameterException();
     }
     return null;

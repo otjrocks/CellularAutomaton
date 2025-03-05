@@ -2,7 +2,6 @@ package cellsociety.view;
 
 import static cellsociety.config.MainConfig.HEIGHT;
 import static cellsociety.config.MainConfig.MARGIN;
-import static cellsociety.config.MainConfig.VERBOSE_ERROR_MESSAGES;
 import static cellsociety.config.MainConfig.WIDTH;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
@@ -12,7 +11,6 @@ import cellsociety.controller.MainController;
 import cellsociety.controller.PreferencesController;
 import cellsociety.model.xml.GridException;
 import cellsociety.model.xml.InvalidStateException;
-import cellsociety.utility.FileUtility;
 import cellsociety.view.components.AlertField;
 import cellsociety.view.components.SelectorField;
 import java.io.IOException;
@@ -25,7 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
- * A view that handles the splash screen that is shown when the program first loads
+ * A view that handles the splash screen that is shown when the program first loads.
  *
  * @author Owen Jennings
  * @author Justin Aronwald
@@ -40,11 +38,11 @@ public class SplashScreenView extends VBox {
   private final SidebarView mySidebarView;
 
   /**
-   * Create a splash screen  view
+   * Create a splash screen  view.
    *
-   * @param mainController: the main controller of this view
-   * @param alertField:     the alert field to display messages
-   * @param sidebar:        an instance of the sidebar view that holds a lot of simulation metadata
+   * @param mainController the main controller of this view
+   * @param alertField     the alert field to display messages
+   * @param sidebar        an instance of the sidebar view that holds a lot of simulation metadata
    */
   public SplashScreenView(AlertField alertField, SidebarView sidebar,
       MainController mainController) {

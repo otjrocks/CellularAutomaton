@@ -26,7 +26,7 @@ import javafx.scene.text.Text;
 
 
 /**
- * A class to handle all the BottomBar view elements of the app
+ * A class to handle all the BottomBar view elements of the app.
  *
  * @author Troy Ludwig
  */
@@ -45,10 +45,10 @@ public class BottomBarView extends VBox {
 
 
   /**
-   * Create a bottom bar view with a preferred size of width x height
+   * Create a bottom bar view with a preferred size of width x height.
    *
-   * @param width:  preferred width of bottom bar box
-   * @param height: preferred height of bottom bar box
+   * @param width preferred width of bottom bar box
+   * @param height preferred height of bottom bar box
    */
   public BottomBarView(int width, int height) {
     super();
@@ -69,7 +69,7 @@ public class BottomBarView extends VBox {
   }
 
   /**
-   * update the bottom bar view, by resetting the iteration count and clearing the state change
+   * update the bottom bar view, by resetting the iteration count and clearing the state change.
    * chart
    */
   public void update() {
@@ -82,7 +82,7 @@ public class BottomBarView extends VBox {
   }
 
   /**
-   * update the iteration counter displayed on the bottom bar
+   * update the iteration counter displayed on the bottom bar.
    *
    * @param count The new count you want to display
    */
@@ -126,7 +126,7 @@ public class BottomBarView extends VBox {
   }
 
   /**
-   * Update the state change chart
+   * Update the state change chart.
    *
    * @param stateCounts The count of all states from the current simulation state
    */

@@ -9,7 +9,7 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.getNeighborOptions.VonNeumannNeighbors;
+import cellsociety.model.simulation.neighbors.VonNeumannNeighbors;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.HashMap;

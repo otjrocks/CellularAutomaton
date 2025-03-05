@@ -3,6 +3,7 @@ package cellsociety.view.config;
 import cellsociety.config.MainConfig;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Random;
 import javafx.scene.paint.Color;
 
@@ -74,10 +75,14 @@ public class StateDisplayConfig {
 
   private static String getStateName(String key, int state) {
     String stateName = getMessage(key);
-    if (stateName.equals(getMessage("MISSING_KEY")) || stateName.equals("UNKNOWN")) {
+    if (isMissingDisplayNamePropertyValue(stateName)) {
       return String.format(getMessage("STATE"), state);
     }
     return stateName;
+  }
+
+  private static boolean isMissingDisplayNamePropertyValue(String stateName) {
+    return stateName.equals(getMessage("MISSING_KEY")) || stateName.equals("UNKNOWN");
   }
 
   private static Color getStateColor(String key, String simulationType, int state) {
@@ -92,14 +97,19 @@ public class StateDisplayConfig {
   private static Color attemptGettingColorFromPropertyFileOrReturnDefaultColor(String key,
       String stateKey) {
     try {
-      Color color = Color.valueOf(getCellColors().getString(key).toUpperCase());
-      RANDOM_COLORS_MAP.put(stateKey, color);
-      return color;
-    } catch (Exception e) {
-      Color randomColor = getRandomColor();
-      RANDOM_COLORS_MAP.put(stateKey, randomColor);
-      return randomColor;
+      if (Color.valueOf(getCellColors().getString(key)) == null) {
+        return setColor(getRandomColor(), stateKey);
+      } else {
+        return setColor(Color.valueOf(getCellColors().getString(key).toUpperCase()), stateKey);
+      }
+    } catch (IllegalArgumentException | MissingResourceException | ClassCastException e) {
+      return setColor(getRandomColor(), stateKey);
     }
+  }
+
+  private static Color setColor(Color color, String stateKey) {
+    RANDOM_COLORS_MAP.put(stateKey, color);
+    return color;
   }
 
   private static Color getRandomColor() {

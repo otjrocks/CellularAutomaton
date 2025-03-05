@@ -6,6 +6,7 @@ import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.utility.CreateGridUtility;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
@@ -18,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,13 +34,15 @@ import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
 
 /**
- * Allows the program to collect data from an XML configuration file and store the associated date
+ * Allows the program to collect data from an XML configuration file and store the associated date.
  *
  * @author Troy Ludwig
  */
 public class XMLHandler {
 
   public static final String RULE_STRING = "ruleString";
+  public static final String EDGE_TYPE = "EdgeType";
+  public static final String CELL_TYPE = "CellType";
   private static int myGridHeight;
   private static int myGridWidth;
   private static Grid myGrid;
@@ -51,8 +55,8 @@ public class XMLHandler {
   /**
    * XMLHandler constructor for referencing data
    *
-   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
-   *                     represented as a String
+   * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
+   *                    represented as a String
    */
   public XMLHandler(String xmlFilePath)
       throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
@@ -63,11 +67,15 @@ public class XMLHandler {
    * Method for parsing the XML file and initializing the XMLHandler instance variables with the
    * associated data
    *
-   * @param xmlFilePath: The path/location of the XML file that we want to parse for simulation data
-   *                     represented as a String
+   * @param xmlFilePath The path/location of the XML file that we want to parse for simulation data
+   *                    represented as a String
    */
   private void parseXMLFile(String xmlFilePath)
-      throws SAXException, IOException, ParserConfigurationException, GridException, InvalidStateException {
+      throws SAXException,
+      IOException,
+      ParserConfigurationException,
+      GridException,
+      InvalidStateException {
 
     File xmlFile = new File(xmlFilePath);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -85,7 +93,7 @@ public class XMLHandler {
   /**
    * Helper method to parse simulation data from document
    *
-   * @param data: Document from which you are extracting the simulation data
+   * @param data Document from which you are extracting the simulation data
    */
   private void parseSimData(Document data) {
     String type = data.getElementsByTagName("Type").item(0).getTextContent();
@@ -104,27 +112,54 @@ public class XMLHandler {
 
   private static void parseCellTypeIfPresent(Document data) {
     try {
-      String cellType = data.getElementsByTagName("CellType").item(0).getTextContent();
-      myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
-    } catch (
-        Exception e) { // fallback to default cell shape if field is missing in xml file, incorrectly spelled, or other error
+      if (data.getElementsByTagName(CELL_TYPE).item(0) == null) {
+        myCellShapeType = DEFAULT_CELL_SHAPE;
+      } else {
+        attemptSettingCellType(data);
+      }
+    } catch (IllegalArgumentException |
+             DOMException e) {
+      // fallback to default cell shape if field is missing in xml file,
+      // incorrectly spelled, or other error
       myCellShapeType = DEFAULT_CELL_SHAPE;
+    }
+  }
+
+  private static void attemptSettingCellType(Document data) {
+    String cellType = data.getElementsByTagName(CELL_TYPE).item(0).getTextContent();
+    if (cellType == null) {
+      myCellShapeType = DEFAULT_CELL_SHAPE;
+    } else {
+      myCellShapeType = CellShapeType.valueOf(cellType.toUpperCase());
     }
   }
 
   private static void parseEdgeTypeIfPresent(Document data) {
     try {
-      String edgeType = data.getElementsByTagName("EdgeType").item(0).getTextContent();
-      myEdgeStrategyType = EdgeStrategyType.valueOf(edgeType.toUpperCase());
-    } catch (Exception e) { // fallback to default edge type if field is missing
+      if (data.getElementsByTagName(EDGE_TYPE).item(0) == null) {
+        myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+      } else {
+        attemptSettingEdgeType(data);
+      }
+    } catch (IllegalArgumentException |
+             DOMException e) { // fallback to default edge type if field is missing
       myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+    }
+  }
+
+  private static void attemptSettingEdgeType(Document data) {
+    String edgeType = data.getElementsByTagName(EDGE_TYPE).item(0).getTextContent();
+    if (edgeType == null) {
+      myEdgeStrategyType = DEFAULT_EDGE_STRATEGY;
+    } else {
+      myEdgeStrategyType = EdgeStrategyType.valueOf(edgeType.toUpperCase());
     }
   }
 
   /**
    * Helper method to parse grid dimensions from document
    *
-   * @param dimDoc: Document from which you are extracting the grid dimensions
+   * @param dimDoc Document from which you are extracting the grid dimensions
    */
   private void parseDimensions(Document dimDoc) {
     Element gridDimensions = (Element) dimDoc.getElementsByTagName("GridDimensions").item(0);
@@ -137,13 +172,13 @@ public class XMLHandler {
   /**
    * Helper method to differentiate between explicit and random grid generation
    *
-   * @param gridDoc: Document from which you are extracting/generating the initial grid data
+   * @param gridDoc Document from which you are extracting/generating the initial grid data
    */
   private static void parseGrid(Document gridDoc) throws GridException, InvalidStateException {
-    if (gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0) {
+    if (isRandomInitByState(gridDoc)) {
       myGrid = CreateGridUtility.generateRandomGridFromStateNumber(gridDoc, myGridHeight,
           myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
-    } else if (gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0) {
+    } else if (isRandomInitByProb(gridDoc)) {
       myGrid = CreateGridUtility.generateRandomGridFromDistribution(gridDoc, myGridHeight,
           myGridWidth, EdgeStrategyFactory.createEdgeStrategy(myEdgeStrategyType), mySim);
     } else {
@@ -152,11 +187,19 @@ public class XMLHandler {
     }
   }
 
+  private static boolean isRandomInitByProb(Document gridDoc) {
+    return gridDoc.getElementsByTagName("RandomInitByProb").getLength() > 0;
+  }
+
+  private static boolean isRandomInitByState(Document gridDoc) {
+    return gridDoc.getElementsByTagName("RandomInitByState").getLength() > 0;
+  }
+
   /**
    * Method that assigns the parameters for the current simulation based on simulation type
    *
-   * @param doc: parsed XML file containing the simulation data most importantly for this function,
-   *             the additional sim parameters
+   * @param doc parsed XML file containing the simulation data most importantly for this function,
+   *            the additional sim parameters
    */
   private void parseParameters(Document doc) {
     myParameters = new HashMap<>();
@@ -187,8 +230,8 @@ public class XMLHandler {
   /**
    * Method that checks an XML file for a parameter with a given name
    *
-   * @param paramElement: element containing all parameters for a given simulation
-   * @param paramName:    name of the parameter being checked
+   * @param paramElement element containing all parameters for a given simulation
+   * @param paramName    name of the parameter being checked
    */
   private void checkAndLoadParameter(Element paramElement, String paramName) {
     try {
@@ -202,9 +245,12 @@ public class XMLHandler {
 
   private void checkAndLoadRuleString(Element paramElement) {
     try {
-      String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0).getTextContent();
-      myParameters.put(RULE_STRING, new Parameter<>(paramString));
-    } catch (Exception e) {
+      if (paramElement.getElementsByTagName(RULE_STRING).item(0) != null) {
+        String paramString = paramElement.getElementsByTagName(RULE_STRING).item(0)
+            .getTextContent();
+        myParameters.put(RULE_STRING, new Parameter<>(paramString));
+      }
+    } catch (DOMException e) {
       myParameters.clear();
     }
   }
@@ -217,7 +263,8 @@ public class XMLHandler {
       mySim = SimulationConfig.getNewSimulation(mySimData.type(), mySimData, myParameters);
     } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new SimulationCreationException(
+          "Unable to assign the simulation rules based on the provided simulation type", e);
     }
   }
 
@@ -264,7 +311,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's cell shape type
+   * Returns the current simulation's cell shape type.
    *
    * @return CellShapeType from the file or the default cell shape if not found
    */
@@ -273,7 +320,7 @@ public class XMLHandler {
   }
 
   /**
-   * Returns the current simulation's
+   * Returns the current simulation's edge strategy.
    *
    * @return EdgeStrategyType from the file or the default edge type if not found in the file
    */

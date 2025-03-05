@@ -36,9 +36,8 @@ public class MainConfig {
   public static final int GRID_WIDTH = (3 * WIDTH) / 5;
   public static final int GRID_HEIGHT = HEIGHT - (2 * MARGIN);
   public static final double INITIAL_STEP_SPEED = 0.5;
-  public static final double STEP_SPEED =
-      1 / Double.parseDouble(PreferencesController.getPreference("animationSpeed",
-          String.valueOf(INITIAL_STEP_SPEED)));
+  public static final double STEP_SPEED = 1 / Double.parseDouble(
+      PreferencesController.getPreference("animationSpeed", String.valueOf(INITIAL_STEP_SPEED)));
   public static final int MAX_GRID_NUM_ROWS = 150;
   public static final int MAX_GRID_NUM_COLS = 150;
   public static final int MIN_GRID_NUM_ROWS = 5;
@@ -52,7 +51,7 @@ public class MainConfig {
   private static final String LANGUAGES_PATH = "src/main/resources/cellsociety/languages/";
 
   /**
-   * Get the message string from the config file for the provided key
+   * Get the message string from the config file for the provided key.
    *
    * @param key The key you are looking for
    * @return The message specified in the language file for the provided key if it exists or a
@@ -70,7 +69,8 @@ public class MainConfig {
       // queries key does not exist in language file or trouble finding messages file
       // return a default string
       try {
-        // try displaying to user that key is missing in their preferred language, fallback to english
+        // try displaying to user that key is missing
+        // in their preferred language, fallback to english
         return myMessages.getString("MISSING_KEY");
       } catch (MissingResourceException e1) {
         logMissingMessage(e.getMessage());
@@ -83,7 +83,7 @@ public class MainConfig {
    * Set the language for the program if it exists. If the language does not exist, the preferred
    * language will not update.
    *
-   * @param language: The new language to set
+   * @param language The new language to set
    */
   public static void setLanguage(String language) {
     try {
@@ -114,7 +114,7 @@ public class MainConfig {
   }
 
   /**
-   * Get the cell colors resource bundle
+   * Get the cell colors resource bundle.
    *
    * @return A resource bundle containing all the cell colors
    */

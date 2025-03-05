@@ -16,10 +16,10 @@ public abstract class Cell {
   private static final double DEFAULT_OPACITY = 1;
 
   /**
-   * The default constructor for a Cell
+   * The default constructor for a Cell.
    *
-   * @param state:    The initial state of a cell, represented as an int
-   * @param location: The location in the simulation grid represented by a Point2D, where the (x:
+   * @param state    The initial state of a cell, represented as an int
+   * @param location The location in the simulation grid represented by a Point2D, where the (x:
    *                  row, y: col) value is the relative location of the cell compared to other
    *                  cells in the grid.
    * @throws IllegalArgumentException illegal argument exception for when the state value provided
@@ -36,7 +36,7 @@ public abstract class Cell {
   }
 
   /**
-   * Get the current state of a cell
+   * Get the current state of a cell.
    *
    * @return integer representation of a cell's state
    */
@@ -45,7 +45,7 @@ public abstract class Cell {
   }
 
   /**
-   * Get the opacity of a cell
+   * Get the opacity of a cell.
    *
    * @return double representing the opacity of a cell
    */
@@ -63,7 +63,7 @@ public abstract class Cell {
   }
 
   /**
-   * Get row coordinate of cell
+   * Get row coordinate of cell.
    *
    * @return int representing row location
    */

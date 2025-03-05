@@ -18,6 +18,7 @@ import cellsociety.model.simulation.rules.DarwinRules.State;
  * Conditional Instruction class to handle the various conditionals in Darwin Simulation
  */
 public class ConditionalInstruction implements Instruction {
+
   private int layers;
   private final String conditionType;
   private final Random random = new Random();
@@ -26,7 +27,7 @@ public class ConditionalInstruction implements Instruction {
    * Creates one instance of a Conditional Instruction
    *
    * @param conditionType - the string name of the condition
-   * @param layers - the number of layers that should be searched when getting neighbors
+   * @param layers        - the number of layers that should be searched when getting neighbors
    */
   public ConditionalInstruction(String conditionType, int layers) {
     this.conditionType = conditionType;
@@ -75,7 +76,7 @@ public class ConditionalInstruction implements Instruction {
       }
 
       if (checkIfConditionIsMet(darwinCell, curCell, grid)) {
-        darwinCell.setCurInstructionIndex(nextInstruction-2);
+        darwinCell.setCurInstructionIndex(nextInstruction - 2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
     }
@@ -83,14 +84,18 @@ public class ConditionalInstruction implements Instruction {
 
   private List<CellUpdate> handleRandomCase(DarwinCell darwinCell, int nextInstruction,
       List<CellUpdate> updates) {
-    if ( conditionType.equals("IFRANDOM") || conditionType.equals("RND?")) {
+    if (checkTypeIsRandomOrRnd()) {
       if (random.nextBoolean()) {
-        darwinCell.setCurInstructionIndex(nextInstruction-2);
+        darwinCell.setCurInstructionIndex(nextInstruction - 2);
         updates.add(new CellUpdate(darwinCell.getLocation(), darwinCell));
       }
       return updates;
     }
     return null;
+  }
+
+  private boolean checkTypeIsRandomOrRnd() {
+    return conditionType.equals("IFRANDOM") || conditionType.equals("RND?");
   }
 
   private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid) {
@@ -124,8 +129,8 @@ public class ConditionalInstruction implements Instruction {
      * Calls the checker to validate the condition
      *
      * @param darwinCell - the cell that the instruction is executed on
-     * @param curCell - the current cell that is being compared to the darwinCell
-     * @param grid - the collection of cell objects
+     * @param curCell    - the current cell that is being compared to the darwinCell
+     * @param grid       - the collection of cell objects
      * @return - a boolean on whether the condition passed
      */
     public boolean check(DarwinCell darwinCell, Cell curCell, Grid grid) {
@@ -143,8 +148,8 @@ public class ConditionalInstruction implements Instruction {
      * Method to check whether or not the condition is validated
      *
      * @param darwinCell - the cell that the instruction is executed on
-     * @param curCell - the current cell that is being compared to the darwinCell
-     * @param grid - the collection of cell objects
+     * @param curCell    - the current cell that is being compared to the darwinCell
+     * @param grid       - the collection of cell objects
      * @return - a boolean on whether the condition passed
      */
     boolean check(DarwinCell darwinCell, Cell curCell, Grid grid);
@@ -155,7 +160,7 @@ public class ConditionalInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //unneeded here
+    //unneeded here
   }
 
   /**

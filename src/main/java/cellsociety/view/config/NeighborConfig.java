@@ -5,17 +5,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * A public class so that the neighbor method choosing is accessible in multiple places
+ * A public class so that the neighbor method choosing is accessible in multiple places.
  *
  * @author Justin Aronwald
  */
 public class NeighborConfig {
 
   //Had a little bit of ChatGPT help with the last few lines of this
-  private static final String NEIGHBOR_OPTION_DIRECTORY = "src/main/java/cellsociety/model/simulation/getNeighborOptions/";
+  private static final String NEIGHBOR_OPTION_DIRECTORY = "src/main/java/cellsociety/model/simulation/neighbors/";
 
   /**
-   * Scans the directory to find the various different neighbor types
+   * Scans the directory to find the various different neighbor types.
    *
    * @return - a list of the string names of the neighbor types
    */

@@ -3,6 +3,7 @@ package cellsociety.controller;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.edge.EdgeStrategyFactory;
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
+import cellsociety.model.simulation.SimulationCreationException;
 import cellsociety.view.config.StateInfo;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 
@@ -81,11 +82,23 @@ public class MainController {
 
   private final ThemeController myThemeController;
   private int myIterationCount;
+  // I used ChatGPT to help in refactoring the getErrorMessageKey method to improve cyclomatic complexity
+  private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = new HashMap<>();
+
+  static {
+    ERROR_MESSAGE_MAP.put(SAXException.class, "ERROR_FORMAT");
+    ERROR_MESSAGE_MAP.put(ParserConfigurationException.class, "ERROR_PARSER");
+    ERROR_MESSAGE_MAP.put(IOException.class, "ERROR_IO");
+    ERROR_MESSAGE_MAP.put(NumberFormatException.class, "ERROR_NUMBER");
+    ERROR_MESSAGE_MAP.put(NullPointerException.class, "ERROR_MISSING");
+    ERROR_MESSAGE_MAP.put(GridException.class, "ERROR_GRID");
+    ERROR_MESSAGE_MAP.put(InvalidStateException.class, "ERROR_STATE");
+  }
 
   /**
    * Initialize the MainController
    *
-   * @param root: the main root group of the program
+   * @param root the main root group of the program
    */
   public MainController(Stage stage, Group root) {
     myThemeController = new ThemeController(stage);
@@ -116,7 +129,7 @@ public class MainController {
   /**
    * Set the theme to the themeName provided if it exists, otherwise fallback to default theme
    *
-   * @param themeName: Name of theme you which to set
+   * @param themeName Name of theme you which to set
    */
   public void setTheme(String themeName) {
     myThemeController.setTheme(themeName);
@@ -170,9 +183,9 @@ public class MainController {
   /**
    * Update the animation to have a new speed
    *
-   * @param speed: the new speed of the animation
-   * @param start: a boolean to determine if the animation should start with the new speed or remain
-   *               stopped
+   * @param speed the new speed of the animation
+   * @param start a boolean to determine if the animation should start with the new speed or remain
+   *              stopped
    */
   public void updateAnimationSpeed(double speed, boolean start) {
     PreferencesController.setPreference("animationSpeed", String.valueOf(speed));
@@ -183,7 +196,8 @@ public class MainController {
           try {
             step();  // step function
           } catch (ClassCastException ev) {
-            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+            throw new IllegalStateException("Unexpected type encountered during step execution",
+                ev);
           } catch (IllegalStateException ev) {
             throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
@@ -196,7 +210,7 @@ public class MainController {
   /**
    * Set whether the user is editing the simulation
    *
-   * @param editing: boolean indicating if user is editing the view
+   * @param editing boolean indicating if user is editing the view
    */
   public void setEditing(boolean editing) {
     isEditing = editing;
@@ -226,12 +240,13 @@ public class MainController {
     try {
       mySimulation = SimulationConfig.getNewSimulation(type, metaData, parameters);
     } catch (InvocationTargetException e) {
-      throw new RuntimeException(
+      throw new SimulationCreationException(
           e.getCause()
-              .getMessage());  // provide exception message thrown by class, not the reflection api
+              .getMessage(),
+          e);  // provide exception message thrown by class, not the reflection api
     } catch (ClassNotFoundException | NoSuchMethodException |
              InstantiationException | IllegalAccessException | InvalidParameterException e) {
-      throw new RuntimeException(e);
+      throw new SimulationCreationException("Unable to create simulation", e);
     }
 
     initializeGridWithCells();
@@ -242,8 +257,8 @@ public class MainController {
    * Change/Increment the cell state to the next possible state. Used to edit the simulation's grid
    * from user input. The cell state will only be changed if the user is currently in editing mode
    *
-   * @param row:    row of cell you which to change state of
-   * @param column: column of cell you which to change state of
+   * @param row    row of cell you which to change state of
+   * @param column column of cell you which to change state of
    */
   public void changeCellState(int row, int column) {
     if (isEditing) {
@@ -284,7 +299,7 @@ public class MainController {
   /**
    * Update the main simulation of the program
    *
-   * @param simulation: The simulation you wish to switch to
+   * @param simulation The simulation you wish to switch to
    */
   public void updateSimulation(Simulation simulation) {
     mySimulation = simulation;
@@ -319,7 +334,7 @@ public class MainController {
   /**
    * Handle whether grid lines should be shown or not
    *
-   * @param selected: Whether to show grid lines
+   * @param selected Whether to show grid lines
    */
   public void setGridLines(boolean selected) {
     PreferencesController.setPreference("gridLines", String.valueOf(selected));
@@ -416,32 +431,13 @@ public class MainController {
       throws SAXException, ParserConfigurationException, IOException, GridException, InvalidStateException {
     try {
       attemptUpdateFromFilePath(filePath);
-    } catch (SAXException | ParserConfigurationException | IOException | GridException | InvalidStateException e) {
-      handleGridAndSimulationCreationExceptions(e);
+    } catch (SAXException | ParserConfigurationException | IOException | GridException |
+             InvalidStateException e) {
+      String errorMessageKey = getErrorMessageKey(e);
+      mySidebarView.flashWarning(getMessage(errorMessageKey));
+      LOGGER.warn(getMessage(errorMessageKey), e);
       throw e;
-    } catch (RuntimeException e) {
-      handleGridAndSimulationCreationExceptions(e);
-      throw new IllegalStateException("Unexpected runtime error during XML handling", e);
     }
-  }
-
-  private void handleGridAndSimulationCreationExceptions(Exception e) {
-    String errorMessageKey = getErrorMessageKey(e);
-    mySidebarView.flashWarning(getMessage(errorMessageKey));
-    LOGGER.warn(getMessage(errorMessageKey), e);
-  }
-
-  // I used ChatGPT to help in refactoring the getErrorMessageKey method to improve cyclomatic complexity
-  private static final Map<Class<? extends Exception>, String> ERROR_MESSAGE_MAP = new HashMap<>();
-
-  static {
-    ERROR_MESSAGE_MAP.put(SAXException.class, "ERROR_FORMAT");
-    ERROR_MESSAGE_MAP.put(ParserConfigurationException.class, "ERROR_PARSER");
-    ERROR_MESSAGE_MAP.put(IOException.class, "ERROR_IO");
-    ERROR_MESSAGE_MAP.put(NumberFormatException.class, "ERROR_NUMBER");
-    ERROR_MESSAGE_MAP.put(NullPointerException.class, "ERROR_MISSING");
-    ERROR_MESSAGE_MAP.put(GridException.class, "ERROR_GRID");
-    ERROR_MESSAGE_MAP.put(InvalidStateException.class, "ERROR_STATE");
   }
 
   private static String getErrorMessageKey(Exception e) {
@@ -490,7 +486,8 @@ public class MainController {
           try {
             step();  // step function
           } catch (ClassCastException ev) {
-            throw new IllegalStateException("Unexpected type encountered during step execution", ev);
+            throw new IllegalStateException("Unexpected type encountered during step execution",
+                ev);
           } catch (IllegalStateException ev) {
             throw new IllegalStateException("Invalid state detected during step execution", ev);
           }
@@ -511,7 +508,8 @@ public class MainController {
     myMainViewContainer.setAlignment(Pos.CENTER);
     try {
       updateSimulationFromFile(FileChooserConfig.DEFAULT_SIMULATION_PATH);
-    }  catch (IOException | SAXException | ParserConfigurationException | GridException | InvalidStateException e) {
+    } catch (IOException | SAXException | ParserConfigurationException | GridException |
+             InvalidStateException e) {
       LOGGER.warn("Error loading the default simulation file: {}", e.getMessage());
     } // can ignore thrown exception since we already handled them earlier in the chain
   }

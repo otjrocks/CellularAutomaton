@@ -111,13 +111,19 @@ public abstract class SimulationRules {
 
 
   /*
-  A simulation's state is updated through the following 2 methods: getNextStates and getNextStatesForAllCells.
+  A simulation's state is updated
+  through the following 2 methods: getNextStates and getNextStatesForAllCells.
   By default, getNextState returns the current state of a cell.
   getNextState is used by the default implementation of getNextStatesForAllCells
-  which returns a list of CellUpdates indicating the cells that need to be updated in the grid on the next step update.
-  A specific implementation of SimulationRules must overwrite or implement one or both of these methods to function.
-  By overwriting getNextStates, you indicate all the next states for the simulation step, which will be used by getNextStatesForAllCells.
-  If a specific simulation rules requires updating grid state in a specific order or updating cell state while determining next state (such as changing a cells health), then
+  which returns a list of CellUpdates indicating the cells that need to be updated
+  in the grid on the next step update.
+  A specific implementation of SimulationRules must overwrite
+  or implement one or both of these methods to function.
+  By overwriting getNextStates, you indicate all the next states
+   for the simulation step, which will be used by getNextStatesForAllCells.
+  If a specific simulation rules requires updating grid state
+  in a specific order or updating cell state while determining next state
+  (such as changing a cells health), then
   getNextStatesForAllCells can be overwritten.
   */
 
@@ -146,7 +152,7 @@ public abstract class SimulationRules {
    * the same time as determining the next states of the entire grid, this method should be
    * overwritten.
    *
-   * @param grid: The grid that you wish to get the next states for
+   * @param grid The grid that you wish to get the next states for
    * @return A list of cell updates that should occur
    * @see CellUpdate
    */

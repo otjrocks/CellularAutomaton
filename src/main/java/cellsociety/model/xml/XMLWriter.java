@@ -35,10 +35,10 @@ import javafx.stage.Stage;
 public class XMLWriter {
 
   /**
-   * Saves the current simulation to an XML file
+   * Saves the current simulation to an XML file.
    *
-   * @param sim:  The simulation object
-   * @param grid: The grid containing cell states
+   * @param sim  The simulation object
+   * @param grid The grid containing cell states
    */
   public static void saveSimulationToXML(Simulation sim, Grid grid, CellShapeType cellShapeType,
       EdgeStrategyType edgeStrategyType,
@@ -72,12 +72,12 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add a child element with text content to a parent element
+   * Helper method to add a child element with text content to a parent element.
    *
-   * @param doc:     Document to which you are adding the element
-   * @param parent:  Parent element you're appending the new element to
-   * @param tagName: Tag label for newly added element
-   * @param value:   Value associated with the newly added element
+   * @param doc     Document to which you are adding the element
+   * @param parent  Parent element you're appending the new element to
+   * @param tagName Tag label for newly added element
+   * @param value   Value associated with the newly added element
    */
 
   private static void addElement(Document doc, Element parent, String tagName, String value) {
@@ -91,16 +91,17 @@ public class XMLWriter {
     addElement(doc, simElement, "CellType", cellShapeType.toString());
   }
 
-  private static void writeEdgeStrategyType(Document doc, EdgeStrategyType edgeStrategyType, Element simElement) {
+  private static void writeEdgeStrategyType(Document doc, EdgeStrategyType edgeStrategyType,
+      Element simElement) {
     addElement(doc, simElement, "EdgeType", edgeStrategyType.toString());
   }
 
   /**
-   * Helper method to add simulation data to XML Writer document
+   * Helper method to add simulation data to XML Writer document.
    *
-   * @param doc:        Document to which you are adding the simulation data
-   * @param sim:        The simulation containing the data you want to save
-   * @param simElement: The parent element for all the simulation data
+   * @param doc        Document to which you are adding the simulation data
+   * @param sim        The simulation containing the data you want to save
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeSimData(Document doc, Simulation sim, Element simElement) {
     SimulationMetaData simData = sim.data();
@@ -111,11 +112,11 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add grid configuration data to XML Writer document
+   * Helper method to add grid configuration data to XML Writer document.
    *
-   * @param doc:        Document to which you are adding the grid data
-   * @param grid:       The grid containing the data you want to save
-   * @param simElement: The parent element for all the simulation data
+   * @param doc        Document to which you are adding the grid data
+   * @param grid       The grid containing the data you want to save
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeGrid(Document doc, Grid grid, Element simElement) {
     Element gridElement = doc.createElement("GridDimensions");
@@ -130,7 +131,7 @@ public class XMLWriter {
       for (int j = 0; j < grid.getCols(); j++) {
         Cell cell = grid.getCell(i, j);
         rowValues.append(cell.getState());
-        if (j < grid.getCols() - 1) {
+        if (indexLessThanGridNumberOfColumns(grid, j)) {
           rowValues.append(",");
         }
       }
@@ -140,12 +141,16 @@ public class XMLWriter {
     }
   }
 
+  private static boolean indexLessThanGridNumberOfColumns(Grid grid, int j) {
+    return j < grid.getCols() - 1;
+  }
+
   /**
-   * Helper method to add necessary parameters to XML Writer document
+   * Helper method to add necessary parameters to XML Writer document.
    *
-   * @param doc:        Document to which you are adding the grid data
-   * @param rules:      SimulationRules pbject that dictates necessary parameters
-   * @param simElement: The parent element for all the simulation data
+   * @param doc        Document to which you are adding the grid data
+   * @param rules      SimulationRules object that dictates necessary parameters
+   * @param simElement The parent element for all the simulation data
    */
   private static void writeParameters(Document doc, SimulationRules rules, Element simElement) {
     Element parametersElement = doc.createElement("Parameters");
@@ -157,7 +162,7 @@ public class XMLWriter {
   }
 
   /**
-   * Helper method to add neighbor configuration to the XML Writer document
+   * Helper method to add neighbor configuration to the XML Writer document.
    *
    * @param doc        Document to which the neighbors data will be added
    * @param rules      SimulationRules object that contains neighbor configuration
@@ -178,10 +183,10 @@ public class XMLWriter {
 
 
   /**
-   * Helper method to transform doc into XML file at designated path
+   * Helper method to transform doc into XML file at designated path.
    *
-   * @param doc:  Document to which you are adding the grid data
-   * @param file: The file generated from filepath
+   * @param doc  Document to which you are adding the grid data
+   * @param file The file generated from filepath
    */
   private static void transformXML(Document doc, File file) throws TransformerException {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();

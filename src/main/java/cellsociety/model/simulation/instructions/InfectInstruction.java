@@ -19,6 +19,7 @@ import cellsociety.model.simulation.rules.DarwinRules.State;
  */
 
 public class InfectInstruction implements Instruction {
+
   private int layers;
 
   /**
@@ -29,6 +30,7 @@ public class InfectInstruction implements Instruction {
   public InfectInstruction(int layers) {
     this.layers = layers;
   }
+
   /**
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
@@ -80,7 +82,7 @@ public class InfectInstruction implements Instruction {
    */
   @Override
   public void setStepSize(int stepSize) {
-  //not needed here
+    //not needed here
   }
 
   /**

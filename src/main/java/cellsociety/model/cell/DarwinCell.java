@@ -7,14 +7,14 @@ import java.util.List;
 import cellsociety.config.SimulationConfig;
 
 /**
- * The cell type used for Darwin simulation
+ * The cell type used for Darwin simulation.
  *
  * @author Justin Aronwald
  */
 public class DarwinCell extends Cell {
   private static final int stateValChecker = 10;
 
-  private int prevSpecies;
+  private final int prevSpecies;
   private int orientation;
   private int curInstructionIndex;
   private int infectionCountdown;
@@ -22,11 +22,11 @@ public class DarwinCell extends Cell {
   private final List<String> instructions;
 
   /**
-   * The default constructor for a Cell
+   * The default constructor for a Cell.
    *
-   * @param state    :    The initial state of a cell, represented as an int. In this case, it
-   *                 represents a species
-   * @param location : The location in the simulation grid represented by a Point2D, where the (x:
+   * @param state    The initial state of a cell, represented as an int. In this case, it represents
+   *                 a species
+   * @param location The location in the simulation grid represented by a Point2D, where the (x:
    *                 row, y: col) value is the relative location of the cell compared to other cells
    *                 in the grid.
    */
@@ -35,10 +35,9 @@ public class DarwinCell extends Cell {
     this.orientation = 0;
     this.curInstructionIndex = 0;
     this.infectionCountdown = 0;
-    if(state < stateValChecker) {
+    if (state < stateValChecker) {
       this.instructions = SimulationConfig.assignInstructionsFromState(state);
-    }
-    else{
+    } else {
       this.instructions = new ArrayList<>();
     }
     this.isInfected = false;
@@ -46,16 +45,9 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Create a Darwin Cell
+   * Create a Darwin Cell.
    *
-   * @param state              - The initial state of a cell, represented as an int. In this case,
-   *                           it represents a species
-   * @param location           - The location in the simulation grid represented by a Point2D, where
-   *                           the (x: row, y: col) value is the relative location of the cell
-   *                           compared to other cells in the grid.
-   * @param orientation        - the initial direction that the cell faces
-   * @param infectionCountdown - the number of steps left before a potential infection revers
-   * @param instructions       - the list of movement or infection commands
+   * @param record The darwin cell record for the cell
    */
   public DarwinCell(DarwinCellRecord record) {
     super(record.state(), record.location());
@@ -73,8 +65,7 @@ public class DarwinCell extends Cell {
    * @return - the current instruction that the species will execute
    */
   public String getInstruction() {
-    if (curInstructionIndex < 0 || curInstructionIndex >= instructions.size()
-        || instructions.isEmpty()) {
+    if (curInstructionIndex < 0 || curInstructionIndex >= instructions.size()) {
       return "";
     }
     return instructions.get(curInstructionIndex);
@@ -93,26 +84,17 @@ public class DarwinCell extends Cell {
   /**
    * Getter for the state of the previous species
    *
-   * @return - an int representation of the previous species's state
+   * @return - an int representation of the previous species' state
    */
   public int getPrevState() {
     return prevSpecies;
-  }
-
-  /**
-   * Setter for the previous species
-   *
-   * @param prevSpecies - an int representation of the previous species's state
-   */
-  public void setPrevState(int prevSpecies) {
-    this.prevSpecies = prevSpecies;
   }
 
 
   /**
    * Rotates the current orientation to the left by a rounded degrees
    *
-   * @param degrees - the degrees to which the orientation will rotate
+   * @param degrees  - the degrees to which the orientation will rotate
    * @param stepSize - the number of directions to look in -- tells the neighbor configuration
    */
   public void turnLeft(int degrees, int stepSize) {
@@ -126,7 +108,7 @@ public class DarwinCell extends Cell {
   /**
    * Rotates the current orientation to the right by a rounded degrees
    *
-   * @param degrees - the degrees to which the orientation will rotate
+   * @param degrees  - the degrees to which the orientation will rotate
    * @param stepSize - the number of directions to look in -- tells the neighbor configuration
    */
 
@@ -155,6 +137,7 @@ public class DarwinCell extends Cell {
 
     return closestAngle;
   }
+
   /**
    * Decreases the Infection Countdown
    */
@@ -237,9 +220,9 @@ public class DarwinCell extends Cell {
   /**
    * Getter for the infection state of the cell
    *
-   * @return - whether or not the cell is infected
+   * @return - whether the cell is infected
    */
-  public boolean getInfected(){
+  public boolean getInfected() {
     return isInfected;
   }
 

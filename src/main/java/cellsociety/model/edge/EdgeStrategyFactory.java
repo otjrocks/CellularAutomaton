@@ -1,14 +1,14 @@
 package cellsociety.model.edge;
 
 /**
- * A factory to create an edge strategy object
+ * A factory to create an edge strategy object.
  *
  * @author Owen Jennings
  */
 public class EdgeStrategyFactory {
 
   /**
-   * This enum stores all the supported edge strategies
+   * This enum stores all the supported edge strategies.
    */
   public enum EdgeStrategyType {
     FIXED("Fixed"),
@@ -29,7 +29,7 @@ public class EdgeStrategyFactory {
   }
 
   /**
-   * Create an edge strategy of the provided type
+   * Create an edge strategy of the provided type.
    *
    * @param edgeStrategyType The edge strategy type you want to create
    * @return An EdgeStrategy object for the specified type
