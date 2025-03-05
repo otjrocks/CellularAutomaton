@@ -8,7 +8,6 @@ import cellsociety.model.cell.DefaultCell;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.neighbors.MooreNeighbors;
 import cellsociety.model.simulation.neighbors.VonNeumannNeighbors;
-import cellsociety.model.simulation.rules.SimulationRules;
 import java.util.HashMap;
 import java.util.List;
 import java.awt.geom.Point2D.Double;

@@ -1,11 +1,8 @@
-package cellsociety.model.simulation.rules;
+package cellsociety.model.simulation;
 
 import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.neighbors.GetNeighbors;
-import cellsociety.model.simulation.InvalidParameterException;
-import cellsociety.model.simulation.Parameter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

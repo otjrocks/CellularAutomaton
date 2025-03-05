@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.neighbors;
 
+import cellsociety.model.simulation.GetNeighbors;
+
 /**
  * The default implementation of VonNeumann Neighbor policy (for a rectangle/square grid setup).
  *

@@ -1,6 +1,7 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.neighbors.GetNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

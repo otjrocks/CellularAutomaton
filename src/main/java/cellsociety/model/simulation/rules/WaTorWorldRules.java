@@ -1,8 +1,9 @@
 package cellsociety.model.simulation.rules;
 
-import cellsociety.model.simulation.neighbors.GetNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
+import cellsociety.model.simulation.SimulationRules;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;

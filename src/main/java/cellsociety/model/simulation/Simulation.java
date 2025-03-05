@@ -1,7 +1,5 @@
 package cellsociety.model.simulation;
 
-import cellsociety.model.simulation.rules.SimulationRules;
-
 /**
  * A record to store information about a simulation.
  *

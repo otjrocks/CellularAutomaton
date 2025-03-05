@@ -17,12 +17,12 @@ import static cellsociety.config.MainConfig.getMessage;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.DefaultCell;
-import cellsociety.model.simulation.neighbors.GetNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.rules.SimulationRules;
+import cellsociety.model.simulation.SimulationRules;
 import cellsociety.utility.FileUtility;
 
 /**

@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.neighbors;
 
+import cellsociety.model.simulation.GetNeighbors;
+
 /**
  * The neighbor rules for a hexagon grid using Von Neumann Technique.
  *

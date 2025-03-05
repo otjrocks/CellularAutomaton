@@ -3,7 +3,7 @@ package cellsociety.model.xml;
 import static cellsociety.config.MainConfig.LOGGER;
 
 import cellsociety.model.edge.EdgeStrategyFactory.EdgeStrategyType;
-import cellsociety.model.simulation.neighbors.GetNeighbors;
+import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.view.grid.GridViewFactory.CellShapeType;
 import java.io.File;
 import java.util.Map;
@@ -25,7 +25,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.Simulation;
 import cellsociety.model.simulation.SimulationMetaData;
-import cellsociety.model.simulation.rules.SimulationRules;
+import cellsociety.model.simulation.SimulationRules;
 import cellsociety.view.config.FileChooserConfig;
 import javafx.stage.Stage;
 

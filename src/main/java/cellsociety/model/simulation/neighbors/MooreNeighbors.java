@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.neighbors;
 
+import cellsociety.model.simulation.GetNeighbors;
+
 /**
  * The default implementation of moore neighbors (for square/rectangle neighbors).
  *
