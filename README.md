@@ -28,6 +28,7 @@ This project implements a cellular automata simulator.
     - The UI styles.css file was heavily influenced
       by : https://github.com/antoniopelusi/JavaFX-Dark-Theme
     - For understanding falling sand rules: https://www.youtube.com/watch?v=5Ka3tbbT-9E
+    - IntelliJ diagrams plugin and Mermaid plugin - https://plugins.jetbrains.com/plugin/20146-mermaid
 
 ### High level UML diagrams showcasing our model and view classes.
 
