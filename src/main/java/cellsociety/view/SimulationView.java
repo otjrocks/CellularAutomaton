@@ -156,7 +156,7 @@ public class SimulationView extends Group {
         double nextOpacity = nextCell.getOpacity();
         myGridView.setColor(row, col, nextColor);
         myGridView.setOpacity(row, col, nextOpacity);
-        myGridView.addCellTooltip(row, col, grid, mySimulation.data().type());
+        myGridView.addCellTooltip(row, col, grid, mySimulation);
       }
     }
   }
