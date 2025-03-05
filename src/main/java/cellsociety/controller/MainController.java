@@ -530,4 +530,13 @@ public class MainController {
     myEdgeStrategyType = edgeStrategyType;
     myGrid.setEdgeStrategy(EdgeStrategyFactory.createEdgeStrategy(edgeStrategyType));
   }
+
+  /**
+   * Return if the user is currently editing.
+   *
+   * @return will return if the user is currently in edit mode
+   */
+  public boolean isEditing() {
+    return isEditing;
+  }
 }

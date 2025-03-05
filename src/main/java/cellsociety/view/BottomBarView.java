@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import cellsociety.utility.ColorUtility;
+import cellsociety.view.config.StateDisplayConfig;
 import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class BottomBarView extends VBox {
   /**
    * Create a bottom bar view with a preferred size of width x height.
    *
-   * @param width preferred width of bottom bar box
+   * @param width  preferred width of bottom bar box
    * @param height preferred height of bottom bar box
    */
   public BottomBarView(int width, int height) {
@@ -167,18 +169,10 @@ public class BottomBarView extends VBox {
 
   private void updateXYChart() {
     for (Series<Number, Number> series : stateChangeChart.getData()) {
-      String colorString = BottomBarView.getWebColorString(
+      String colorString = ColorUtility.getWebColorString(
           stateInfoMap.get(series.getName()).color());
       series.getNode().setStyle("-fx-stroke: " + colorString + ";");
     }
-  }
-
-  // I used ChatGPT to write this method.
-  private static String getWebColorString(Color color) {
-    return String.format("#%02X%02X%02X",
-        (int) (color.getRed() * 255),
-        (int) (color.getGreen() * 255),
-        (int) (color.getBlue() * 255));
   }
 
   private void addStateToStateChangeMap(StateInfo state) {

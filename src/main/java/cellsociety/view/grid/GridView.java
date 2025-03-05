@@ -1,14 +1,18 @@
 package cellsociety.view.grid;
 
-import static cellsociety.config.MainConfig.getCellColors;
 import static cellsociety.config.MainConfig.getMessage;
+import static cellsociety.view.SidebarView.ELEMENT_SPACING;
 
 import cellsociety.controller.MainController;
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.simulation.Simulation;
 import cellsociety.view.cell.CellView;
+import cellsociety.view.config.StateDisplayConfig;
+import cellsociety.view.config.StateInfo;
 import javafx.scene.Group;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
@@ -20,19 +24,21 @@ import javafx.scene.shape.Shape;
  */
 public abstract class GridView extends Group {
 
+  public static final String STATE_MESSAGE = getMessage("STATE_PREFIX");
   private final int myNumRows;
   private final int myNumColumns;
   private final int myWidth;
   private final int myHeight;
   private final CellView[][] myGrid;
+  private final MainController myMainController;
 
   /**
    * Create a grid view.
    *
-   * @param width Width of the view
-   * @param height Height of the view
-   * @param numRows Number of rows in the grid
-   * @param numColumns Number of cells per row in the grid
+   * @param width          Width of the view
+   * @param height         Height of the view
+   * @param numRows        Number of rows in the grid
+   * @param numColumns     Number of cells per row in the grid
    * @param mainController : Main controller of the program
    */
   public GridView(int width, int height, int numRows, int numColumns,
@@ -43,6 +49,7 @@ public abstract class GridView extends Group {
     myWidth = width;
     myHeight = height;
     myGrid = initializeGrid();
+    myMainController = mainController;
     addGridElementsToGroupAndSetEventHandlers(mainController);
     this.setId("gridView");
   }
@@ -70,8 +77,8 @@ public abstract class GridView extends Group {
   /**
    * Set the color of a cell in the grid.
    *
-   * @param row row of cell
-   * @param col column of cell
+   * @param row   row of cell
+   * @param col   column of cell
    * @param color color you want to set
    */
   public void setColor(int row, int col, Paint color) {
@@ -170,24 +177,30 @@ public abstract class GridView extends Group {
   /**
    * Add the cell tool tip for a provided row, col in the grid.
    *
-   * @param row     The row of the cell
-   * @param col     The col of the cell
-   * @param grid    The grid of the simulation
-   * @param simType The name of the simulation type as a string
+   * @param row        The row of the cell
+   * @param col        The col of the cell
+   * @param grid       The grid of the simulation
+   * @param simulation The simulation you are using
    */
-  public void addCellTooltip(int row, int col, Grid grid, String simType) {
+  public void addCellTooltip(int row, int col, Grid grid, Simulation simulation) {
     Shape cellShape = myGrid[row][col].getShape();
 
     Tooltip tooltip = new Tooltip();
     Tooltip.install(cellShape, tooltip);
 
-    // Update tooltip dynamically when the user hovers
-    cellShape.setOnMouseEntered(event -> {
+    cellShape.setOnMouseEntered(
+        event -> displayToolTip(row, col, grid, simulation, event, tooltip, cellShape));
+    cellShape.setOnMouseExited(event -> tooltip.hide());
+  }
+
+  private void displayToolTip(int row, int col, Grid grid, Simulation simulation, MouseEvent event,
+      Tooltip tooltip, Shape cellShape) {
+    if (!myMainController.isEditing() && !myMainController.isPlaying()) {
       Cell cell = grid.getCell(row, col);
-      tooltip.setText("State: " + getMessage((simType + "_NAME_" + cell.getState()).toUpperCase()));
-      String colorString = getCellColors().getString(
-          ((simType + "_COLOR_" + cell.getState())).toUpperCase()).toLowerCase();
-      tooltip.setStyle("-fx-background-color: white; -fx-text-fill: " + colorString + ";");
-    });
+      StateInfo info = StateDisplayConfig.getStateInfo(simulation, cell.getState());
+      tooltip.setText(String.format(STATE_MESSAGE, info.displayName()));
+      tooltip.setStyle("-fx-background-color: -fx-light; -fx-text-fill: -fx-secondary;");
+      tooltip.show(cellShape, event.getScreenX(), event.getScreenY() + ELEMENT_SPACING * 3);
+    }
   }
 }
