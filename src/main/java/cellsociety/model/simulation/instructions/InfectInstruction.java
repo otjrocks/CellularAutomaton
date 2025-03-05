@@ -55,7 +55,7 @@ public class InfectInstruction implements Instruction {
 
       DarwinCell speciesCell = (DarwinCell) curCell;
 
-      if (curCell == null || ((curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState() || speciesCell.getInfected()) && !occupiedCells.keySet().contains(curCell.getLocation()))) {
+      if (!isValidInfectionTarget(curCell, darwinCell, occupiedCells)) {
         continue;
       }
 
@@ -64,7 +64,16 @@ public class InfectInstruction implements Instruction {
     return updates;
   }
 
+  private boolean isValidInfectionTarget(Cell curCell, DarwinCell darwinCell, Map<Point2D, DarwinCell> occupiedCells) {
+    if (curCell == null) return false;
+    
+    DarwinCell speciesCell = (DarwinCell) curCell;
+    boolean isEmptyOrSameSpecies = curCell.getState() == State.EMPTY.getValue() || curCell.getState() == darwinCell.getState();
+    boolean isAlreadyInfected = speciesCell.getInfected();
+    boolean isOccupied = occupiedCells.containsKey(curCell.getLocation());
 
+    return !(isEmptyOrSameSpecies || isAlreadyInfected || isOccupied);
+  }
 
   /**
    * @param stepSize - the number of directions to look towards for each configuration

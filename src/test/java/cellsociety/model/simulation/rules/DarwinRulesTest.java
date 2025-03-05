@@ -104,7 +104,7 @@ class DarwinRulesTest {
   @Test
   void getNextStatesForAllCells_ConditionalIfSame_DoesNotJump() {
     DarwinCell cell1 = new DarwinCell(0, new Double(2, 2));
-    DarwinCell cell2 = new DarwinCell(1, new Double(3, 2));
+    DarwinCell cell2 = new DarwinCell(10, new Double(3, 2));
 
     grid.updateCell(cell1);
     grid.updateCell(cell2);

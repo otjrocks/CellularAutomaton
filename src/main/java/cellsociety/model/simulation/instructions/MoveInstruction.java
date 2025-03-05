@@ -55,7 +55,7 @@ public class MoveInstruction implements Instruction {
           break;
         }
 
-        if (curCell == null || curCell.getState() != State.EMPTY.getValue() || occupiedCells.keySet().contains(curCell.getLocation())) {
+        if (shouldBreakTraversal(curCell, occupiedCells)) {
           break;
         }
 
@@ -64,6 +64,10 @@ public class MoveInstruction implements Instruction {
 
       return updateGridForMovement(darwinCell, curLocation, occupiedCells, movingCells);
     }
+
+  private boolean shouldBreakTraversal(Cell curCell, Map<Point2D, DarwinCell> occupiedCells) {
+    return curCell == null || curCell.getState() != State.EMPTY.getValue() || occupiedCells.keySet().contains(curCell.getLocation());
+  }
 
   /**
    * @param stepSize - the number of directions to look towards for each configuration
