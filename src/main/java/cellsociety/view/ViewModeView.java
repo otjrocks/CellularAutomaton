@@ -154,7 +154,9 @@ public class ViewModeView extends VBox {
       myMainController.handleNewSimulationFromFile();
     } catch (GridException | InvalidStateException | IOException |
              ParserConfigurationException | SAXException | IllegalArgumentException e) {
-      myAlertField.flash(e.getMessage(), true);
+      if (e.getMessage() != null) {
+        myAlertField.flash(e.getMessage(), true);
+      }
       myAlertField.flash(getMessage("LOAD_ERROR"), true);
     }
     stopAnimationPlayIfRunning();
