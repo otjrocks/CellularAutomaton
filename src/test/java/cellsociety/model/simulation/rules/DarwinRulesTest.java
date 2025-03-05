@@ -33,7 +33,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_MoveInstruction_ExecuteCorrectly() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("MOVE 2");
 
     grid.updateCell(cell);
@@ -46,7 +46,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_LeftInstruction_UpdatesExecuteCorrectly() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("LEFT 90");
     grid.updateCell(cell);
 
@@ -56,7 +56,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_RightInstruction_UpdatesExecuteCorrectlyAndRounds() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("RIGHT 70");
     grid.updateCell(cell);
 
@@ -67,7 +67,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_ConditionalIfEmpty_JumpsToCorrectInstruction() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("IFEMPTY 2");
 
     grid.updateCell(cell);
@@ -77,7 +77,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_ConditionalIfWall_JumpsCorrectly() {
-    DarwinCell cell = new DarwinCell(5, new Double(0, 0));
+    DarwinCell cell = new DarwinCell(0, new Double(0, 0));
     cell.setInstructions("IFWALL 2");
 
     grid.updateCell(cell);
@@ -90,7 +90,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_ConditionalIfWall_DoesNotJump() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("IFWALL 2");
 
     grid.updateCell(cell);
@@ -103,8 +103,8 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_ConditionalIfSame_DoesNotJump() {
-    DarwinCell cell1 = new DarwinCell(5, new Double(2, 2));
-    DarwinCell cell2 = new DarwinCell(6, new Double(3, 2));
+    DarwinCell cell1 = new DarwinCell(0, new Double(2, 2));
+    DarwinCell cell2 = new DarwinCell(10, new Double(3, 2));
 
     grid.updateCell(cell1);
     grid.updateCell(cell2);
@@ -116,8 +116,8 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_ConditionalIfSame_Jumps() {
-    DarwinCell cell1 = new DarwinCell(5, new Double(2, 2));
-    DarwinCell cell2 = new DarwinCell(5, new Double(3, 2));
+    DarwinCell cell1 = new DarwinCell(0, new Double(2, 2));
+    DarwinCell cell2 = new DarwinCell(0, new Double(3, 2));
 
     cell1.setInstructions("IFSAME 2");
 
@@ -131,7 +131,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_GoInstruction_SetsCorrectly() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
 
     cell.setInstructions("GO 2");
     grid.updateCell(cell);
@@ -142,7 +142,7 @@ class DarwinRulesTest {
 
   @Test
   void getNextStatesForAllCells_InvalidCommands_NothingHappens() {
-    DarwinCell cell = new DarwinCell(5, new Double(2, 2));
+    DarwinCell cell = new DarwinCell(0, new Double(2, 2));
     cell.setInstructions("INVALID 5");
     grid.addCell(cell);
 

@@ -1,9 +1,13 @@
 package cellsociety.model.simulation;
 
+import java.awt.geom.Point2D;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
-import java.util.List;
 
 /**
  * Interface defined to create an Instruction instance. Handles all different Instructions needed
@@ -20,7 +24,7 @@ public interface Instruction {
    * @param arguments  - the list of instructions for the given cell
    * @param grid       - the collection of cell objects
    */
-  List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid);
+  List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells);
 
   /**
    * Sets the step size for neighbor configuration.
