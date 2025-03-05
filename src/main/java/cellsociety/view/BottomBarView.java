@@ -1,19 +1,18 @@
 package cellsociety.view;
 
-import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static cellsociety.config.MainConfig.GRID_HEIGHT;
 import static cellsociety.config.MainConfig.GRID_WIDTH;
 import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getMessage;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-
-import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import cellsociety.view.config.StateInfo;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
@@ -164,7 +163,7 @@ public class BottomBarView extends VBox {
     }
   }
 
-
+  // I asked ChatGPT to help me with graph styling
   private void updateXYChart() {
     for (Series<Number, Number> series : stateChangeChart.getData()) {
       String colorString = BottomBarView.getWebColorString(
