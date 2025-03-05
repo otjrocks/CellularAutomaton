@@ -1,0 +1,81 @@
+
+classDiagram
+  direction BT
+  class Cell {
+    + Cell(int, Point2D)
+    + getCol() int
+    + getOpacity() double
+    - checkValidLocation(Point2D) void
+    + getLocation() Point2D
+    - validateIsInteger(Point2D) boolean
+    + getState() int
+    + getRow() int
+  }
+  class CellUpdate {
+    + CellUpdate(Point2D, Cell)
+    + getRow() int
+    + getCol() int
+    + getState() int
+    + getNextCell() Cell
+  }
+  class DarwinCell {
+    + DarwinCell(DarwinCellRecord)
+    + DarwinCell(int, Point2D)
+    + getInstruction() String
+    + getInfectionCountdown() int
+    + setInstructions(String) void
+    + turnRight(int, int) void
+    + getFrontDirection() Point2D
+    + getInfected() boolean
+    + getPrevState() int
+    + turnLeft(int, int) void
+    - roundOrientation(int, int) int
+    + getCurInstructionIndex() int
+    + nextInstruction() void
+    + getOrientation() int
+    + handleInfectionDecrease() void
+    + getAllInstructions() List~String~
+    + setCurInstructionIndex(int) void
+  }
+  class DefaultCell {
+    + DefaultCell(int, Point2D)
+  }
+  class ForagingAntsCell {
+    + ForagingAntsCell(int, Point2D, double, double, int, boolean, double)
+    + ForagingAntsCell(int, Point2D)
+    + getFoodPheromone() double
+    + reduceHealth(int) void
+    + getHealth() int
+    + getHasFood() boolean
+    + getOpacity() double
+    + getHomePheromone() double
+  }
+  class SugarscapeCell {
+    + SugarscapeCell(int, Point2D)
+    + SugarscapeCell(int, Point2D, int, int, int, int, int)
+    + getMetabolism() int
+    + setSugar(int) void
+    + isPatch() boolean
+    + getSugarGrowBackRate() int
+    + getVision() int
+    + getSugarGrowBackInterval() int
+    + getOpacity() double
+    - checkParametersArePositive(int, int, int, int, int) boolean
+    + isAgent() boolean
+    + regenerateSugar() void
+    + getSugar() int
+  }
+  class WaTorWorldCell {
+    + WaTorWorldCell(int, Point2D, int, double)
+    + WaTorWorldCell(int, Point2D)
+    + getReproductionEnergy() double
+    + getHealth() int
+  }
+
+
+  CellUpdate "1" *--> "nextCell 1" Cell
+  DarwinCell  -->  Cell
+  WaTorWorldCell --> Cell
+  SugarscapeCell --> Cell
+  ForagingAntsCell --> Cell
+  DefaultCell --> Cell

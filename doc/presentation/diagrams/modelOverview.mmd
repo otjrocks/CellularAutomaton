@@ -1,0 +1,52 @@
+classDiagram
+    direction TB
+    class Simulation {
+        + Simulation(SimulationRules, SimulationMetaData)
+        + data() SimulationMetaData
+        + rules() SimulationRules
+    }
+    class SimulationMetaData {
+        + SimulationMetaData(String, String, String, String, String, int)
+        + name() String
+        + type() String
+        + layers() int
+        + neighborType() String
+        + author() String
+        + description() String
+    }
+    class SimulationRules {
+        + SimulationRules(Map~String, Parameter~ ?~~, GetNeighbors)
+        + getNeighbors(Cell, Grid) List~Cell~
+        + getNumberStates() int
+        + getNextStatesForAllCells(Grid) List~CellUpdate~
+        + getLayers() int
+        + getRequiredParameters() List~String~
+        + setParameters(Map~String, Parameter~ ?~~) void
+        + throwInvalidParameterException(String) void
+        + checkMissingParameterAndThrowException(String) void
+        + getParameters() Map~String, Parameter~ ?~~
+        + getStepSize() int
+        + getNeighborConfig() GetNeighbors
+        + getNextState(Cell, Grid) int
+    }
+    class GetNeighbors {
+        + GetNeighbors(int)
+        + getDirections(int, int) int[][]
+        + getStepSize() int
+        + getNeighbors(Cell, Grid) List~Cell~
+        + getLayers() int
+        - addNeighborCellsForLayer(Cell, Grid, int[][], int, List~Cell~) void
+        - addNeighborCell(Grid, int, int, List~Cell~) void
+        - addAllNeighborCells(Cell, Grid, int[][], List~Cell~) void
+    }
+    class Parameter~T~ {
+        + getInteger() Integer
+        + getDouble() Double
+        + getString() String
+        + toString() String
+    }
+
+    Simulation "1" *--> "1 rules" SimulationRules
+    Simulation "1" *--> "1 meta data" SimulationMetaData
+    SimulationRules "1" *--> "1 neighbor policy" GetNeighbors
+    SimulationRules "1" *--> "* parameters" Parameter~T~
