@@ -1,14 +1,15 @@
 package cellsociety.model.simulation.rules;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cellsociety.model.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 import cellsociety.model.simulation.SimulationRules;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -54,7 +55,7 @@ public class RockPaperScissorsRules extends SimulationRules {
   }
 
   /**
-   * Get a list of all required parameters for a simulation
+   * Get a list of all required parameters for a simulation.
    *
    * @return A list of strings representing the required parameter keys for this simulation
    */

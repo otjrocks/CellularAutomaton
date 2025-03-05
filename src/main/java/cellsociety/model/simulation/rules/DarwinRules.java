@@ -35,11 +35,17 @@ import cellsociety.model.simulation.instructions.RightInstruction;
  * Rules class for the Darwin Simulation.
  *
  * @author Justin Aronwald
+ * @author Troy Ludwig
  */
 public class DarwinRules extends SimulationRules {
 
   public static final Logger LOGGER = LogManager.getLogger();
   private Map<String, Instruction> instructionHandlers;
+  private static final String IFEMPTY = "IFEMPTY";
+  private static final String IFWALL = "IFWALL";
+  private static final String IFSAME = "IFSAME";
+  private static final String IFENEMY = "IFENEMY";
+  private static final String IFRANDOM = "IFRANDOM";
 
   /**
    * The default constructor of a simulation rules class.
@@ -69,19 +75,14 @@ public class DarwinRules extends SimulationRules {
     instructionHandlers.put("RT", new RightInstruction());
     instructionHandlers.put("INFECT", new InfectInstruction(getLayers()));
     instructionHandlers.put("INF", new InfectInstruction(getLayers()));
-    String IFEMPTY = "IFEMPTY";
     instructionHandlers.put(IFEMPTY, new ConditionalInstruction(IFEMPTY, getLayers()));
     instructionHandlers.put("EMP?", new ConditionalInstruction(IFEMPTY, getLayers()));
-    String IFWALL = "IFWALL";
     instructionHandlers.put("IFWALL", new ConditionalInstruction(IFWALL, getLayers()));
     instructionHandlers.put("WL?", new ConditionalInstruction(IFWALL, getLayers()));
-    String IFSAME = "IFSAME";
     instructionHandlers.put(IFSAME, new ConditionalInstruction(IFSAME, getLayers()));
     instructionHandlers.put("SM?", new ConditionalInstruction(IFSAME, getLayers()));
-    String IFENEMY = "IFENEMY";
     instructionHandlers.put(IFENEMY, new ConditionalInstruction(IFENEMY, getLayers()));
     instructionHandlers.put("EMY?", new ConditionalInstruction(IFENEMY, getLayers()));
-    String IFRANDOM = "IFRANDOM";
     instructionHandlers.put(IFRANDOM, new ConditionalInstruction(IFRANDOM, getLayers()));
     instructionHandlers.put("RND?", new ConditionalInstruction(IFRANDOM, getLayers()));
     instructionHandlers.put("GO", new GoInstruction());
@@ -109,7 +110,10 @@ public class DarwinRules extends SimulationRules {
 
       Instruction instruction = instructionHandlers.get(arguments.getFirst());
       if (instruction != null) {
-        List<CellUpdate> instructionUpdates = instruction.executeInstruction(darwinCell, arguments, grid, occupiedCells, movingCells);
+        List<CellUpdate> instructionUpdates = 
+        instruction.executeInstruction(darwinCell, arguments, grid, 
+        occupiedCells, movingCells);
+
         darwinCell.nextInstruction();
         updates.addAll(instructionUpdates);
       } else if (!(darwinCell.getState() == State.EMPTY.getValue())) {
@@ -138,7 +142,8 @@ public class DarwinRules extends SimulationRules {
    * An enum to store the possible states for this simulation.
    */
   public enum State {
-    EMPTY, HOPPER, FLYTRAP, CREEPER, LANDMINE, OODFAY, ROVER, DANCER, SNAKE, RUNNER;
+    EMPTY, HOPPER, FLYTRAP, CREEPER, LANDMINE, 
+    OODFAY, ROVER, DANCER, SNAKE, RUNNER;
 
     /**
      * Get the ordinal value of this enum entry.
@@ -151,7 +156,7 @@ public class DarwinRules extends SimulationRules {
   }
 
   /**
-   * @return - the number of potential states for any given cell
+   * @return - the number of potential states for any given cell.
    */
   @Override
   public int getNumberStates() {

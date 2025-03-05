@@ -20,7 +20,9 @@ import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
 
 /**
- * A class representing the rules for Foraging Ants
+ * A class representing the rules for Foraging Ants.
+ * 
+ * @author Troy Ludwig
  */
 public class ForagingAntsRules extends SimulationRules {
 
@@ -42,7 +44,7 @@ public class ForagingAntsRules extends SimulationRules {
   private final List<Cell> nestCellNeighbors = new ArrayList<>();
 
   /**
-   * A default constructor for foraging ants
+   * A default constructor for foraging ants.
    *
    * @param parameters The required parameters. This class requires pheromoneDecayRate,
    *                   antReproductionTime, and maxPheromoneAmount
@@ -312,7 +314,7 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Method that updates the pheremones for the cell the ant is moving to
+   * Method that updates the pheremones for the cell the ant is moving to.
    *
    * @param antCell the cell the ant is moving to and thus needs have its pheremones updated
    * @param grid    grid on which the cell is located
@@ -356,7 +358,7 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Method that gets neighbors based on state value
+   * Method that gets neighbors based on state value.
    *
    * @param cell          the cell whose neighbors you want to find
    * @param grid          grid on which the cell is located
@@ -376,7 +378,7 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Method that finds the neighbor of a given cell with the highest pheromones
+   * Method that finds the neighbor of a given cell with the highest pheromones.
    *
    * @param emptyNeighbors neighbors with an empty state value
    * @param type           String to differentiate between home and food pheromones
@@ -418,7 +420,7 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Method that adds a new ant with full health to the grid
+   * Method that adds a new ant with full health to the grid.
    *
    * @param newAnt     the ant cell to be added
    * @param nextStates list of CellUpdates to be handled by the grid
@@ -432,7 +434,7 @@ public class ForagingAntsRules extends SimulationRules {
 
   /**
    * Method that moves an ant to somewhere else in the grid (adds new cell with properly updated
-   * values)
+   * values).
    *
    * @param ant          the current ant to based update values on
    * @param nextLocation the location where the ant is moving
@@ -450,7 +452,7 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   /**
-   * Method that adds an empty cell in the case of when an ant moves or dies
+   * Method that adds an empty cell in the case of when an ant moves or dies.
    *
    * @param ant        the ant cell to be referenced for position
    * @param nextStates list of CellUpdates to be handled by the grid
@@ -497,8 +499,8 @@ public class ForagingAntsRules extends SimulationRules {
   }
 
   private void verifyAndAddNewAnt(ForagingAntsCell nextLocation, ForagingAntsCell ant, Grid grid, 
-  List<CellUpdate> nextStates, Set<Point2D> occupiedCells){
-    if(nextLocation != null){
+            List<CellUpdate> nextStates, Set<Point2D> occupiedCells) {
+    if (nextLocation != null) {
       addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
       occupiedCells.add(nextLocation.getLocation());
 

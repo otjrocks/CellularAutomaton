@@ -60,7 +60,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Get the current instruction of the Species
+   * Get the current instruction of the Species.
    *
    * @return - the current instruction that the species will execute
    */
@@ -72,7 +72,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Handles incrementing of instructions
+   * Handles incrementing of instructions.
    */
   // had help from ChatGPT to get the logic of looping instructions
   public void nextInstruction() {
@@ -82,7 +82,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Getter for the state of the previous species
+   * Getter for the state of the previous species.
    *
    * @return - an int representation of the previous species' state
    */
@@ -92,7 +92,7 @@ public class DarwinCell extends Cell {
 
 
   /**
-   * Rotates the current orientation to the left by a rounded degrees
+   * Rotates the current orientation to the left by a rounded degrees.
    *
    * @param degrees  - the degrees to which the orientation will rotate
    * @param stepSize - the number of directions to look in -- tells the neighbor configuration
@@ -106,7 +106,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Rotates the current orientation to the right by a rounded degrees
+   * Rotates the current orientation to the right by a rounded degrees.
    *
    * @param degrees  - the degrees to which the orientation will rotate
    * @param stepSize - the number of directions to look in -- tells the neighbor configuration
@@ -139,7 +139,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Decreases the Infection Countdown
+   * Decreases the Infection Countdown.
    */
   public void handleInfectionDecrease() {
     if (infectionCountdown > 0) {
@@ -150,7 +150,7 @@ public class DarwinCell extends Cell {
   //had help from ChatGPT to generate the radian logic
 
   /**
-   * Determines the direction that the cell faces
+   * Determines the direction that the cell faces.
    *
    * @return - a unit vector in the direction the cell faces
    */
@@ -163,7 +163,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Sets the current instruction index to a new index
+   * Sets the current instruction index to a new index.
    *
    * @param instructionIndex - the new index to be set to
    */
@@ -173,7 +173,7 @@ public class DarwinCell extends Cell {
 
 
   /**
-   * Gets the instruction list
+   * Gets the instruction list.
    *
    * @return - the list of instructions for the species
    */
@@ -182,7 +182,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Getter for the orientation
+   * Getter for the orientation.
    *
    * @return - the angle which the species is turned
    */
@@ -191,7 +191,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Getter for the infection countdown
+   * Getter for the infection countdown.
    *
    * @return - the number of steps left before a potential infection reverse
    */
@@ -200,7 +200,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Setter for an instruction (used mainly for tests)
+   * Setter for an instruction (used mainly for tests).
    *
    * @param instruction - an instruction for a species
    */
@@ -209,7 +209,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Getter for the instruction index
+   * Getter for the instruction index.
    *
    * @return - the index of the current instruction to run
    */
@@ -218,7 +218,7 @@ public class DarwinCell extends Cell {
   }
 
   /**
-   * Getter for the infection state of the cell
+   * Getter for the infection state of the cell.
    *
    * @return - whether the cell is infected
    */

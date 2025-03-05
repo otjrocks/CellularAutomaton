@@ -15,7 +15,7 @@ import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.rules.DarwinRules.State;
 
 /**
- * Conditional Instruction class to handle the various conditionals in Darwin Simulation
+ * Conditional Instruction class to handle the various conditionals in Darwin Simulation.
  */
 public class ConditionalInstruction implements Instruction {
 
@@ -24,7 +24,7 @@ public class ConditionalInstruction implements Instruction {
   private final Random random = new Random();
 
   /**
-   * Creates one instance of a Conditional Instruction
+   * Creates one instance of a Conditional Instruction.
    *
    * @param conditionType - the string name of the condition
    * @param layers        - the number of layers that should be searched when getting neighbors
@@ -35,12 +35,15 @@ public class ConditionalInstruction implements Instruction {
   }
 
   /**
+   * Overidden function that carrys out the conditional.
+   * 
    * @param darwinCell - the cell that the instruction is executed on
    * @param arguments  - the list of instructions for the given cell
    * @param grid       - the collection of cell objects
    */
   @Override
-  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
+  public List<CellUpdate> executeInstruction(DarwinCell darwinCell, List<String> arguments, Grid grid, 
+            Map<Point2D, DarwinCell> occupiedCells, Set<Point2D> movingCells) {
     Point2D direction = darwinCell.getFrontDirection();
     int newRow = darwinCell.getRow();
     int newCol = darwinCell.getCol();
@@ -98,7 +101,8 @@ public class ConditionalInstruction implements Instruction {
     return conditionType.equals("IFRANDOM") || conditionType.equals("RND?");
   }
 
-  private boolean checkIfConditionIsMet(DarwinCell darwinCell, Cell curCell, Grid grid) {
+  private boolean checkIfConditionIsMet(DarwinCell darwinCell, 
+            Cell curCell, Grid grid) {
     return ConditionType.valueOf(conditionType).check(darwinCell, curCell, grid);
   }
 
@@ -117,7 +121,7 @@ public class ConditionalInstruction implements Instruction {
     private final ConditionChecker conditionChecker;
 
     /**
-     * Creates an instance of the enum for the current type of the condition
+     * Creates an instance of the enum for the current type of the condition.
      *
      * @param checker - instance of the functional interface that checks the condition
      */
@@ -126,7 +130,7 @@ public class ConditionalInstruction implements Instruction {
     }
 
     /**
-     * Calls the checker to validate the condition
+     * Calls the checker to validate the condition.
      *
      * @param darwinCell - the cell that the instruction is executed on
      * @param curCell    - the current cell that is being compared to the darwinCell
@@ -139,13 +143,13 @@ public class ConditionalInstruction implements Instruction {
   }
 
   /**
-   * A functional interface that checks and validates the condition
+   * A functional interface that checks and validates the condition.
    */
   @FunctionalInterface
   private interface ConditionChecker {
 
     /**
-     * Method to check whether or not the condition is validated
+     * Method to check whether or not the condition is validated.
      *
      * @param darwinCell - the cell that the instruction is executed on
      * @param curCell    - the current cell that is being compared to the darwinCell
@@ -156,6 +160,8 @@ public class ConditionalInstruction implements Instruction {
   }
 
   /**
+   * Instatiates the number of directions a species can look.
+   * 
    * @param stepSize - the number of directions to look towards for each configuration
    */
   @Override
@@ -164,6 +170,8 @@ public class ConditionalInstruction implements Instruction {
   }
 
   /**
+   * Instantiates number of tiles each species can see.
+   * 
    * @param layers - the number of cells to look forward
    */
   @Override

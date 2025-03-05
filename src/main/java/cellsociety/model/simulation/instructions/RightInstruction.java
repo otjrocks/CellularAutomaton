@@ -3,12 +3,12 @@ package cellsociety.model.simulation.instructions;
 import cellsociety.model.cell.DarwinCell;
 
 /**
- * Subclass to handle the turning of a cell right
+ * Subclass to handle the turning of a cell right.
  */
 public class RightInstruction extends TurnInstruction {
 
   /**
-   * The method that calls the cell method to turn the cell
+   * The method that calls the cell method to turn the cell.
    *
    * @param darwinCell - the cell being executed on
    * @param degrees    - the degrees being shifted right

@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
- * A record storing the information required for a darwin cell
+ * A record storing the information required for a darwin cell.
  *
  * @param state              The state int value
  * @param location           The location of the cell
