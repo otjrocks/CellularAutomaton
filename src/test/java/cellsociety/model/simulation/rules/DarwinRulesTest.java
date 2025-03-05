@@ -5,6 +5,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import cellsociety.model.cell.CellUpdate;
 import cellsociety.model.cell.DarwinCell;
 import cellsociety.model.edge.FixedEdgeStrategy;
 import cellsociety.model.simulation.InvalidParameterException;
+import cellsociety.model.simulation.Simulation;
+import cellsociety.model.simulation.SimulationMetaData;
 import cellsociety.model.simulation.neighbors.MooreNeighbors;
 
 class DarwinRulesTest {
@@ -138,6 +141,23 @@ class DarwinRulesTest {
     List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
 
     assertEquals(0, cell.getCurInstructionIndex());
+  }
+
+  @Test
+  void getNextStatesForAllCells_InfectInstruction_DoesNotInfect() {
+    DarwinCell cell = new DarwinCell(1, new Double(2, 1));
+    DarwinCell cell2 = new DarwinCell(2, new Double(2, 2));
+
+    grid.updateCell(cell);
+    grid.updateCell(cell2);
+
+    for(int i = 0; i < 10; i++){
+      List<CellUpdate> updates = darwinRules.getNextStatesForAllCells(grid);
+      grid.updateGrid(new Simulation(darwinRules, new SimulationMetaData("","","","","",1)));
+      System.out.println(((DarwinCell)grid.getCell(new Double(2, 2))).getInfected());
+    }
+
+    assertFalse(cell.getInfected());
   }
 
   @Test
