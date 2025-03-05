@@ -29,7 +29,7 @@ This project implements a cellular automata simulator.
       by : https://github.com/antoniopelusi/JavaFX-Dark-Theme
     - For understanding falling sand rules: https://www.youtube.com/watch?v=5Ka3tbbT-9E
 
-### High level UML diagrams showcasing our model and view classes. 
+### High level UML diagrams showcasing our model and view classes.
 
 ![CellModel.png](doc/images/CellModel.png)
 ![EdgeStrategyModel.png](doc/images/EdgeStrategyModel.png)
@@ -144,6 +144,8 @@ This project implements a cellular automata simulator.
       rounding
       of double values for their location. This may make it appear like there are grid lines even
       when grid lines is disabled.
+    * Sometimes when changing the theme, some of the text in the UI has an update glitch where the
+      text alignment shifts from centered to right or left aligned.
 
 * Features implemented:
     * Every core feature from the initial project, to the general and robustness phase, to the

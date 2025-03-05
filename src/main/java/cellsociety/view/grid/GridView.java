@@ -24,7 +24,6 @@ import javafx.scene.shape.Shape;
  */
 public abstract class GridView extends Group {
 
-  public static final String STATE_MESSAGE = getMessage("STATE_PREFIX");
   private final int myNumRows;
   private final int myNumColumns;
   private final int myWidth;
@@ -198,7 +197,7 @@ public abstract class GridView extends Group {
     if (!myMainController.isEditing() && !myMainController.isPlaying()) {
       Cell cell = grid.getCell(row, col);
       StateInfo info = StateDisplayConfig.getStateInfo(simulation, cell.getState());
-      tooltip.setText(String.format(STATE_MESSAGE, info.displayName()));
+      tooltip.setText(String.format(getMessage("STATE_PREFIX"), info.displayName()));
       tooltip.setStyle("-fx-background-color: -fx-light; -fx-text-fill: -fx-secondary;");
       tooltip.show(cellShape, event.getScreenX(), event.getScreenY() + ELEMENT_SPACING * 3);
     }

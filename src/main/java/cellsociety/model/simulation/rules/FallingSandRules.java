@@ -92,7 +92,7 @@ public class FallingSandRules extends SimulationRules {
   }
 
   private void handleSandMovement(Grid grid, Cell sandCell, List<CellUpdate> updates) {
-    Cell cellBelow = getNeighborCell(sandCell, grid, sandCell.getRow() + 1, sandCell.getCol());
+    Cell cellBelow = getCellIfInBounds(grid, sandCell.getRow() + 1, sandCell.getCol());
     if (cellBelow == null) { // no cell below exists, you cannot move stay in location
       return;
     }
@@ -103,9 +103,9 @@ public class FallingSandRules extends SimulationRules {
   }
 
   private void attemptMoveSandDiagonal(Cell sandCell, Grid grid, List<CellUpdate> updates) {
-    Cell leftDiagonalCell = getNeighborCell(sandCell, grid, sandCell.getRow() + 1,
+    Cell leftDiagonalCell = getCellIfInBounds(grid, sandCell.getRow() + 1,
         sandCell.getCol() - 1);
-    Cell rightDiagonalCell = getNeighborCell(sandCell, grid, sandCell.getRow() + 1,
+    Cell rightDiagonalCell = getCellIfInBounds(grid, sandCell.getRow() + 1,
         sandCell.getCol() + 1);
     moveWithZeroOrOneEmptyDiagonal(grid, sandCell, updates, leftDiagonalCell, rightDiagonalCell);
     // we now know that both diagonals are empty
@@ -162,16 +162,6 @@ public class FallingSandRules extends SimulationRules {
     updates.add(new CellUpdate(sandCell.getLocation(), newEmpty)); // move empty up
     grid.updateCell(newSand);
     grid.updateCell(newEmpty);
-  }
-
-  private Cell getNeighborCell(Cell cell, Grid grid, int row, int col) {
-    List<Cell> neighbors = getNeighbors(cell, grid);
-    for (Cell neighbor : neighbors) {
-      if (neighbor.getRow() == row && neighbor.getCol() == col) {
-        return neighbor;
-      }
-    }
-    return null;
   }
 
   private Cell getCellIfInBounds(Grid grid, int row, int col) {

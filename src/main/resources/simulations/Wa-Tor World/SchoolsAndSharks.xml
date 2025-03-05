@@ -4,12 +4,12 @@
     <Title>SchoolsAndSharks</Title>
     <Author>Troy Ludwig</Author>
     <Description>Multiple spread out schools of fish and individual sharks around them</Description>
-
+    <CellType>Rectangle</CellType>
+    <EdgeType>Fixed</EdgeType>
     <Neighbors>
         <NeighborType>Moore</NeighborType>
         <NeighborLayer>1</NeighborLayer>
     </Neighbors>
-
     <GridDimensions>
         <Height>50</Height>
         <Width>50</Width>
@@ -67,8 +67,8 @@
         <Row>2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
     </GridData>
     <Parameters>
-        <fishReproductionTime>2.0</fishReproductionTime>
-        <sharkEnergyGain>1.0</sharkEnergyGain>
-        <sharkReproductionTime>3.0</sharkReproductionTime>
+        <fishReproductionTime>1</fishReproductionTime>
+        <sharkEnergyGain>1</sharkEnergyGain>
+        <sharkReproductionTime>6</sharkReproductionTime>
     </Parameters>
 </Simulation>
