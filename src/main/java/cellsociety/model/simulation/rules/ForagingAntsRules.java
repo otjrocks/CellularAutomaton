@@ -256,11 +256,14 @@ public class ForagingAntsRules extends SimulationRules {
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
         emptyNeighbors, HOME);
-    addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
-    occupiedCells.add(nextLocation.getLocation());
 
-    if (!nextLocation.getLocation().equals(ant.getLocation())) {
-      addEmptyCell(ant, nextStates);
+    if(nextLocation != null){
+      addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
+      occupiedCells.add(nextLocation.getLocation());
+
+      if (!nextLocation.getLocation().equals(ant.getLocation())) {
+        addEmptyCell(ant, nextStates);
+      }
     }
   }
 
@@ -269,11 +272,14 @@ public class ForagingAntsRules extends SimulationRules {
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
         emptyNeighbors, FOOD);
-    addUpdatedAnt(ant, nextLocation, grid, nextStates, false);
-    occupiedCells.add(nextLocation.getLocation());
+        
+    if(nextLocation != null){
+      addUpdatedAnt(ant, nextLocation, grid, nextStates, false);
+      occupiedCells.add(nextLocation.getLocation());
 
-    if (!nextLocation.getLocation().equals(ant.getLocation())) {
-      addEmptyCell(ant, nextStates);
+      if (!nextLocation.getLocation().equals(ant.getLocation())) {
+        addEmptyCell(ant, nextStates);
+      }
     }
   }
 
@@ -292,11 +298,14 @@ public class ForagingAntsRules extends SimulationRules {
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
         emptyNeighbors, FOOD);
-    addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
-    occupiedCells.add(nextLocation.getLocation());
+        
+    if(nextLocation != null){
+      addUpdatedAnt(ant, nextLocation, grid, nextStates, ant.getHasFood());
+      occupiedCells.add(nextLocation.getLocation());
 
-    if (!nextLocation.getLocation().equals(ant.getLocation())) {
-      addEmptyCell(ant, nextStates);
+      if (!nextLocation.getLocation().equals(ant.getLocation())) {
+        addEmptyCell(ant, nextStates);
+      }
     }
   }
 
@@ -305,11 +314,14 @@ public class ForagingAntsRules extends SimulationRules {
       List<Cell> emptyNeighbors, ForagingAntsCell ant) {
     ForagingAntsCell nextLocation = (ForagingAntsCell) highestPheromoneNeighbor(
         emptyNeighbors, HOME);
-    addUpdatedAnt(ant, nextLocation, grid, nextStates, true);
-    occupiedCells.add(nextLocation.getLocation());
+        
+    if(nextLocation != null){
+      addUpdatedAnt(ant, nextLocation, grid, nextStates, true);
+      occupiedCells.add(nextLocation.getLocation());
 
-    if (!nextLocation.getLocation().equals(ant.getLocation())) {
-      addEmptyCell(ant, nextStates);
+      if (!nextLocation.getLocation().equals(ant.getLocation())) {
+        addEmptyCell(ant, nextStates);
+      }
     }
   }
 
