@@ -1,5 +1,7 @@
 package cellsociety.view;
 
+import cellsociety.utility.ColorUtility;
+import cellsociety.view.config.StateInfo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,7 +15,6 @@ import static cellsociety.config.MainConfig.MARGIN;
 import static cellsociety.config.MainConfig.getMessage;
 import cellsociety.utility.ColorUtility;
 import static cellsociety.view.SidebarView.ELEMENT_SPACING;
-import cellsociety.view.config.StateInfo;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;

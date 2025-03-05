@@ -1,5 +1,6 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.SimulationRules;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,6 @@ import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.Instruction;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.SimulationRules;
 import cellsociety.model.simulation.instructions.ConditionalInstruction;
 import cellsociety.model.simulation.instructions.GoInstruction;
 import cellsociety.model.simulation.instructions.InfectInstruction;

@@ -1,5 +1,7 @@
 package cellsociety.model.simulation.rules;
 
+import cellsociety.model.simulation.GetNeighbors;
+import cellsociety.model.simulation.SimulationRules;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +12,6 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.simulation.GetNeighbors;
 import cellsociety.model.simulation.InvalidParameterException;
 import cellsociety.model.simulation.Parameter;
-import cellsociety.model.simulation.SimulationRules;
 
 /**
  * The implementation of Game of Life.
