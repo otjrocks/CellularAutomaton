@@ -58,6 +58,7 @@ public class EditModeView extends VBox {
       @Override
       protected void handleAdditionalButtonActions() {
         super.handleAdditionalButtonActions();
+
         updateDisplay(); // update state info when new simulation is created.
       }
     };

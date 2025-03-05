@@ -94,8 +94,9 @@ public class SidebarView extends VBox {
 
   private void addAllComponentsToSidebar() {
     initializeTitle();
+    this.getChildren().addFirst(myAlertField);
     this.getChildren()
-        .addAll(myControlsBox, myViewModeView, myAlertField);
+        .addAll(myControlsBox, myViewModeView);
   }
 
   private void addControlsToBox() {
@@ -109,8 +110,9 @@ public class SidebarView extends VBox {
   private void addAllEditModeComponents() {
     this.getChildren().clear();
     initializeTitle();
+    this.getChildren().addFirst(myAlertField);
     this.getChildren()
-        .addAll(myControlsBox, myEditModeView, myAlertField);
+        .addAll(myControlsBox, myEditModeView);
   }
 
   private void initializeTitle() {
