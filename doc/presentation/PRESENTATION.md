@@ -15,5 +15,7 @@
 #### View Overview:
 
 ![View Diagram](diagrams/viewOverview.png)
+
+
 *Note: These UML Diagrams do not include all methods and classes to remain concise for the
 presentation.*
