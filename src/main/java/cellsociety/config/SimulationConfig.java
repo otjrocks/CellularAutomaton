@@ -142,6 +142,16 @@ public class SimulationConfig {
     return null;
   }
 
+  /**
+   * Gets instructions for predefined species from the properties file.
+   *
+   * @param state Integer representing the species of the animal (or empty)
+   */
+  public static List<String> assignInstructionsFromState(int state) {
+    String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
+    return new ArrayList<>(Arrays.asList(instrArray));
+  }
+
   private static List<String> getRequiredParametersForSimulationRulesClass(String simulationName)
       throws ClassNotFoundException,
       NoSuchMethodException,
@@ -205,16 +215,6 @@ public class SimulationConfig {
     if (neighborType == null || layers <= 0) {
       throw new IllegalArgumentException("Invalid neighbor configuration.");
     }
-  }
-
-  /**
-   * Gets instructions for predefined species from the properties file.
-   *
-   * @param state Integer representing the species of the animal (or empty)
-   */
-  public static List<String> assignInstructionsFromState(int state) {
-    String[] instrArray = myInstructions.getString(String.valueOf(state)).split(",");
-    return new ArrayList<>(Arrays.asList(instrArray));
   }
 
 }
