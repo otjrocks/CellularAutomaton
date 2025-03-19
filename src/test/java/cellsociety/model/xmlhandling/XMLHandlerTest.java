@@ -1,21 +1,20 @@
 package cellsociety.model.xmlhandling;
 
-import cellsociety.model.xml.InvalidStateException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-import cellsociety.model.xml.GridException;
-import cellsociety.model.xml.XMLHandler;
 import cellsociety.model.simulation.rules.GameOfLifeRules;
+import cellsociety.model.xml.GridException;
+import cellsociety.model.xml.InvalidStateException;
+import cellsociety.model.xml.XMLHandler;
 
-class XMLTest {
+class XMLHandlerTest {
 
   private XMLHandler myXMLHandler;
 
