@@ -1,10 +1,15 @@
 # Cellular Automaton Simulator
 
-## Team Number 4
+![Project Demo Image](./doc/demoGif.gif)
 
 ### By: Owen Jennings, Justin Aronwald, Troy Ludwig
 
 This project implements a cellular automata simulator.
+
+### Credit
+This project was completed as a group project for the class CS308, Advanced Software Design and Implementation. 
+
+For more information about Cellular Automaton, see [Cellular Automaton - Wikipedia](https://en.wikipedia.org/wiki/Cellular_automaton).
 
 ### Timeline
 
@@ -15,20 +20,11 @@ This project implements a cellular automata simulator.
 * Hours Spent: 220+ hours
 
 ### Attributions
-
-* Resources used for learning (including AI assistance)
-    - Java and JavaFX documentation
-    - ChatGPT for assistance in learning new concepts and refactoring code based on design
-      requirements.
-
-* Resources used directly (including AI assistance)
-    - We used ChatGPT for assistance in writing and refactoring code throughout the project.
-      Whenever ChatGPT generated code that we copied or slightly modified, we included a comment in
-      the file to indicate that it was used.
-    - The UI styles.css file was heavily influenced
+- The UI styles.css file was heavily influenced
       by : https://github.com/antoniopelusi/JavaFX-Dark-Theme
-    - For understanding falling sand rules: https://www.youtube.com/watch?v=5Ka3tbbT-9E
-    - IntelliJ diagrams plugin and Mermaid plugin - https://plugins.jetbrains.com/plugin/20146-mermaid
+- For understanding falling sand rules: https://www.youtube.com/watch?v=5Ka3tbbT-9E
+- IntelliJ diagrams plugin and Mermaid plugin - https://plugins.jetbrains.com/plugin/20146-mermaid
+- This project uses fonts from Google Fonts.
 
 ### High level UML diagrams showcasing our model and view classes.
 
@@ -147,62 +143,5 @@ This project implements a cellular automata simulator.
       when grid lines is disabled.
     * Sometimes when changing the theme, some of the text in the UI has an update glitch where the
       text alignment shifts from centered to right or left aligned.
-
-* Features implemented:
-    * Every core feature from the initial project, to the general and robustness phase, to the
-      change phase were completed.
-    * Of the variations for the General/Robustness phase, we completed:
-        * For Feature 26:
-            * We implemented CELL-26A, 26B, 26C, 26D, 26E, and 26F
-            * For the simulations with different presets, we chose the first one for each, so we
-              could maximize the different simulation we created.
-        * For Feature 32:
-            * We implemented CEll 32A and 32B
-        * For Feature 45:
-            * We implemented CELL 45A, 45B, and 45C
-
-    * Of the variations for the change phase, we completed:
-        * For Feature 48:
-            * We implemented CELL 48A and 48B
-        * For Feature 49:
-            * We implemented CELL 49A, 49B, and 49C. So, users can create any
-              combination/configuration of neighborhood and layers to search for any simulation.
-        * For Feature 50:
-            * We implemented CELL 50A and 50B
-            * What is unique about our implementation is that ou can assign neighborhood types like
-              triangle to a hexagon grid etc. that allows you to do custom neighbor types even if
-              the cell shape doesn’t reflect the neighborhood technique you want to use
-        * For Feature 51:
-            * We implemented CELL-51A, 51B, and 51C. All of this is located in our edit mode view.
-        * For Feature 52/53:
-            * We implemented the core 52, 53A, 53B, 53E,
-
-* Features unimplemented:
-    * We implemented all core + the variation features above.
-
-* Noteworthy Features:
-    * Our UI is a step above the requirement. We put a lot of time and effort into making sure the
-      UI was super intuitive and easy to use.
-    * We have a designated edit mode page that allows users to actively edit the simulation at that
-      current moment. Users can change the cell states, modify the simulation data, or change the
-      current configurations. This was created so that users don't inadvertently update the
-      simulation when they don't want it to.
-    * Users can create any simulation with any neighbor configuration, including both neighboring
-      type and number of layers to look forward. This way, any simulation can be ran with any amount
-      of layers and what not.
-    * We added an extension Users can save the state of a program including preferred language,
-      simulation speed, whether grid lines are enabled, preferred theme, etc, so that these details
-      are saved when the user quits and reads in when the program restarts.
-    * The config files requirements we went above and beyond on
-
-### Assignment Impressions
-
-* This project was a great way to improve our skills in Java, JavaFX, and refactoring and designing
-  code.
-* Having put in 220+ hours as a team, I think it's reasonable to say that this is a VERY time
-  intensive project. This may not be feasible, but reducing the work load would have helped us.
-* For receiving feedback, we would always receive it nearly a week later, when it was due. Thus, it
-  would be much more useful if we could get the feedback sooner, so we could actually use it to
-  improve out code.
 
 
